@@ -11,10 +11,10 @@ namespace Bounce {
 
             var p = new Process { StartInfo = processInfo };
 
-            var output = new CommandOutput();
+            var output = new CommandOutputReceiver();
 
-            p.ErrorDataReceived += output.MsBuildErrorDataReceived;
-            p.OutputDataReceived += output.MsBuildOutputDataReceived;
+            p.ErrorDataReceived += output.ErrorDataReceived;
+            p.OutputDataReceived += output.OutputDataReceived;
             p.Start();
 
             p.BeginErrorReadLine();

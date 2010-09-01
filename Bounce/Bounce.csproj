@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildException.cs" />
-    <Compile Include="CommandOutput.cs" />
+    <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="PlainValue.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
