@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{BD123B60-C18A-4446-808E-F4B81D0EE23D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bounce.VisualStudio.Tests</RootNamespace>
-    <AssemblyName>Bounce.VisualStudio.Tests</AssemblyName>
+    <RootNamespace>Bouncer.Console</RootNamespace>
+    <AssemblyName>Bouncer.Console</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,16 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build.Engine" />
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Moq\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\NUnit\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -55,26 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VisualStudioSolutionFileLoaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
       <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
       <Name>Bounce.VisualStudio</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestFiles\Bounce.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\Bounce.sln">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\Bouncer.Console.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\Bounce\Bounce.csproj">
+      <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
+      <Name>Bounce</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
