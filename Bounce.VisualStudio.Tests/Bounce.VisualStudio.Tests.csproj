@@ -55,9 +55,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VisualStudioCSharpProjectFileLoaderTest.cs" />
     <Compile Include="VisualStudioSolutionFileLoaderTest.cs" />
+    <Compile Include="VisualStudioSolutionFileReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
