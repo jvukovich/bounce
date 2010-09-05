@@ -12,11 +12,11 @@ namespace Bouncer.Console
         static void Main(string[] args) {
             CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
 
-            var solution = new VisualStudioSolution() { SolutionPath = parameters.Default("sln", @"C:\Users\Public\Documents\Development\Bounce\Bounce.sln"), OutputProjectName = parameters.Default("proj", "Bouncer.Console") };
+            var solution = new VisualStudioSolution() { SolutionPath = parameters.Default("sln", @"C:\Users\Public\Documents\Development\Bounce\Bounce.sln"), PrimaryProjectName = parameters.Default("proj", "Bouncer.Console") };
             var targets = new
             {
                 Default = new IisWebSite() { WebSiteDirectory = solution },
-                Tests = new NUnitTestResults() { DllPaths = solution.Property(s => s.DllPaths) },
+                Tests = new NUnitTestResults() { DllPaths = solution.Property(s => s.Projects.Select(p => p.OutputFile)) },
             };
 
             var builder = new TargetBuilder ();

@@ -17,12 +17,13 @@ namespace Bounce.VisualStudio {
         public VisualStudioSolutionDetails ReadSolution(string solutionPath, string configuration) {
             VisualStudioSolutionFileDetails solutionDetails = SolutionLoader.LoadVisualStudioSolution(solutionPath);
 
-            var projects = new List<VisualStudioCSharpProjectFileDetails>();
+            var projects = new List<VisualStudioProjectDetails>();
 
             foreach (var project in solutionDetails.VisualStudioProjects) {
                 string projectPath = Path.Combine(Path.GetDirectoryName(solutionPath), project.Path);
-                VisualStudioCSharpProjectFileDetails projectDetails = ProjectLoader.LoadProject(projectPath, configuration);
-                projects.Add(projectDetails);
+                VisualStudioCSharpProjectFileDetails projectDetails = ProjectLoader.LoadProject(projectPath, project.Name, configuration);
+                string outputPath = Path.Combine(Path.GetDirectoryName(projectPath), projectDetails.OutputFile);
+                projects.Add(new VisualStudioProjectDetails { Name = projectDetails.Name, OutputFile = outputPath });
             }
 
             return new VisualStudioSolutionDetails {Projects = projects};

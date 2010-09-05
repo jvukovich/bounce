@@ -2,6 +2,6 @@
 
 namespace Bounce.VisualStudio {
     public class VisualStudioSolutionDetails {
-        public IEnumerable<VisualStudioCSharpProjectFileDetails> Projects { get; set; }
+        public IEnumerable<VisualStudioProjectDetails> Projects { get; set; }
     }
 }

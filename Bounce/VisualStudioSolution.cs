@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bounce.VisualStudio;
 using Microsoft.Build.BuildEngine;
 using System.IO;
 
 namespace Bounce {
     public class VisualStudioSolution : IIisWebSiteDirectory {
         public IValue<string> SolutionPath;
-        public IValue<string> OutputProjectName;
-        public IEnumerable<string> DllPaths { get; private set; }
+        public IValue<string> Configuration;
+        public IValue<string> PrimaryProjectName;
+        public IEnumerable<VisualStudioProjectDetails> Projects { get; private set; }
+        public VisualStudioProjectDetails PrimaryProject { get; private set; }
 
         public IEnumerable<ITarget> Dependencies {
             get { return new[] {SolutionPath}; }
@@ -21,8 +24,10 @@ namespace Bounce {
 
             LastBuilt = DateTime.UtcNow;
 
-            var binPath = System.IO.Path.Combine(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(SolutionPath.Value), OutputProjectName.Value), @"bin\Debug");
-            DllPaths = Directory.GetFiles(binPath);
+            var reader = new VisualStudioSolutionFileReader();
+            VisualStudioSolutionDetails solutionDetails = reader.ReadSolution(SolutionPath.Value, Config);
+            Projects = solutionDetails.Projects;
+            PrimaryProject = Projects.First(p => p.Name == PrimaryProjectName.Value);
         }
 
         public void Clean() {
@@ -33,6 +38,16 @@ namespace Bounce {
 
         public string Path {
             get { return SolutionPath.Value; }
+        }
+
+        private string Config {
+            get {
+                if (Configuration == null) {
+                    return "";
+                } else {
+                    return Configuration.Value;
+                }
+            }
         }
     }
 }

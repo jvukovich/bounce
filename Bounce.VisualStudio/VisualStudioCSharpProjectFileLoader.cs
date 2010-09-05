@@ -7,7 +7,7 @@ namespace Bounce.VisualStudio {
     public class VisualStudioCSharpProjectFileLoader : IVisualStudioProjectFileLoader {
         private XNamespace msbuild = "http://schemas.microsoft.com/developer/msbuild/2003";
 
-        public VisualStudioCSharpProjectFileDetails LoadProject(string path, string configuration) {
+        public VisualStudioCSharpProjectFileDetails LoadProject(string path, string projectName, string configuration) {
             XDocument proj = XDocument.Load(path);
 
             var props = new PropertyValues();
@@ -17,7 +17,8 @@ namespace Bounce.VisualStudio {
             LoadProperties(propertyGroups, props);
 
             return new VisualStudioCSharpProjectFileDetails {
-                OutputFile = Path.Combine(props["OutputPath"], props["AssemblyName"] + "." + GetExtensionForOutputType(props["OutputType"]))
+                OutputFile = Path.Combine(props["OutputPath"], props["AssemblyName"] + "." + GetExtensionForOutputType(props["OutputType"])),
+                Name = projectName,
             };
         }
 

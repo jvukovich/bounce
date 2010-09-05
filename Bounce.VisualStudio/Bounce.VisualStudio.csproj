@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VisualStudioProjectDetails.cs" />
     <Compile Include="VisualStudioSolutionProject.cs" />
     <Compile Include="ConditionParseException.cs" />
     <Compile Include="IPropertyValues.cs" />
