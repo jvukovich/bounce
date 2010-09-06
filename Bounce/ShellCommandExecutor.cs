@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Bounce {
     class ShellCommandExecutor {
-        public void ExternalBuild(string commandName, string commandArgs, string errorMessage) {
+        public void ExecuteProcess(string commandName, string commandArgs, string errorMessage) {
             var processInfo = new ProcessStartInfo(commandName, commandArgs);
             processInfo.CreateNoWindow = true;
             processInfo.RedirectStandardError = true;

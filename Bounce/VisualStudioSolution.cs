@@ -20,7 +20,7 @@ namespace Bounce {
         public void Build() {
             Console.WriteLine("building solution at: " + SolutionPath.Value);
 
-            new ShellCommandExecutor().ExternalBuild("msbuild.exe", SolutionPath.Value, "msbiuld exited funny");
+            new ShellCommandExecutor().ExecuteProcess("msbuild.exe", SolutionPath.Value, "msbiuld exited funny");
 
             LastBuilt = DateTime.UtcNow;
 

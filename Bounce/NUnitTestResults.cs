@@ -18,6 +18,7 @@ namespace Bounce {
             IEnumerable<string> testDlls = DllPaths.Value.Where(dll => dll.EndsWith("Tests.dll"));
             foreach (var dllPath in testDlls) {
                 Console.WriteLine("running unit tests for: " + dllPath);
+                new ShellCommandExecutor().ExecuteProcess("nunit-console", dllPath, "running nunit");
             }
         }
 
