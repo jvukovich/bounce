@@ -50,4 +50,8 @@ namespace Bounce {
             }
         }
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class TargetsAttribute : Attribute {
+    }
 }

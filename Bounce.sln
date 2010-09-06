@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce", "Bounce\Bounce.csproj", "{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework", "Bounce\Bounce.Framework.csproj", "{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bouncer.Console", "Bouncer.Console\Bouncer.Console.csproj", "{BD123B60-C18A-4446-808E-F4B81D0EE23D}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.VisualStudio", "Bounce.VisualStudio\Bounce.VisualStudio.csproj", "{EE0A20D3-AABB-4100-B766-4CFF1AA38262}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.VisualStudio.Tests", "Bounce.VisualStudio.Tests\Bounce.VisualStudio.Tests.csproj", "{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console.Tests", "Bounce.Console.Tests\Bounce.Console.Tests.csproj", "{2DD987A2-8501-4265-A731-A06F7E210F1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBounceAssembly", "TestBounceAssembly\TestBounceAssembly.csproj", "{FFDD5742-FB1D-425F-91BA-58B097FFB51B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,14 @@ Global
 		{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DD987A2-8501-4265-A731-A06F7E210F1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD987A2-8501-4265-A731-A06F7E210F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD987A2-8501-4265-A731-A06F7E210F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD987A2-8501-4265-A731-A06F7E210F1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFDD5742-FB1D-425F-91BA-58B097FFB51B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFDD5742-FB1D-425F-91BA-58B097FFB51B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFDD5742-FB1D-425F-91BA-58B097FFB51B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFDD5742-FB1D-425F-91BA-58B097FFB51B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
