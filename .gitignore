@@ -5,3 +5,4 @@ obj/
 *.sln.cache
 *.suo
 *.csproj.user
+*.resharper.user
