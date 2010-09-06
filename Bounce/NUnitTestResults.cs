@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bounce {
     public class NUnitTestResults : ITarget {
@@ -14,7 +15,8 @@ namespace Bounce {
         }
 
         public void Build() {
-            foreach (var dllPath in DllPaths.Value) {
+            IEnumerable<string> testDlls = DllPaths.Value.Where(dll => dll.EndsWith("Tests.dll"));
+            foreach (var dllPath in testDlls) {
                 Console.WriteLine("running unit tests for: " + dllPath);
             }
         }

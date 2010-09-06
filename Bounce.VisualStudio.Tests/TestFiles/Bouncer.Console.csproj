@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{BD123B60-C18A-4446-808E-F4B81D0EE23D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bounce</RootNamespace>
-    <AssemblyName>Bounce</AssemblyName>
+    <RootNamespace>Bouncer.Console</RootNamespace>
+    <AssemblyName>Bouncer.Console</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,8 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build.Engine" />
-    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -47,33 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildException.cs" />
-    <Compile Include="CommandOutputReceiver.cs" />
-    <Compile Include="PlainValue.cs" />
-    <Compile Include="ShellCommandExecutor.cs" />
-    <Compile Include="TargetBuilder.cs" />
-    <Compile Include="BouncerUtils.cs" />
-    <Compile Include="TargetWalker.cs" />
-    <Compile Include="IIisWebSiteDirectory.cs" />
-    <Compile Include="ITarget.cs" />
-    <Compile Include="IisWebSite.cs" />
-    <Compile Include="IParameter.cs" />
-    <Compile Include="IParameters.cs" />
-    <Compile Include="ISourceDirectory.cs" />
-    <Compile Include="ITypeParsers.cs" />
-    <Compile Include="IValue.cs" />
-    <Compile Include="NUnitTestResults.cs" />
-    <Compile Include="Parameter.cs" />
-    <Compile Include="CommandLineParameters.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SourceDirectory.cs" />
-    <Compile Include="TypeParsers.cs" />
-    <Compile Include="VisualStudioSolution.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
       <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
       <Name>Bounce.VisualStudio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bounce\Bounce.csproj">
+      <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
+      <Name>Bounce</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

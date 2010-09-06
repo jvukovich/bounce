@@ -47,10 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildException.cs" />
-    <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="PlainValue.cs" />
-    <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="BouncerUtils.cs" />
     <Compile Include="TargetWalker.cs" />
@@ -69,12 +66,6 @@
     <Compile Include="SourceDirectory.cs" />
     <Compile Include="TypeParsers.cs" />
     <Compile Include="VisualStudioSolution.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
-      <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
-      <Name>Bounce.VisualStudio</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
