@@ -12,7 +12,7 @@ namespace Bouncer.Console
         static void Main(string[] args) {
             CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
 
-            var solution = new VisualStudioSolution() { SolutionPath = parameters.Default("sln", @"C:\Users\Public\Documents\Development\Bounce\Bounce.sln"), PrimaryProjectName = parameters.Default("proj", "Bouncer.Console") };
+            var solution = new VisualStudioSolution() { SolutionPath = parameters.Default("sln", @"..\..\..\Bounce.sln"), PrimaryProjectName = parameters.Default("proj", "Bouncer.Console") };
             var targets = new
             {
                 Default = new IisWebSite() { WebSiteDirectory = solution },
