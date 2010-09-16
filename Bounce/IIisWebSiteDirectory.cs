@@ -1,5 +1,5 @@
 ﻿namespace Bounce {
     public interface IIisWebSiteDirectory : ITarget {
-        string Path { get; }
+        IValue<string> Path { get; }
     }
 }
