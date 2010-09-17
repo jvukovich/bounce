@@ -74,7 +74,6 @@
     <Compile Include="BouncerUtils.cs" />
     <Compile Include="TaskException.cs" />
     <Compile Include="TargetsAttribute.cs" />
-    <Compile Include="TaskExtensions.cs" />
     <Compile Include="TaskWalker.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="Iis7WebSite.cs" />
