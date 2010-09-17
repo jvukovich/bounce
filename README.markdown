@@ -23,8 +23,7 @@ C# is well up to the task so why bother with language barriers when you don't ne
 Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0. We'd write
 a C# targets file like this:
 
-<pre><code>
-public class BuildTargets {
+<pre><code>public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
         var solution = new VisualStudioSolution {
@@ -48,8 +47,7 @@ Build the `BuildTargets` class into `MyBuild.dll` and you can build your website
 
 Say you wanted to add a unit test task:
 
-<pre><code>
-public class BuildTargets {
+<pre><code>public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
 		...
@@ -69,8 +67,7 @@ And, to run them:
 
 And, say you wanted to do a `git` checkout before you built the solution:
 
-<pre><code>
-public class BuildTargets {
+<pre><code>public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
 		<b>var gitrepo = new GitRepo {
