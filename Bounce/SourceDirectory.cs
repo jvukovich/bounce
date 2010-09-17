@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class SourceDirectory : ISourceDirectory {
         public IEnumerable<ITarget> Dependencies {
             get { return new ITarget[0]; }

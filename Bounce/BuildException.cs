@@ -1,6 +1,6 @@
 using System;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class BuildException : Exception {
         public readonly string Output;
 

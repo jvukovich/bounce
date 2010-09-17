@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Bounce {
+namespace Bounce.Framework {
     class CommandOutputReceiver {
         private readonly TextWriter synchronizedOutputWriter;
         private readonly StringWriter outputWriter;

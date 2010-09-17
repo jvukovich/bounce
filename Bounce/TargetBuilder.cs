@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class TargetBuilder {
         public TargetWalker Walker;
 

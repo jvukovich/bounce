@@ -1,4 +1,5 @@
 ﻿using System;
+using Bounce.Framework;
 using Moq;
 using NUnit.Framework;
 

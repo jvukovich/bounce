@@ -47,13 +47,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
+    <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="PlainValue.cs" />
+    <Compile Include="PlainValueExtensions.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="BouncerUtils.cs" />
+    <Compile Include="TargetException.cs" />
+    <Compile Include="TargetsAttribute.cs" />
     <Compile Include="TargetWalker.cs" />
     <Compile Include="IIisWebSiteDirectory.cs" />
     <Compile Include="ITarget.cs" />
@@ -71,6 +76,7 @@
     <Compile Include="TypeParsers.cs" />
     <Compile Include="VisualStudioProject.cs" />
     <Compile Include="VisualStudioSolution.cs" />
+    <Compile Include="VisualStudioSolutionProjects.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">

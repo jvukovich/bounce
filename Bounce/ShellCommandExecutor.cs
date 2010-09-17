@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace Bounce {
+namespace Bounce.Framework {
     class ShellCommandExecutor {
         public void ExecuteProcess(string commandName, string commandArgs) {
             var processInfo = new ProcessStartInfo(commandName, commandArgs);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Bounce.Framework;
 
 namespace Bounce.Tests {
     public class FakeTarget : ITarget {

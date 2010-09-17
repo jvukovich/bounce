@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Bounce.VisualStudio;
-using Microsoft.Build.BuildEngine;
 using System.IO;
 
 namespace Bounce.Framework {
@@ -95,49 +93,5 @@ namespace Bounce.Framework {
         internal VisualStudioProjectDetails GetProjectDetails(string name) {
             return SolutionDetails.Projects.First(p => p.Name == name);
         }
-    }
-
-    public class VisualStudioSolutionProjects : IEnumerable<VisualStudioProject> {
-        private readonly VisualStudioSolution solution;
-
-        public VisualStudioSolutionProjects(VisualStudioSolution solution) {
-            this.solution = solution;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
-        }
-
-        public IEnumerator<VisualStudioProject> GetEnumerator() {
-            return solution.SolutionDetails.Projects.Select(p => new VisualStudioProject(solution, new PlainValue<string>(p.Name))).GetEnumerator();
-        }
-
-        public VisualStudioProject this[IValue<String> name] {
-            get {
-                return new VisualStudioProject(solution, name);
-            }
-        }
-    }
-
-    internal class DependencyBuildFailureException : TargetException {
-        public DependencyBuildFailureException(ITarget target, string message) : base(target, message) {
-        }
-    }
-
-    internal class TargetException : BounceException {
-        public ITarget Target { get; private set; }
-
-        public TargetException(ITarget target, string message) : base(message) {
-            Target = target;
-        }
-    }
-
-    internal class BounceException : Exception {
-        public BounceException(string message) : base(message) {
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Method)]
-    public class TargetsAttribute : Attribute {
     }
 }

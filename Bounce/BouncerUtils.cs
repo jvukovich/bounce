@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public static class BouncerUtils {
         public static IValue<TP> Property<TB, TP>(this TB bouncer, Func<TB, TP> getProperty) where TB : ITarget {
             return new Property<TB, TP>(bouncer, getProperty);

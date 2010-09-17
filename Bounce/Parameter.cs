@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     class Parameter<T> : IParameter<T> {
         public bool Required { get; set; }
         public string Name { get; set; }

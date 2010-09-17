@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Bounce {
+﻿namespace Bounce.Framework {
     public interface IValue<T> : ITarget {
         T Value { get; }
     }

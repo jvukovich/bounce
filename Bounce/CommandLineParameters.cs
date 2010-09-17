@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Bounce.Framework;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class CommandLineParameters : IParameters {
         private TypeParsers TypeParsers;
         private Dictionary<string, IParameter> RegisteredParameters;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class TargetWalker {
         public void Walk(ITarget target, Action<ITarget> stepOnBouncer) {
             foreach (ITarget bouncerDependency in target.Dependencies) {
