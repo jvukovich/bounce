@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
     public class WindowsService : ITarget {
@@ -20,6 +21,27 @@ namespace Bounce.Framework {
         }
 
         public void BeforeBuild() {
+            if (Name.Value != null) {
+                if (ServiceInstalled && ServiceRunning) {
+                    StopService();
+                }
+            }
+        }
+
+        protected bool ServiceRunning {
+            get {
+                Regex statePattern = new Regex(@"STATE\s+:\s+\d\s+STARTED");
+
+                var queryOutput = ShellCommandExecutor
+                    .Execute("sc", String.Format(@"query ""{0}""", Name.Value))
+                    .Output;
+
+                return statePattern.Match(queryOutput).Success;
+            }
+        }
+
+        private void StopService() {
+            ShellCommandExecutor.ExecuteAndExpectSuccess("sc", String.Format(@"stop ""{0}""", Name.Value));
         }
 
         public void Build() {

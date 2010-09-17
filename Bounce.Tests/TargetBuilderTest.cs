@@ -1,11 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Bounce.Framework;
 using Moq;
 using NUnit.Framework;
 
-namespace Bounce.Tests
-{
+namespace Bounce.Tests {
     [TestFixture]
     public class TargetBuilderTest {
         [Test]
