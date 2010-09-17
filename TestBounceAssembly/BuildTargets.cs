@@ -13,7 +13,7 @@ namespace TestBounceAssembly {
             return new {
                 WebSite = new Iis7WebSite() {Path = project.Directory, Name = "BigWebSite".V(), Port = 5001.V()},
                 Tests = new NUnitTestResults() {DllPaths = solution.Projects.Select(p => p.OutputFile)},
-                Service = new WindowsService {BinaryPath = service.OutputFile, Name = serviceName, UserName = @"sonomorph\tim".V(), Password = "fAct04Fv".V()},
+                Service = new WindowsService {BinaryPath = service.OutputFile, Name = serviceName, DisplayName = "Big Windows Service".V(), Description = "a big windows service demonstrating the bounce build framework".V()},
             };
         }
     }
