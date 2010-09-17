@@ -3,7 +3,12 @@ using System.Diagnostics;
 using System.IO;
 
 namespace Bounce.Framework {
-    class ShellCommandExecutor {
+    public interface IShellCommandExecutor {
+        void ExecuteAndExpectSuccess(string commandName, string commandArgs);
+        ProcessOutput Execute(string commandName, string commandArgs);
+    }
+
+    class ShellCommandExecutor : IShellCommandExecutor {
         public void ExecuteAndExpectSuccess(string commandName, string commandArgs) {
             var output = Execute(commandName, commandArgs);
             if (output.ExitCode != 0) {
