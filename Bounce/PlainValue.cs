@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class PlainValue<T> : IValue<T> {
@@ -9,10 +8,6 @@ namespace Bounce.Framework {
 
         public IEnumerable<ITarget> Dependencies {
             get { return new ITarget[0]; }
-        }
-
-        public DateTime? LastBuilt {
-            get { return null; }
         }
 
         public void Build() {

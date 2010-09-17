@@ -10,10 +10,6 @@ namespace Bounce.Framework {
             get { return DllPaths.Cast<ITarget>(); }
         }
 
-        public DateTime? LastBuilt {
-            get { return null; }
-        }
-
         public void Build() {
             IEnumerable<string> testDlls = DllPaths.Select(dll => dll.Value).Where(dll => dll.EndsWith("Tests.dll"));
 

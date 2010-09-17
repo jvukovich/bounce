@@ -19,10 +19,6 @@ namespace Bounce.Framework {
             get { return new[] {Name, BinaryPath, Description, DisplayName, UserName, Password}; }
         }
 
-        public DateTime? LastBuilt {
-            get { return null; }
-        }
-
         public void Build() {
             if (ServiceInstalled) {
                 DeleteService();

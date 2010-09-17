@@ -29,10 +29,6 @@ namespace Bounce.Framework {
             get { return new[] { (ITarget)Dependency }; }
         }
 
-        public DateTime? LastBuilt {
-            get { return Dependency.LastBuilt; }
-        }
-
         public void Build() {
         }
 
@@ -55,10 +51,6 @@ namespace Bounce.Framework {
 
         public IEnumerable<ITarget> Dependencies {
             get { return new[] {dependency}; }
-        }
-
-        public DateTime? LastBuilt {
-            get { return dependency.LastBuilt; }
         }
 
         public void Build() {

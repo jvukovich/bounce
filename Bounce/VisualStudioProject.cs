@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class VisualStudioProject : ITarget {
@@ -24,10 +23,6 @@ namespace Bounce.Framework {
 
         public IEnumerable<ITarget> Dependencies {
             get { return new[] {Solution}; }
-        }
-
-        public DateTime? LastBuilt {
-            get { return Solution.LastBuilt; }
         }
 
         public void Build() {

@@ -66,13 +66,13 @@ namespace Bounce.Tests {
         }
 
         [Test]
-        public void LastBuiltShouldReturnLastModDateOfDirectoryIfNoFiles() {
+        public void LastModTimeShouldReturnLastModDateOfDirectoryIfNoFiles() {
             var directoryUtils = new DirectoryUtils();
             Assert.That(directoryUtils.GetLastModTimeForDirectory(Dir), Is.EqualTo(new DateTime(2010, 5, 1)));
         }
 
         [Test]
-        public void LastBuiltShouldReturnLastModDateOfFileInDirOrSubDir() {
+        public void LastModTimeShouldReturnLastModDateOfFileInDirOrSubDir() {
             Touch("j.txt", new DateTime(2010, 5, 6));
             Touch(@"test\j.txt", new DateTime(2010, 5, 20));
 

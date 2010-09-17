@@ -63,10 +63,6 @@ namespace Bounce.Framework {
             get { return new[] {FromPath, ToPath}; }
         }
 
-        public DateTime? LastBuilt {
-            get { return new DirectoryUtils().GetLastModTimeForDirectory(FromPath.Value); }
-        }
-
         public void Build() {
             var fromPath = FromPath.Value;
             var toPath = ToPath.Value;

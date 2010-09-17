@@ -56,7 +56,5 @@ namespace Bounce.Framework {
             RemoveWebSiteIfExtant(iisServer);
             iisServer.CommitChanges();
         }
-
-        public DateTime? LastBuilt { get; set; }
     }
 }

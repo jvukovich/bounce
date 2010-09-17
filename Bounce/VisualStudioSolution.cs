@@ -65,27 +65,6 @@ namespace Bounce.Framework {
             ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
         }
 
-        public DateTime? LastBuilt {
-            get {
-                var details = TryGetSolutionDetails();
-
-                if (details != null) {
-                    IEnumerable<DateTime> outputFileModTimes = SolutionDetails.Projects
-                        .Select(p => p.OutputFile)
-                        .Where(File.Exists)
-                        .Select(filename => File.GetLastWriteTimeUtc(filename));
-
-                    if (outputFileModTimes.Count() > 0) {
-                        return outputFileModTimes.Max();
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return null;
-                }
-            }
-        }
-
         private string Config {
             get {
                 if (Configuration == null) {

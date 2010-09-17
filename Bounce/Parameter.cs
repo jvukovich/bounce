@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
     class Parameter<T> : IParameter<T> {
@@ -12,10 +11,6 @@ namespace Bounce.Framework {
         public IEnumerable<ITarget> Dependencies
         {
             get { return new ITarget[0]; }
-        }
-
-        public DateTime? LastBuilt {
-            get { return DateTime.UtcNow; }
         }
 
         public void Build() {
