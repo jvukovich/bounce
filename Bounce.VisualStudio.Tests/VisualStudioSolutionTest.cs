@@ -6,7 +6,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using NUnit.Framework;
 
 namespace Bounce.VisualStudio.Tests {
-    [TestFixture]
+    [TestFixture, Explicit("should be executed with MSBuild in PATH, say, from nunit from a Visual Studio command prompt.")]
     public class VisualStudioSolutionTest {
         private const string SolutionUnzipDirectory = "TestSolution";
 
