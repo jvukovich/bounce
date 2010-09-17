@@ -7,8 +7,7 @@ using NUnit.Framework;
 namespace Bounce.Tests
 {
     [TestFixture]
-    public class BouncerBuilderTest
-    {
+    public class TargetBuilderTest {
         [Test]
         public void ShouldBuildDependenciesBeforeDependencts() {
             var dependent = new Mock<ITarget>();

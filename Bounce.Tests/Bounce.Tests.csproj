@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BouncerBuilderTest.cs" />
+    <Compile Include="TargetBuilderTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />
     <Compile Include="FakeTarget.cs" />
     <Compile Include="Iis7Admin.cs" />

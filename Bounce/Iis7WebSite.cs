@@ -25,8 +25,6 @@ namespace Bounce.Framework {
             } else {
                 Console.WriteLine("IIS website already installed");
             }
-
-            LastBuilt = DateTime.UtcNow;
         }
 
         private bool SiteUpToDate(Site site) {
