@@ -49,9 +49,9 @@ Say you wanted to add a unit test task:
 
             return new {
                 WebSite = new Iis7WebSite { ... },
-				<b><i>Tests = new NUnitTests {
+				<b>Tests = new NUnitTests {
                     DllPaths = solution.Projects.Select(p => p.OutputFile),
-				},</b></i>
+				},</b>
             };
         }
     }</code></pre>
@@ -66,13 +66,15 @@ And, say you wanted to do a `git` checkout before you built the solution:
     public class BuildTargets {
         [Targets]
         public static object Targets (IParameters parameters) {
-			<i><b>var gitrepo = new GitRepo {
+			<b>var gitrepo = new GitRepo {
 				Origin = "git@github.com:refractalize/website.git",
-			};</b></i>
+			};</b>
             var solution = new VisualStudioSolution {
-				SolutionPath = <i><b>gitrepo["WebSolution.sln".V()]</b></i>,
+				SolutionPath = <b>gitrepo["WebSolution.sln".V()]</b>,
 			};
 			
 			...
 		}
     }</code></pre>
+
+`GitRepo` clones the github repo and the rest of the build works from the checkout directory.
