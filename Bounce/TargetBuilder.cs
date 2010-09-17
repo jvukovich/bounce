@@ -13,7 +13,7 @@ namespace Bounce.Framework {
         }
 
         public void Build(ITarget target) {
-            Walker.Walk(target, BuildIfOutOfDate);
+            Walker.Walk(target, null, BuildIfOutOfDate);
         }
 
         private static void BuildIfOutOfDate(ITarget t) {
@@ -39,7 +39,7 @@ namespace Bounce.Framework {
         }
 
         public void Clean(ITarget target) {
-            Walker.Walk(target, b => b.Clean());
+            Walker.Walk(target, b => b.Clean(), null);
         }
     }
 }

@@ -5,6 +5,12 @@ using Bounce.VisualStudio;
 using System.IO;
 
 namespace Bounce.Framework {
+    public class VS {
+        public static VisualStudioSolution Solution(IValue<string> path) {
+            return new VisualStudioSolution {SolutionPath = path};
+        }
+    }
+
     public class VisualStudioSolution : ITarget {
         public IValue<string> SolutionPath;
         public IValue<string> Configuration;

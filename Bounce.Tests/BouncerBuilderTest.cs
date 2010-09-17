@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Bounce.Framework;
 using Moq;
 using NUnit.Framework;
@@ -58,6 +60,24 @@ namespace Bounce.Tests
             builder.Build(bouncer.Object);
 
             bouncer.Verify(b => b.Build(), Times.Never());
+        }
+
+        [Test]
+        public void ShouldCleanDependentsBeforeDependencies() {
+            var dependent = new Mock<ITarget>();
+            var dependency = new Mock<ITarget>();
+
+            var cleanActions = new StringWriter();
+
+            dependent.Setup(d => d.Dependencies).Returns(new[] {dependency.Object});
+            dependent.Setup(d => d.Clean()).Callback(() => cleanActions.Write("clean dependent;"));
+
+            dependency.Setup(d => d.Clean()).Callback(() => cleanActions.Write("clean dependency;"));
+
+            var builder = new TargetBuilder();
+            builder.Clean(dependent.Object);
+
+            Assert.That(cleanActions.ToString(), Is.EqualTo(@"clean dependent;clean dependency;"));
         }
     }
 }
