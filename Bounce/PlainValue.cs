@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class PlainValue<T> : IValue<T> {
         public PlainValue (T value) {
             Value = value;
         }
 
-        public IEnumerable<ITarget> Dependencies {
-            get { return new ITarget[0]; }
+        public IEnumerable<ITask> Dependencies {
+            get { return new ITask[0]; }
         }
 
-        public DateTime? LastBuilt {
-            get { return null; }
+        public void BeforeBuild() {
         }
 
         public void Build() {

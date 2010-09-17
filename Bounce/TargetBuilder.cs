@@ -1,45 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class TargetBuilder {
-        public TargetWalker Walker;
+        public TaskWalker Walker;
+        public HashSet<ITask> BuiltTasks;
 
-        public TargetBuilder() : this(new TargetWalker()) {}
+        public TargetBuilder() : this(new TaskWalker()) {
+            BuiltTasks = new HashSet<ITask>();
+        }
 
-        public TargetBuilder(TargetWalker walker) {
+        public TargetBuilder(TaskWalker walker) {
             Walker = walker;
         }
 
-        public void Build(ITarget target) {
-            Walker.Walk(target, BuildIfOutOfDate);
+        public void Build(ITask task) {
+            Walker.Walk(task, t => t.BeforeBuild(), BuildIfNotAlreadyBuilt);
         }
 
-        private static void BuildIfOutOfDate(ITarget t) {
-            if (IsBouncerOutOfDate(t)) {
-                t.Build();
+        public void BuildIfNotAlreadyBuilt(ITask task) {
+            if (!BuiltTasks.Contains(task)) {
+                task.Build();
+                BuiltTasks.Add(task);
             }
         }
 
-        private static bool IsBouncerOutOfDate(ITarget t) {
-            if (t.Dependencies.Count() == 0) {
-                return !t.LastBuilt.HasValue;
-            }
-
-            if (t.Dependencies.All(d => d.LastBuilt.HasValue)) {
-                IEnumerable<DateTime> allDates = t.Dependencies.Select(d => d.LastBuilt.Value);
-                DateTime latestOfAllDeps = allDates.Max();
-                if (t.LastBuilt.HasValue && latestOfAllDeps <= t.LastBuilt.Value) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public void Clean(ITarget target) {
-            Walker.Walk(target, b => b.Clean());
+        public void Clean(ITask task) {
+            Walker.Walk(task, b => b.Clean(), null);
         }
     }
 }

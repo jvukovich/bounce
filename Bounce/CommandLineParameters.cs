@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class CommandLineParameters : IParameters {
         private TypeParsers TypeParsers;
         private Dictionary<string, IParameter> RegisteredParameters;
@@ -26,6 +25,10 @@ namespace Bounce {
         }
 
         private IParameter<T> RegisterParameter<T>(IParameter<T> p) {
+            if (RegisteredParameters.ContainsKey(p.Name)) {
+                throw new ConfigurationException(String.Format("parameter `{0}' already registered", p.Name));
+            }
+
             RegisteredParameters.Add(p.Name, p);
             return p;
         }

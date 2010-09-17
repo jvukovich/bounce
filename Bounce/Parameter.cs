@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     class Parameter<T> : IParameter<T> {
         public bool Required { get; set; }
         public string Name { get; set; }
@@ -9,13 +8,12 @@ namespace Bounce {
         private T _value;
         public IEnumerable<object> AvailableValues { get; set; }
 
-        public IEnumerable<ITarget> Dependencies
+        public IEnumerable<ITask> Dependencies
         {
-            get { return new ITarget[0]; }
+            get { return new ITask[0]; }
         }
 
-        public DateTime? LastBuilt {
-            get { return DateTime.UtcNow; }
+        public void BeforeBuild() {
         }
 
         public void Build() {

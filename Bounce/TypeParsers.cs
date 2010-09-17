@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     class TypeParsers : Dictionary<Type, Func<string, object>>, ITypeParsers {
         public T Parse<T>(string parameterValue) {
             Func<string, object> parser = this[typeof(T)];

@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class VisualStudioProject : IIisWebSiteDirectory {
+    public class VisualStudioProject : ITask {
         private readonly VisualStudioSolution Solution;
 
         public VisualStudioProject(VisualStudioSolution solution, IValue<string> name) {
@@ -16,23 +15,23 @@ namespace Bounce.Framework {
                 return this.Future(() => Solution.GetProjectDetails(Name.Value).OutputFile);
             }
         }
+        public IValue<string> Directory {
+            get {
+                return this.Future(() => Solution.GetProjectDetails(Name.Value).Directory);
+            }
+        }
 
-        public IEnumerable<ITarget> Dependencies {
+        public IEnumerable<ITask> Dependencies {
             get { return new[] {Solution}; }
         }
 
-        public DateTime? LastBuilt {
-            get { return Solution.LastBuilt; }
+        public void BeforeBuild() {
         }
 
         public void Build() {
         }
 
         public void Clean() {
-        }
-
-        public IValue<string> Path {
-            get { return this.Future(() => System.IO.Path.GetDirectoryName(OutputFile.Value)); }
         }
     }
 }

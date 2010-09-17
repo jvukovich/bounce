@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BD123B60-C18A-4446-808E-F4B81D0EE23D}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -48,16 +48,6 @@
     <Compile Include="BounceAssemblyRunner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
-      <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
-      <Name>Bounce.VisualStudio</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bounce\Bounce.Framework.csproj">
-      <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
-      <Name>Bounce.Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

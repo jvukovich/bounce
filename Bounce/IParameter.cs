@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public interface IParameter {
         void Parse(string parameterValue, ITypeParsers typeParsers);
         string Name { get; }

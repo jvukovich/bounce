@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bounce {
-    public class NUnitTestResults : ITarget {
+namespace Bounce.Framework {
+    public class NUnitTests : ITask {
         public IEnumerable<IValue<string>> DllPaths;
 
-        public IEnumerable<ITarget> Dependencies {
-            get { return DllPaths.Cast<ITarget>(); }
+        public IEnumerable<ITask> Dependencies {
+            get { return DllPaths.Cast<ITask>(); }
         }
 
-        public DateTime? LastBuilt {
-            get { return null; }
+        public void BeforeBuild() {
         }
 
         public void Build() {
@@ -19,7 +18,7 @@ namespace Bounce {
 
             foreach (var dllPath in testDlls) {
                 Console.WriteLine("running unit tests for: " + dllPath);
-                new ShellCommandExecutor().ExecuteProcess("nunit-console", dllPath, "running nunit");
+                new ShellCommandExecutor().ExecuteAndExpectSuccess("nunit-console", String.Format(@"""{0}""", dllPath));
             }
         }
 

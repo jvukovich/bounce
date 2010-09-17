@@ -34,8 +34,10 @@ namespace Bounce.VisualStudio.Tests {
             Assert.That(projects.Count(), Is.EqualTo(2));
             Assert.That(projects.ElementAt(0).OutputFile, Is.EqualTo(@"solutionPath\Stuff\bin\stuff.dll"));
             Assert.That(projects.ElementAt(0).Name, Is.EqualTo("Stuff"));
+            Assert.That(projects.ElementAt(0).Directory, Is.EqualTo(@"solutionPath\Stuff"));
             Assert.That(projects.ElementAt(1).OutputFile, Is.EqualTo(@"solutionPath\Other\bin\other.dll"));
             Assert.That(projects.ElementAt(1).Name, Is.EqualTo("Other"));
+            Assert.That(projects.ElementAt(1).Directory, Is.EqualTo(@"solutionPath\Other"));
         }
     }
 }

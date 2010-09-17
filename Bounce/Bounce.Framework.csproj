@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -31,12 +31,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -47,29 +57,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
+    <Compile Include="DependencyBuildFailureException.cs" />
+    <Compile Include="Dir.cs" />
+    <Compile Include="FileSystem.cs" />
+    <Compile Include="IDirectoryUtils.cs" />
+    <Compile Include="IFileSystem.cs" />
+    <Compile Include="IZipFileCreator.cs" />
     <Compile Include="PlainValue.cs" />
+    <Compile Include="PlainValueExtensions.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="BouncerUtils.cs" />
-    <Compile Include="TargetWalker.cs" />
-    <Compile Include="IIisWebSiteDirectory.cs" />
-    <Compile Include="ITarget.cs" />
-    <Compile Include="IisWebSite.cs" />
+    <Compile Include="TaskException.cs" />
+    <Compile Include="TargetsAttribute.cs" />
+    <Compile Include="TaskWalker.cs" />
+    <Compile Include="ITask.cs" />
+    <Compile Include="Iis7WebSite.cs" />
     <Compile Include="IParameter.cs" />
     <Compile Include="IParameters.cs" />
-    <Compile Include="ISourceDirectory.cs" />
     <Compile Include="ITypeParsers.cs" />
     <Compile Include="IValue.cs" />
-    <Compile Include="NUnitTestResults.cs" />
+    <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="CommandLineParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SourceDirectory.cs" />
     <Compile Include="TypeParsers.cs" />
+    <Compile Include="VisualStudioProject.cs" />
     <Compile Include="VisualStudioSolution.cs" />
+    <Compile Include="VisualStudioSolutionProjects.cs" />
+    <Compile Include="WindowsService.cs" />
+    <Compile Include="ZipFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
