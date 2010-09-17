@@ -4,7 +4,7 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace Bounce.Framework {
-    public class ZipFile : ITarget {
+    public class ZipFile : ITask {
         private readonly IZipFileCreator ZipFileCreator;
         private readonly IFileSystem FileSystem;
         private readonly IDirectoryUtils DirectoryUtils;
@@ -20,7 +20,7 @@ namespace Bounce.Framework {
             DirectoryUtils = directoryUtils;
         }
 
-        public IEnumerable<ITarget> Dependencies {
+        public IEnumerable<ITask> Dependencies {
             get { return new[] {Directory, ZipFileName}; }
         }
 

@@ -47,7 +47,7 @@ namespace Bounce.Framework {
         }
     }
 
-    public class ToDir : ITarget {
+    public class ToDir : ITask {
         private readonly IDirectoryUtils DirUtils;
 
         public ToDir() : this(new DirectoryUtils()) {}
@@ -59,7 +59,7 @@ namespace Bounce.Framework {
         public IValue<string> FromPath { get; set; }
         public IValue<string> ToPath { get; set; }
 
-        public IEnumerable<ITarget> Dependencies {
+        public IEnumerable<ITask> Dependencies {
             get { return new[] {FromPath, ToPath}; }
         }
 

@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="TargetBuilderTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />
-    <Compile Include="FakeTarget.cs" />
+    <Compile Include="FakeTask.cs" />
     <Compile Include="Iis7Admin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToDirTest.cs" />

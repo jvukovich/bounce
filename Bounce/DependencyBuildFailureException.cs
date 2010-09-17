@@ -1,6 +1,6 @@
 ﻿namespace Bounce.Framework {
-    internal class DependencyBuildFailureException : TargetException {
-        public DependencyBuildFailureException(ITarget target, string message) : base(target, message) {
+    internal class DependencyBuildFailureException : TaskException {
+        public DependencyBuildFailureException(ITask task, string message) : base(task, message) {
         }
     }
 }

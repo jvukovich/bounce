@@ -11,17 +11,20 @@ It works slightly differently to NAnt and Rake. It uses tasks that can be compos
 complex dependency trees of build operations. Tasks depend on each other, and in doing so they can query
 tasks for configuration settings - eliminating the need for global variables.
 
-## Why C# 
+## Why C#?
 
-No scripting language? Controversial! :)
+No scripting language? How controversial! :)
 
-When the build and production language are the same, we easily can share common code between our project and our build.
-C# is well up to the task so why bother with language barriers when you don't need them?
+Everybody's talking about using Ruby and Rake to hack their build scripts? Why use C#?
+
+For us .Net hackers, C# is our lingua franca. And when C# is used as your production language
+_and_ you're build language, you can easily share code and configuration between them. No language barriers
+- they're just not worth it.
 
 ## Show me
 
-Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0. We'd write
-a C# targets file like this:
+Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0.
+We'd write a C# file containing our targets like this:
 
 <pre><code>public class BuildTargets {
     [Targets]

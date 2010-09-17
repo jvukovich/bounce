@@ -8,8 +8,8 @@ namespace Bounce.Tests {
     public class TargetBuilderTest {
         [Test]
         public void ShouldBuildDependenciesBeforeDependencts() {
-            var dependent = new Mock<ITarget>();
-            var dependency = new Mock<ITarget>();
+            var dependent = new Mock<ITask>();
+            var dependency = new Mock<ITask>();
 
             var buildActions = new StringWriter();
 
@@ -27,8 +27,8 @@ namespace Bounce.Tests {
 
         [Test]
         public void ShouldCleanDependentsBeforeDependencies() {
-            var dependent = new Mock<ITarget>();
-            var dependency = new Mock<ITarget>();
+            var dependent = new Mock<ITask>();
+            var dependency = new Mock<ITask>();
 
             var cleanActions = new StringWriter();
 
@@ -44,12 +44,12 @@ namespace Bounce.Tests {
         }
 
         [Test]
-        public void ShouldOnlyBuildTargetsOnceEvenIfTheyAreDependedUponTwice()
+        public void ShouldOnlyBuildTasksOnceEvenIfTheyAreDependedUponTwice()
         {
-            var all = new Mock<ITarget>();
-            var dependent1 = new Mock<ITarget>();
-            var dependent2 = new Mock<ITarget>();
-            var twiceADependency = new Mock<ITarget>();
+            var all = new Mock<ITask>();
+            var dependent1 = new Mock<ITask>();
+            var dependent2 = new Mock<ITask>();
+            var twiceADependency = new Mock<ITask>();
 
             all.Setup(d => d.Dependencies).Returns(new[] { dependent1.Object, dependent2.Object });
             dependent1.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });

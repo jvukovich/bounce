@@ -2,8 +2,8 @@
 using Bounce.Framework;
 
 namespace Bounce.Tests {
-    public class FakeTarget : ITarget {
-        public IEnumerable<ITarget> Dependencies { get; set; }
+    public class FakeTask : ITask {
+        public IEnumerable<ITask> Dependencies { get; set; }
 
         public virtual void BeforeBuild() {
         }

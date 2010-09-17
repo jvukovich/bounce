@@ -1,5 +1,5 @@
 ﻿namespace Bounce.Framework {
-    public interface IValue<T> : ITarget {
+    public interface IValue<T> : ITask {
         T Value { get; }
     }
 }

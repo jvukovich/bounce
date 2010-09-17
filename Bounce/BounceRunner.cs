@@ -17,14 +17,14 @@ namespace Bounce.Framework {
                     string[] buildArguments = parameters.ParseCommandLineArguments(args);
 
                     string command = buildArguments[1];
-                    Action<TargetBuilder, ITarget> commandAction = GetCommand(command);
+                    Action<TargetBuilder, ITask> commandAction = GetCommand(command);
 
                     for (int i = 2; i < buildArguments.Length; i++) {
                         string targetName = buildArguments[i];
-                        ITarget target = FindTarget(targets, targetName);
+                        ITask task = FindTarget(targets, targetName);
 
-                        if (target != null) {
-                            commandAction(builder, target);
+                        if (task != null) {
+                            commandAction(builder, task);
                         } else {
                             Console.WriteLine("no target named {0}", targetName);
                             Console.WriteLine("try one of the following:");
@@ -61,13 +61,13 @@ namespace Bounce.Framework {
             }
         }
 
-        private static Action<TargetBuilder, ITarget> GetCommand(string command) {
+        private static Action<TargetBuilder, ITask> GetCommand(string command) {
             switch (command.ToLower()) {
                 case "build": {
-                        return (builder, target) => builder.Build(target);
+                        return (builder, task) => builder.Build(task);
                     }
                 case "clean": {
-                        return (builder, target) => builder.Clean(target);
+                        return (builder, task) => builder.Clean(task);
                     }
                 default: {
                         throw new ConfigurationException(String.Format("command {0} not recognised", command));
@@ -75,11 +75,11 @@ namespace Bounce.Framework {
             }
         }
 
-        private static ITarget FindTarget(object targets, string targetName) {
+        private static ITask FindTarget(object targets, string targetName) {
             PropertyInfo propertyInfo = targets.GetType().GetProperty(targetName);
 
             if (propertyInfo != null) {
-                return (ITarget)propertyInfo.GetValue(targets, new object[0]);
+                return (ITask)propertyInfo.GetValue(targets, new object[0]);
             } else {
                 return null;
             }

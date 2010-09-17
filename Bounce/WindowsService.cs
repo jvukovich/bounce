@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
-    public class WindowsService : ITarget {
+    public class WindowsService : ITask {
         public IValue<string> Name;
         public IValue<string> BinaryPath;
         public IValue<string> Description;
@@ -16,7 +16,7 @@ namespace Bounce.Framework {
             ShellCommandExecutor = new ShellCommandExecutor();
         }
 
-        public IEnumerable<ITarget> Dependencies {
+        public IEnumerable<ITask> Dependencies {
             get { return new[] {Name, BinaryPath, Description, DisplayName, UserName, Password}; }
         }
 

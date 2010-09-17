@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class VisualStudioProject : ITarget {
+    public class VisualStudioProject : ITask {
         private readonly VisualStudioSolution Solution;
 
         public VisualStudioProject(VisualStudioSolution solution, IValue<string> name) {
@@ -21,7 +21,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public IEnumerable<ITarget> Dependencies {
+        public IEnumerable<ITask> Dependencies {
             get { return new[] {Solution}; }
         }
 

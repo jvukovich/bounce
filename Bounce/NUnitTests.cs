@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Bounce.Framework {
-    public class NUnitTests : ITarget {
+    public class NUnitTests : ITask {
         public IEnumerable<IValue<string>> DllPaths;
 
-        public IEnumerable<ITarget> Dependencies {
-            get { return DllPaths.Cast<ITarget>(); }
+        public IEnumerable<ITask> Dependencies {
+            get { return DllPaths.Cast<ITask>(); }
         }
 
         public void BeforeBuild() {

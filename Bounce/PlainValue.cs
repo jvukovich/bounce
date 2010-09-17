@@ -6,8 +6,8 @@ namespace Bounce.Framework {
             Value = value;
         }
 
-        public IEnumerable<ITarget> Dependencies {
-            get { return new ITarget[0]; }
+        public IEnumerable<ITask> Dependencies {
+            get { return new ITask[0]; }
         }
 
         public void BeforeBuild() {

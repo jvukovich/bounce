@@ -4,13 +4,13 @@ using System.Linq;
 using Microsoft.Web.Administration;
 
 namespace Bounce.Framework {
-    public class Iis7WebSite : ITarget {
+    public class Iis7WebSite : ITask {
         public IValue<string> Path;
         public IValue<int> Port;
         public IValue<string> Name;
 
-        public IEnumerable<ITarget> Dependencies {
-            get { return new ITarget[] {Path, Port, Name}; }
+        public IEnumerable<ITask> Dependencies {
+            get { return new ITask[] {Path, Port, Name}; }
         }
 
         public void BeforeBuild() {

@@ -72,10 +72,11 @@
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="BouncerUtils.cs" />
-    <Compile Include="TargetException.cs" />
+    <Compile Include="TaskException.cs" />
     <Compile Include="TargetsAttribute.cs" />
-    <Compile Include="TargetWalker.cs" />
-    <Compile Include="ITarget.cs" />
+    <Compile Include="TaskExtensions.cs" />
+    <Compile Include="TaskWalker.cs" />
+    <Compile Include="ITask.cs" />
     <Compile Include="Iis7WebSite.cs" />
     <Compile Include="IParameter.cs" />
     <Compile Include="IParameters.cs" />

@@ -8,9 +8,9 @@ namespace Bounce.Framework {
         private T _value;
         public IEnumerable<object> AvailableValues { get; set; }
 
-        public IEnumerable<ITarget> Dependencies
+        public IEnumerable<ITask> Dependencies
         {
-            get { return new ITarget[0]; }
+            get { return new ITask[0]; }
         }
 
         public void BeforeBuild() {

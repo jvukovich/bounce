@@ -11,7 +11,7 @@ namespace Bounce.Framework {
         }
     }
 
-    public class VisualStudioSolution : ITarget {
+    public class VisualStudioSolution : ITask {
         public IValue<string> SolutionPath;
         public IValue<string> Configuration;
         private readonly ShellCommandExecutor ShellCommandExecutor;
@@ -26,7 +26,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public IEnumerable<ITarget> Dependencies {
+        public IEnumerable<ITask> Dependencies {
             get { return new[] {SolutionPath}; }
         }
 
