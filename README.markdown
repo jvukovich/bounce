@@ -56,7 +56,7 @@ Say you wanted to add a unit test task:
 					Name = "My Website".V(),
 					Port = 5001.V(),
 				},
-				<span style="color: black"><b>Tests = new NUnitTests {
+				<span style="color: red"><b>Tests = new NUnitTests {
                     DllPaths = solution.Projects.Select(p => p.OutputFile),
 				},</b></span>
             };
@@ -73,11 +73,11 @@ And, say you wanted to do a `git` checkout before you built the solution:
     <span style="color: gray">public class BuildTargets {
         [Targets]
         public static object Targets (IParameters parameters) {
-			<span style="color: black"><b>var gitrepo = new GitRepo {
+			<span style="color: red"><b>var gitrepo = new GitRepo {
 				Origin = "git@github.com:refractalize/website.git",
 			};</b></span>
             var solution = new VisualStudioSolution {
-				SolutionPath = <span style="color: black"><b>gitrepo["WebSolution.sln".V()]</b></span>,
+				SolutionPath = <span style="color: red"><b>gitrepo["WebSolution.sln".V()]</b></span>,
 			};
             var webProject = solution.Projects["WebSite".V()];
 

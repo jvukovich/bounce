@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Bounce.Framework {
-    public class NUnitTestResults : ITarget {
+    public class NUnitTests : ITarget {
         public IEnumerable<IValue<string>> DllPaths;
 
         public IEnumerable<ITarget> Dependencies {

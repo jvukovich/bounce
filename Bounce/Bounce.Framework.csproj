@@ -81,7 +81,7 @@
     <Compile Include="IParameters.cs" />
     <Compile Include="ITypeParsers.cs" />
     <Compile Include="IValue.cs" />
-    <Compile Include="NUnitTestResults.cs" />
+    <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="CommandLineParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
