@@ -10,6 +10,9 @@ namespace Bounce.Framework {
             get { return DllPaths.Cast<ITarget>(); }
         }
 
+        public void BeforeBuild() {
+        }
+
         public void Build() {
             IEnumerable<string> testDlls = DllPaths.Select(dll => dll.Value).Where(dll => dll.EndsWith("Tests.dll"));
 

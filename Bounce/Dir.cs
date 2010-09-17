@@ -63,6 +63,9 @@ namespace Bounce.Framework {
             get { return new[] {FromPath, ToPath}; }
         }
 
+        public void BeforeBuild() {
+        }
+
         public void Build() {
             var fromPath = FromPath.Value;
             var toPath = ToPath.Value;

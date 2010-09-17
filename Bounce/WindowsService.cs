@@ -19,6 +19,9 @@ namespace Bounce.Framework {
             get { return new[] {Name, BinaryPath, Description, DisplayName, UserName, Password}; }
         }
 
+        public void BeforeBuild() {
+        }
+
         public void Build() {
             if (ServiceInstalled) {
                 DeleteService();

@@ -30,6 +30,9 @@ namespace Bounce.Framework {
             get { return new[] {SolutionPath}; }
         }
 
+        public void BeforeBuild() {
+        }
+
         public void Build() {
             Console.WriteLine("building solution at: " + SolutionPath.Value);
 

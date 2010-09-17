@@ -29,6 +29,9 @@ namespace Bounce.Framework {
             get { return new[] { (ITarget)Dependency }; }
         }
 
+        public void BeforeBuild() {
+        }
+
         public void Build() {
         }
 
@@ -51,6 +54,9 @@ namespace Bounce.Framework {
 
         public IEnumerable<ITarget> Dependencies {
             get { return new[] {dependency}; }
+        }
+
+        public void BeforeBuild() {
         }
 
         public void Build() {

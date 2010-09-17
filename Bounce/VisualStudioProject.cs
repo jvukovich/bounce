@@ -25,6 +25,9 @@ namespace Bounce.Framework {
             get { return new[] {Solution}; }
         }
 
+        public void BeforeBuild() {
+        }
+
         public void Build() {
         }
 

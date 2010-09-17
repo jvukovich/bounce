@@ -5,6 +5,9 @@ namespace Bounce.Tests {
     public class FakeTarget : ITarget {
         public IEnumerable<ITarget> Dependencies { get; set; }
 
+        public virtual void BeforeBuild() {
+        }
+
         public virtual void Build() {
         }
 

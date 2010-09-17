@@ -10,6 +10,9 @@ namespace Bounce.Framework {
             get { return new ITarget[0]; }
         }
 
+        public void BeforeBuild() {
+        }
+
         public void Build() {
         }
 
