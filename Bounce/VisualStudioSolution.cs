@@ -33,7 +33,7 @@ namespace Bounce.Framework {
         public void Build() {
             Console.WriteLine("building solution at: " + SolutionPath.Value);
 
-            ShellCommandExecutor.ExecuteProcess("msbuild.exe", String.Format(@"""{0}""", SolutionPath.Value));
+            ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"""{0}""", SolutionPath.Value));
         }
 
         internal VisualStudioSolutionDetails SolutionDetails {
@@ -62,7 +62,7 @@ namespace Bounce.Framework {
 
         public void Clean() {
             Console.WriteLine("cleaning solution at: " + SolutionPath.Value);
-            ShellCommandExecutor.ExecuteProcess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
+            ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
         }
 
         public DateTime? LastBuilt {

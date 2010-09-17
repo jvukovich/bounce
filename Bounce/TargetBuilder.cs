@@ -23,12 +23,14 @@ namespace Bounce.Framework {
         }
 
         private static bool IsBouncerOutOfDate(ITarget t) {
-            if (t.Dependencies.Count() == 0) {
+            var deps = t.GetNonNullDependencies();
+
+            if (deps.Count() == 0) {
                 return !t.LastBuilt.HasValue;
             }
 
-            if (t.Dependencies.All(d => d.LastBuilt.HasValue)) {
-                IEnumerable<DateTime> allDates = t.Dependencies.Select(d => d.LastBuilt.Value);
+            if (deps.All(d => d.LastBuilt.HasValue)) {
+                IEnumerable<DateTime> allDates = deps.Select(d => d.LastBuilt.Value);
                 DateTime latestOfAllDeps = allDates.Max();
                 if (t.LastBuilt.HasValue && latestOfAllDeps <= t.LastBuilt.Value) {
                     return false;

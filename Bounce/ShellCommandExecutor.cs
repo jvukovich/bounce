@@ -4,7 +4,14 @@ using System.IO;
 
 namespace Bounce.Framework {
     class ShellCommandExecutor {
-        public void ExecuteProcess(string commandName, string commandArgs) {
+        public void ExecuteAndExpectSuccess(string commandName, string commandArgs) {
+            var output = Execute(commandName, commandArgs);
+            if (output.ExitCode != 0) {
+                throw new BuildException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
+            }
+        }
+
+        public ProcessOutput Execute(string commandName, string commandArgs) {
             var processInfo = new ProcessStartInfo(commandName, commandArgs);
             processInfo.CreateNoWindow = true;
             processInfo.RedirectStandardError = true;
@@ -23,9 +30,15 @@ namespace Bounce.Framework {
             p.BeginOutputReadLine();
 
             p.WaitForExit();
-            if (p.ExitCode != 0) {
-                throw new BuildException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), p.ExitCode), output.Output);
-            }
+
+            return new ProcessOutput {ExitCode = p.ExitCode, Output = output.Output, Error = output.Error, ErrorAndOutput = output.ErrorAndOutput};
         }
+    }
+
+    public class ProcessOutput {
+        public int ExitCode;
+        public string Output;
+        public string Error;
+        public string ErrorAndOutput;
     }
 }

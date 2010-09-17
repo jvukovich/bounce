@@ -19,7 +19,7 @@ namespace Bounce.Framework {
 
             foreach (var dllPath in testDlls) {
                 Console.WriteLine("running unit tests for: " + dllPath);
-                new ShellCommandExecutor().ExecuteProcess("nunit-console", String.Format(@"""{0}""", dllPath));
+                new ShellCommandExecutor().ExecuteAndExpectSuccess("nunit-console", String.Format(@"""{0}""", dllPath));
             }
         }
 

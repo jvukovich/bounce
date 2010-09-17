@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0F0BBC36-D999-47EB-BA24-6A926C2B8641}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -54,8 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BouncerBuilderTest.cs" />
+    <Compile Include="DirTest.cs" />
     <Compile Include="FakeTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToDirTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce\Bounce.Framework.csproj">

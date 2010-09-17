@@ -34,9 +34,11 @@
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -52,6 +54,7 @@
     <Compile Include="BuildException.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
+    <Compile Include="Dir.cs" />
     <Compile Include="PlainValue.cs" />
     <Compile Include="PlainValueExtensions.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="VisualStudioProject.cs" />
     <Compile Include="VisualStudioSolution.cs" />
     <Compile Include="VisualStudioSolutionProjects.cs" />
+    <Compile Include="WindowsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">

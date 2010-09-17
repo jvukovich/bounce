@@ -24,6 +24,7 @@ namespace Bounce.VisualStudio {
 
         private string GetExtensionForOutputType(string outputType) {
             switch (outputType) {
+                case "WinExe":
                 case "Exe":
                     return "exe";
                 case "Library":

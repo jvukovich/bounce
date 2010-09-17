@@ -25,6 +25,10 @@ namespace Bounce.Framework {
         }
 
         private IParameter<T> RegisterParameter<T>(IParameter<T> p) {
+            if (RegisteredParameters.ContainsKey(p.Name)) {
+                throw new ConfigurationException(String.Format("parameter `{0}' already registered", p.Name));
+            }
+
             RegisteredParameters.Add(p.Name, p);
             return p;
         }

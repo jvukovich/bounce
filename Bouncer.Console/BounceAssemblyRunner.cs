@@ -58,7 +58,7 @@ namespace Bouncer.Console {
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
             object parameters = runnerType.GetProperty("Parameters").GetValue(runner, new object[0]);
 
-            object targets = bounceAssemblyAndTargetsProperty.TargetsProperty.Invoke(null, new[] { parameters });
+            object targets = bounceAssemblyAndTargetsProperty.GetTargetsMethod.Invoke(null, new[] { parameters });
 
             runnerType.GetMethod("Run").Invoke(runner, new[] { args, targets });
         }
@@ -70,7 +70,7 @@ namespace Bouncer.Console {
                 foreach (var attr in prop.GetCustomAttributes(false)) {
                     var attrType = attr.GetType();
                     if (attrType.FullName == "Bounce.Framework.TargetsAttribute") {
-                        return new BounceAssemblyAndTargetsProperty { BounceAssembly = attrType.Assembly, TargetsProperty = prop };
+                        return new BounceAssemblyAndTargetsProperty { BounceAssembly = attrType.Assembly, GetTargetsMethod = prop };
                     }
                 }
             }
@@ -79,7 +79,7 @@ namespace Bouncer.Console {
         }
 
         class BounceAssemblyAndTargetsProperty {
-            public MethodInfo TargetsProperty;
+            public MethodInfo GetTargetsMethod;
             public Assembly BounceAssembly;
         }
     }
