@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class IisWebSite : ITarget {
         public IIisWebSiteDirectory WebSiteDirectory;
-
-        #region ITarget Members
 
         public IEnumerable<ITarget> Dependencies {
             get { return new[] {WebSiteDirectory}; }
         }
 
         public void Build() {
-            Console.WriteLine("installing IIS website at: " + WebSiteDirectory.Path);
+            Console.WriteLine("installing IIS website at: " + WebSiteDirectory.Path.Value);
             LastBuilt = DateTime.UtcNow;
         }
 
         public void Clean() {
-            Console.WriteLine("uninstalling IIS website at: " + WebSiteDirectory.Path);
+            Console.WriteLine("uninstalling IIS website at: " + WebSiteDirectory.Path.Value);
         }
 
         public DateTime? LastBuilt { get; set; }
-
-        #endregion
     }
 }

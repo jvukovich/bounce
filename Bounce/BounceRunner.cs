@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class BounceRunner {
         public BounceRunner () {
             Parameters = CommandLineParameters.ParametersWithUsualTypeParsers();

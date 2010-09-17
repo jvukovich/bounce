@@ -10,6 +10,11 @@ namespace Bounce.Framework {
     public class VisualStudioSolution : ITarget {
         public IValue<string> SolutionPath;
         public IValue<string> Configuration;
+        private readonly ShellCommandExecutor ShellCommandExecutor;
+
+        public VisualStudioSolution() {
+            ShellCommandExecutor = new ShellCommandExecutor();
+        }
 
         public VisualStudioSolutionProjects Projects {
             get {
@@ -24,28 +29,58 @@ namespace Bounce.Framework {
         public void Build() {
             Console.WriteLine("building solution at: " + SolutionPath.Value);
 
-            new ShellCommandExecutor().ExecuteProcess("msbuild.exe", SolutionPath.Value, "msbiuld exited funny");
-
-            LastBuilt = DateTime.UtcNow;
+            ShellCommandExecutor.ExecuteProcess("msbuild.exe", String.Format(@"""{0}""", SolutionPath.Value));
         }
 
         internal VisualStudioSolutionDetails SolutionDetails {
             get {
-                var solutionPath = SolutionPath.Value;
+                var details = TryGetSolutionDetails();
 
-                if (File.Exists(solutionPath)) {
-                    return new VisualStudioSolutionFileReader().ReadSolution(solutionPath, Config);
+                if (details != null) {
+                    return details;
                 } else {
-                    throw new DependencyBuildFailureException(this, String.Format("VisualStudio solution file `{0}' does not exist", solutionPath));
+                    throw new DependencyBuildFailureException(this,
+                                                              String.Format("VisualStudio solution file `{0}' does not exist",
+                                                                            SolutionPath.Value));
                 }
+            }
+        }
+
+        internal VisualStudioSolutionDetails TryGetSolutionDetails() {
+            var solutionPath = SolutionPath.Value;
+
+            if (File.Exists(solutionPath)) {
+                return new VisualStudioSolutionFileReader().ReadSolution(solutionPath, Config);
+            } else {
+                return null;
             }
         }
 
         public void Clean() {
             Console.WriteLine("cleaning solution at: " + SolutionPath.Value);
+            ShellCommandExecutor.ExecuteProcess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
         }
 
-        public DateTime? LastBuilt { get; set; }
+        public DateTime? LastBuilt {
+            get {
+                var details = TryGetSolutionDetails();
+
+                if (details != null) {
+                    IEnumerable<DateTime> outputFileModTimes = SolutionDetails.Projects
+                        .Select(p => p.OutputFile)
+                        .Where(File.Exists)
+                        .Select(filename => File.GetLastWriteTimeUtc(filename));
+
+                    if (outputFileModTimes.Count() > 0) {
+                        return outputFileModTimes.Max();
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        }
 
         private string Config {
             get {
@@ -99,40 +134,6 @@ namespace Bounce.Framework {
 
     internal class BounceException : Exception {
         public BounceException(string message) : base(message) {
-        }
-    }
-
-    public class VisualStudioProject : IIisWebSiteDirectory {
-        private readonly VisualStudioSolution Solution;
-
-        public VisualStudioProject(VisualStudioSolution solution, IValue<string> name) {
-            Solution = solution;
-            Name = name;
-        }
-
-        public IValue<string> Name { get; private set; }
-        public IValue<string> OutputFile {
-            get {
-                return this.Future(() => Solution.GetProjectDetails(Name.Value).OutputFile);
-            }
-        }
-
-        public IEnumerable<ITarget> Dependencies {
-            get { return new[] {Solution}; }
-        }
-
-        public DateTime? LastBuilt {
-            get { return Solution.LastBuilt; }
-        }
-
-        public void Build() {
-        }
-
-        public void Clean() {
-        }
-
-        public IValue<string> Path {
-            get { return this.Future(() => System.IO.Path.GetDirectoryName(OutputFile.Value)); }
         }
     }
 

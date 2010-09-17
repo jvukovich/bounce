@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public interface IParameters {
         IValue<T> Required<T>(string name);
         IValue<T> Default<T>(string name, T defaultValue);

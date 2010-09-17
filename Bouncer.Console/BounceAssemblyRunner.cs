@@ -7,23 +7,59 @@ namespace Bouncer.Console {
     class BounceAssemblyRunner {
         public void Run(string [] args) {
             if (args.Length < 1) {
-                System.Console.WriteLine("usage: bounce ASSEMBLY");
-                return;
+                string exeName = Path.GetFileNameWithoutExtension(GetType().Assembly.Location);
+                System.Console.WriteLine("usage: {0} ASSEMBLY", exeName);
+                Environment.Exit(1);
             }
-            string assemblyPath = args[0];
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(assemblyPath));
+            string assemblyFileName = args[0];
+            SetCwdToAssemblyDirectory(assemblyFileName);
 
-            Assembly a = Assembly.LoadFrom(assemblyPath);
+            if (!File.Exists(assemblyFileName)) {
+                System.Console.WriteLine("assembly at: `{0}', does not exist", assemblyFileName);
+                Environment.Exit(1);
+            }
+
+            Assembly a = Assembly.LoadFrom(assemblyFileName);
 
             BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty = FindTargetsMember(a);
 
+            if (bounceAssemblyAndTargetsProperty == null)
+            {
+                System.Console.WriteLine("assembly contains no [Targets] method. Try adding something like this:");
+                System.Console.WriteLine();
+                System.Console.WriteLine(
+@"public class BuildTargets {
+    [Bounce.Framework.Targets]
+    public static object Targets (IParameters parameters) {
+        return new {
+            MyTarget = ...
+        };
+    }
+}
+");
+                Environment.Exit(1);
+            }
+            else {
+                RunAssembly(bounceAssemblyAndTargetsProperty, args);
+            }
+        }
+
+        private void SetCwdToAssemblyDirectory(string assemblyFileName) {
+            string assemblyDirectory = Path.GetDirectoryName(assemblyFileName);
+
+            if (!String.IsNullOrEmpty(assemblyDirectory)) {
+                Directory.SetCurrentDirectory(assemblyDirectory);
+            }
+        }
+
+        private void RunAssembly(BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty, string[] args) {
             Assembly bounceAssembly = bounceAssemblyAndTargetsProperty.BounceAssembly;
-            Type runnerType = bounceAssembly.GetType("Bounce.BounceRunner");
-            ConstructorInfo runnerConstructor = runnerType.GetConstructor(new Type[0]);
-            object runner = runnerConstructor.Invoke(new object[0]);
+            Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
+            object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
             object parameters = runnerType.GetProperty("Parameters").GetValue(runner, new object[0]);
 
             object targets = bounceAssemblyAndTargetsProperty.TargetsProperty.Invoke(null, new[] { parameters });
+
             runnerType.GetMethod("Run").Invoke(runner, new[] { args, targets });
         }
 
@@ -33,7 +69,7 @@ namespace Bouncer.Console {
             foreach (var prop in allProperties) {
                 foreach (var attr in prop.GetCustomAttributes(false)) {
                     var attrType = attr.GetType();
-                    if (attrType.FullName == "Bounce.TargetsAttribute") {
+                    if (attrType.FullName == "Bounce.Framework.TargetsAttribute") {
                         return new BounceAssemblyAndTargetsProperty { BounceAssembly = attrType.Assembly, TargetsProperty = prop };
                     }
                 }

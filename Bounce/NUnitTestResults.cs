@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bounce {
+namespace Bounce.Framework {
     public class NUnitTestResults : ITarget {
         public IEnumerable<IValue<string>> DllPaths;
 
@@ -19,7 +19,7 @@ namespace Bounce {
 
             foreach (var dllPath in testDlls) {
                 Console.WriteLine("running unit tests for: " + dllPath);
-                new ShellCommandExecutor().ExecuteProcess("nunit-console", dllPath, "running nunit");
+                new ShellCommandExecutor().ExecuteProcess("nunit-console", String.Format(@"""{0}""", dllPath));
             }
         }
 

@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bounce {
+namespace Bounce.Framework {
+    public static class PlainValueExtensions {
+        public static IValue<T> V<T>(this T s) {
+            return new PlainValue<T>(s);
+        }
+    }
+
     public class PlainValue<T> : IValue<T> {
         public PlainValue (T value) {
             Value = value;

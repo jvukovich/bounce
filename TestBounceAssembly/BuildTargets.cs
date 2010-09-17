@@ -1,16 +1,15 @@
 ﻿using System.Linq;
-using Bounce;
 using Bounce.Framework;
 
 namespace TestBounceAssembly {
-    public class Build {
+    public class BuildTargets {
         [Targets]
         public static object Targets (IParameters parameters) {
-            var solution = new VisualStudioSolution() { SolutionPath = parameters.Default("sln", @"..\..\..\Bounce.sln") };
-            var bounce = solution.Projects[parameters.Default("proj", "Bouncer.Console")];
+            var solution = new VisualStudioSolution() { SolutionPath = parameters.Default("sln", @"C:\Users\Public\Documents\Development\BigSolution\BigSolution.sln") };
+            var project = solution.Projects[parameters.Default("proj", "BigSolution")];
 
             return new {
-                Default = new IisWebSite() { WebSiteDirectory = bounce },
+                Default = new IisWebSite() { WebSiteDirectory = project },
                 Tests = new NUnitTestResults() { DllPaths = solution.Projects.Select(p => p.OutputFile) },
             };
         }
