@@ -5,18 +5,16 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        public BounceRunner () {
-            Parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
-        }
+        public void Run(string[] args, MethodInfo getTargetsMethod) {
+            CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
 
-        public CommandLineParameters Parameters { get; set; }
-
-        public void Run(string[] args, object targets) {
             var builder = new TargetBuilder();
 
             try {
+                var targets = getTargetsMethod.Invoke(null, new[] {parameters});
+
                 if (args.Length >= 3) {
-                    string[] buildArguments = Parameters.ParseCommandLineArguments(args);
+                    string[] buildArguments = parameters.ParseCommandLineArguments(args);
 
                     string command = buildArguments[1];
                     Action<TargetBuilder, ITarget> commandAction = GetCommand(command);
@@ -28,38 +26,38 @@ namespace Bounce.Framework {
                         if (target != null) {
                             commandAction(builder, target);
                         } else {
-                            System.Console.WriteLine("no target named {0}", targetName);
-                            System.Console.WriteLine("try one of the following:");
+                            Console.WriteLine("no target named {0}", targetName);
+                            Console.WriteLine("try one of the following:");
                             foreach (var name in GetTargetNames(targets)) {
-                                System.Console.WriteLine("  " + name);
+                                Console.WriteLine("  " + name);
                             }
                         }
                     }
                 } else {
-                    System.Console.WriteLine("usage: bounce build|clean target-name");
-                    System.Console.WriteLine();
-                    System.Console.WriteLine("targets:");
+                    Console.WriteLine("usage: bounce build|clean target-name");
+                    Console.WriteLine();
+                    Console.WriteLine("targets:");
                     foreach (var name in GetTargetNames(targets)) {
-                        System.Console.WriteLine("  " + name);
+                        Console.WriteLine("  " + name);
                     }
-                    System.Console.WriteLine();
-                    System.Console.WriteLine("arguments:");
-                    foreach (var param in Parameters.Parameters) {
-                        System.Console.Write("  /" + param.Name);
+                    Console.WriteLine();
+                    Console.WriteLine("arguments:");
+                    foreach (var param in parameters.Parameters) {
+                        Console.Write("  /" + param.Name);
                         if (param.Required) {
-                            System.Console.Write(" required");
+                            Console.Write(" required");
                         }
                         if (param.HasValue) {
-                            System.Console.Write(" default: " + param.DefaultValue);
+                            Console.Write(" default: " + param.DefaultValue);
                         }
-                        System.Console.WriteLine();
+                        Console.WriteLine();
                     }
                 }
             } catch (BuildException ce) {
-                System.Console.WriteLine(ce.Message);
-                System.Console.Write(ce.Output);
+                Console.WriteLine(ce.Message);
+                Console.Write(ce.Output);
             } catch (ConfigurationException ce) {
-                System.Console.WriteLine(ce.Message);
+                Console.WriteLine(ce.Message);
             }
         }
 

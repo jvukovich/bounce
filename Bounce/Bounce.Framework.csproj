@@ -33,6 +33,10 @@
   <ItemGroup>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
@@ -63,9 +67,8 @@
     <Compile Include="TargetException.cs" />
     <Compile Include="TargetsAttribute.cs" />
     <Compile Include="TargetWalker.cs" />
-    <Compile Include="IIisWebSiteDirectory.cs" />
     <Compile Include="ITarget.cs" />
-    <Compile Include="IisWebSite.cs" />
+    <Compile Include="Iis7WebSite.cs" />
     <Compile Include="IParameter.cs" />
     <Compile Include="IParameters.cs" />
     <Compile Include="ISourceDirectory.cs" />

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class VisualStudioProject : IIisWebSiteDirectory {
+    public class VisualStudioProject : ITarget {
         private readonly VisualStudioSolution Solution;
 
         public VisualStudioProject(VisualStudioSolution solution, IValue<string> name) {
@@ -34,10 +34,6 @@ namespace Bounce.Framework {
         }
 
         public void Clean() {
-        }
-
-        public IValue<string> Path {
-            get { return this.Future(() => System.IO.Path.GetDirectoryName(Directory.Value)); }
         }
     }
 }

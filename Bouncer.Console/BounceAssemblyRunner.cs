@@ -56,11 +56,8 @@ namespace Bouncer.Console {
             Assembly bounceAssembly = bounceAssemblyAndTargetsProperty.BounceAssembly;
             Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
-            object parameters = runnerType.GetProperty("Parameters").GetValue(runner, new object[0]);
 
-            object targets = bounceAssemblyAndTargetsProperty.GetTargetsMethod.Invoke(null, new[] { parameters });
-
-            runnerType.GetMethod("Run").Invoke(runner, new[] { args, targets });
+            runnerType.GetMethod("Run").Invoke(runner, new object[] { args, bounceAssemblyAndTargetsProperty.GetTargetsMethod });
         }
 
         BounceAssemblyAndTargetsProperty FindTargetsMember(Assembly assembly) {
