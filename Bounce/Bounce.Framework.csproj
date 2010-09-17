@@ -63,7 +63,10 @@
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="Dir.cs" />
+    <Compile Include="FileSystem.cs" />
     <Compile Include="IDirectoryUtils.cs" />
+    <Compile Include="IFileSystem.cs" />
+    <Compile Include="IZipFileCreator.cs" />
     <Compile Include="PlainValue.cs" />
     <Compile Include="PlainValueExtensions.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
