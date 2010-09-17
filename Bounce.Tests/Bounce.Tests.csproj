@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BouncerBuilderTest.cs" />
-    <Compile Include="DirTest.cs" />
+    <Compile Include="DirectoryUtilsTest.cs" />
     <Compile Include="FakeTarget.cs" />
     <Compile Include="Iis7Admin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

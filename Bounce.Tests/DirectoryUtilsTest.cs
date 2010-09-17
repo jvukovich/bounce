@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Bounce.Tests {
     [TestFixture]
-    public class DirTest {
+    public class DirectoryUtilsTest {
         private const string dir = @"testdir";
 
         [SetUp]
@@ -23,14 +23,12 @@ namespace Bounce.Tests {
             Touch("j.txt", new DateTime(2010, 5, 6));
             Touch(@"test\j.txt", new DateTime(2010, 5, 20));
 
-            var d = new Dir {Path = dir.V()};
-            Assert.That(d.LastBuilt, Is.EqualTo(new DateTime(2010, 5, 20)));
+            Assert.That(DirectoryUtils.GetLastModTimeForFilesInDirectory(dir), Is.EqualTo(new DateTime(2010, 5, 20)));
         }
 
         [Test]
         public void LastBuiltShouldReturnLastModDateOfDirectoryIfNoFiles() {
-            var d = new Dir {Path = dir.V()};
-            Assert.That(d.LastBuilt, Is.EqualTo(new DateTime(2010, 5, 1)));
+            Assert.That(DirectoryUtils.GetLastModTimeForFilesInDirectory(dir), Is.EqualTo(new DateTime(2010, 5, 1)));
         }
 
         private void Touch(string filename, DateTime modTime) {

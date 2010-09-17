@@ -11,24 +11,6 @@ namespace Bounce.VisualStudio.Tests {
         private const string SolutionUnzipDirectory = "TestSolution";
 
         [Test]
-        public void LastBuiltShouldReturnLatestDateForAllOutputFiles() {
-            UnzipTestSolution();
-
-            var solution = new VisualStudioSolution { SolutionPath = new PlainValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln")) };
-
-            Assert.That(solution.LastBuilt, Is.Null);
-
-            solution.Build();
-
-            DateTime now = DateTime.UtcNow;
-            Assert.That(solution.LastBuilt, Is.InRange(now.AddSeconds(-2), now));
-
-            solution.Clean();
-
-            Assert.That(solution.LastBuilt, Is.Null);
-        }
-
-        [Test]
         public void BuildsOutputFileOfFirstProject() {
             UnzipTestSolution();
 
