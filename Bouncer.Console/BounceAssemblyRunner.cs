@@ -12,7 +12,6 @@ namespace Bouncer.Console {
                 Environment.Exit(1);
             }
             string assemblyFileName = args[0];
-            SetCwdToAssemblyDirectory(assemblyFileName);
 
             if (!File.Exists(assemblyFileName)) {
                 System.Console.WriteLine("assembly at: `{0}', does not exist", assemblyFileName);
@@ -41,14 +40,6 @@ namespace Bouncer.Console {
             }
             else {
                 RunAssembly(bounceAssemblyAndTargetsProperty, args);
-            }
-        }
-
-        private void SetCwdToAssemblyDirectory(string assemblyFileName) {
-            string assemblyDirectory = Path.GetDirectoryName(assemblyFileName);
-
-            if (!String.IsNullOrEmpty(assemblyDirectory)) {
-                Directory.SetCurrentDirectory(assemblyDirectory);
             }
         }
 

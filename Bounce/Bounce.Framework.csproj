@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -83,6 +87,7 @@
     <Compile Include="VisualStudioSolution.cs" />
     <Compile Include="VisualStudioSolutionProjects.cs" />
     <Compile Include="WindowsService.cs" />
+    <Compile Include="ZipFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
