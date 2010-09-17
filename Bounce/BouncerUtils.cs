@@ -6,6 +6,10 @@ namespace Bounce {
         public static IValue<TP> Property<TB, TP>(this TB bouncer, Func<TB, TP> getProperty) where TB : ITarget {
             return new Property<TB, TP>(bouncer, getProperty);
         }
+
+        public static IValue<TP> Future<TP>(this ITarget bouncer, Func<TP> getValue) {
+            return new FutureValue<TP>(bouncer, getValue);
+        }
     }
 
     public class Property<TB, TP> : IValue<TP> where TB : ITarget {
@@ -22,11 +26,39 @@ namespace Bounce {
         }
 
         public IEnumerable<ITarget> Dependencies {
-            get { return new[] {(ITarget) Dependency}; }
+            get { return new[] { (ITarget)Dependency }; }
         }
 
         public DateTime? LastBuilt {
             get { return Dependency.LastBuilt; }
+        }
+
+        public void Build() {
+        }
+
+        public void Clean() {
+        }
+    }
+ 
+    public class FutureValue<TP> : IValue<TP> {
+        private readonly ITarget dependency;
+        private readonly Func<TP> getValue;
+
+        public FutureValue(ITarget dependency, Func<TP> getValue) {
+            this.dependency = dependency;
+            this.getValue = getValue;
+        }
+
+        public TP Value {
+            get { return getValue(); }
+        }
+
+        public IEnumerable<ITarget> Dependencies {
+            get { return new[] {dependency}; }
+        }
+
+        public DateTime? LastBuilt {
+            get { return dependency.LastBuilt; }
         }
 
         public void Build() {

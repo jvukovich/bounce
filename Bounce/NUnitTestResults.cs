@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace Bounce {
     public class NUnitTestResults : ITarget {
-        public IValue<IEnumerable<string>> DllPaths;
+        public IEnumerable<IValue<string>> DllPaths;
 
         public IEnumerable<ITarget> Dependencies {
-            get { return new[] {DllPaths}; }
+            get { return DllPaths.Cast<ITarget>(); }
         }
 
         public DateTime? LastBuilt {
@@ -15,7 +15,8 @@ namespace Bounce {
         }
 
         public void Build() {
-            IEnumerable<string> testDlls = DllPaths.Value.Where(dll => dll.EndsWith("Tests.dll"));
+            IEnumerable<string> testDlls = DllPaths.Select(dll => dll.Value).Where(dll => dll.EndsWith("Tests.dll"));
+
             foreach (var dllPath in testDlls) {
                 Console.WriteLine("running unit tests for: " + dllPath);
                 new ShellCommandExecutor().ExecuteProcess("nunit-console", dllPath, "running nunit");
