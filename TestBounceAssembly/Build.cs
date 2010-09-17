@@ -5,7 +5,7 @@ using System.Text;
 using Bounce;
 
 namespace TestBounceAssembly {
-    public class Class1 {
+    public class Build {
         [Targets]
         public static object Targets (IParameters parameters) {
             var solution = new VisualStudioSolution() { SolutionPath = parameters.Default("sln", @"..\..\..\Bounce.sln"), PrimaryProjectName = parameters.Default("proj", "Bouncer.Console") };
