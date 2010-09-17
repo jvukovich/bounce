@@ -59,6 +59,7 @@
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="Dir.cs" />
+    <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="PlainValue.cs" />
     <Compile Include="PlainValueExtensions.cs" />
     <Compile Include="ShellCommandExecutor.cs" />

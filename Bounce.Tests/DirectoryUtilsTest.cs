@@ -6,37 +6,53 @@ using NUnit.Framework;
 namespace Bounce.Tests {
     [TestFixture]
     public class DirectoryUtilsTest {
-        private const string dir = @"testdir";
-
         [SetUp]
         public void SetUp() {
-            if (Directory.Exists(dir)) {
-                Directory.Delete(dir, true);
+            if (Directory.Exists(Dir)) {
+                Directory.Delete(Dir, true);
             }
-            Directory.CreateDirectory(dir);
+            Directory.CreateDirectory(Dir);
 
-            Directory.SetLastWriteTimeUtc(dir, new DateTime(2010, 5, 1));
+            Directory.SetLastWriteTimeUtc(Dir, new DateTime(2010, 5, 1));
         }
 
-        [Test]
-        public void LastBuiltShouldReturnLastModDateOfFileInDirOrSubDir() {
-            Touch("j.txt", new DateTime(2010, 5, 6));
-            Touch(@"test\j.txt", new DateTime(2010, 5, 20));
+        private const string Dir = @"testdir";
 
-            Assert.That(DirectoryUtils.GetLastModTimeForFilesInDirectory(dir), Is.EqualTo(new DateTime(2010, 5, 20)));
+        private void RecreateDirectory(string d) {
+            if (Directory.Exists(d)) {
+                Directory.Delete(d, true);
+            }
+            Directory.CreateDirectory(d);
         }
 
-        [Test]
-        public void LastBuiltShouldReturnLastModDateOfDirectoryIfNoFiles() {
-            Assert.That(DirectoryUtils.GetLastModTimeForFilesInDirectory(dir), Is.EqualTo(new DateTime(2010, 5, 1)));
+        private void AssertFileContains(string filename, string contents) {
+            Assert.That(File.Exists(filename), String.Format("file `{0}' should exist", filename));
+            Assert.That(File.ReadAllText(filename), Is.EqualTo(contents));
+        }
+
+        private void Touch(string filename, string contents) {
+            CreatePath(Path.GetDirectoryName(filename));
+            File.WriteAllText(filename, contents);
+        }
+
+        private void CreatePath(string dir) {
+            if (string.IsNullOrEmpty(dir)) {
+                return;
+            }
+
+            CreatePath(Path.GetDirectoryName(dir));
+
+            if (!Directory.Exists(dir)) {
+                Directory.CreateDirectory(dir);
+            }
         }
 
         private void Touch(string filename, DateTime modTime) {
-            var fullPath = Path.Combine(dir, filename);
-            var directoryName = Path.GetDirectoryName(fullPath);
+            string fullPath = Path.Combine(Dir, filename);
+            string directoryName = Path.GetDirectoryName(fullPath);
             if (!Directory.Exists(directoryName)) {
                 Directory.CreateDirectory(directoryName);
-                var parentDir = Path.GetDirectoryName(directoryName);
+                string parentDir = Path.GetDirectoryName(directoryName);
                 if (!string.IsNullOrEmpty(parentDir)) {
                     Directory.SetLastWriteTimeUtc(parentDir, new DateTime(2010, 5, 1));
                 }
@@ -47,6 +63,55 @@ namespace Bounce.Tests {
             // the directory write time is updated to now whenever a new file is created.
             // lets set it back, so to pretend that the files were modified, not created.
             Directory.SetLastWriteTimeUtc(directoryName, new DateTime(2010, 5, 1));
+        }
+
+        [Test]
+        public void LastBuiltShouldReturnLastModDateOfDirectoryIfNoFiles() {
+            var directoryUtils = new DirectoryUtils();
+            Assert.That(directoryUtils.GetLastModTimeForDirectory(Dir), Is.EqualTo(new DateTime(2010, 5, 1)));
+        }
+
+        [Test]
+        public void LastBuiltShouldReturnLastModDateOfFileInDirOrSubDir() {
+            Touch("j.txt", new DateTime(2010, 5, 6));
+            Touch(@"test\j.txt", new DateTime(2010, 5, 20));
+
+            var directoryUtils = new DirectoryUtils();
+            Assert.That(directoryUtils.GetLastModTimeForDirectory(Dir), Is.EqualTo(new DateTime(2010, 5, 20)));
+        }
+
+        [Test]
+        public void ShouldCopyContents() {
+            RecreateDirectory("testfrom");
+            RecreateDirectory("testto");
+
+            Touch(@"testfrom\one.txt", "one");
+            Touch(@"testfrom\two.txt", "two");
+            Touch(@"testfrom\subdir\three.txt", "three");
+
+            new DirectoryUtils().CopyDirectoryContents("testfrom", "testto");
+
+            AssertFileContains(@"testto\one.txt", "one");
+            AssertFileContains(@"testto\two.txt", "two");
+            AssertFileContains(@"testto\subdir\three.txt", "three");
+        }
+
+        [Test]
+        public void ShouldDeleteDirectory() {
+            string dir = "test";
+            RecreateDirectory(dir);
+
+            Assert.That(Directory.Exists(dir));
+
+            Touch(@"test\one.txt", "one");
+
+            var directoryUtils = new DirectoryUtils();
+
+            directoryUtils.DeleteDirectory(dir);
+            Assert.That(!Directory.Exists(dir));
+
+            directoryUtils.DeleteDirectory(dir);
+            Assert.That(!Directory.Exists(dir));
         }
     }
 }

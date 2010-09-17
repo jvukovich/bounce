@@ -3,7 +3,7 @@ using Microsoft.Web.Administration;
 using NUnit.Framework;
 
 namespace Bounce.Tests {
-    [TestFixture]
+    [TestFixture, Ignore("for testing IIS 7 management")]
     public class Iis7Admin {
         [Test]
         public void Stuff() {
@@ -21,7 +21,6 @@ namespace Bounce.Tests {
             }
 
             foreach (var app in s.Applications) {
-//                Console.WriteLine(app.Path);
                 foreach (var vd in app.VirtualDirectories) {
                     Console.WriteLine(vd.Path);
                     Console.WriteLine(vd.PhysicalPath);
