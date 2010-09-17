@@ -11,29 +11,36 @@ It works slightly differently to NAnt and Rake. It uses tasks that can be compos
 complex dependency trees of build operations. Tasks depend on each other, and in doing so they can query
 tasks for configuration settings - eliminating the need for global variables.
 
+## Why C# 
+
+No scripting language? Controversial! :)
+
+When the build and production language are the same, we easily can share common code between our project and our build.
+C# is well up to the task so why bother with language barriers when you don't need them?
+
 ## Show me
 
 Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0. We'd write
 a C# targets file like this:
 
 <pre><code>
-	public class BuildTargets {
-        [Targets]
-        public static object Targets (IParameters parameters) {
-            var solution = new VisualStudioSolution {
-				SolutionPath = "WebSolution.sln".V(),
-			};
-            var webProject = solution.Projects["WebSite".V()];
+public class BuildTargets {
+    [Targets]
+    public static object Targets (IParameters parameters) {
+        var solution = new VisualStudioSolution {
+			SolutionPath = "WebSolution.sln".V(),
+		};
+        var webProject = solution.Projects["WebSite".V()];
 
-            return new {
-                WebSite = new Iis7WebSite {
-					Path = webProject.Directory,
-					Name = "My Website".V(),
-					Port = 5001.V(),
-				},
-            };
-        }
-    }</code></pre>
+        return new {
+            WebSite = new Iis7WebSite {
+				Path = webProject.Directory,
+				Name = "My Website".V(),
+				Port = 5001.V(),
+			},
+        };
+    }
+}</code></pre>
 
 Build the `BuildTargets` class into `MyBuild.dll` and you can build your website like this:
 
@@ -42,19 +49,19 @@ Build the `BuildTargets` class into `MyBuild.dll` and you can build your website
 Say you wanted to add a unit test task:
 
 <pre><code>
-    public class BuildTargets {
-        [Targets]
-        public static object Targets (IParameters parameters) {
-			...
+public class BuildTargets {
+    [Targets]
+    public static object Targets (IParameters parameters) {
+		...
 
-            return new {
-                WebSite = new Iis7WebSite { ... },
-				<b>Tests = new NUnitTests {
-                    DllPaths = solution.Projects.Select(p => p.OutputFile),
-				},</b>
-            };
-        }
-    }</code></pre>
+        return new {
+            WebSite = new Iis7WebSite { ... },
+			<b>Tests = new NUnitTests {
+                DllPaths = solution.Projects.Select(p => p.OutputFile),
+			},</b>
+        };
+    }
+}</code></pre>
 
 And, to run them:
 
@@ -63,18 +70,18 @@ And, to run them:
 And, say you wanted to do a `git` checkout before you built the solution:
 
 <pre><code>
-    public class BuildTargets {
-        [Targets]
-        public static object Targets (IParameters parameters) {
-			<b>var gitrepo = new GitRepo {
-				Origin = "git@github.com:refractalize/website.git",
-			};</b>
-            var solution = new VisualStudioSolution {
-				SolutionPath = <b>gitrepo["WebSolution.sln".V()]</b>,
-			};
-			
-			...
-		}
-    }</code></pre>
+public class BuildTargets {
+    [Targets]
+    public static object Targets (IParameters parameters) {
+		<b>var gitrepo = new GitRepo {
+			Origin = "git@github.com:refractalize/website.git",
+		};</b>
+        var solution = new VisualStudioSolution {
+			SolutionPath = <b>gitrepo["WebSolution.sln".V()]</b>,
+		};
+		
+		...
+	}
+}</code></pre>
 
 `GitRepo` clones the github repo and the rest of the build works from the checkout directory.
