@@ -16,7 +16,7 @@ tasks for configuration settings - eliminating the need for global variables.
 Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0. We'd write
 a C# targets file like this:
 
-<pre><code><b>
+<pre><code>
 	public class BuildTargets {
         [Targets]
         public static object Targets (IParameters parameters) {
@@ -33,7 +33,7 @@ a C# targets file like this:
 				},
             };
         }
-    }</b></code></pre>
+    }</code></pre>
 
 Build the `BuildTargets` class into `MyBuild.dll` and you can build your website like this:
 
@@ -42,26 +42,19 @@ Build the `BuildTargets` class into `MyBuild.dll` and you can build your website
 Say you wanted to add a unit test task:
 
 <pre><code>
-    <span style="color: gray">public class BuildTargets {
+    public class BuildTargets {
         [Targets]
         public static object Targets (IParameters parameters) {
-            var solution = new VisualStudioSolution {
-				SolutionPath = "WebSolution.sln".V(),
-			};
-            var webProject = solution.Projects["WebSite".V()];
+			...
 
             return new {
-                WebSite = new Iis7WebSite {
-					Path = webProject.Directory,
-					Name = "My Website".V(),
-					Port = 5001.V(),
-				},
-				<span style="color: red"><b>Tests = new NUnitTests {
+                WebSite = new Iis7WebSite { ... },
+				<b><i>Tests = new NUnitTests {
                     DllPaths = solution.Projects.Select(p => p.OutputFile),
-				},</b></span>
+				},</b></i>
             };
         }
-    }</span></code></pre>
+    }</code></pre>
 
 And, to run them:
 
@@ -70,26 +63,16 @@ And, to run them:
 And, say you wanted to do a `git` checkout before you built the solution:
 
 <pre><code>
-    <span style="color: gray">public class BuildTargets {
+    public class BuildTargets {
         [Targets]
         public static object Targets (IParameters parameters) {
-			<span style="color: red"><b>var gitrepo = new GitRepo {
+			<i><b>var gitrepo = new GitRepo {
 				Origin = "git@github.com:refractalize/website.git",
-			};</b></span>
+			};</b></i>
             var solution = new VisualStudioSolution {
-				SolutionPath = <span style="color: red"><b>gitrepo["WebSolution.sln".V()]</b></span>,
+				SolutionPath = <i><b>gitrepo["WebSolution.sln".V()]</b></i>,
 			};
-            var webProject = solution.Projects["WebSite".V()];
-
-            return new {
-                WebSite = new Iis7WebSite {
-					Path = webProject.Directory,
-					Name = "My Website".V(),
-					Port = 5001.V(),
-				},
-				Tests = new NUnitTests {
-                    DllPaths = solution.Projects.Select(p => p.OutputFile),
-				},
-            };
-        }
-    }</span></code></pre>
+			
+			...
+		}
+    }</code></pre>
