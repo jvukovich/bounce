@@ -13,7 +13,7 @@ namespace Bounce.Framework {
         }
 
         public void Build(ITarget target) {
-            Walker.Walk(target, null, t => t.Build());
+            Walker.Walk(target, t => t.BeforeBuild(), t => t.Build());
         }
 
         public void Clean(ITarget target) {
