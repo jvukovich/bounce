@@ -54,18 +54,24 @@ namespace Bounce.Framework {
         }
 
         internal VisualStudioSolutionDetails TryGetSolutionDetails() {
-            var solutionPath = SolutionPath.Value;
-
-            if (File.Exists(solutionPath)) {
-                return new VisualStudioSolutionFileReader().ReadSolution(solutionPath, Config);
+            if (SolutionExists) {
+                return new VisualStudioSolutionFileReader().ReadSolution(SolutionPath.Value, Config);
             } else {
                 return null;
             }
         }
 
+        private bool SolutionExists {
+            get {
+                return File.Exists(SolutionPath.Value);
+            }
+        }
+
         public void Clean() {
-            Console.WriteLine("cleaning solution at: " + SolutionPath.Value);
-            ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
+            if (SolutionExists) {
+                Console.WriteLine("cleaning solution at: " + SolutionPath.Value);
+                ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
+            }
         }
 
         private string Config {

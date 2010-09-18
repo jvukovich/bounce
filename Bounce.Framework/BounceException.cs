@@ -1,8 +1,13 @@
 ﻿using System;
+using System.IO;
 
 namespace Bounce.Framework {
-    internal class BounceException : Exception {
+    public class BounceException : Exception {
         public BounceException(string message) : base(message) {
+        }
+
+        public virtual void Explain(TextWriter writer) {
+            writer.WriteLine(this);
         }
     }
 }

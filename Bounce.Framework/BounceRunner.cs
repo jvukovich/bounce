@@ -16,10 +16,10 @@ namespace Bounce.Framework {
                 if (args.Length >= 2) {
                     string[] buildArguments = parameters.ParseCommandLineArguments(args);
 
-                    string command = buildArguments[1];
+                    string command = buildArguments[0];
                     Action<TargetBuilder, ITask> commandAction = GetCommand(command);
 
-                    for (int i = 2; i < buildArguments.Length; i++) {
+                    for (int i = 1; i < buildArguments.Length; i++) {
                         string targetName = buildArguments[i];
                         ITask task = FindTarget(targets, targetName);
 
@@ -53,11 +53,8 @@ namespace Bounce.Framework {
                         Console.WriteLine();
                     }
                 }
-            } catch (BuildException ce) {
-                Console.WriteLine(ce.Message);
-                Console.Write(ce.Output);
-            } catch (ConfigurationException ce) {
-                Console.WriteLine(ce.Message);
+            } catch (BounceException ce) {
+                ce.Explain(Console.Out);
             }
         }
 
