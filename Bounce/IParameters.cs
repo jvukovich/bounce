@@ -2,9 +2,9 @@
 
 namespace Bounce.Framework {
     public interface IParameters {
-        IValue<T> Required<T>(string name);
-        IValue<T> Default<T>(string name, T defaultValue);
-        IValue<T> OneOf<T>(string name, IEnumerable<T> availableValues);
-        IValue<T> OneOfWithDefault<T>(string name, T defaultValue, IEnumerable<T> availableValues);
+        Val<T> Required<T>(string name);
+        Val<T> Default<T>(string name, T defaultValue);
+        Val<T> OneOf<T>(string name, IEnumerable<T> availableValues);
+        Val<T> OneOfWithDefault<T>(string name, T defaultValue, IEnumerable<T> availableValues);
     }
 }

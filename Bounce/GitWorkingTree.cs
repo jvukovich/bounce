@@ -3,8 +3,8 @@ using System.IO;
 
 namespace Bounce.Framework {
     public class GitWorkingTree : ITask {
-        public IValue<string> Repository;
-        public IValue<string> Directory;
+        public Val<string> Repository;
+        public Val<string> Directory;
         private IGitRepoParser GitRepoParser;
         private IDirectoryUtils DirectoryUtils;
         private readonly IGitCommand GitCommand;
@@ -46,7 +46,7 @@ namespace Bounce.Framework {
             DirectoryUtils.DeleteDirectory(WorkingDirectory);
         }
 
-        public IValue<string> this[IValue<string> filename] {
+        public Val<string> this[Val<string> filename] {
             get {
                 return this.WhenBuilt(() => Path.Combine(WorkingDirectory, filename.Value));
             }

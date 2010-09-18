@@ -60,8 +60,8 @@ namespace Bounce.Framework {
             DirUtils = dirUtils;
         }
 
-        public IValue<string> FromPath { get; set; }
-        public IValue<string> ToPath { get; set; }
+        public Val<string> FromPath { get; set; }
+        public Val<string> ToPath { get; set; }
 
         public IEnumerable<ITask> Dependencies {
             get { return new[] {FromPath, ToPath}; }

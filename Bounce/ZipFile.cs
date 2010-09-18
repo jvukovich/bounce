@@ -8,8 +8,8 @@ namespace Bounce.Framework {
         private readonly IZipFileCreator ZipFileCreator;
         private readonly IFileSystem FileSystem;
         private readonly IDirectoryUtils DirectoryUtils;
-        public IValue<string> Directory;
-        public IValue<string> ZipFileName;
+        public Val<string> Directory;
+        public Val<string> ZipFileName;
 
         public ZipFile() : this(new ZipFileCreator(), new FileSystem(), new DirectoryUtils()) {
         }

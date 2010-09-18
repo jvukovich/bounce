@@ -24,7 +24,7 @@ namespace Bounce.Framework {
             return p;
         }
 
-        private IParameter<T> RegisterParameter<T>(IParameter<T> p) {
+        private Parameter<T> RegisterParameter<T>(Parameter<T> p) {
             if (RegisteredParameters.ContainsKey(p.Name)) {
                 throw new ConfigurationException(String.Format("parameter `{0}' already registered", p.Name));
             }
@@ -33,20 +33,20 @@ namespace Bounce.Framework {
             return p;
         }
 
-        public IValue<T> Required<T>(string name) {
+        public Val<T> Required<T>(string name) {
             return RegisterParameter(new Parameter<T> {Name = name, Required = true});
         }
 
-        public IValue<T> Default<T>(string name, T defaultValue) {
-            return RegisterParameter(new Parameter<T> {Name = name, Value = defaultValue});
+        public Val<T> Default<T>(string name, T defaultValue) {
+            return RegisterParameter(new Parameter<T> {Name = name, DefaultValue = defaultValue});
         }
 
-        public IValue<T> OneOf<T>(string name, IEnumerable<T> availableValues) {
+        public Val<T> OneOf<T>(string name, IEnumerable<T> availableValues) {
             return RegisterParameter(new Parameter<T> { Name = name, Required = true, AvailableValues = availableValues.Cast<object>() });
         }
 
-        public IValue<T> OneOfWithDefault<T>(string name, T defaultValue, IEnumerable<T> availableValues) {
-            return RegisterParameter(new Parameter<T> { Name = name, Value = defaultValue, AvailableValues = availableValues.Cast<object>() });
+        public Val<T> OneOfWithDefault<T>(string name, T defaultValue, IEnumerable<T> availableValues) {
+            return RegisterParameter(new Parameter<T> { Name = name, DefaultValue = defaultValue, AvailableValues = availableValues.Cast<object>() });
         }
 
         public void RegisterTypeParser<T>(Func<string, T> parser) {

@@ -4,12 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
     public class WindowsService : ITask {
-        public IValue<string> Name;
-        public IValue<string> BinaryPath;
-        public IValue<string> Description;
-        public IValue<string> DisplayName;
-        public IValue<string> UserName;
-        public IValue<string> Password;
+        public Val<string> Name;
+        public Val<string> BinaryPath;
+        public Val<string> Description;
+        public Val<string> DisplayName;
+        public Val<string> UserName;
+        public Val<string> Password;
         private ShellCommandExecutor ShellCommandExecutor;
 
         public WindowsService() {
@@ -72,7 +72,7 @@ namespace Bounce.Framework {
             return String.Join("", new [] {GetSetting(DisplayName, "DisplayName"), GetSetting(UserName, "obj"), GetSetting(Password, "Password")});
         }
 
-        private string GetSetting(IValue<string> setting, string scSetting) {
+        private string GetSetting(Val<string> setting, string scSetting) {
             if (setting != null && setting.Value != null) {
                 return String.Format(@" {0}= ""{1}""", scSetting, setting.Value);
             } else {

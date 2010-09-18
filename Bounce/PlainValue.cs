@@ -1,24 +1,32 @@
 ﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class PlainValue<T> : IValue<T> {
+    public class PlainValue<T> : Val<T> {
+        private T _value;
+
         public PlainValue (T value) {
-            Value = value;
+            _value = value;
         }
 
-        public IEnumerable<ITask> Dependencies {
+        public override IEnumerable<ITask> Dependencies {
             get { return new ITask[0]; }
         }
 
-        public void BeforeBuild() {
+        public override void BeforeBuild() {
         }
 
-        public void Build() {
+        public override void Build() {
         }
 
-        public void Clean() {
+        public override void Clean() {
         }
 
-        public T Value { get; private set; }
+        public override T Value {
+            get { return _value; }
+        }
+
+        public void SetValue(T val) {
+            _value = val;
+        }
     }
 }

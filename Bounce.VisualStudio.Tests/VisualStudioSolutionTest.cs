@@ -18,7 +18,7 @@ namespace Bounce.VisualStudio.Tests {
 
             solution.Build();
 
-            Assert.That(File.Exists(solution.Projects["TestSolution".V()].OutputFile.Value));
+            Assert.That(File.Exists(solution.Projects["TestSolution"].OutputFile.Value));
         }
 
         [Test]

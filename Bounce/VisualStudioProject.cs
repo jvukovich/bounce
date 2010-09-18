@@ -4,18 +4,18 @@ namespace Bounce.Framework {
     public class VisualStudioProject : ITask {
         private readonly VisualStudioSolution Solution;
 
-        public VisualStudioProject(VisualStudioSolution solution, IValue<string> name) {
+        public VisualStudioProject(VisualStudioSolution solution, Val<string> name) {
             Solution = solution;
             Name = name;
         }
 
-        public IValue<string> Name { get; private set; }
-        public IValue<string> OutputFile {
+        public Val<string> Name { get; private set; }
+        public Val<string> OutputFile {
             get {
                 return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).OutputFile);
             }
         }
-        public IValue<string> Directory {
+        public Val<string> Directory {
             get {
                 return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).Directory);
             }

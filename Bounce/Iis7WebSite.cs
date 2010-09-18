@@ -5,9 +5,9 @@ using Microsoft.Web.Administration;
 
 namespace Bounce.Framework {
     public class Iis7WebSite : ITask {
-        public IValue<string> Path;
-        public IValue<int> Port;
-        public IValue<string> Name;
+        public Val<string> Path;
+        public Val<int> Port;
+        public Val<string> Name;
 
         public IEnumerable<ITask> Dependencies {
             get { return new ITask[] {Path, Port, Name}; }

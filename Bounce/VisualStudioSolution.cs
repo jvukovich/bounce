@@ -6,14 +6,14 @@ using System.IO;
 
 namespace Bounce.Framework {
     public class VS {
-        public static VisualStudioSolution Solution(IValue<string> path) {
+        public static VisualStudioSolution Solution(Val<string> path) {
             return new VisualStudioSolution {SolutionPath = path};
         }
     }
 
     public class VisualStudioSolution : ITask {
-        public IValue<string> SolutionPath;
-        public IValue<string> Configuration;
+        public Val<string> SolutionPath;
+        public Val<string> Configuration;
         private readonly ShellCommandExecutor ShellCommandExecutor;
 
         public VisualStudioSolution() {

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Bounce.Framework {
     public class NUnitTests : ITask {
-        public IEnumerable<IValue<string>> DllPaths;
+        public IEnumerable<Val<string>> DllPaths;
 
         public IEnumerable<ITask> Dependencies {
             get { return DllPaths.Cast<ITask>(); }

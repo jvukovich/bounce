@@ -17,7 +17,7 @@ namespace Bounce.Tests {
 
             string directoryToBeZipped = "dir";
 
-            var zip = new ZipFile(zipCreator.Object, fs.Object, directoryUtils.Object) {ZipFileName = zipfilename.V(), Directory = directoryToBeZipped.V()};
+            var zip = new ZipFile(zipCreator.Object, fs.Object, directoryUtils.Object) {ZipFileName = zipfilename, Directory = directoryToBeZipped};
 
             zip.Build();
 
@@ -39,7 +39,7 @@ namespace Bounce.Tests {
             fs.Setup(f => f.LastWriteTimeForFile(zipfilename)).Returns(directoryModTime.AddDays(1));
             directoryUtils.Setup(d => d.GetLastModTimeForDirectory(directoryToBeZipped)).Returns(directoryModTime);
 
-            var zip = new ZipFile(zipCreator.Object, fs.Object, directoryUtils.Object) {ZipFileName = zipfilename.V(), Directory = directoryToBeZipped.V()};
+            var zip = new ZipFile(zipCreator.Object, fs.Object, directoryUtils.Object) {ZipFileName = zipfilename, Directory = directoryToBeZipped};
 
             zip.Build();
 
@@ -61,7 +61,7 @@ namespace Bounce.Tests {
             fs.Setup(f => f.LastWriteTimeForFile(zipfilename)).Returns(directoryModTime.AddDays(-1));
             directoryUtils.Setup(d => d.GetLastModTimeForDirectory(directoryToBeZipped)).Returns(directoryModTime);
 
-            var zip = new ZipFile(zipCreator.Object, fs.Object, directoryUtils.Object) {ZipFileName = zipfilename.V(), Directory = directoryToBeZipped.V()};
+            var zip = new ZipFile(zipCreator.Object, fs.Object, directoryUtils.Object) {ZipFileName = zipfilename, Directory = directoryToBeZipped};
 
             zip.Build();
 

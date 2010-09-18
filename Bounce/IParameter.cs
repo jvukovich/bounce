@@ -9,7 +9,4 @@ namespace Bounce.Framework {
         IEnumerable<object> AvailableValues { get; }
         object DefaultValue { get; }
     }
-
-    public interface IParameter<T> : IValue<T>, IParameter {
-    }
 }

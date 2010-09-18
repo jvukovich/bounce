@@ -1,41 +1,43 @@
 ﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    class Parameter<T> : IParameter<T> {
+    class Parameter<T> : Val<T>, IParameter {
         public bool Required { get; set; }
         public string Name { get; set; }
         public bool HasValue { get; private set; }
         private T _value;
         public IEnumerable<object> AvailableValues { get; set; }
 
-        public IEnumerable<ITask> Dependencies
+        public override IEnumerable<ITask> Dependencies
         {
             get { return new ITask[0]; }
         }
 
-        public void BeforeBuild() {
+        public override void BeforeBuild() {
         }
 
-        public void Build() {
+        public override void Build() {
         }
 
-        public void Clean() {
+        public override void Clean() {
         }
 
-        public T Value {
+        public override T Value {
             get { return _value; }
-            set {
-                HasValue = true;
-                _value = value;
-            }
+        }
+
+        public void SetValue(T val) {
+            HasValue = true;
+            _value = val;
         }
 
         public object DefaultValue {
-            get { return Value; }
+            get { return _value; }
+            set { SetValue((T) value); }
         }
 
         public void Parse(string parameterValue, ITypeParsers typeParsers) {
-            Value = typeParsers.Parse<T>(parameterValue);
+            SetValue(typeParsers.Parse<T>(parameterValue));
         }
     }
 }

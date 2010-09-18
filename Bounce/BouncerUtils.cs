@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public static class BouncerUtils {
-        public static IValue<TP> Property<TB, TP>(this TB bouncer, Func<TB, TP> getProperty) where TB : ITask {
+        public static Val<TP> Property<TB, TP>(this TB bouncer, Func<TB, TP> getProperty) where TB : ITask {
             return new Property<TB, TP>(bouncer, getProperty);
         }
 
-        public static IValue<TP> WhenBuilt<TP>(this ITask bouncer, Func<TP> getValue) {
+        public static Val<TP> WhenBuilt<TP>(this ITask bouncer, Func<TP> getValue) {
             return new FutureValue<TP>(bouncer, getValue);
         }
     }
 
-    public class Property<TB, TP> : IValue<TP> where TB : ITask {
+    public class Property<TB, TP> : Val<TP> where TB : ITask {
         private readonly TB Dependency;
         private readonly Func<TB, TP> GetProperty;
 
@@ -21,25 +21,25 @@ namespace Bounce.Framework {
             GetProperty = getProperty;
         }
 
-        public TP Value {
+        public override TP Value {
             get { return GetProperty(Dependency); }
         }
 
-        public IEnumerable<ITask> Dependencies {
+        public override IEnumerable<ITask> Dependencies {
             get { return new[] { (ITask)Dependency }; }
         }
 
-        public void BeforeBuild() {
+        public override void BeforeBuild() {
         }
 
-        public void Build() {
+        public override void Build() {
         }
 
-        public void Clean() {
+        public override void Clean() {
         }
     }
  
-    public class FutureValue<TP> : IValue<TP> {
+    public class FutureValue<TP> : Val<TP> {
         private readonly ITask dependency;
         private readonly Func<TP> getValue;
 
@@ -48,21 +48,21 @@ namespace Bounce.Framework {
             this.getValue = getValue;
         }
 
-        public TP Value {
+        public override TP Value {
             get { return getValue(); }
         }
 
-        public IEnumerable<ITask> Dependencies {
+        public override IEnumerable<ITask> Dependencies {
             get { return new[] {dependency}; }
         }
 
-        public void BeforeBuild() {
+        public override void BeforeBuild() {
         }
 
-        public void Build() {
+        public override void Build() {
         }
 
-        public void Clean() {
+        public override void Clean() {
         }
     }
 }

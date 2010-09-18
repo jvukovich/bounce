@@ -16,7 +16,7 @@ namespace Bounce.Tests {
             dirUtils.Setup(d => d.GetLastModTimeForDirectory(fromPath)).Returns(fromPathLastModified);
             dirUtils.Setup(d => d.GetLastModTimeForDirectory(toPath)).Returns(fromPathLastModified.AddDays(-1));
 
-            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath.V(), FromPath = fromPath.V()};
+            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath, FromPath = fromPath};
 
             toDir.Build();
 
@@ -33,7 +33,7 @@ namespace Bounce.Tests {
             dirUtils.Setup(d => d.GetLastModTimeForDirectory(fromPath)).Returns(fromPathLastModified);
             dirUtils.Setup(d => d.GetLastModTimeForDirectory(toPath)).Returns(fromPathLastModified.AddDays(1));
 
-            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath.V(), FromPath = fromPath.V()};
+            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath, FromPath = fromPath};
 
             toDir.Build();
 
@@ -45,7 +45,7 @@ namespace Bounce.Tests {
             var dirUtils = new Mock<IDirectoryUtils>();
             var toPath = "todir";
 
-            var toDir = new ToDir(dirUtils.Object) { ToPath = toPath.V()};
+            var toDir = new ToDir(dirUtils.Object) { ToPath = toPath};
 
             toDir.Clean();
 

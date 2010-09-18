@@ -66,7 +66,6 @@
     <Compile Include="IGitRepoParser.cs" />
     <Compile Include="IZipFileCreator.cs" />
     <Compile Include="PlainValue.cs" />
-    <Compile Include="PlainValueExtensions.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="BouncerUtils.cs" />
@@ -78,7 +77,7 @@
     <Compile Include="IParameter.cs" />
     <Compile Include="IParameters.cs" />
     <Compile Include="ITypeParsers.cs" />
-    <Compile Include="IValue.cs" />
+    <Compile Include="Val.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="CommandLineParameters.cs" />
