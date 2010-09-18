@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -57,10 +57,12 @@
     <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="Dir.cs" />
     <Compile Include="FileSystem.cs" />
+    <Compile Include="GitCommand.cs" />
     <Compile Include="GitRepo.cs" />
     <Compile Include="GitRepoParser.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileSystem.cs" />
+    <Compile Include="IGitCommand.cs" />
     <Compile Include="IGitRepoParser.cs" />
     <Compile Include="IZipFileCreator.cs" />
     <Compile Include="PlainValue.cs" />

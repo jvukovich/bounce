@@ -45,6 +45,10 @@ namespace Bounce.Framework {
                 Directory.Delete(dir, true);
             }
         }
+
+        public bool DirectoryExists(string dir) {
+            return Directory.Exists(dir);
+        }
     }
 
     public class ToDir : ITask {

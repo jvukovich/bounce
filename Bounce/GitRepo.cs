@@ -6,14 +6,14 @@ namespace Bounce.Framework {
         public IValue<string> Path;
         private IGitRepoParser GitRepoParser;
         private IDirectoryUtils DirectoryUtils;
-        private IShellCommandExecutor ShellCommandExecutor;
+        private readonly IGitCommand GitCommand;
 
-        public GitRepo() : this(new GitRepoParser(), new DirectoryUtils(), new ShellCommandExecutor()) {}
+        public GitRepo() : this(new GitRepoParser(), new DirectoryUtils(), new GitCommand()) {}
 
-        public GitRepo(IGitRepoParser gitRepoParser, IDirectoryUtils directoryUtils, IShellCommandExecutor shellCommandExecutor) {
+        public GitRepo(IGitRepoParser gitRepoParser, IDirectoryUtils directoryUtils, IGitCommand gitCommand) {
             GitRepoParser = gitRepoParser;
             DirectoryUtils = directoryUtils;
-            ShellCommandExecutor = shellCommandExecutor;
+            GitCommand = gitCommand;
         }
 
         public IEnumerable<ITask> Dependencies {
@@ -24,22 +24,25 @@ namespace Bounce.Framework {
         }
 
         public void Build() {
-//            ShellCommandExecutor.ExecuteAndExpectSuccess("git", string.Format(@"clone {0}{1}", Origin.Value, OptionalPath));
+            if (DirectoryUtils.DirectoryExists(OptionalPath)) {
+                GitCommand.Pull();
+            } else {
+                GitCommand.Clone(Origin.Value, OptionalPath);
+            }
         }
 
-        private object OptionalPath {
+        private string OptionalPath {
             get {
-                if (Path != null || Path.Value != null) {
-                    return string.Format(@" ""{0}""", Path.Value);
+                if (Path != null && Path.Value != null) {
+                    return Path.Value;
                 } else {
-                    return "";
+                    return GitRepoParser.ParseCloneDirectoryFromRepoUri(Origin.Value);
                 }
             }
         }
 
         public void Clean() {
-//            var dir = GitRepoParser.ParseCloneDirectoryFromRepoUri(Origin.Value);
-//            DirectoryUtils.DeleteDirectory(dir);
+            DirectoryUtils.DeleteDirectory(OptionalPath);
         }
     }
 }
