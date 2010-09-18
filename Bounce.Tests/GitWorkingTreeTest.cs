@@ -62,5 +62,14 @@ namespace Bounce.Tests {
 
             dirs.Verify(d => d.DeleteDirectory("path"), Times.Once());
         }
+
+        [Test]
+        public void ShouldReturnPathsRelativeToWorkingDirectory() {
+            var gitRepo = new GitWorkingTree() {Directory = "dir".V()};
+
+            var subPath = gitRepo["test.txt".V()];
+            Assert.That(subPath.Value, Is.EqualTo(@"dir\test.txt"));
+            Assert.That(subPath.Dependencies, Has.Member(gitRepo));
+        }
     }
 }

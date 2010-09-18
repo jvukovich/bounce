@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 
 namespace Bounce.Framework {
     public class GitWorkingTree : ITask {
@@ -24,14 +25,14 @@ namespace Bounce.Framework {
         }
 
         public void Build() {
-            if (DirectoryUtils.DirectoryExists(OptionalPath)) {
+            if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
                 GitCommand.Pull();
             } else {
-                GitCommand.Clone(Repository.Value, OptionalPath);
+                GitCommand.Clone(Repository.Value, WorkingDirectory);
             }
         }
 
-        private string OptionalPath {
+        private string WorkingDirectory {
             get {
                 if (Directory != null && Directory.Value != null) {
                     return Directory.Value;
@@ -42,7 +43,13 @@ namespace Bounce.Framework {
         }
 
         public void Clean() {
-            DirectoryUtils.DeleteDirectory(OptionalPath);
+            DirectoryUtils.DeleteDirectory(WorkingDirectory);
+        }
+
+        public IValue<string> this[IValue<string> filename] {
+            get {
+                return this.WhenBuilt(() => Path.Combine(WorkingDirectory, filename.Value));
+            }
         }
     }
 }

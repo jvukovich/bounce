@@ -12,12 +12,12 @@ namespace Bounce.Framework {
         public IValue<string> Name { get; private set; }
         public IValue<string> OutputFile {
             get {
-                return this.Future(() => Solution.GetProjectDetails(Name.Value).OutputFile);
+                return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).OutputFile);
             }
         }
         public IValue<string> Directory {
             get {
-                return this.Future(() => Solution.GetProjectDetails(Name.Value).Directory);
+                return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).Directory);
             }
         }
 

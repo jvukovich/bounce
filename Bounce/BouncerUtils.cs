@@ -7,7 +7,7 @@ namespace Bounce.Framework {
             return new Property<TB, TP>(bouncer, getProperty);
         }
 
-        public static IValue<TP> Future<TP>(this ITask bouncer, Func<TP> getValue) {
+        public static IValue<TP> WhenBuilt<TP>(this ITask bouncer, Func<TP> getValue) {
             return new FutureValue<TP>(bouncer, getValue);
         }
     }

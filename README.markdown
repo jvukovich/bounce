@@ -73,11 +73,11 @@ And, say you wanted to do a `git` checkout before you built the solution:
 <pre><code>public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
-		<b>var gitrepo = new GitRepo {
-			Origin = "git@github.com:refractalize/website.git",
+		<b>var git = new GitWorkingTree {
+			Repository = "git@github.com:refractalize/website.git",
 		};</b>
         var solution = new VisualStudioSolution {
-			SolutionPath = <b>gitrepo["WebSolution.sln".V()]</b>,
+			SolutionPath = <b>git["WebSolution.sln".V()]</b>,
 		};
 		
 		...
