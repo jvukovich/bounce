@@ -1,23 +1,23 @@
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class GitRepo : ITask {
-        public IValue<string> Origin;
-        public IValue<string> Path;
+    public class GitWorkingTree : ITask {
+        public IValue<string> Repository;
+        public IValue<string> Directory;
         private IGitRepoParser GitRepoParser;
         private IDirectoryUtils DirectoryUtils;
         private readonly IGitCommand GitCommand;
 
-        public GitRepo() : this(new GitRepoParser(), new DirectoryUtils(), new GitCommand()) {}
+        public GitWorkingTree() : this(new GitRepoParser(), new DirectoryUtils(), new GitCommand()) {}
 
-        public GitRepo(IGitRepoParser gitRepoParser, IDirectoryUtils directoryUtils, IGitCommand gitCommand) {
+        public GitWorkingTree(IGitRepoParser gitRepoParser, IDirectoryUtils directoryUtils, IGitCommand gitCommand) {
             GitRepoParser = gitRepoParser;
             DirectoryUtils = directoryUtils;
             GitCommand = gitCommand;
         }
 
         public IEnumerable<ITask> Dependencies {
-            get { return new[] {Origin, Path}; }
+            get { return new[] {Repository, Directory}; }
         }
 
         public void BeforeBuild() {
@@ -27,16 +27,16 @@ namespace Bounce.Framework {
             if (DirectoryUtils.DirectoryExists(OptionalPath)) {
                 GitCommand.Pull();
             } else {
-                GitCommand.Clone(Origin.Value, OptionalPath);
+                GitCommand.Clone(Repository.Value, OptionalPath);
             }
         }
 
         private string OptionalPath {
             get {
-                if (Path != null && Path.Value != null) {
-                    return Path.Value;
+                if (Directory != null && Directory.Value != null) {
+                    return Directory.Value;
                 } else {
-                    return GitRepoParser.ParseCloneDirectoryFromRepoUri(Origin.Value);
+                    return GitRepoParser.ParseCloneDirectoryFromRepoUri(Repository.Value);
                 }
             }
         }

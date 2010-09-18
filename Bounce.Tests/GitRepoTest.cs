@@ -14,7 +14,7 @@ namespace Bounce.Tests {
             parser.Setup(p => p.ParseCloneDirectoryFromRepoUri("repo")).Returns("dir");
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(true);
 
-            var gitRepo = new GitRepo(parser.Object, dirs.Object, git.Object) { Origin = "repo".V() };
+            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) { Repository = "repo".V() };
             gitRepo.Build();
 
             git.Verify(g => g.Pull(), Times.Once());
@@ -29,7 +29,7 @@ namespace Bounce.Tests {
             parser.Setup(p => p.ParseCloneDirectoryFromRepoUri("repo")).Returns("dir");
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(false);
 
-            var gitRepo = new GitRepo(parser.Object, dirs.Object, git.Object) {Origin = "repo".V()};
+            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) {Repository = "repo".V()};
             gitRepo.Build();
 
             git.Verify(g => g.Clone("repo", "dir"), Times.Once());
@@ -44,7 +44,7 @@ namespace Bounce.Tests {
             parser.Setup(p => p.ParseCloneDirectoryFromRepoUri("repo")).Returns("dir");
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(false);
 
-            var gitRepo = new GitRepo(parser.Object, dirs.Object, git.Object) {Origin = "repo".V(), Path = "path".V()};
+            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) {Repository = "repo".V(), Directory = "path".V()};
             gitRepo.Build();
 
             git.Verify(g => g.Clone("repo", "path"), Times.Once());
@@ -56,7 +56,7 @@ namespace Bounce.Tests {
             var dirs = new Mock<IDirectoryUtils>();
             var parser = new Mock<IGitRepoParser>();
 
-            var gitRepo = new GitRepo(parser.Object, dirs.Object, git.Object) {Origin = "repo".V(), Path = "path".V()};
+            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) {Repository = "repo".V(), Directory = "path".V()};
 
             gitRepo.Clean();
 
