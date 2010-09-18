@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using ICSharpCode.SharpZipLib.Zip;
+﻿using System.IO;
 
 namespace Bounce.Framework {
     public class ZipFile : Task {

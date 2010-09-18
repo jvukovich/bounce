@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Bounce.Tests {
     [TestFixture]
-    public class GitWorkingTreeTest {
+    public class GitCheckoutTest {
         [Test]
         public void IfDirectoryAlreadyExtantShouldUsePull() {
             var git = new Mock<IGitCommand>();
@@ -14,7 +14,7 @@ namespace Bounce.Tests {
             parser.Setup(p => p.ParseCloneDirectoryFromRepoUri("repo")).Returns("dir");
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(true);
 
-            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) { Repository = "repo" };
+            var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) { Repository = "repo" };
             gitRepo.Build();
 
             git.Verify(g => g.Pull(), Times.Once());
@@ -29,7 +29,7 @@ namespace Bounce.Tests {
             parser.Setup(p => p.ParseCloneDirectoryFromRepoUri("repo")).Returns("dir");
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(false);
 
-            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) {Repository = "repo"};
+            var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) {Repository = "repo"};
             gitRepo.Build();
 
             git.Verify(g => g.Clone("repo", "dir"), Times.Once());
@@ -44,7 +44,7 @@ namespace Bounce.Tests {
             parser.Setup(p => p.ParseCloneDirectoryFromRepoUri("repo")).Returns("dir");
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(false);
 
-            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) {Repository = "repo", Directory = "path"};
+            var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) {Repository = "repo", Directory = "path"};
             gitRepo.Build();
 
             git.Verify(g => g.Clone("repo", "path"), Times.Once());
@@ -56,7 +56,7 @@ namespace Bounce.Tests {
             var dirs = new Mock<IDirectoryUtils>();
             var parser = new Mock<IGitRepoParser>();
 
-            var gitRepo = new GitWorkingTree(parser.Object, dirs.Object, git.Object) {Repository = "repo", Directory = "path"};
+            var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) {Repository = "repo", Directory = "path"};
 
             gitRepo.Clean();
 
@@ -65,7 +65,7 @@ namespace Bounce.Tests {
 
         [Test]
         public void ShouldReturnPathsRelativeToWorkingDirectory() {
-            var gitRepo = new GitWorkingTree() {Directory = "dir"};
+            var gitRepo = new GitCheckout() {Directory = "dir"};
 
             var subPath = gitRepo["test.txt"];
             Assert.That(subPath.Value, Is.EqualTo(@"dir\test.txt"));

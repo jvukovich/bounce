@@ -5,7 +5,7 @@ namespace TestBounceAssembly {
     public class BuildTargets {
         [Targets]
         public static object Targets (IParameters parameters) {
-            var git = new GitWorkingTree {
+            var git = new GitCheckout {
                 Repository = @"C:\Users\Public\Documents\Development\BigSolution.git",
                 Directory = "one"
             };

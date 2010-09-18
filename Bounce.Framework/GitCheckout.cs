@@ -1,7 +1,7 @@
 using System.IO;
 
 namespace Bounce.Framework {
-    public class GitWorkingTree : Task {
+    public class GitCheckout : Task {
         [Dependency]
         public Val<string> Repository;
         [Dependency]
@@ -11,9 +11,9 @@ namespace Bounce.Framework {
         private IDirectoryUtils DirectoryUtils;
         private readonly IGitCommand GitCommand;
 
-        public GitWorkingTree() : this(new GitRepoParser(), new DirectoryUtils(), new GitCommand()) {}
+        public GitCheckout() : this(new GitRepoParser(), new DirectoryUtils(), new GitCommand()) {}
 
-        public GitWorkingTree(IGitRepoParser gitRepoParser, IDirectoryUtils directoryUtils, IGitCommand gitCommand) {
+        public GitCheckout(IGitRepoParser gitRepoParser, IDirectoryUtils directoryUtils, IGitCommand gitCommand) {
             GitRepoParser = gitRepoParser;
             DirectoryUtils = directoryUtils;
             GitCommand = gitCommand;

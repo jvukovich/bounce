@@ -59,7 +59,7 @@
     <Compile Include="Dir.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="GitCommand.cs" />
-    <Compile Include="GitWorkingTree.cs" />
+    <Compile Include="GitCheckout.cs" />
     <Compile Include="GitRepoParser.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileSystem.cs" />
