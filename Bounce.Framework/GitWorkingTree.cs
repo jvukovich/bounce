@@ -1,10 +1,12 @@
-using System.Collections.Generic;
 using System.IO;
 
 namespace Bounce.Framework {
-    public class GitWorkingTree : ITask {
+    public class GitWorkingTree : Task {
+        [Dependency]
         public Val<string> Repository;
+        [Dependency]
         public Val<string> Directory;
+
         private IGitRepoParser GitRepoParser;
         private IDirectoryUtils DirectoryUtils;
         private readonly IGitCommand GitCommand;
@@ -17,14 +19,7 @@ namespace Bounce.Framework {
             GitCommand = gitCommand;
         }
 
-        public IEnumerable<ITask> Dependencies {
-            get { return new[] {Repository, Directory}; }
-        }
-
-        public void BeforeBuild() {
-        }
-
-        public void Build() {
+        public override void Build() {
             if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
                 GitCommand.Pull();
             } else {
@@ -42,7 +37,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Clean() {
+        public override void Clean() {
             DirectoryUtils.DeleteDirectory(WorkingDirectory);
         }
 

@@ -7,7 +7,7 @@ namespace Bounce.Framework {
         }
 
         public virtual void Explain(TextWriter writer) {
-            writer.WriteLine(this);
+            writer.WriteLine(Message);
         }
     }
 }

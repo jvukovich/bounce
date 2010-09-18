@@ -5,16 +5,13 @@ using Bounce.VisualStudio;
 using System.IO;
 
 namespace Bounce.Framework {
-    public class VS {
-        public static VisualStudioSolution Solution(Val<string> path) {
-            return new VisualStudioSolution {SolutionPath = path};
-        }
-    }
-
-    public class VisualStudioSolution : ITask {
+    public class VisualStudioSolution : Task {
+        [Dependency]
         public Val<string> SolutionPath;
+        [Dependency]
         public Val<string> Configuration;
-        private readonly ShellCommandExecutor ShellCommandExecutor;
+
+        private readonly IShellCommandExecutor ShellCommandExecutor;
 
         public VisualStudioSolution() {
             ShellCommandExecutor = new ShellCommandExecutor();
@@ -26,14 +23,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public IEnumerable<ITask> Dependencies {
-            get { return new[] {SolutionPath}; }
-        }
-
-        public void BeforeBuild() {
-        }
-
-        public void Build() {
+        public override void Build() {
             Console.WriteLine("building solution at: " + SolutionPath.Value);
 
             ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"""{0}""", SolutionPath.Value));
@@ -67,7 +57,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Clean() {
+        public override void Clean() {
             if (SolutionExists) {
                 Console.WriteLine("cleaning solution at: " + SolutionPath.Value);
                 ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));

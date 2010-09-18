@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
-    public class WindowsService : ITask {
+    public class WindowsService : Task {
+        [Dependency]
         public Val<string> Name;
+        [Dependency]
         public Val<string> BinaryPath;
+        [Dependency]
         public Val<string> Description;
+        [Dependency]
         public Val<string> DisplayName;
+        [Dependency]
         public Val<string> UserName;
+        [Dependency]
         public Val<string> Password;
+
         private ShellCommandExecutor ShellCommandExecutor;
 
         public WindowsService() {
             ShellCommandExecutor = new ShellCommandExecutor();
         }
 
-        public IEnumerable<ITask> Dependencies {
-            get { return new[] {Name, BinaryPath, Description, DisplayName, UserName, Password}; }
-        }
-
-        public void BeforeBuild() {
+        public override void BeforeBuild() {
             if (Name.Value != null) {
                 if (ServiceInstalled && ServiceRunning) {
                     StopService();
@@ -44,7 +47,7 @@ namespace Bounce.Framework {
             ShellCommandExecutor.ExecuteAndExpectSuccess("sc", String.Format(@"stop ""{0}""", Name.Value));
         }
 
-        public void Build() {
+        public override void Build() {
             if (ServiceInstalled) {
                 DeleteService();
             }
@@ -80,7 +83,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Clean() {
+        public override void Clean() {
             if (ServiceInstalled) {
                 DeleteService();
             }

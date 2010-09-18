@@ -67,7 +67,7 @@ namespace Bounce.Framework {
                         return (builder, task) => builder.Clean(task);
                     }
                 default: {
-                        throw new ConfigurationException(String.Format("command {0} not recognised", command));
+                        throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
                     }
             }
         }

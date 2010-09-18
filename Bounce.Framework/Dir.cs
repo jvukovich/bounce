@@ -50,37 +50,4 @@ namespace Bounce.Framework {
             return Directory.Exists(dir);
         }
     }
-
-    public class ToDir : ITask {
-        private readonly IDirectoryUtils DirUtils;
-
-        public ToDir() : this(new DirectoryUtils()) {}
-
-        public ToDir(IDirectoryUtils dirUtils) {
-            DirUtils = dirUtils;
-        }
-
-        public Val<string> FromPath { get; set; }
-        public Val<string> ToPath { get; set; }
-
-        public IEnumerable<ITask> Dependencies {
-            get { return new[] {FromPath, ToPath}; }
-        }
-
-        public void BeforeBuild() {
-        }
-
-        public void Build() {
-            var fromPath = FromPath.Value;
-            var toPath = ToPath.Value;
-
-            if (DirUtils.GetLastModTimeForDirectory(fromPath) > DirUtils.GetLastModTimeForDirectory(toPath)) {
-                DirUtils.CopyDirectoryContents(fromPath, toPath);
-            }
-        }
-
-        public void Clean() {
-            DirUtils.DeleteDirectory(ToPath.Value);
-        }
-    }
 }

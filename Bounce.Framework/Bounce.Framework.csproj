@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -54,6 +54,7 @@
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
+    <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="Dir.cs" />
     <Compile Include="FileSystem.cs" />
@@ -69,6 +70,8 @@
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="BouncerUtils.cs" />
+    <Compile Include="Task.cs" />
+    <Compile Include="TaskDependencyFinder.cs" />
     <Compile Include="TaskException.cs" />
     <Compile Include="TargetsAttribute.cs" />
     <Compile Include="TaskWalker.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="IParameter.cs" />
     <Compile Include="IParameters.cs" />
     <Compile Include="ITypeParsers.cs" />
+    <Compile Include="ToDir.cs" />
     <Compile Include="Val.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />

@@ -81,7 +81,7 @@ namespace Bounce.Framework {
         }
     }
 
-    public class ConfigurationException : Exception {
+    public class ConfigurationException : BounceException {
         public ConfigurationException(string message) : base(message) {}
     }
 }

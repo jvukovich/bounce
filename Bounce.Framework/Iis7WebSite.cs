@@ -4,19 +4,15 @@ using System.Linq;
 using Microsoft.Web.Administration;
 
 namespace Bounce.Framework {
-    public class Iis7WebSite : ITask {
+    public class Iis7WebSite : Task {
+        [Dependency]
         public Val<string> Path;
+        [Dependency]
         public Val<int> Port;
+        [Dependency]
         public Val<string> Name;
 
-        public IEnumerable<ITask> Dependencies {
-            get { return new ITask[] {Path, Port, Name}; }
-        }
-
-        public void BeforeBuild() {
-        }
-
-        public void Build() {
+        public override void Build() {
             var iisServer = new ServerManager();
 
             var existingSite = iisServer.Sites[Name.Value];
@@ -54,7 +50,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Clean() {
+        public override void Clean() {
             var iisServer = new ServerManager();
             RemoveWebSiteIfExtant(iisServer);
             iisServer.CommitChanges();
