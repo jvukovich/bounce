@@ -6,15 +6,10 @@ using System.Reflection;
 namespace Bouncer.Console {
     class BounceAssemblyRunner {
         public void Run(string [] args) {
-            if (args.Length < 1) {
-                string exeName = Path.GetFileNameWithoutExtension(GetType().Assembly.Location);
-                System.Console.WriteLine("usage: {0} ASSEMBLY", exeName);
-                Environment.Exit(1);
-            }
-            string assemblyFileName = args[0];
+            string assemblyFileName = FindTargetsAssembly(Directory.GetCurrentDirectory());
 
-            if (!File.Exists(assemblyFileName)) {
-                System.Console.WriteLine("assembly at: `{0}', does not exist", assemblyFileName);
+            if (assemblyFileName == null) {
+                System.Console.WriteLine(@"unable to find Bounce\Targets.dll assembly in this or any parent directory");
                 Environment.Exit(1);
             }
 
@@ -40,6 +35,19 @@ namespace Bouncer.Console {
             }
             else {
                 RunAssembly(bounceAssemblyAndTargetsProperty, args);
+            }
+        }
+
+        private string FindTargetsAssembly(string currentDir) {
+            if (String.IsNullOrEmpty(currentDir)) {
+                return null;
+            }
+
+            var targetsDll = Path.Combine(Path.Combine(currentDir, "Bounce"), "Targets.dll");
+            if (File.Exists(targetsDll)) {
+                return targetsDll;
+            } else {
+                return FindTargetsAssembly(Path.GetDirectoryName(currentDir));
             }
         }
 

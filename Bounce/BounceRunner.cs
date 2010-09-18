@@ -13,7 +13,7 @@ namespace Bounce.Framework {
             try {
                 var targets = getTargetsMethod.Invoke(null, new[] {parameters});
 
-                if (args.Length >= 3) {
+                if (args.Length >= 2) {
                     string[] buildArguments = parameters.ParseCommandLineArguments(args);
 
                     string command = buildArguments[1];
