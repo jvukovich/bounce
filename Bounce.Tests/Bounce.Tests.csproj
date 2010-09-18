@@ -68,7 +68,7 @@
     <Compile Include="ZipFileTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bounce\Bounce.Framework.csproj">
+    <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">
       <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
       <Name>Bounce.Framework</Name>
     </ProjectReference>

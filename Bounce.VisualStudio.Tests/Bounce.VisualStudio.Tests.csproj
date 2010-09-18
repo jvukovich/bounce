@@ -71,7 +71,7 @@
       <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
       <Name>Bounce.VisualStudio</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Bounce\Bounce.Framework.csproj">
+    <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">
       <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
       <Name>Bounce.Framework</Name>
     </ProjectReference>
