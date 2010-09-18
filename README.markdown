@@ -30,16 +30,16 @@ We'd write a C# file containing our targets like this:
     [Targets]
     public static object Targets (IParameters parameters) {
         var solution = new VisualStudioSolution {
-			SolutionPath = "WebSolution.sln".V(),
-		};
-        var webProject = solution.Projects["WebSite".V()];
+            SolutionPath = "WebSolution.sln",
+        };
+        var webProject = solution.Projects["WebSite"];
 
         return new {
             WebSite = new Iis7WebSite {
-				Path = webProject.Directory,
-				Name = "My Website".V(),
-				Port = 5001.V(),
-			},
+                Path = webProject.Directory,
+                Name = "My Website",
+                Port = 5001,
+            },
         };
     }
 }</code></pre>
@@ -53,35 +53,35 @@ Say you wanted to add a unit test task:
 <pre><code>public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
-		...
+        ...
 
         return new {
             WebSite = new Iis7WebSite { ... },
-			<b>Tests = new NUnitTests {
+            <b>Tests = new NUnitTests {
                 DllPaths = solution.Projects.Select(p => p.OutputFile),
-			},</b>
+            },</b>
         };
     }
 }</code></pre>
 
 And, to run them:
 
-	bounce MyBuild.dll build Tests
+    bounce MyBuild.dll build Tests
 
 And, say you wanted to do a `git` checkout before you built the solution:
 
 <pre><code>public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
-		<b>var git = new GitWorkingTree {
-			Repository = "git@github.com:refractalize/website.git",
-		};</b>
+        <b>var git = new GitWorkingTree {
+            Repository = "git@github.com:refractalize/website.git",
+        };</b>
         var solution = new VisualStudioSolution {
-			SolutionPath = <b>git["WebSolution.sln".V()]</b>,
-		};
-		
-		...
-	}
+            SolutionPath = <b>git["WebSolution.sln"]</b>,
+        };
+        
+        ...
+    }
 }</code></pre>
 
 `GitRepo` clones the github repo and the rest of the build works from the checkout directory.
