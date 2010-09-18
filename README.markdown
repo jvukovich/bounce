@@ -73,7 +73,7 @@ And, say you wanted to do a `git` checkout _before_ you built the solution:
 <pre><code>public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
-        <b>var git = new GitWorkingTree {
+        <b>var git = new GitCheckout {
             Repository = "git@github.com:refractalize/website.git",
         };</b>
         var solution = new VisualStudioSolution {
@@ -84,4 +84,4 @@ And, say you wanted to do a `git` checkout _before_ you built the solution:
     }
 }</code></pre>
 
-`GitWorkingTree` clones the github repo and the rest of the build works from the checkout directory.
+`GitCheckout` clones the github repo and the rest of the build works from the checkout directory.
