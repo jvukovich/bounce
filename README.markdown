@@ -68,7 +68,7 @@ And, to run them:
 
     bounce MyBuild.dll build Tests
 
-And, say you wanted to do a `git` checkout before you built the solution:
+And, say you wanted to do a `git` checkout _before_ you built the solution:
 
 <pre><code>public class BuildTargets {
     [Targets]

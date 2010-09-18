@@ -1,3 +1,4 @@
 watch 'README\.markdown' do
-	system 'perl Markdown.pl README.markdown > README.html'
+	puts 'marking down!'
+	system 'perl docs/Markdown.pl README.markdown > docs/README.html'
 end
