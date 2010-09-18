@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GitRepoParserTest.cs" />
-    <Compile Include="GitRepoTest.cs" />
+    <Compile Include="GitWorkingTreeTest.cs" />
     <Compile Include="TargetBuilderTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />
     <Compile Include="FakeTask.cs" />

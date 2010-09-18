@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Bounce.Tests {
     [TestFixture]
-    public class GitRepoTest {
+    public class GitWorkingTreeTest {
         [Test]
         public void IfDirectoryAlreadyExtantShouldUsePull() {
             var git = new Mock<IGitCommand>();
