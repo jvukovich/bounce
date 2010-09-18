@@ -84,4 +84,4 @@ And, say you wanted to do a `git` checkout before you built the solution:
     }
 }</code></pre>
 
-`GitRepo` clones the github repo and the rest of the build works from the checkout directory.
+`GitWorkingTree` clones the github repo and the rest of the build works from the checkout directory.
