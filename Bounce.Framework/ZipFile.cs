@@ -3,7 +3,7 @@
 namespace Bounce.Framework {
     public class ZipFile : Task {
         private readonly IZipFileCreator ZipFileCreator;
-        private readonly IFileSystem FileSystem;
+        private readonly IFileUtils FileUtils;
         private readonly IDirectoryUtils DirectoryUtils;
 
         [Dependency]
@@ -11,17 +11,17 @@ namespace Bounce.Framework {
         [Dependency]
         public Val<string> ZipFileName;
 
-        public ZipFile() : this(new ZipFileCreator(), new FileSystem(), new DirectoryUtils()) {
+        public ZipFile() : this(new ZipFileCreator(), new FileUtils(), new DirectoryUtils()) {
         }
 
-        public ZipFile(IZipFileCreator zipFileCreator, IFileSystem fileSystem, IDirectoryUtils directoryUtils) {
+        public ZipFile(IZipFileCreator zipFileCreator, IFileUtils fileUtils, IDirectoryUtils directoryUtils) {
             ZipFileCreator = zipFileCreator;
-            FileSystem = fileSystem;
+            FileUtils = fileUtils;
             DirectoryUtils = directoryUtils;
         }
 
         public override void Build() {
-            if (!FileSystem.FileExists(ZipFileName.Value) || (FileSystem.LastWriteTimeForFile(ZipFileName.Value) < DirectoryUtils.GetLastModTimeForDirectory(Directory.Value))) {
+            if (!FileUtils.FileExists(ZipFileName.Value) || (FileUtils.LastWriteTimeForFile(ZipFileName.Value) < DirectoryUtils.GetLastModTimeForDirectory(Directory.Value))) {
                 ZipFileCreator.CreateZipFile(ZipFileName.Value, Directory.Value);
             }
         }

@@ -103,7 +103,7 @@ namespace Bounce.Tests {
             filter.Setup(f => f.IncludeFile(@"subdir\three.txt")).Returns(true);
             filter.Setup(f => f.IncludeFile(@"subdir\exclude.txt")).Returns(false);
 
-            new DirectoryUtils(filterFactory.Object).CopyDirectoryContents("testfrom", "testto", excludes, includes);
+            new DirectoryUtils(filterFactory.Object).CopyDirectory("testfrom", "testto", excludes, includes);
 
             AssertFileContains(@"testto\one.txt", "one");
             AssertFileContains(@"testto\two.txt", "two");

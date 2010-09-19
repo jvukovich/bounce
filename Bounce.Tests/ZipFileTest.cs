@@ -8,7 +8,7 @@ namespace Bounce.Tests {
     public class ZipFileTest {
         [Test]
         public void ShouldCreateZipFileIfDoesntExist() {
-            var fs = new Mock<IFileSystem>();
+            var fs = new Mock<IFileUtils>();
             var zipCreator = new Mock<IZipFileCreator>();
             var directoryUtils = new Mock<IDirectoryUtils>();
 
@@ -26,7 +26,7 @@ namespace Bounce.Tests {
 
         [Test]
         public void ShouldNotCreateZipFileIfExistsAndModifiedLaterThanDirectory() {
-            var fs = new Mock<IFileSystem>();
+            var fs = new Mock<IFileUtils>();
             var directoryUtils = new Mock<IDirectoryUtils>();
             var zipCreator = new Mock<IZipFileCreator>();
 
@@ -48,7 +48,7 @@ namespace Bounce.Tests {
 
         [Test]
         public void ShouldCreateZipFileIfExistsAndModifiedBeforeDirectory() {
-            var fs = new Mock<IFileSystem>();
+            var fs = new Mock<IFileUtils>();
             var directoryUtils = new Mock<IDirectoryUtils>();
             var zipCreator = new Mock<IZipFileCreator>();
 

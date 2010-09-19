@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Bounce.Framework {
     public class DirectoryUtils : IDirectoryUtils {
-        private IFileNameFilterFactory FileNameFilterFactory;
+        private readonly IFileNameFilterFactory FileNameFilterFactory;
 
         public DirectoryUtils() : this(new FileNameFilterFactory()) {}
 
@@ -30,11 +30,7 @@ namespace Bounce.Framework {
             return modTimes.Max();
         }
 
-        public void CopyDirectoryContents(string from, string to, IEnumerable<string> excludes, IEnumerable<string> includes) {
-            CopyDirectoryContents(from, from, to, FileNameFilterFactory.CreateFileNameFilter(excludes, includes));
-        }
-
-        private void CopyDirectoryContents(string originalFrom, string from, string to, IFileNameFilter fileNameFilter) {
+        private static void CopyDirectoryContents(string originalFrom, string from, string to, IFileNameFilter fileNameFilter) {
             if (!Directory.Exists(to)) {
                 Directory.CreateDirectory(to);
             }
@@ -60,6 +56,10 @@ namespace Bounce.Framework {
 
         public bool DirectoryExists(string dir) {
             return Directory.Exists(dir);
+        }
+
+        public void CopyDirectory(string from, string to, IEnumerable<string> excludes, IEnumerable<string> includes) {
+            CopyDirectoryContents(from, from, to, FileNameFilterFactory.CreateFileNameFilter(excludes, includes));
         }
     }
 }

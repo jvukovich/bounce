@@ -8,51 +8,76 @@ namespace Bounce.Tests {
     [TestFixture]
     public class ToDirTest {
         [Test]
-        public void ShouldCopyIfFromDirectoryIfNewer() {
-            var dirUtils = new Mock<IDirectoryUtils>();
+        public void ShouldCopyIfFromPathNewer() {
+            var copier = new Mock<IFileSystemCopier>();
             var fromPath = "fromdir";
             var toPath = "todir";
 
+            copier.Setup(c => c.Exists(toPath)).Returns(true);
+            copier.Setup(c => c.Exists(fromPath)).Returns(true);
             var fromPathLastModified = new DateTime(2010, 5, 10);
-            dirUtils.Setup(d => d.GetLastModTimeForDirectory(fromPath)).Returns(fromPathLastModified);
-            dirUtils.Setup(d => d.GetLastModTimeForDirectory(toPath)).Returns(fromPathLastModified.AddDays(-1));
+            copier.Setup(c => c.GetLastModTimeForPath(fromPath)).Returns(fromPathLastModified);
+            copier.Setup(c => c.GetLastModTimeForPath(toPath)).Returns(fromPathLastModified.AddDays(-1));
 
             var includes = new string[0];
             var excludes = new string[0];
-            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath, FromPath = fromPath, Includes = includes, Excludes = excludes};
+            var toDir = new Copy(copier.Object) {ToPath = toPath, FromPath = fromPath, Includes = includes, Excludes = excludes};
 
             toDir.Build();
 
-            dirUtils.Verify(d => d.CopyDirectoryContents(fromPath, toPath, excludes, includes), Times.Once());
+            copier.Verify(c => c.Copy(fromPath, toPath, excludes, includes), Times.Once());
         }
 
         [Test]
-        public void ShouldNotCopyIfFromDirectoryOlder() {
-            var dirUtils = new Mock<IDirectoryUtils>();
+        public void ShouldCopyIfToPathDoesntExist() {
+            var copier = new Mock<IFileSystemCopier>();
             var fromPath = "fromdir";
             var toPath = "todir";
 
-            var fromPathLastModified = new DateTime(2010, 5, 10);
-            dirUtils.Setup(d => d.GetLastModTimeForDirectory(fromPath)).Returns(fromPathLastModified);
-            dirUtils.Setup(d => d.GetLastModTimeForDirectory(toPath)).Returns(fromPathLastModified.AddDays(1));
+            copier.Setup(c => c.Exists(toPath)).Returns(false);
+            copier.Setup(c => c.Exists(fromPath)).Returns(true);
 
-            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath, FromPath = fromPath};
+            var includes = new string[0];
+            var excludes = new string[0];
+            var toDir = new Copy(copier.Object) {ToPath = toPath, FromPath = fromPath, Includes = includes, Excludes = excludes};
 
             toDir.Build();
 
-            dirUtils.Verify(d => d.CopyDirectoryContents(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never());
+            copier.Verify(c => c.GetLastModTimeForPath(toPath), Times.Never());
+            copier.Verify(c => c.GetLastModTimeForPath(fromPath), Times.Never());
+            copier.Verify(c => c.Copy(fromPath, toPath, excludes, includes), Times.Once());
+        }
+
+        [Test]
+        public void ShouldNotCopyIfFromPathOlder() {
+            var copier = new Mock<IFileSystemCopier>();
+            var fromPath = "fromdir";
+            var toPath = "todir";
+
+            copier.Setup(c => c.Exists(toPath)).Returns(true);
+            copier.Setup(c => c.Exists(fromPath)).Returns(true);
+
+            var fromPathLastModified = new DateTime(2010, 5, 10);
+            copier.Setup(c => c.GetLastModTimeForPath(fromPath)).Returns(fromPathLastModified);
+            copier.Setup(c => c.GetLastModTimeForPath(toPath)).Returns(fromPathLastModified.AddDays(1));
+
+            var toDir = new Copy(copier.Object) {ToPath = toPath, FromPath = fromPath};
+
+            toDir.Build();
+
+            copier.Verify(c => c.Copy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never());
         }
 
         [Test]
         public void ShouldDeleteDirectory() {
-            var dirUtils = new Mock<IDirectoryUtils>();
+            var copier = new Mock<IFileSystemCopier>();
             var toPath = "todir";
 
-            var toDir = new ToDir(dirUtils.Object) { ToPath = toPath};
+            var toDir = new Copy(copier.Object) { ToPath = toPath};
 
             toDir.Clean();
 
-            dirUtils.Verify(d => d.DeleteDirectory(toPath), Times.Once());
+            copier.Verify(c => c.Delete(toPath), Times.Once());
         }
     }
 }

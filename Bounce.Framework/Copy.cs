@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class ToDir : Task {
-        private readonly IDirectoryUtils DirUtils;
+    public class Copy : Task {
+        private readonly IFileSystemCopier FileSystemCopier;
 
-        public ToDir() : this(new DirectoryUtils()) {}
+        public Copy() : this(new FileSystemCopier()) {}
 
-        public ToDir(IDirectoryUtils dirUtils) {
-            DirUtils = dirUtils;
+        public Copy(IFileSystemCopier fileSystemCopier) {
+            FileSystemCopier = fileSystemCopier;
         }
 
         [Dependency]
@@ -23,13 +23,13 @@ namespace Bounce.Framework {
             var fromPath = FromPath.Value;
             var toPath = ToPath.Value;
 
-            if (DirUtils.GetLastModTimeForDirectory(fromPath) > DirUtils.GetLastModTimeForDirectory(toPath)) {
-                DirUtils.CopyDirectoryContents(fromPath, toPath, Excludes.Value, Includes.Value);
+            if (!FileSystemCopier.Exists(toPath) || FileSystemCopier.GetLastModTimeForPath(fromPath) > FileSystemCopier.GetLastModTimeForPath(toPath)) {
+                FileSystemCopier.Copy(fromPath, toPath, Excludes.Value, Includes.Value);
             }
         }
 
         public override void Clean() {
-            DirUtils.DeleteDirectory(ToPath.Value);
+            FileSystemCopier.Delete(ToPath.Value);
         }
     }
 }
