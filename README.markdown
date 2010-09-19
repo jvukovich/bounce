@@ -22,8 +22,8 @@ Naturally, downstream tasks can use properties of built upstream tasks to perfor
 
 ## Why C#?
 
-Because we hack our production code in C#, it makes a whole lot of sense to hack our in the same language and development environment.
-That way we can reuse code, configuration and know-how between production and build - no language barriers.
+Because we hack our production code in C#, it makes a whole lot of sense to hack our build in the same language and development environment.
+That way we can reuse code, configuration and know-how between production and build - no language barriers!
 
 ## Getting Started
 
