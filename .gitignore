@@ -6,3 +6,5 @@ obj/
 *.suo
 *.csproj.user
 *.resharper.user
+Bounce/
+docs/README.html
