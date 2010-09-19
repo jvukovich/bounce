@@ -18,7 +18,8 @@ namespace Bounce.Tests {
 //            EnumerateWebsites(scope);
 //            CreateSite(scope);
 //            PrintSite(scope, "IIsWebServer='W3SVC/1180970907'");
-            PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
+                PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/2046576962'");
+//            PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
 //            FindSite(scope, "My New Site");
         }
 
@@ -74,7 +75,7 @@ namespace Bounce.Tests {
 
 
         private void FindSite(ManagementScope scope, string serverComment) {
-            var query = new ManagementObjectSearcher(scope, new ObjectQuery(String.Format("select * from IIsWebServerSetting where ServerComment = '{0}'", serverComment)));
+            var query = new ManagementObjectSearcher(scope, new ObjectQuery(String.Format("select * from IIsWebServerSetting where ServerComment = '{0}'", serverComment.Replace("'", "''"))));
             ManagementObjectCollection websites = query.Get();
 
             foreach (var website in websites) {
@@ -106,6 +107,18 @@ namespace Bounce.Tests {
             Console.WriteLine("system props:");
             foreach (var prop in site.SystemProperties) {
                 Console.WriteLine("  {0}: {1}", prop.Name, prop.Value);
+            }
+
+            Console.WriteLine("scriptmap:");
+            foreach (var scriptMap in (ManagementBaseObject[]) site["ScriptMaps"]) {
+                Console.WriteLine("  props:");
+                foreach (var prop in scriptMap.Properties) {
+                    Console.WriteLine("    {0}: {1}", prop.Name, prop.Value);
+                }
+                Console.WriteLine("  system props:");
+                foreach (var prop in scriptMap.SystemProperties) {
+                    Console.WriteLine("    {0}: {1}", prop.Name, prop.Value);
+                }
             }
         }
 
