@@ -30,28 +30,28 @@ That way we can reuse code, configuration and know-how between production and bu
 Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0.
 We'd write a C# file containing our targets like this:
 
-public class BuildTargets {
-    [Targets]
-    public static object Targets (IParameters parameters) {
-        var solution = new VisualStudioSolution {
-            SolutionPath = "WebSolution.sln",
-        };
-        var webProject = solution.Projects["WebSite"];
+	public class BuildTargets {
+		[Targets]
+		public static object Targets (IParameters parameters) {
+			var solution = new VisualStudioSolution {
+				SolutionPath = "WebSolution.sln",
+			};
+			var webProject = solution.Projects["WebSite"];
 
-        return new {
-            WebSite = new Iis7WebSite {
-                Directory = webProject.Directory,
-                Name = "My Website",
-                Port = 5001,
-            },
-            Tests = new NUnitTests {
-                DllPaths = solution.Projects.Select(p => p.OutputFile),
-            },
-        };
-    }
-}
+			return new {
+				WebSite = new Iis7WebSite {
+					Directory = webProject.Directory,
+					Name = "My Website",
+					Port = 5001,
+				},
+				Tests = new NUnitTests {
+					DllPaths = solution.Projects.Select(p => p.OutputFile),
+				},
+			};
+		}
+	}
 
-The above code should be compiled into an assembly called Targets.dll, and into an output directory called `Bounce`.
+The above code should be compiled into an assembly called `Targets.dll`, and into an output directory called `Bounce`.
 This is how the `bounce` command will find our build configuration - it looks for `Bounce\Targets.dll` in the current
 and all parent directories.
 
@@ -75,7 +75,8 @@ If we're not sure what our build allows us, just run `bounce` alone and it will 
 ### Command-line Arguments
 
 We can also change our build configuration from the command line, by passing in named arguments. Lets say we
-want to specify the website port from the command line, but default it to 5001:
+want to specify the website port from the command line, but default it to 5001. We'll use the `IParameters` object
+passed in to our `Targets` method:
 
     public static object Targets(IParameters parameters) {
     ...
