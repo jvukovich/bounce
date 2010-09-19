@@ -32,4 +32,16 @@ namespace Bounce.Framework {
             FileSystemCopier.Delete(ToPath.Value);
         }
     }
+
+    public class AspNetWebSiteDirectory : Copy {
+        public AspNetWebSiteDirectory() {
+            Excludes = new[] {
+                "**.cs",
+                @"obj\**",
+                "**.csproj.user",
+                "**.csproj",
+                "**.pdb",
+            };
+        }
+    }
 }
