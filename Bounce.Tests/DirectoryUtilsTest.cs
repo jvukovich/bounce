@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Bounce.Framework;
+using Moq;
 using NUnit.Framework;
 
 namespace Bounce.Tests {
@@ -88,12 +89,26 @@ namespace Bounce.Tests {
             Touch(@"testfrom\one.txt", "one");
             Touch(@"testfrom\two.txt", "two");
             Touch(@"testfrom\subdir\three.txt", "three");
+            Touch(@"testfrom\subdir\exclude.txt", "three");
 
-            new DirectoryUtils().CopyDirectoryContents("testfrom", "testto");
+            var includes = new string[0];
+            var excludes = new string[0];
+
+            var filterFactory = new Mock<IFileNameFilterFactory>();
+            var filter = new Mock<IFileNameFilter>();
+            filterFactory.Setup(ff => ff.CreateFileNameFilter(excludes, includes)).Returns(filter.Object);
+
+            filter.Setup(f => f.IncludeFile(@"one.txt")).Returns(true);
+            filter.Setup(f => f.IncludeFile(@"two.txt")).Returns(true);
+            filter.Setup(f => f.IncludeFile(@"subdir\three.txt")).Returns(true);
+            filter.Setup(f => f.IncludeFile(@"subdir\exclude.txt")).Returns(false);
+
+            new DirectoryUtils(filterFactory.Object).CopyDirectoryContents("testfrom", "testto", excludes, includes);
 
             AssertFileContains(@"testto\one.txt", "one");
             AssertFileContains(@"testto\two.txt", "two");
             AssertFileContains(@"testto\subdir\three.txt", "three");
+            Assert.That(File.Exists(@"testto\subdir\exclude.txt"), Is.False);
         }
 
         [Test]

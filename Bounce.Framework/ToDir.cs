@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Bounce.Framework {
     public class ToDir : Task {
         private readonly IDirectoryUtils DirUtils;
@@ -12,13 +14,17 @@ namespace Bounce.Framework {
         public Val<string> FromPath { get; set; }
         [Dependency]
         public Val<string> ToPath { get; set; }
+        [Dependency]
+        public Val<IEnumerable<string>> Excludes;
+        [Dependency]
+        public Val<IEnumerable<string>> Includes;
 
         public override void Build() {
             var fromPath = FromPath.Value;
             var toPath = ToPath.Value;
 
             if (DirUtils.GetLastModTimeForDirectory(fromPath) > DirUtils.GetLastModTimeForDirectory(toPath)) {
-                DirUtils.CopyDirectoryContents(fromPath, toPath);
+                DirUtils.CopyDirectoryContents(fromPath, toPath, Excludes.Value, Includes.Value);
             }
         }
 

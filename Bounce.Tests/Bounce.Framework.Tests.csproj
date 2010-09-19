@@ -57,8 +57,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileNameFilterTest.cs" />
     <Compile Include="GitRepoParserTest.cs" />
     <Compile Include="GitCheckoutTest.cs" />
+    <Compile Include="GlobToRegexConverterTest.cs" />
     <Compile Include="TargetBuilderTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />
     <Compile Include="FakeTask.cs" />

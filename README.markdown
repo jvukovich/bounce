@@ -1,5 +1,5 @@
 # Bounce
-An experimental new build framework for C# projects
+An experimental new build framework for C# projects.
 
 ## Why use Bounce?
 

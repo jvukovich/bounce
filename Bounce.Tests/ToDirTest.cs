@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Bounce.Framework;
 using Moq;
 using NUnit.Framework;
@@ -7,7 +8,7 @@ namespace Bounce.Tests {
     [TestFixture]
     public class ToDirTest {
         [Test]
-        public void ShouldCopyIfFromDirectoryNewer() {
+        public void ShouldCopyIfFromDirectoryIfNewer() {
             var dirUtils = new Mock<IDirectoryUtils>();
             var fromPath = "fromdir";
             var toPath = "todir";
@@ -16,11 +17,13 @@ namespace Bounce.Tests {
             dirUtils.Setup(d => d.GetLastModTimeForDirectory(fromPath)).Returns(fromPathLastModified);
             dirUtils.Setup(d => d.GetLastModTimeForDirectory(toPath)).Returns(fromPathLastModified.AddDays(-1));
 
-            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath, FromPath = fromPath};
+            var includes = new string[0];
+            var excludes = new string[0];
+            var toDir = new ToDir(dirUtils.Object) {ToPath = toPath, FromPath = fromPath, Includes = includes, Excludes = excludes};
 
             toDir.Build();
 
-            dirUtils.Verify(d => d.CopyDirectoryContents(fromPath, toPath), Times.Once());
+            dirUtils.Verify(d => d.CopyDirectoryContents(fromPath, toPath, excludes, includes), Times.Once());
         }
 
         [Test]
@@ -37,7 +40,7 @@ namespace Bounce.Tests {
 
             toDir.Build();
 
-            dirUtils.Verify(d => d.CopyDirectoryContents(fromPath, toPath), Times.Never());
+            dirUtils.Verify(d => d.CopyDirectoryContents(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never());
         }
 
         [Test]

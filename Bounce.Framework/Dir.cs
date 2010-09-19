@@ -5,6 +5,14 @@ using System.Linq;
 
 namespace Bounce.Framework {
     public class DirectoryUtils : IDirectoryUtils {
+        private IFileNameFilterFactory FileNameFilterFactory;
+
+        public DirectoryUtils() : this(new FileNameFilterFactory()) {}
+
+        public DirectoryUtils(IFileNameFilterFactory fileNameFilterFactory) {
+            FileNameFilterFactory = fileNameFilterFactory;
+        }
+
         public DateTime GetLastModTimeForDirectory(string dir) {
             var modTimes = new List<DateTime>();
             modTimes.Add(Directory.GetLastWriteTimeUtc(dir));
@@ -22,21 +30,25 @@ namespace Bounce.Framework {
             return modTimes.Max();
         }
 
-        public void CopyDirectoryContents(string from, string to) {
-            string fullFromDir = Path.GetFullPath(from);
-            string fullToDir = Path.GetFullPath(to);
+        public void CopyDirectoryContents(string from, string to, IEnumerable<string> excludes, IEnumerable<string> includes) {
+            CopyDirectoryContents(from, from, to, FileNameFilterFactory.CreateFileNameFilter(excludes, includes));
+        }
 
-            if (!Directory.Exists(fullToDir)) {
-                Directory.CreateDirectory(fullToDir);
+        private void CopyDirectoryContents(string originalFrom, string from, string to, IFileNameFilter fileNameFilter) {
+            if (!Directory.Exists(to)) {
+                Directory.CreateDirectory(to);
             }
 
-            foreach(var file in Directory.GetFiles(fullFromDir)) {
-                var destFilename = Path.Combine(fullToDir, file.Substring(fullFromDir.Length + 1));
-                File.Copy(file, destFilename);
+            foreach(var file in Directory.GetFiles(from)) {
+                var destFilename = Path.Combine(to, Path.GetFileName(file));
+
+                if (fileNameFilter.IncludeFile(file.Substring(originalFrom.Length + 1))) {
+                    File.Copy(file, destFilename);
+                }
             }
 
             foreach(var subdir in Directory.GetDirectories(from)) {
-                CopyDirectoryContents(subdir, Path.Combine(to, Path.GetFileName(subdir)));
+                CopyDirectoryContents(originalFrom, subdir, Path.Combine(to, Path.GetFileName(subdir)), fileNameFilter);
             }
         }
 
