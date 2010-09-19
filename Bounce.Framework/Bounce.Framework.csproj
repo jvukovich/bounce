@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
