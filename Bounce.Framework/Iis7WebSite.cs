@@ -6,7 +6,7 @@ using Microsoft.Web.Administration;
 namespace Bounce.Framework {
     public class Iis7WebSite : Task {
         [Dependency]
-        public Val<string> Path;
+        public Val<string> Directory;
         [Dependency]
         public Val<int> Port;
         [Dependency]
@@ -17,9 +17,9 @@ namespace Bounce.Framework {
 
             var existingSite = iisServer.Sites[Name.Value];
             if (!SiteUpToDate(existingSite)) {
-                Console.WriteLine("installing IIS website at: " + Path.Value);
+                Console.WriteLine("installing IIS website at: " + Directory.Value);
                 RemoveWebSiteIfExtant(iisServer);
-                iisServer.Sites.Add(Name.Value, Path.Value, Port.Value);
+                iisServer.Sites.Add(Name.Value, Directory.Value, Port.Value);
                 iisServer.CommitChanges();
             } else {
                 Console.WriteLine("IIS website already installed");
@@ -28,7 +28,7 @@ namespace Bounce.Framework {
 
         private bool SiteUpToDate(Site site) {
             if (site != null) {
-                if (site.Applications[0].VirtualDirectories[0].PhysicalPath != Path.Value) {
+                if (site.Applications[0].VirtualDirectories[0].PhysicalPath != Directory.Value) {
                     return false;
                 }
 

@@ -35,26 +35,36 @@ namespace Bounce.Framework {
                     }
                 } else {
                     Console.WriteLine("usage: bounce build|clean target-name");
-                    Console.WriteLine();
-                    Console.WriteLine("targets:");
-                    foreach (var name in GetTargetNames(targets)) {
-                        Console.WriteLine("  " + name);
-                    }
-                    Console.WriteLine();
-                    Console.WriteLine("arguments:");
-                    foreach (var param in parameters.Parameters) {
-                        Console.Write("  /" + param.Name);
-                        if (param.Required) {
-                            Console.Write(" required");
-                        }
-                        if (param.HasValue) {
-                            Console.Write(" default: " + param.DefaultValue);
-                        }
-                        Console.WriteLine();
-                    }
+                    PrintAvailableTargets(targets);
+                    PrintAvailableParameters(parameters);
                 }
             } catch (BounceException ce) {
                 ce.Explain(Console.Out);
+            }
+        }
+
+        private void PrintAvailableTargets(object targets) {
+            Console.WriteLine();
+            Console.WriteLine("targets:");
+            foreach (var name in GetTargetNames(targets)) {
+                Console.WriteLine("  " + name);
+            }
+        }
+
+        private void PrintAvailableParameters(CommandLineParameters parameters) {
+            if (parameters.Parameters.Count() > 0) {
+                Console.WriteLine();
+                Console.WriteLine("arguments:");
+                foreach (var param in parameters.Parameters) {
+                    Console.Write("  /" + param.Name);
+                    if (param.Required) {
+                        Console.Write(" required");
+                    }
+                    if (param.HasValue) {
+                        Console.Write(" default: " + param.DefaultValue);
+                    }
+                    Console.WriteLine();
+                }
             }
         }
 

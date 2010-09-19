@@ -3,8 +3,7 @@ using Bounce.Framework;
 
 namespace TestBounceAssembly {
     public class BuildTargets {
-        [Targets]
-        public static object Targets (IParameters parameters) {
+        public static object GetTargets (IParameters parameters) {
             var git = new GitCheckout {
                 Repository = @"C:\Users\Public\Documents\Development\BigSolution.git",
                 Directory = "one"
@@ -18,7 +17,7 @@ namespace TestBounceAssembly {
 
             return new {
                 WebSite = new Iis7WebSite {
-                    Path = webProject.Directory,
+                    Directory = webProject.Directory,
                     Name = "BigWebSite",
                     Port = 5001
                 },
@@ -34,6 +33,25 @@ namespace TestBounceAssembly {
                 Zip = new ZipFile {
                     Directory = webProject.Directory,
                     ZipFileName = "web.zip"
+                },
+            };
+        }
+
+        [Targets]
+        public static object Targets(IParameters parameters) {
+            var solution = new VisualStudioSolution {
+                SolutionPath = "WebSolution.sln",
+            };
+            var webProject = solution.Projects["WebSite"];
+
+            return new {
+                WebSite = new Iis7WebSite {
+                    Directory = webProject.Directory,
+                    Name = "My Website",
+                    Port = parameters.Default("port", 5001),
+                },
+                Tests = new NUnitTests {
+                    DllPaths = solution.Projects.Select(p => p.OutputFile),
                 },
             };
         }

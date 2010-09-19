@@ -3,30 +3,34 @@ An experimental new build framework for C# projects
 
 ## Why use Bounce?
 
-So your build configuration can be clean, declarative and easy to maintain.
+For clean, beautiful build scripts! Bounce is a build framework based on functional
+programming semantics: In Bounce, each build task is seen as a function that accepts arguments
+(in the form of other tasks) and returns a built artefact that can be passed to yet other tasks. For example,
+from git checkout to IIS deploy:
 
-Sounds nice, but how?
+    new Iis7WebSite {
+        Directory = new VisualStudioSolution {
+            SolutionPath = new GitCheckout {
+                Repository = "git@github.com:refractalize/website.git"
+            }.Files["MySolution.sln"]
+        }.Projects["WebSite"],
+        Name = "Some Website",
+        Port = 5001,
+	}
 
-It works slightly differently to NAnt and Rake. It uses tasks that can be composed together to form
-complex dependency trees of build operations. Tasks depend on each other, and in doing so they can query
-tasks for configuration settings - eliminating the need for global variables.
+Naturally, downstream tasks can use properties of built upstream tasks to perform their own builds, affording a refreshingly declarative style.
 
 ## Why C#?
 
-No scripting language? How controversial! :)
+Because we hack our production code in C#, it makes a whole lot of sense to hack our in the same language and development environment.
+That way we can reuse code, configuration and know-how between production and build - no language barriers.
 
-Everybody's talking about using Ruby and Rake to hack their build scripts? Why use C#?
-
-For us .Net hackers, C# is our lingua franca. And when C# is used as your production language
-_and_ you're build language, you can easily share code and configuration between them. No language barriers
-- they're just not worth it.
-
-## Show me
+## Getting Started
 
 Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0.
 We'd write a C# file containing our targets like this:
 
-<pre><code>public class BuildTargets {
+public class BuildTargets {
     [Targets]
     public static object Targets (IParameters parameters) {
         var solution = new VisualStudioSolution {
@@ -36,52 +40,67 @@ We'd write a C# file containing our targets like this:
 
         return new {
             WebSite = new Iis7WebSite {
-                Path = webProject.Directory,
+                Directory = webProject.Directory,
                 Name = "My Website",
                 Port = 5001,
             },
-        };
-    }
-}</code></pre>
-
-Build the `BuildTargets` class into `MyBuild.dll` and you can build your website like this:
-
-    bounce MyBuild.dll build WebSite
-
-Say you wanted to add a unit test task:
-
-<pre><code>public class BuildTargets {
-    [Targets]
-    public static object Targets (IParameters parameters) {
-        ...
-
-        return new {
-            WebSite = new Iis7WebSite { ... },
-            <b>Tests = new NUnitTests {
+            Tests = new NUnitTests {
                 DllPaths = solution.Projects.Select(p => p.OutputFile),
-            },</b>
+            },
         };
     }
-}</code></pre>
+}
 
-And, to run them:
+The above code should be compiled into an assembly called Targets.dll, and into an output directory called `Bounce`.
+This is how the `bounce` command will find our build configuration - it looks for `Bounce\Targets.dll` in the current
+and all parent directories.
 
-    bounce MyBuild.dll build Tests
+Then you can build your website:
 
-And, say you wanted to do a `git` checkout _before_ you built the solution:
+    bounce build WebSite
 
-<pre><code>public class BuildTargets {
-    [Targets]
-    public static object Targets (IParameters parameters) {
-        <b>var git = new GitCheckout {
-            Repository = "git@github.com:refractalize/website.git",
-        };</b>
-        var solution = new VisualStudioSolution {
-            SolutionPath = <b>git["WebSolution.sln"]</b>,
-        };
-        
-        ...
-    }
-}</code></pre>
+This code has a `Tests` target too, returned in the anonymous object returned from the `Targets` method. We can watch our tests pass (or not) with this command:
 
-`GitCheckout` clones the github repo and the rest of the build works from the checkout directory.
+    bounce build Tests
+
+If we're not sure what our build allows us, just run `bounce` alone and it will print our available targets:
+
+    bounce
+	usage: bounce build|clean target-name
+
+	targets:
+	  WebSite
+	  Tests
+
+### Command-line Arguments
+
+We can also change our build configuration from the command line, by passing in named arguments. Lets say we
+want to specify the website port from the command line, but default it to 5001:
+
+    public static object Targets(IParameters parameters) {
+    ...
+        return new {
+            WebSite = new Iis7WebSite {
+                Directory = webProject.Directory,
+                Name = "My Website",
+                Port = parameters.Default("port", 5001),
+            },
+			...
+		}
+	}
+
+Now we can build the website and override the port it will be deployed on:
+
+	bounce build WebSite /port 80
+
+And, `bounce` will tell you what arguments you have available too:
+
+	bounce
+	usage: bounce build|clean target-name
+
+	targets:
+	  WebSite
+	  Tests
+
+	arguments:
+	  /port default: 5001
