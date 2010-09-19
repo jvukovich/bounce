@@ -67,7 +67,7 @@ namespace Bounce.Tests {
         public void ShouldReturnPathsRelativeToWorkingDirectory() {
             var gitRepo = new GitCheckout() {Directory = "dir"};
 
-            var subPath = gitRepo["test.txt"];
+            var subPath = gitRepo.Files["test.txt"];
             Assert.That(subPath.Value, Is.EqualTo(@"dir\test.txt"));
             Assert.That(subPath.Dependencies, Has.Member(gitRepo));
         }

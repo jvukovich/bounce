@@ -41,9 +41,9 @@ namespace Bounce.Framework {
             DirectoryUtils.DeleteDirectory(WorkingDirectory);
         }
 
-        public Val<string> this[Val<string> filename] {
+        public GitFiles Files {
             get {
-                return this.WhenBuilt(() => Path.Combine(WorkingDirectory, filename.Value));
+                return new GitFiles(this, () => WorkingDirectory);
             }
         }
     }

@@ -9,7 +9,7 @@ namespace TestBounceAssembly {
                 Directory = "one"
             };
             var solution = new VisualStudioSolution {
-                SolutionPath = git["BigSolution.sln"]
+                SolutionPath = git.Files["BigSolution.sln"]
             };
             var webProject = solution.Projects[parameters.Default("proj", "BigSolution")];
             var serviceName = parameters.Default("svc", "BigWindowsService");
