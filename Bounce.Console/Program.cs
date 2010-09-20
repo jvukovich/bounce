@@ -1,7 +1,4 @@
-﻿using System;
-
-namespace Bouncer.Console
-{
+﻿namespace Bounce.Console {
     class Program
     {
         static void Main(string[] args) {

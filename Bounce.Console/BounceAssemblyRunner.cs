@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Bouncer.Console {
+namespace Bounce.Console {
     class BounceAssemblyRunner {
         public void Run(string [] args) {
             string assemblyFileName = FindTargetsAssembly(Directory.GetCurrentDirectory());
@@ -22,7 +22,7 @@ namespace Bouncer.Console {
                 System.Console.WriteLine("assembly contains no [Targets] method. Try adding something like this:");
                 System.Console.WriteLine();
                 System.Console.WriteLine(
-@"public class BuildTargets {
+                    @"public class BuildTargets {
     [Bounce.Framework.Targets]
     public static object Targets (IParameters parameters) {
         return new {

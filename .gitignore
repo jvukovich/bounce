@@ -8,3 +8,4 @@ obj/
 *.resharper.user
 Bounce/
 docs/README.html
+.*.swp

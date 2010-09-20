@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework", "Bounce.Framework\Bounce.Framework.csproj", "{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bouncer.Console", "Bouncer.Console\Bouncer.Console.csproj", "{BD123B60-C18A-4446-808E-F4B81D0EE23D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console", "Bounce.Console\Bounce.Console.csproj", "{BD123B60-C18A-4446-808E-F4B81D0EE23D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework.Tests", "Bounce.Tests\Bounce.Framework.Tests.csproj", "{0F0BBC36-D999-47EB-BA24-6A926C2B8641}"
 EndProject
