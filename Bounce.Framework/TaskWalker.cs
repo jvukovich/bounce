@@ -9,8 +9,8 @@ namespace Bounce.Framework {
                 beforeDependencies(task);
             }
 
-            foreach (ITask bouncerDependency in GetNonNullDependencies(task)) {
-                Walk(bouncerDependency, beforeDependencies, afterDependencies);
+            foreach (ITask dependency in GetNonNullDependencies(task)) {
+                Walk(dependency, beforeDependencies, afterDependencies);
             }
 
             if (afterDependencies != null) {

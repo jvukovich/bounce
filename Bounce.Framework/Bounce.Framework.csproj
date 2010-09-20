@@ -63,6 +63,7 @@
     <Compile Include="FileNameFilterFactory.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="FileSystemCopier.cs" />
+    <Compile Include="FutureValue.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCheckout.cs" />
     <Compile Include="GitFiles.cs" />
@@ -82,9 +83,10 @@
     <Compile Include="IisWebSiteState.cs" />
     <Compile Include="IZipFileCreator.cs" />
     <Compile Include="PlainValue.cs" />
+    <Compile Include="Property.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
-    <Compile Include="BouncerUtils.cs" />
+    <Compile Include="TaskExtensions.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskDependencyFinder.cs" />
     <Compile Include="TaskException.cs" />
