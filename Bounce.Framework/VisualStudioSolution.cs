@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bounce.VisualStudio;
 using System.IO;
 
 namespace Bounce.Framework {

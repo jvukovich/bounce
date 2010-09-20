@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -57,6 +57,7 @@
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
+    <Compile Include="ConditionParseException.cs" />
     <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="DirectoryUtils.cs" />
@@ -85,10 +86,16 @@
     <Compile Include="IisWebSiteState.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="ILogMessageFormatter.cs" />
+    <Compile Include="IPropertyValues.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
+    <Compile Include="IVisualStudioProjectFileLoader.cs" />
+    <Compile Include="IVisualStudioSolutionFileLoader.cs" />
     <Compile Include="IZipFileCreator.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="ParseResult.cs" />
     <Compile Include="PlainValue.cs" />
+    <Compile Include="ProjectFilePropertyExpressionParser.cs" />
+    <Compile Include="PropertyValues.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="TaskExtensions.cs" />
@@ -111,8 +118,16 @@
     <Compile Include="CommandLineParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeParsers.cs" />
+    <Compile Include="VisualStudioCSharpProjectFileDetails.cs" />
+    <Compile Include="VisualStudioCSharpProjectFileLoader.cs" />
     <Compile Include="VisualStudioProject.cs" />
+    <Compile Include="VisualStudioProjectDetails.cs" />
     <Compile Include="VisualStudioSolution.cs" />
+    <Compile Include="VisualStudioSolutionDetails.cs" />
+    <Compile Include="VisualStudioSolutionFileDetails.cs" />
+    <Compile Include="VisualStudioSolutionFileLoader.cs" />
+    <Compile Include="VisualStudioSolutionFileReader.cs" />
+    <Compile Include="VisualStudioSolutionProject.cs" />
     <Compile Include="VisualStudioSolutionProjects.cs" />
     <Compile Include="WindowsService.cs" />
     <Compile Include="ZipFile.cs" />

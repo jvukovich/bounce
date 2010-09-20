@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}</ProjectGuid>
+    <ProjectGuid>{0F0BBC36-D999-47EB-BA24-6A926C2B8641}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bounce.VisualStudio.Tests</RootNamespace>
-    <AssemblyName>Bounce.VisualStudio.Tests</AssemblyName>
+    <RootNamespace>Bounce.Framework.Tests</RootNamespace>
+    <AssemblyName>Bounce.Framework.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,8 +35,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Build.Engine" />
-    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\InetSrv\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Moq\Moq.dll</HintPath>
@@ -49,6 +51,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -59,17 +62,49 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileNameFilterTest.cs" />
+    <Compile Include="FileSystemCopierTest.cs" />
+    <Compile Include="FileUtilsTest.cs" />
+    <Compile Include="GitRepoParserTest.cs" />
+    <Compile Include="GitCheckoutTest.cs" />
+    <Compile Include="GlobToRegexConverterTest.cs" />
+    <Compile Include="Iis6WebSiteTest.cs" />
+    <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />
+    <Compile Include="TargetBuilderTest.cs" />
+    <Compile Include="DirectoryUtilsTest.cs" />
+    <Compile Include="FakeTask.cs" />
+    <Compile Include="Iis7Admin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskDependencyFinderTest.cs" />
+    <Compile Include="TaskTest.cs" />
+    <Compile Include="CopyTest.cs" />
+    <Compile Include="VisualStudioCSharpProjectFileLoaderTest.cs" />
+    <Compile Include="VisualStudioSolutionFileLoaderTest.cs" />
+    <Compile Include="VisualStudioSolutionFileReaderTest.cs" />
+    <Compile Include="VisualStudioSolutionTest.cs" />
+    <Compile Include="ZipFileTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
-      <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
-      <Name>Bounce.VisualStudio</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">
       <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
       <Name>Bounce.Framework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestFiles\Bounce.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestFiles\Bounce.sln">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestFiles\Bouncer.Console.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestSolution.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

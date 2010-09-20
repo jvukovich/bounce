@@ -47,22 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="VisualStudioProjectDetails.cs" />
-    <Compile Include="VisualStudioSolutionProject.cs" />
-    <Compile Include="ConditionParseException.cs" />
-    <Compile Include="IPropertyValues.cs" />
-    <Compile Include="IVisualStudioProjectFileLoader.cs" />
-    <Compile Include="IVisualStudioSolutionFileLoader.cs" />
-    <Compile Include="ParseResult.cs" />
-    <Compile Include="ProjectFilePropertyExpressionParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyValues.cs" />
-    <Compile Include="VisualStudioCSharpProjectFileDetails.cs" />
-    <Compile Include="VisualStudioCSharpProjectFileLoader.cs" />
-    <Compile Include="VisualStudioSolutionDetails.cs" />
-    <Compile Include="VisualStudioSolutionFileDetails.cs" />
-    <Compile Include="VisualStudioSolutionFileLoader.cs" />
-    <Compile Include="VisualStudioSolutionFileReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
