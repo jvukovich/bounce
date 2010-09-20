@@ -20,6 +20,8 @@ namespace Bounce.Framework {
         [Dependency]
         public Val<string> Machine;
 
+        public const string NetworkService = @"NT AUTHORITY\NetworkService";
+
         private ShellCommandExecutor ShellCommandExecutor;
 
         public WindowsService() {
