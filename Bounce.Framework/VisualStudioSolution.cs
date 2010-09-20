@@ -23,8 +23,8 @@ namespace Bounce.Framework {
             }
         }
 
-        public override void Build() {
-            Console.WriteLine("building solution at: " + SolutionPath.Value);
+        public override void Build(IBounce bounce) {
+            bounce.Log.Info("building solution at: " + SolutionPath.Value);
 
             ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"""{0}""", SolutionPath.Value));
         }
@@ -57,9 +57,9 @@ namespace Bounce.Framework {
             }
         }
 
-        public override void Clean() {
+        public override void Clean(IBounce bounce) {
             if (SolutionExists) {
-                Console.WriteLine("cleaning solution at: " + SolutionPath.Value);
+                bounce.Log.Info("cleaning solution at: " + SolutionPath.Value);
                 ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
             }
         }

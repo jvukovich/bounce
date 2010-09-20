@@ -18,14 +18,5 @@ namespace Bounce.Framework {
         public override IEnumerable<ITask> Dependencies {
             get { return new[] {dependency}; }
         }
-
-        public override void BeforeBuild() {
-        }
-
-        public override void Build() {
-        }
-
-        public override void Clean() {
-        }
     }
 }

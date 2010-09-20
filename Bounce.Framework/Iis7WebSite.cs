@@ -12,17 +12,17 @@ namespace Bounce.Framework {
         [Dependency]
         public Val<string> Name;
 
-        public override void Build() {
+        public override void Build(IBounce bounce) {
             var iisServer = new ServerManager();
 
             var existingSite = iisServer.Sites[Name.Value];
             if (!SiteUpToDate(existingSite)) {
-                Console.WriteLine("installing IIS website at: " + Directory.Value);
+                bounce.Log.Info("installing IIS website at: " + Directory.Value);
                 RemoveWebSiteIfExtant(iisServer);
                 iisServer.Sites.Add(Name.Value, Directory.Value, Port.Value);
                 iisServer.CommitChanges();
             } else {
-                Console.WriteLine("IIS website already installed");
+                bounce.Log.Info("IIS website already installed");
             }
         }
 

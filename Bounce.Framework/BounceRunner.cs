@@ -8,7 +8,7 @@ namespace Bounce.Framework {
         public void Run(string[] args, MethodInfo getTargetsMethod) {
             CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
 
-            var builder = new TargetBuilder();
+            var builder = new TargetBuilder(new Bounce(Console.Out, Console.Error));
 
             try {
                 var targets = getTargetsMethod.Invoke(null, new[] {parameters});

@@ -13,15 +13,6 @@ namespace Bounce.Framework {
             get { return new ITask[0]; }
         }
 
-        public override void BeforeBuild() {
-        }
-
-        public override void Build() {
-        }
-
-        public override void Clean() {
-        }
-
         public override T Value {
             get { return _value; }
         }

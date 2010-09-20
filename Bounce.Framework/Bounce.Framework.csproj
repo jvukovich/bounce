@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AspNetWebSiteDirectory.cs" />
+    <Compile Include="Bounce.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="GitFiles.cs" />
     <Compile Include="GitRepoParser.cs" />
     <Compile Include="GlobToRegexConverter.cs" />
+    <Compile Include="IBounce.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
     <Compile Include="IFileUtils.cs" />
@@ -81,9 +83,12 @@
     <Compile Include="IisWebSite.cs" />
     <Compile Include="IisWebSiteBinding.cs" />
     <Compile Include="IisWebSiteState.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="ILogMessageFormatter.cs" />
+    <Compile Include="ITargetBuilderBounce.cs" />
     <Compile Include="IZipFileCreator.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="PlainValue.cs" />
-    <Compile Include="Property.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="TaskExtensions.cs" />
@@ -91,6 +96,8 @@
     <Compile Include="TaskDependencyFinder.cs" />
     <Compile Include="TaskException.cs" />
     <Compile Include="TargetsAttribute.cs" />
+    <Compile Include="TaskLog.cs" />
+    <Compile Include="TaskLogMessageFormatter.cs" />
     <Compile Include="TaskWalker.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="Iis7WebSite.cs" />

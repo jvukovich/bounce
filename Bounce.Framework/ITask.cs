@@ -3,8 +3,8 @@
 namespace Bounce.Framework {
     public interface ITask {
         IEnumerable<ITask> Dependencies { get; }
-        void BeforeBuild();
-        void Build();
-        void Clean();
+        void BeforeBuild(IBounce bounce);
+        void Build(IBounce bounce);
+        void Clean(IBounce bounce);
     }
 }

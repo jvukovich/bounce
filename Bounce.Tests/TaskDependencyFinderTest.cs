@@ -46,15 +46,15 @@ namespace Bounce.Tests {
                 get { throw new System.NotImplementedException(); }
             }
 
-            public void BeforeBuild() {
+            public void BeforeBuild(IBounce bounce) {
                 throw new System.NotImplementedException();
             }
 
-            public void Build() {
+            public void Build(IBounce bounce) {
                 throw new System.NotImplementedException();
             }
 
-            public void Clean() {
+            public void Clean(IBounce bounce) {
                 throw new System.NotImplementedException();
             }
         }

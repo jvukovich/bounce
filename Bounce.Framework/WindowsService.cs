@@ -63,9 +63,9 @@ namespace Bounce.Framework {
             ExecuteScAndExpectSuccess(@"stop ""{0}""", Name.Value);
         }
 
-        public override void Build() {
+        public override void Build(IBounce bounce) {
             if (ServiceInstalled) {
-                Console.WriteLine("service {0} installed, deleting", Name.Value);
+                bounce.Log.Info("service {0} installed, deleting", Name.Value);
                 DeleteService();
             }
             InstallService();
@@ -101,9 +101,9 @@ namespace Bounce.Framework {
             }
         }
 
-        public override void Clean() {
+        public override void Clean(IBounce bounce) {
             if (ServiceInstalled) {
-                Console.WriteLine("service {0} installed, deleting", Name.Value);
+                bounce.Log.Info("service {0} installed, deleting", Name.Value);
                 DeleteService();
             } else {
                 Console.WriteLine("service {0} not installed");
