@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
@@ -16,11 +17,14 @@ namespace Bounce.Framework {
         public Val<string> UserName;
         [Dependency]
         public Val<string> Password;
+        [Dependency]
+        public Val<string> Machine;
 
         private ShellCommandExecutor ShellCommandExecutor;
 
         public WindowsService() {
             ShellCommandExecutor = new ShellCommandExecutor();
+            Machine = "localhost";
         }
 
         public override void BeforeBuild() {
@@ -35,37 +39,49 @@ namespace Bounce.Framework {
             get {
                 Regex statePattern = new Regex(@"STATE\s+:\s+\d\s+STARTED");
 
-                var queryOutput = ShellCommandExecutor
-                    .Execute("sc", String.Format(@"query ""{0}""", Name.Value))
-                    .Output;
+                var queryOutput = ExecuteSc(@"query ""{0}""", Name.Value).Output;
 
                 return statePattern.Match(queryOutput).Success;
             }
         }
 
+        private ProcessOutput ExecuteSc(string commandArgs, params object[] args) {
+            return ShellCommandExecutor.Execute("sc", OnMachine(commandArgs, args));
+        }
+
+        private void ExecuteScAndExpectSuccess(string commandArgs, params object[] args) {
+            ShellCommandExecutor.ExecuteAndExpectSuccess("sc", OnMachine(commandArgs, args));
+        }
+
+        private string OnMachine(string commandArgs, params object [] args) {
+            return String.Format(@"\\{0} {1}", Machine.Value, String.Format(commandArgs, args));
+        }
+
         private void StopService() {
-            ShellCommandExecutor.ExecuteAndExpectSuccess("sc", String.Format(@"stop ""{0}""", Name.Value));
+            ExecuteScAndExpectSuccess(@"stop ""{0}""", Name.Value);
         }
 
         public override void Build() {
             if (ServiceInstalled) {
+                Console.WriteLine("service {0} installed, deleting", Name.Value);
                 DeleteService();
             }
             InstallService();
         }
 
         private void InstallService() {
-            ShellCommandExecutor.ExecuteAndExpectSuccess("sc", String.Format(@"create ""{0}"" binPath= ""{1}""{2}", Name.Value, BinaryPath.Value, GetSettings()));
+            Console.WriteLine("installing service {0}", Name.Value);
+
+            ExecuteScAndExpectSuccess(@"create ""{0}"" binPath= ""{1}""{2}", Name.Value, Path.GetFullPath(BinaryPath.Value), GetSettings());
 
             if (Description != null && Description.Value != null) {
-                ShellCommandExecutor.ExecuteAndExpectSuccess("sc", String.Format(@"description ""{0}"" ""{1}""", Name.Value, Description.Value));
+                ExecuteScAndExpectSuccess(@"description ""{0}"" ""{1}""", Name.Value, Description.Value);
             }
         }
 
         private bool ServiceInstalled {
             get {
-                return !ShellCommandExecutor
-                        .Execute("sc", String.Format(@"query ""{0}""", Name.Value))
+                return !ExecuteSc(@"query ""{0}""", Name.Value)
                         .Output
                         .Contains("service does not exist");
             }
@@ -85,12 +101,15 @@ namespace Bounce.Framework {
 
         public override void Clean() {
             if (ServiceInstalled) {
+                Console.WriteLine("service {0} installed, deleting", Name.Value);
                 DeleteService();
+            } else {
+                Console.WriteLine("service {0} not installed");
             }
         }
 
         private void DeleteService() {
-            ShellCommandExecutor.ExecuteAndExpectSuccess("sc", String.Format(@"delete ""{0}""", Name.Value));
+            ExecuteScAndExpectSuccess(@"delete ""{0}""", Name.Value);
         }
     }
 }

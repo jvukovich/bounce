@@ -10,7 +10,13 @@ namespace Bounce.Framework {
 
     class ShellCommandExecutor : IShellCommandExecutor {
         public void ExecuteAndExpectSuccess(string commandName, string commandArgs) {
+            Console.WriteLine(String.Format("running: {0} {1}\nin: {2}", commandName, commandArgs, Directory.GetCurrentDirectory()));
+
             var output = Execute(commandName, commandArgs);
+
+            Console.WriteLine("exited with: {0}", output.ExitCode);
+            Console.WriteLine(output.ErrorAndOutput);
+
             if (output.ExitCode != 0) {
                 throw new BuildException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
             }

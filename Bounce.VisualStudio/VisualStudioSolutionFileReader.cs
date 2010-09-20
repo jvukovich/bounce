@@ -20,12 +20,17 @@ namespace Bounce.VisualStudio {
             var projects = new List<VisualStudioProjectDetails>();
 
             foreach (var project in solutionDetails.VisualStudioProjects) {
-                string projectFileName = Path.Combine(Path.GetDirectoryName(solutionPath), project.Path);
-                VisualStudioCSharpProjectFileDetails projectDetails = ProjectLoader.LoadProject(projectFileName, project.Name, configuration);
+                if (Path.GetExtension(project.Path) == ".csproj") {
+                    string projectFileName = Path.Combine(Path.GetDirectoryName(solutionPath), project.Path);
+                    VisualStudioCSharpProjectFileDetails projectDetails = ProjectLoader.LoadProject(projectFileName,
+                                                                                                    project.Name,
+                                                                                                    configuration);
 
-                string projectDirectory = Path.GetDirectoryName(projectFileName);
-                string outputPath = Path.Combine(projectDirectory, projectDetails.OutputFile);
-                projects.Add(new VisualStudioProjectDetails { Name = projectDetails.Name, OutputFile = outputPath, Directory = projectDirectory});
+                    string projectDirectory = Path.GetDirectoryName(projectFileName);
+                    string outputPath = Path.Combine(projectDirectory, projectDetails.OutputFile);
+                    projects.Add(new VisualStudioProjectDetails
+                    {Name = projectDetails.Name, OutputFile = outputPath, Directory = projectDirectory});
+                }
             }
 
             return new VisualStudioSolutionDetails {Projects = projects};
