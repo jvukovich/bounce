@@ -21,8 +21,12 @@ namespace Bounce.Framework {
         }
 
         public override void Build() {
-            if (!FileUtils.FileExists(ZipFileName.Value) || (FileUtils.LastWriteTimeForFile(ZipFileName.Value) < DirectoryUtils.GetLastModTimeForDirectory(Directory.Value))) {
-                ZipFileCreator.CreateZipFile(ZipFileName.Value, Directory.Value);
+            var zipFileName = ZipFileName.Value;
+            var directory = Directory.Value;
+
+            if (!FileUtils.FileExists(zipFileName) || (FileUtils.LastWriteTimeForFile(zipFileName) < DirectoryUtils.GetLastModTimeForDirectory(directory))) {
+                FileUtils.DeleteFile(zipFileName);
+                ZipFileCreator.CreateZipFile(zipFileName, directory);
             }
         }
 

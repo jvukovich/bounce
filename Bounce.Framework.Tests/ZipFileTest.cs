@@ -64,6 +64,7 @@ namespace Bounce.Framework.Tests {
 
             zip.Build();
 
+            fs.Verify(f => f.DeleteFile(zipfilename), Times.Once());
             zipCreator.Verify(z => z.CreateZipFile(zipfilename, directoryToBeZipped), Times.Once());
         }
     }

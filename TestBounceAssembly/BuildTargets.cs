@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Bounce.Framework;
 
 namespace TestBounceAssembly {
@@ -31,7 +32,7 @@ namespace TestBounceAssembly {
                     Description = "a big windows service demonstrating the bounce build framework"
                 },
                 Zip = new ZipFile {
-                    Directory = webProject.Directory,
+                    Directory = webProject.WhenBuilt(() => Path.GetDirectoryName(webProject.OutputFile.Value)),
                     ZipFileName = "web.zip"
                 },
             };
@@ -66,7 +67,7 @@ namespace TestBounceAssembly {
             };
             var frameworkProject = solution.Projects["Bounce.Framework"];
             var frameworkZip = new ZipFile {
-                Directory = frameworkProject.Directory,
+                Directory = frameworkProject.WhenBuilt(() => Path.GetDirectoryName(frameworkProject.OutputFile.Value)),
                 ZipFileName = "Bounce.Framework.zip"
             };
             var command = new Copy {
