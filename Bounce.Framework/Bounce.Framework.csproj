@@ -68,7 +68,7 @@
     <Compile Include="FutureValue.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCheckout.cs" />
-    <Compile Include="GitFiles.cs" />
+    <Compile Include="DirectoryFiles.cs" />
     <Compile Include="GitRepoParser.cs" />
     <Compile Include="GlobToRegexConverter.cs" />
     <Compile Include="IBounce.cs" />

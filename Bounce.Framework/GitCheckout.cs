@@ -44,9 +44,9 @@ namespace Bounce.Framework {
             DirectoryUtils.DeleteDirectory(WorkingDirectory);
         }
 
-        public GitFiles Files {
+        public DirectoryFiles Files {
             get {
-                return new GitFiles(this, () => WorkingDirectory);
+                return new DirectoryFiles(this, () => WorkingDirectory);
             }
         }
     }

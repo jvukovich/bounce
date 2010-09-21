@@ -59,7 +59,7 @@ namespace TestBounceAssembly {
         public static object RealTargets(IParameters parameters) {
             var git = new GitCheckout {
                 Repository = "git://github.com/refractalize/bounce.git",
-                Directory = "tmp",
+                Directory = "tmp2",
             };
             var solution = new VisualStudioSolution {
                 SolutionPath = git.Files["Bounce.sln"],
