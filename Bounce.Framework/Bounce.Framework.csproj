@@ -72,6 +72,7 @@
     <Compile Include="GitRepoParser.cs" />
     <Compile Include="GlobToRegexConverter.cs" />
     <Compile Include="IBounce.cs" />
+    <Compile Include="ICommandLog.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
     <Compile Include="IFileUtils.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="ILog.cs" />
     <Compile Include="ILogMessageFormatter.cs" />
     <Compile Include="IPropertyValues.cs" />
+    <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
     <Compile Include="IVisualStudioProjectFileLoader.cs" />
     <Compile Include="IVisualStudioSolutionFileLoader.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="ParseResult.cs" />
     <Compile Include="PlainValue.cs" />
+    <Compile Include="ProcessOutput.cs" />
     <Compile Include="ProjectFilePropertyExpressionParser.cs" />
     <Compile Include="PropertyValues.cs" />
     <Compile Include="ShellCommandExecutor.cs" />

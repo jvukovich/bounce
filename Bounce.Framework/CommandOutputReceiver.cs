@@ -3,6 +3,7 @@ using System.IO;
 
 namespace Bounce.Framework {
     class CommandOutputReceiver {
+        private readonly ICommandLog CommandLog;
         private readonly TextWriter synchronizedOutputWriter;
         private readonly TextWriter synchronizedErrorWriter;
         private readonly TextWriter synchronizedCombinedWriter;
@@ -10,7 +11,8 @@ namespace Bounce.Framework {
         private readonly StringWriter errorWriter;
         private readonly StringWriter combinedWriter;
 
-        public CommandOutputReceiver() {
+        public CommandOutputReceiver(ICommandLog commandLog) {
+            CommandLog = commandLog;
             outputWriter = new StringWriter();
             synchronizedOutputWriter = TextWriter.Synchronized(outputWriter);
             errorWriter = new StringWriter();
@@ -22,11 +24,13 @@ namespace Bounce.Framework {
         public void OutputDataReceived(object sender, DataReceivedEventArgs e) {
             synchronizedOutputWriter.WriteLine(e.Data);
             synchronizedCombinedWriter.WriteLine(e.Data);
+            CommandLog.CommandOutput(e.Data);
         }
 
         public void ErrorDataReceived(object sender, DataReceivedEventArgs e) {
             synchronizedErrorWriter.WriteLine(e.Data);
             synchronizedCombinedWriter.WriteLine(e.Data);
+            CommandLog.CommandError(e.Data);
         }
 
         public string Output {

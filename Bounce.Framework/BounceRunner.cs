@@ -5,10 +5,16 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
+        private static Bounce _bounce = new Bounce(Console.Out, Console.Error);
+
+        public static IBounce Bounce {
+            get { return _bounce; }
+        }
+
         public void Run(string[] args, MethodInfo getTargetsMethod) {
             CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
 
-            var builder = new TargetBuilder(new Bounce(Console.Out, Console.Error));
+            var builder = new TargetBuilder(_bounce);
 
             try {
                 var targets = getTargetsMethod.Invoke(null, new[] {parameters});

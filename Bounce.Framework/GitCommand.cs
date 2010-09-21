@@ -9,20 +9,16 @@ namespace Bounce.Framework {
             ShellCommandExecutor = new ShellCommandExecutor();
         }
 
-        public void Pull(string workingDirectory) {
+        public void Pull(string workingDirectory, ILog log) {
             using (new DirectoryChange(workingDirectory)) {
-                Console.WriteLine("pulling git repo in: " + workingDirectory);
-                var output = ShellCommandExecutor.Execute("cmd", @"/C git pull");
-                Console.WriteLine(output.ExitCode);
-                Console.WriteLine(output.ErrorAndOutput);
+                log.Info("pulling git repo in: " + workingDirectory);
+                ShellCommandExecutor.ExecuteAndExpectSuccess("cmd", @"/C git pull");
             }
         }
 
-        public void Clone(string repo, string directory) {
-            Console.WriteLine("cloning git repo: {0}, into: {1}", repo, directory);
-            var output = ShellCommandExecutor.Execute("cmd", String.Format(@"/C git clone {0} ""{1}""", repo, directory));
-            Console.WriteLine(output.ExitCode);
-            Console.WriteLine(output.ErrorAndOutput);
+        public void Clone(string repo, string directory, ILog log) {
+            log.Info("cloning git repo: {0}, into: {1}", repo, directory);
+            ShellCommandExecutor.ExecuteAndExpectSuccess("cmd", String.Format(@"/C git clone {0} ""{1}""", repo, directory));
         }
 
         class DirectoryChange : IDisposable {

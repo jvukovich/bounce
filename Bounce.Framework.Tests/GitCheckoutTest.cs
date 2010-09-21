@@ -4,6 +4,17 @@ using NUnit.Framework;
 namespace Bounce.Framework.Tests {
     [TestFixture]
     public class GitCheckoutTest {
+        private Mock<IBounce> Bounce;
+        private ILog Log;
+
+        [SetUp]
+        public void SetUp() {
+            Bounce = new Mock<IBounce>();
+            Log = new Mock<ILog>().Object;
+            Bounce.Setup(b => b.Log).Returns(Log);
+        }
+
+
         [Test]
         public void IfDirectoryAlreadyExtantShouldUsePull() {
             var git = new Mock<IGitCommand>();
@@ -14,9 +25,10 @@ namespace Bounce.Framework.Tests {
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(true);
 
             var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) { Repository = "repo" };
-            gitRepo.Build();
 
-            git.Verify(g => g.Pull("dir"), Times.Once());
+            gitRepo.Build(Bounce.Object);
+
+            git.Verify(g => g.Pull("dir", Log), Times.Once());
         }
 
         [Test]
@@ -29,9 +41,9 @@ namespace Bounce.Framework.Tests {
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(false);
 
             var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) {Repository = "repo"};
-            gitRepo.Build();
+            gitRepo.Build(Bounce.Object);
 
-            git.Verify(g => g.Clone("repo", "dir"), Times.Once());
+            git.Verify(g => g.Clone("repo", "dir", Log), Times.Once());
         }
 
         [Test]
@@ -44,9 +56,9 @@ namespace Bounce.Framework.Tests {
             dirs.Setup(d => d.DirectoryExists("dir")).Returns(false);
 
             var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) {Repository = "repo", Directory = "path"};
-            gitRepo.Build();
+            gitRepo.Build(Bounce.Object);
 
-            git.Verify(g => g.Clone("repo", "path"), Times.Once());
+            git.Verify(g => g.Clone("repo", "path", Log), Times.Once());
         }
 
         [Test]

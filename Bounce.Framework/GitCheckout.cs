@@ -20,13 +20,13 @@ namespace Bounce.Framework {
             GitCommand = gitCommand;
         }
 
-        public override void Build() {
+        public override void Build(IBounce bounce) {
             Console.WriteLine("pwd");
             Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
             if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
-                GitCommand.Pull(WorkingDirectory);
+                GitCommand.Pull(WorkingDirectory, bounce.Log);
             } else {
-                GitCommand.Clone(Repository.Value, WorkingDirectory);
+                GitCommand.Clone(Repository.Value, WorkingDirectory, bounce.Log);
             }
         }
 

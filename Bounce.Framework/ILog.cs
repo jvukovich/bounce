@@ -5,6 +5,8 @@ namespace Bounce.Framework {
         void Debug(string format, params object[] args);
         void Debug(object message);
 
+        ICommandLog BeginExecutingCommand(string command, string args);
+
         void Info(string format, params object[] args);
         void Info(object message);
 
