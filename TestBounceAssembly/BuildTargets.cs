@@ -66,13 +66,18 @@ namespace TestBounceAssembly {
                 SolutionPath = git.Files["Bounce.sln"],
             };
             var frameworkProject = solution.Projects["Bounce.Framework"];
+
+            var downloadsDir = new CleanDirectory {
+                Path = "Downloads",
+            };
+
             var frameworkZip = new ZipFile {
                 Directory = frameworkProject.WhenBuilt(() => Path.GetDirectoryName(frameworkProject.OutputFile.Value)),
-                ZipFileName = "Bounce.Framework.zip"
+                ZipFileName = downloadsDir.Files["Bounce.Framework.zip"],
             };
             var command = new Copy {
                 FromPath = solution.Projects["Bounce.Console"].OutputFile,
-                ToPath = ".",
+                ToPath = downloadsDir.Files["."],
             };
 
             return new {
@@ -81,6 +86,7 @@ namespace TestBounceAssembly {
                 },
                 FrameworkZip = frameworkZip,
                 Command = command,
+                Downloads = new All(frameworkZip, command),
             };
         }
     }

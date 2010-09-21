@@ -52,11 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="All.cs" />
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
+    <Compile Include="CleanDirectory.cs" />
     <Compile Include="CommandLog.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="ConditionParseException.cs" />

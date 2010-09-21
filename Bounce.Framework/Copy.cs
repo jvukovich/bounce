@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Bounce.Framework {
     public class Copy : Task {
@@ -22,6 +24,9 @@ namespace Bounce.Framework {
         public override void Build() {
             var fromPath = FromPath.Value;
             var toPath = ToPath.Value;
+
+            Console.WriteLine(Directory.GetCurrentDirectory());
+            Console.WriteLine("copying from: {0}, to: {1}", FromPath.Value, ToPath.Value);
 
             if (!FileSystemCopier.Exists(toPath) || FileSystemCopier.GetLastModTimeForPath(fromPath) > FileSystemCopier.GetLastModTimeForPath(toPath)) {
                 FileSystemCopier.Copy(fromPath, toPath, Excludes.Value, Includes.Value);
