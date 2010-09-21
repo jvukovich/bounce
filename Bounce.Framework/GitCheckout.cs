@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Bounce.Framework {
@@ -20,6 +21,8 @@ namespace Bounce.Framework {
         }
 
         public override void Build() {
+            Console.WriteLine("pwd");
+            Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
             if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
                 GitCommand.Pull();
             } else {

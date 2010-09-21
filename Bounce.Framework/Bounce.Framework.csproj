@@ -132,12 +132,6 @@
     <Compile Include="WindowsService.cs" />
     <Compile Include="ZipFile.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
-      <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
-      <Name>Bounce.VisualStudio</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -37,7 +37,6 @@ namespace TestBounceAssembly {
             };
         }
 
-        [Targets]
         public static object Targets(IParameters parameters) {
             var solution = new VisualStudioSolution {
                 SolutionPath = "WebSolution.sln",
@@ -53,6 +52,34 @@ namespace TestBounceAssembly {
                 Tests = new NUnitTests {
                     DllPaths = solution.Projects.Select(p => p.OutputFile),
                 },
+            };
+        }
+
+        [Targets]
+        public static object RealTargets(IParameters parameters) {
+            var git = new GitCheckout {
+                Repository = "git://github.com/refractalize/bounce.git",
+                Directory = "tmp",
+            };
+            var solution = new VisualStudioSolution {
+                SolutionPath = git.Files["Bounce.sln"],
+            };
+            var frameworkProject = solution.Projects["Bounce.Framework"];
+            var frameworkZip = new ZipFile {
+                Directory = frameworkProject.Directory,
+                ZipFileName = "Bounce.Framework.zip"
+            };
+            var command = new Copy {
+                FromPath = solution.Projects["Bounce.Console"].OutputFile,
+                ToPath = ".",
+            };
+
+            return new {
+                Tests = new NUnitTests {
+                    DllPaths = solution.Projects.Select(p => p.OutputFile),
+                },
+                FrameworkZip = frameworkZip,
+                Command = command,
             };
         }
     }
