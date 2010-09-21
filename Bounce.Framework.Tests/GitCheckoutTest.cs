@@ -16,7 +16,7 @@ namespace Bounce.Framework.Tests {
             var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) { Repository = "repo" };
             gitRepo.Build();
 
-            git.Verify(g => g.Pull(), Times.Once());
+            git.Verify(g => g.Pull("dir"), Times.Once());
         }
 
         [Test]

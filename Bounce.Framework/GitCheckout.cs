@@ -24,7 +24,7 @@ namespace Bounce.Framework {
             Console.WriteLine("pwd");
             Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
             if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
-                GitCommand.Pull();
+                GitCommand.Pull(WorkingDirectory);
             } else {
                 GitCommand.Clone(Repository.Value, WorkingDirectory);
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Bounce.Framework {
     class GitCommand : IGitCommand {
@@ -8,11 +9,13 @@ namespace Bounce.Framework {
             ShellCommandExecutor = new ShellCommandExecutor();
         }
 
-        public void Pull() {
-            Console.WriteLine("pulling git repo");
-            var output = ShellCommandExecutor.Execute("cmd", @"/C git pull");
-            Console.WriteLine(output.ExitCode);
-            Console.WriteLine(output.ErrorAndOutput);
+        public void Pull(string workingDirectory) {
+            using (new DirectoryChange(workingDirectory)) {
+                Console.WriteLine("pulling git repo in: " + workingDirectory);
+                var output = ShellCommandExecutor.Execute("cmd", @"/C git pull");
+                Console.WriteLine(output.ExitCode);
+                Console.WriteLine(output.ErrorAndOutput);
+            }
         }
 
         public void Clone(string repo, string directory) {
@@ -20,6 +23,19 @@ namespace Bounce.Framework {
             var output = ShellCommandExecutor.Execute("cmd", String.Format(@"/C git clone {0} ""{1}""", repo, directory));
             Console.WriteLine(output.ExitCode);
             Console.WriteLine(output.ErrorAndOutput);
+        }
+
+        class DirectoryChange : IDisposable {
+            private readonly string OldDirectory;
+
+            public DirectoryChange(string newDir) {
+                OldDirectory = Directory.GetCurrentDirectory();
+                Directory.SetCurrentDirectory(newDir);
+            }
+
+            public void Dispose() {
+                Directory.SetCurrentDirectory(OldDirectory);
+            }
         }
     }
 }
