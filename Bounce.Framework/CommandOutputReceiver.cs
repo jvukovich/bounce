@@ -4,50 +4,50 @@ using System.IO;
 namespace Bounce.Framework {
     class CommandOutputReceiver {
         private readonly ICommandLog CommandLog;
-        private readonly TextWriter synchronizedOutputWriter;
-        private readonly TextWriter synchronizedErrorWriter;
-        private readonly TextWriter synchronizedCombinedWriter;
-        private readonly StringWriter outputWriter;
-        private readonly StringWriter errorWriter;
-        private readonly StringWriter combinedWriter;
+        private readonly TextWriter SynchronizedOutputWriter;
+        private readonly TextWriter SynchronizedErrorWriter;
+        private readonly TextWriter SynchronizedCombinedWriter;
+        private readonly StringWriter OutputWriter;
+        private readonly StringWriter ErrorWriter;
+        private readonly StringWriter CombinedWriter;
 
         public CommandOutputReceiver(ICommandLog commandLog) {
             CommandLog = commandLog;
-            outputWriter = new StringWriter();
-            synchronizedOutputWriter = TextWriter.Synchronized(outputWriter);
-            errorWriter = new StringWriter();
-            synchronizedErrorWriter = TextWriter.Synchronized(errorWriter);
-            combinedWriter = new StringWriter();
-            synchronizedCombinedWriter = TextWriter.Synchronized(combinedWriter);
+            OutputWriter = new StringWriter();
+            SynchronizedOutputWriter = TextWriter.Synchronized(OutputWriter);
+            ErrorWriter = new StringWriter();
+            SynchronizedErrorWriter = TextWriter.Synchronized(ErrorWriter);
+            CombinedWriter = new StringWriter();
+            SynchronizedCombinedWriter = TextWriter.Synchronized(CombinedWriter);
         }
 
         public void OutputDataReceived(object sender, DataReceivedEventArgs e) {
-            synchronizedOutputWriter.WriteLine(e.Data);
-            synchronizedCombinedWriter.WriteLine(e.Data);
+            SynchronizedOutputWriter.WriteLine(e.Data);
+            SynchronizedCombinedWriter.WriteLine(e.Data);
             CommandLog.CommandOutput(e.Data);
         }
 
         public void ErrorDataReceived(object sender, DataReceivedEventArgs e) {
-            synchronizedErrorWriter.WriteLine(e.Data);
-            synchronizedCombinedWriter.WriteLine(e.Data);
+            SynchronizedErrorWriter.WriteLine(e.Data);
+            SynchronizedCombinedWriter.WriteLine(e.Data);
             CommandLog.CommandError(e.Data);
         }
 
         public string Output {
             get {
-                return outputWriter.ToString();
+                return OutputWriter.ToString();
             }
         }
 
         public string Error {
             get {
-                return errorWriter.ToString();
+                return ErrorWriter.ToString();
             }
         }
 
         public string ErrorAndOutput {
             get {
-                return combinedWriter.ToString();
+                return CombinedWriter.ToString();
             }
         }
     }

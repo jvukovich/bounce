@@ -6,49 +6,26 @@ using System.Reflection;
 namespace Bounce.Console {
     class BounceAssemblyRunner {
         public void Run(string [] args) {
-            string assemblyFileName = FindTargetsAssembly(Directory.GetCurrentDirectory());
-
-            if (assemblyFileName == null) {
-                System.Console.WriteLine(@"unable to find Bounce\Targets.dll assembly in this or any parent directory");
-                Environment.Exit(1);
-            }
-
-            Assembly a = Assembly.LoadFrom(assemblyFileName);
-
-            BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty = FindTargetsMember(a);
-
-            if (bounceAssemblyAndTargetsProperty == null)
-            {
-                System.Console.WriteLine("assembly contains no [Targets] method. Try adding something like this:");
-                System.Console.WriteLine();
-                System.Console.WriteLine(
-                    @"public class BuildTargets {
-    [Bounce.Framework.Targets]
-    public static object Targets (IParameters parameters) {
-        return new {
-            MyTarget = ...
-        };
-    }
-}
-");
-                Environment.Exit(1);
-            }
-            else {
-                RunAssembly(bounceAssemblyAndTargetsProperty, args);
+            try {
+                FindTargetsAssemblyAndRunBounce(args);
+            } catch (BounceConsoleException bce) {
+                bce.Explain(System.Console.Error);
             }
         }
 
-        private string FindTargetsAssembly(string currentDir) {
-            if (String.IsNullOrEmpty(currentDir)) {
-                return null;
-            }
+        private void FindTargetsAssemblyAndRunBounce(string[] args) {
+            TargetsAssemblyAndArguments assemblyAndArguments = GetAssemblyFileName(args);
+            string assemblyFileName = assemblyAndArguments.TargetsAssembly;
+            args = assemblyAndArguments.RemainingArguments;
 
-            var targetsDll = Path.Combine(Path.Combine(currentDir, "Bounce"), "Targets.dll");
-            if (File.Exists(targetsDll)) {
-                return targetsDll;
-            } else {
-                return FindTargetsAssembly(Path.GetDirectoryName(currentDir));
-            }
+            Assembly a = Assembly.LoadFrom(assemblyFileName);
+            BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty = GetTargetsMemberFromAssembly(a);
+
+            RunAssembly(bounceAssemblyAndTargetsProperty, args);
+        }
+
+        private TargetsAssemblyAndArguments GetAssemblyFileName(string[] args) {
+            return new TargetsAssemblyArgumentsParser().GetTargetsAssembly(args);
         }
 
         private void RunAssembly(BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty, string[] args) {
@@ -59,7 +36,7 @@ namespace Bounce.Console {
             runnerType.GetMethod("Run").Invoke(runner, new object[] { args, bounceAssemblyAndTargetsProperty.GetTargetsMethod });
         }
 
-        BounceAssemblyAndTargetsProperty FindTargetsMember(Assembly assembly) {
+        BounceAssemblyAndTargetsProperty GetTargetsMemberFromAssembly(Assembly assembly) {
             var allProperties = assembly.GetTypes().SelectMany(t => t.GetMethods(BindingFlags.Static | BindingFlags.Public));
 
             foreach (var prop in allProperties) {
@@ -71,7 +48,7 @@ namespace Bounce.Console {
                 }
             }
 
-            return null;
+            throw new TargetsAttributeNotFoundException();
         }
 
         class BounceAssemblyAndTargetsProperty {

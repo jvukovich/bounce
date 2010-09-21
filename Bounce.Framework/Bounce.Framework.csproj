@@ -56,6 +56,7 @@
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
+    <Compile Include="CommandLog.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="ConditionParseException.cs" />
     <Compile Include="DependencyAttribute.cs" />

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BD123B60-C18A-4446-808E-F4B81D0EE23D}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -46,8 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BounceAssemblyRunner.cs" />
+    <Compile Include="BounceConsoleException.cs" />
+    <Compile Include="ITargetsAssemblyFinder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TargetsAssemblyAndArguments.cs" />
+    <Compile Include="TargetsAssemblyArgumentsParser.cs" />
+    <Compile Include="TargetsAssemblyFinder.cs" />
+    <Compile Include="TargetsAssemblyNotFoundException.cs" />
+    <Compile Include="TargetsAttributeNotFoundException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
