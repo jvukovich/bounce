@@ -97,6 +97,8 @@
     <Compile Include="IVisualStudioProjectFileLoader.cs" />
     <Compile Include="IVisualStudioSolutionFileLoader.cs" />
     <Compile Include="IZipFileCreator.cs" />
+    <Compile Include="LazyDirectoryUtils.cs" />
+    <Compile Include="LazyFileUtils.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ParseResult.cs" />
     <Compile Include="PlainValue.cs" />

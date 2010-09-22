@@ -7,7 +7,7 @@ namespace Bounce.Framework {
         private IFileUtils FileUtils;
         private IDirectoryUtils DirectoryUtils;
 
-        public FileSystemCopier() : this(new FileUtils(), new DirectoryUtils()) {}
+        public FileSystemCopier() : this(new LazyFileUtils(), new LazyDirectoryUtils()) {}
 
         public FileSystemCopier(IFileUtils fileUtils, IDirectoryUtils directoryUtils) {
             FileUtils = fileUtils;

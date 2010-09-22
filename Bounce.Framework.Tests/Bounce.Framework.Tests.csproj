@@ -69,6 +69,8 @@
     <Compile Include="GitCheckoutTest.cs" />
     <Compile Include="GlobToRegexConverterTest.cs" />
     <Compile Include="Iis6WebSiteTest.cs" />
+    <Compile Include="LazyDirectoryUtilsTest.cs" />
+    <Compile Include="LazyFileUtilsTest.cs" />
     <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />
     <Compile Include="TargetBuilderTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />
