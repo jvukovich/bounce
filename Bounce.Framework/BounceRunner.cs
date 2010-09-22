@@ -50,12 +50,12 @@ namespace Bounce.Framework {
         }
 
         private void InterpretParameters(CommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
-            var loglevel = parsedParameters.Parameters.FirstOrDefault(p => p.Name == "loglevel");
+            var loglevel = parsedParameters.TryPopParameter("loglevel");
             if (loglevel != null) {
                 bounce.LogOptions.LogLevel = ParseLogLevel(loglevel.Value);
             }
 
-            var commandOutput = parsedParameters.Parameters.FirstOrDefault(p => p.Name == "command-output");
+            var commandOutput = parsedParameters.TryPopParameter("command-output");
             if (commandOutput != null) {
                 bounce.LogOptions.CommandOutput = commandOutput.Value.ToLower() == "true";
             }

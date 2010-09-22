@@ -110,7 +110,7 @@ namespace Bounce.Framework {
         }
 
         public void ThrowIfThereAreErrors() {
-            if (Errors.Count > 1) {
+            if (Errors.Count > 0) {
                 throw new CommandLineParametersException(Errors);
             }
         }
