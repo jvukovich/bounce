@@ -75,18 +75,12 @@ namespace TestBounceAssembly {
                 Directory = frameworkProject.WhenBuilt(() => Path.GetDirectoryName(frameworkProject.OutputFile.Value)),
                 ZipFileName = downloadsDir.Files["Bounce.Framework.zip"],
             };
-            var command = new Copy {
-                FromPath = solution.Projects["Bounce.Console"].OutputFile,
-                ToPath = downloadsDir.Files["."],
-            };
 
             return new {
                 Tests = new NUnitTests {
                     DllPaths = solution.Projects.Select(p => p.OutputFile),
                 },
-                FrameworkZip = frameworkZip,
-                Command = command,
-                Downloads = new All(frameworkZip, command),
+                Downloads = frameworkZip,
             };
         }
     }

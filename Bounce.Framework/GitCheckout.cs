@@ -21,8 +21,8 @@ namespace Bounce.Framework {
         }
 
         public override void Build(IBounce bounce) {
-            Console.WriteLine("pwd");
-            Console.WriteLine(System.IO.Directory.GetCurrentDirectory());
+            bounce.Log.Debug("pwd");
+            bounce.Log.Debug(System.IO.Directory.GetCurrentDirectory());
             if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
                 GitCommand.Pull(WorkingDirectory, bounce.Log);
             } else {

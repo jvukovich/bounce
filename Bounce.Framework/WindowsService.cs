@@ -72,7 +72,7 @@ namespace Bounce.Framework {
         }
 
         private void InstallService() {
-            Console.WriteLine("installing service {0}", Name.Value);
+            System.Console.WriteLine("installing service {0}", Name.Value);
 
             ExecuteScAndExpectSuccess(@"create ""{0}"" binPath= ""{1}""{2}", Name.Value, Path.GetFullPath(BinaryPath.Value), GetSettings());
 
@@ -106,7 +106,7 @@ namespace Bounce.Framework {
                 bounce.Log.Info("service {0} installed, deleting", Name.Value);
                 DeleteService();
             } else {
-                Console.WriteLine("service {0} not installed");
+                bounce.Log.Info("service {0} not installed");
             }
         }
 
