@@ -18,9 +18,12 @@ namespace Bounce.Tests {
 //            EnumerateWebsites(scope);
 //            CreateSite(scope);
 //            PrintSite(scope, "IIsWebServer='W3SVC/1180970907'");
-                PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/2046576962'");
+//            PrintSite(scope, @"IIsWebVirtualDir.Name=""W3SVC/1180970907/root""");
+            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""");
+//            PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/2046576962'");
 //            PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
 //            FindSite(scope, "My New Site");
+//            EnumerateWebsites(scope, "ScriptMap");
         }
 
         [Test]
@@ -122,8 +125,8 @@ namespace Bounce.Tests {
             }
         }
 
-        private void EnumerateWebsites(ManagementScope scope) {
-            var query = new ManagementObjectSearcher(scope, new ObjectQuery("select * from IIsWebVirtualDir"));
+        private void EnumerateWebsites(ManagementScope scope, string _class) {
+            var query = new ManagementObjectSearcher(scope, new ObjectQuery("select * from " + _class));
             ManagementObjectCollection websites = query.Get();
 
             foreach (var website in websites) {
