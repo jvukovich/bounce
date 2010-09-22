@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLineParameterParserTest.cs" />
     <Compile Include="FileNameFilterTest.cs" />
     <Compile Include="FileSystemCopierTest.cs" />
     <Compile Include="FileUtilsTest.cs" />

@@ -6,8 +6,8 @@ namespace Bounce.Framework {
         public BounceException(string message) : base(message) {
         }
 
-        public virtual void Explain(TextWriter writer) {
-            writer.WriteLine(Message);
+        public virtual void Explain(TextWriter stderr) {
+            stderr.WriteLine(this);
         }
     }
 }

@@ -19,9 +19,12 @@ namespace Bounce.Framework {
             try {
                 var targets = getTargetsMethod.Invoke(null, new[] {parameters});
 
-                if (args.Length >= 2) {
-                    string[] buildArguments = parameters.ParseCommandLineArguments(args);
+                var parsedParameters = ParseCommandLineArguments(args);
+                InterpretParameters(parameters, parsedParameters, _bounce);
 
+                string[] buildArguments = parsedParameters.RemainingArguments;
+
+                if (buildArguments.Length >= 2) {
                     string command = buildArguments[0];
                     Action<TargetBuilder, ITask> commandAction = GetCommand(command);
 
@@ -32,11 +35,7 @@ namespace Bounce.Framework {
                         if (task != null) {
                             commandAction(builder, task);
                         } else {
-                            System.Console.WriteLine("no target named {0}", targetName);
-                            System.Console.WriteLine("try one of the following:");
-                            foreach (var name in GetTargetNames(targets)) {
-                                System.Console.WriteLine("  " + name);
-                            }
+                            throw new NoSuchTargetException(targetName, GetTargetNames(targets));
                         }
                     }
                 } else {
@@ -45,8 +44,36 @@ namespace Bounce.Framework {
                     PrintAvailableParameters(parameters);
                 }
             } catch (BounceException ce) {
-                ce.Explain(System.Console.Out);
+                ce.Explain(System.Console.Error);
+                Environment.Exit(1);
             }
+        }
+
+        private void InterpretParameters(CommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
+            var loglevel = parsedParameters.Parameters.FirstOrDefault(p => p.Name == "loglevel");
+            if (loglevel != null) {
+                bounce.LogOptions.LogLevel = ParseLogLevel(loglevel.Value);
+            }
+
+            var commandOutput = parsedParameters.Parameters.FirstOrDefault(p => p.Name == "command-output");
+            if (commandOutput != null) {
+                bounce.LogOptions.CommandOutput = commandOutput.Value.ToLower() == "true";
+            }
+
+            parameters.ParseCommandLineArguments(parsedParameters.Parameters);
+        }
+
+        private LogLevel ParseLogLevel(string loglevel) {
+            try {
+                return (LogLevel) Enum.Parse(typeof (LogLevel), loglevel, true);
+            } catch (Exception e) {
+                throw new ConfigurationException(String.Format("log level {0} not recognised, try one of {1}", loglevel, String.Join(", ", Enum.GetNames(typeof(LogLevel)))));
+            }
+        }
+
+        public ParsedCommandLineParameters ParseCommandLineArguments(string [] args) {
+            var parser = new CommandLineParameterParser();
+            return parser.ParseCommandLineParameters(args);
         }
 
         private void PrintAvailableTargets(object targets) {
