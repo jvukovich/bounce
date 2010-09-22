@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Bounce.Framework {
@@ -19,11 +20,13 @@ namespace Bounce.Framework {
             GitCommand = gitCommand;
         }
 
-        public override void Build() {
+        public override void Build(IBounce bounce) {
+            bounce.Log.Debug("pwd");
+            bounce.Log.Debug(System.IO.Directory.GetCurrentDirectory());
             if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
-                GitCommand.Pull();
+                GitCommand.Pull(WorkingDirectory, bounce.Log);
             } else {
-                GitCommand.Clone(Repository.Value, WorkingDirectory);
+                GitCommand.Clone(Repository.Value, WorkingDirectory, bounce.Log);
             }
         }
 
@@ -41,9 +44,9 @@ namespace Bounce.Framework {
             DirectoryUtils.DeleteDirectory(WorkingDirectory);
         }
 
-        public GitFiles Files {
+        public DirectoryFiles Files {
             get {
-                return new GitFiles(this, () => WorkingDirectory);
+                return new DirectoryFiles(this, () => WorkingDirectory);
             }
         }
     }

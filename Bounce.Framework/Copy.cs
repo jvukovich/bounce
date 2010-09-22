@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Bounce.Framework {
     public class Copy : Task {
@@ -19,13 +21,18 @@ namespace Bounce.Framework {
         [Dependency]
         public Val<IEnumerable<string>> Includes;
 
-        public override void Build() {
+        public override void Build(IBounce bounce) {
             var fromPath = FromPath.Value;
             var toPath = ToPath.Value;
 
-            if (!FileSystemCopier.Exists(toPath) || FileSystemCopier.GetLastModTimeForPath(fromPath) > FileSystemCopier.GetLastModTimeForPath(toPath)) {
-                FileSystemCopier.Copy(fromPath, toPath, Excludes.Value, Includes.Value);
-            }
+            bounce.Log.Debug(Directory.GetCurrentDirectory());
+            bounce.Log.Debug("copying from: {0}, to: {1}", FromPath.Value, ToPath.Value);
+
+            FileSystemCopier.Copy(fromPath, toPath, GetValueOf(Excludes), GetValueOf(Includes));
+        }
+
+        private IEnumerable<string> GetValueOf(Val<IEnumerable<string>> paths) {
+            return paths != null ? paths.Value : null;
         }
 
         public override void Clean() {

@@ -5,11 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework", "Bounce.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console", "Bounce.Console\Bounce.Console.csproj", "{BD123B60-C18A-4446-808E-F4B81D0EE23D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework.Tests", "Bounce.Tests\Bounce.Framework.Tests.csproj", "{0F0BBC36-D999-47EB-BA24-6A926C2B8641}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.VisualStudio", "Bounce.VisualStudio\Bounce.VisualStudio.csproj", "{EE0A20D3-AABB-4100-B766-4CFF1AA38262}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.VisualStudio.Tests", "Bounce.VisualStudio.Tests\Bounce.VisualStudio.Tests.csproj", "{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework.Tests", "Bounce.Framework.Tests\Bounce.Framework.Tests.csproj", "{0F0BBC36-D999-47EB-BA24-6A926C2B8641}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console.Tests", "Bounce.Console.Tests\Bounce.Console.Tests.csproj", "{2DD987A2-8501-4265-A731-A06F7E210F1E}"
 EndProject
@@ -38,14 +34,6 @@ Global
 		{0F0BBC36-D999-47EB-BA24-6A926C2B8641}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F0BBC36-D999-47EB-BA24-6A926C2B8641}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F0BBC36-D999-47EB-BA24-6A926C2B8641}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE0A20D3-AABB-4100-B766-4CFF1AA38262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE0A20D3-AABB-4100-B766-4CFF1AA38262}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE0A20D3-AABB-4100-B766-4CFF1AA38262}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE0A20D3-AABB-4100-B766-4CFF1AA38262}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EC8ACD3-9693-4CA5-A733-D04DA0CF26CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DD987A2-8501-4265-A731-A06F7E210F1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2DD987A2-8501-4265-A731-A06F7E210F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DD987A2-8501-4265-A731-A06F7E210F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU

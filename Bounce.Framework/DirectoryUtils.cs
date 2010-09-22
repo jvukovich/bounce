@@ -61,5 +61,18 @@ namespace Bounce.Framework {
         public void CopyDirectory(string from, string to, IEnumerable<string> excludes, IEnumerable<string> includes) {
             CopyDirectoryContents(from, from, to, FileNameFilterFactory.CreateFileNameFilter(excludes, includes));
         }
+
+        public void CreateDirectory(string path) {
+            if (String.IsNullOrEmpty(path)) {
+                return;
+            }
+
+            var parentDirectory = Path.GetDirectoryName(path);
+            if (Directory.Exists(parentDirectory)) {
+                CreateDirectory(parentDirectory);
+            }
+
+            Directory.CreateDirectory(path);
+        }
     }
 }

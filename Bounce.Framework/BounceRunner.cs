@@ -5,10 +5,16 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
+        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
+
+        public static IBounce Bounce {
+            get { return _bounce; }
+        }
+
         public void Run(string[] args, MethodInfo getTargetsMethod) {
             CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
 
-            var builder = new TargetBuilder(new Bounce(Console.Out, Console.Error));
+            var builder = new TargetBuilder(_bounce);
 
             try {
                 var targets = getTargetsMethod.Invoke(null, new[] {parameters});
@@ -26,44 +32,44 @@ namespace Bounce.Framework {
                         if (task != null) {
                             commandAction(builder, task);
                         } else {
-                            Console.WriteLine("no target named {0}", targetName);
-                            Console.WriteLine("try one of the following:");
+                            System.Console.WriteLine("no target named {0}", targetName);
+                            System.Console.WriteLine("try one of the following:");
                             foreach (var name in GetTargetNames(targets)) {
-                                Console.WriteLine("  " + name);
+                                System.Console.WriteLine("  " + name);
                             }
                         }
                     }
                 } else {
-                    Console.WriteLine("usage: bounce build|clean target-name");
+                    System.Console.WriteLine("usage: bounce build|clean target-name");
                     PrintAvailableTargets(targets);
                     PrintAvailableParameters(parameters);
                 }
             } catch (BounceException ce) {
-                ce.Explain(Console.Out);
+                ce.Explain(System.Console.Out);
             }
         }
 
         private void PrintAvailableTargets(object targets) {
-            Console.WriteLine();
-            Console.WriteLine("targets:");
+            System.Console.WriteLine();
+            System.Console.WriteLine("targets:");
             foreach (var name in GetTargetNames(targets)) {
-                Console.WriteLine("  " + name);
+                System.Console.WriteLine("  " + name);
             }
         }
 
         private void PrintAvailableParameters(CommandLineParameters parameters) {
             if (parameters.Parameters.Count() > 0) {
-                Console.WriteLine();
-                Console.WriteLine("arguments:");
+                System.Console.WriteLine();
+                System.Console.WriteLine("arguments:");
                 foreach (var param in parameters.Parameters) {
-                    Console.Write("  /" + param.Name);
+                    System.Console.Write("  /" + param.Name);
                     if (param.Required) {
-                        Console.Write(" required");
+                        System.Console.Write(" required");
                     }
                     if (param.HasValue) {
-                        Console.Write(" default: " + param.DefaultValue);
+                        System.Console.Write(" default: " + param.DefaultValue);
                     }
-                    Console.WriteLine();
+                    System.Console.WriteLine();
                 }
             }
         }

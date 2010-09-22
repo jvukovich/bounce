@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -38,6 +38,7 @@
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\InetSrv\Microsoft.Web.Administration.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -51,12 +52,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="All.cs" />
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildException.cs" />
+    <Compile Include="CleanDirectory.cs" />
+    <Compile Include="CommandLog.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
+    <Compile Include="ConditionParseException.cs" />
     <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="DirectoryUtils.cs" />
@@ -67,10 +72,11 @@
     <Compile Include="FutureValue.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCheckout.cs" />
-    <Compile Include="GitFiles.cs" />
+    <Compile Include="DirectoryFiles.cs" />
     <Compile Include="GitRepoParser.cs" />
     <Compile Include="GlobToRegexConverter.cs" />
     <Compile Include="IBounce.cs" />
+    <Compile Include="ICommandLog.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
     <Compile Include="IFileUtils.cs" />
@@ -85,10 +91,20 @@
     <Compile Include="IisWebSiteState.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="ILogMessageFormatter.cs" />
+    <Compile Include="IPropertyValues.cs" />
+    <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
+    <Compile Include="IVisualStudioProjectFileLoader.cs" />
+    <Compile Include="IVisualStudioSolutionFileLoader.cs" />
     <Compile Include="IZipFileCreator.cs" />
+    <Compile Include="LazyDirectoryUtils.cs" />
+    <Compile Include="LazyFileUtils.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="ParseResult.cs" />
     <Compile Include="PlainValue.cs" />
+    <Compile Include="ProcessOutput.cs" />
+    <Compile Include="ProjectFilePropertyExpressionParser.cs" />
+    <Compile Include="PropertyValues.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="TaskExtensions.cs" />
@@ -111,16 +127,24 @@
     <Compile Include="CommandLineParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeParsers.cs" />
+    <Compile Include="VisualStudioCSharpProjectFileDetails.cs" />
+    <Compile Include="VisualStudioCSharpProjectFileLoader.cs" />
     <Compile Include="VisualStudioProject.cs" />
+    <Compile Include="VisualStudioProjectDetails.cs" />
     <Compile Include="VisualStudioSolution.cs" />
+    <Compile Include="VisualStudioSolutionDetails.cs" />
+    <Compile Include="VisualStudioSolutionFileDetails.cs" />
+    <Compile Include="VisualStudioSolutionFileLoader.cs" />
+    <Compile Include="VisualStudioSolutionFileReader.cs" />
+    <Compile Include="VisualStudioSolutionProject.cs" />
     <Compile Include="VisualStudioSolutionProjects.cs" />
     <Compile Include="WindowsService.cs" />
     <Compile Include="ZipFile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bounce.VisualStudio\Bounce.VisualStudio.csproj">
-      <Project>{EE0A20D3-AABB-4100-B766-4CFF1AA38262}</Project>
-      <Name>Bounce.VisualStudio</Name>
+    <ProjectReference Include="..\Bounce.Console\Bounce.Console.csproj">
+      <Project>{BD123B60-C18A-4446-808E-F4B81D0EE23D}</Project>
+      <Name>Bounce.Console</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
