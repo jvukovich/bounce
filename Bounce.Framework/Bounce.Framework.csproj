@@ -56,9 +56,11 @@
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
     <Compile Include="BounceException.cs" />
+    <Compile Include="BounceExceptionPresenter.cs" />
     <Compile Include="BounceRunner.cs" />
-    <Compile Include="BuildException.cs" />
+    <Compile Include="CommandExecutionException.cs" />
     <Compile Include="CleanDirectory.cs" />
+    <Compile Include="CommandLineParameterParser.cs" />
     <Compile Include="CommandLog.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="ConditionParseException.cs" />
@@ -76,6 +78,8 @@
     <Compile Include="GitRepoParser.cs" />
     <Compile Include="GlobToRegexConverter.cs" />
     <Compile Include="IBounce.cs" />
+    <Compile Include="IBounceExceptionPresenter.cs" />
+    <Compile Include="ICommandLineParameterParser.cs" />
     <Compile Include="ICommandLog.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
@@ -100,6 +104,10 @@
     <Compile Include="LazyDirectoryUtils.cs" />
     <Compile Include="LazyFileUtils.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="NoSuchTargetException.cs" />
+    <Compile Include="NullCommandLog.cs" />
+    <Compile Include="ParsedCommandLineParameter.cs" />
+    <Compile Include="ParsedCommandLineParameters.cs" />
     <Compile Include="ParseResult.cs" />
     <Compile Include="PlainValue.cs" />
     <Compile Include="ProcessOutput.cs" />

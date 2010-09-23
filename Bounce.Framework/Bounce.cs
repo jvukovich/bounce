@@ -7,13 +7,16 @@ namespace Bounce.Framework {
         private readonly TextWriter stderr;
         public ILog Log { get; private set; }
 
+        public LogOptions LogOptions { get; set; }
+
         public Bounce(TextWriter stdout, TextWriter stderr) {
             this.stdout = stdout;
             this.stderr = stderr;
+            LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning};
         }
 
         public IDisposable LogForTask(ITask task) {
-            Log = new TaskLog(task, stdout, stderr);
+            Log = new TaskLog(task, stdout, stderr, LogOptions);
             return new TaskLogRemover(this);
         }
 
@@ -28,5 +31,17 @@ namespace Bounce.Framework {
                 bounce.Log = null;
             }
         }
+    }
+
+    class LogOptions {
+        public LogLevel LogLevel;
+        public bool CommandOutput;
+    }
+
+    enum LogLevel {
+        Error,
+        Warning,
+        Info,
+        Debug
     }
 }

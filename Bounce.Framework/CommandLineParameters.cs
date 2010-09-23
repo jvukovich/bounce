@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Bounce.Framework {
@@ -26,7 +27,7 @@ namespace Bounce.Framework {
 
         private Parameter<T> RegisterParameter<T>(Parameter<T> p) {
             if (RegisteredParameters.ContainsKey(p.Name)) {
-                throw new ConfigurationException(String.Format("parameter `{0}' already registered", p.Name));
+                throw new BounceException(String.Format("parameter `{0}' already registered", p.Name));
             }
 
             RegisteredParameters.Add(p.Name, p);
@@ -53,31 +54,79 @@ namespace Bounce.Framework {
             TypeParsers.Add(typeof (T), s => parser(s));
         }
 
-        public string [] ParseCommandLineArguments(string [] args) {
-            var remainingArgs = new List<string>();
+        private void EnsureThatRequiredParametersAreSet(ParameterErrors parameterErrors) {
+            foreach (var required in RegisteredParameters.Select(p => p.Value).Where(p => p.Required && !p.HasValue)) {
+                if (required != null) {
+                    parameterErrors.RequiredParameterNotSet(required.Name);
+                }
+            }
+        }
 
-            for (int n = 0; n < args.Length; n++) {
-                string arg = args[n];
+        public void ParseCommandLineArguments(List<ParsedCommandLineParameter> parameters) {
+            var parameterErrors = new ParameterErrors();
 
-                if (arg.StartsWith("/")) {
-                    string argName = arg.Substring(1);
-                    if ((n + 1) < args.Length) {
-                        string argValue = args[++n];
-                        RegisteredParameters[argName].Parse(argValue, TypeParsers);
-                    } else {
-                        throw new ConfigurationException("expected value for argument " + argName);
-                    }
+            foreach (var commandLineParameter in parameters) {
+                IParameter parameter;
+                if (RegisteredParameters.TryGetValue(commandLineParameter.Name, out parameter)) {
+                    parameter.Parse(commandLineParameter.Value, TypeParsers);
                 } else {
-                    remainingArgs.Add(arg);
+                    parameterErrors.NoSuchParameter(commandLineParameter.Name);
                 }
             }
 
-            var firstRequiredWithoutValue = RegisteredParameters.Select(p => p.Value).Where(p => p.Required && !p.HasValue).FirstOrDefault();
-            if (firstRequiredWithoutValue != null) {
-                throw new ConfigurationException("expected value for argument " + firstRequiredWithoutValue.Name);
-            }
+            EnsureThatRequiredParametersAreSet(parameterErrors);
 
-            return remainingArgs.ToArray();
+            parameterErrors.ThrowIfThereAreErrors();
+        }
+    }
+
+    public abstract class ParameterError {
+        public string Name;
+
+        public abstract void Explain(TextWriter stderr);
+    }
+
+    internal class NoSuchParameter : ParameterError {
+        public override void Explain(TextWriter stderr) {
+            stderr.WriteLine("no such parameter {0}", Name);
+        }
+    }
+
+    internal class RequiredParameterNotSet : ParameterError {
+        public override void Explain(TextWriter stderr) {
+            stderr.WriteLine("required parameter {0} not given value", Name);
+        }
+    }
+
+    public class ParameterErrors {
+        List<ParameterError> Errors = new List<ParameterError>();
+
+        public void NoSuchParameter(string name) {
+            Errors.Add(new NoSuchParameter {Name = name});
+        }
+
+        public void RequiredParameterNotSet(string name) {
+            Errors.Add(new RequiredParameterNotSet {Name = name});
+        }
+
+        public void ThrowIfThereAreErrors() {
+            if (Errors.Count > 0) {
+                throw new CommandLineParametersException(Errors);
+            }
+        }
+    }
+
+    public class CommandLineParametersException : BounceException {
+        private readonly List<ParameterError> Errors;
+
+        public CommandLineParametersException(List<ParameterError> errors) : base("command line argument errors") {
+            Errors = errors;
+        }
+
+        public override void Explain(TextWriter stderr) {
+            foreach (var error in Errors) {
+                error.Explain(stderr);
+            }
         }
     }
 

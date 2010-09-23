@@ -8,7 +8,7 @@ namespace Bounce.Framework {
             var output = Execute(commandName, commandArgs);
 
             if (output.ExitCode != 0) {
-                throw new BuildException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
+                throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
             }
         }
 

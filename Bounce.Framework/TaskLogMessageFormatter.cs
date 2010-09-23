@@ -8,8 +8,8 @@ namespace Bounce.Framework {
             this.task = task;
         }
 
-        public string FormatLogMessage(DateTime now, string logEntryType, object message) {
-            return String.Format("{0} {1} {2} {3}", now, task, logEntryType, message);
+        public string FormatLogMessage(DateTime now, LogLevel logLevel, object message) {
+            return String.Format("{0} {1} {2} {3}", now, task, logLevel.ToString().ToLower(), message);
         }
     }
 }
