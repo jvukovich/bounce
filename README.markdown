@@ -1,6 +1,8 @@
 # Bounce
 An experimental new build framework for C# projects.
 
+[Install](http://github.com/refractalize/bounce/wiki/Install) instructions.
+
 ## Why use Bounce?
 
 For clean, beautiful build scripts! Bounce is a build framework based on functional
