@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -76,6 +76,7 @@
     <Compile Include="GitCheckout.cs" />
     <Compile Include="DirectoryFiles.cs" />
     <Compile Include="GitRepoParser.cs" />
+    <Compile Include="GitTag.cs" />
     <Compile Include="GlobToRegexConverter.cs" />
     <Compile Include="IBounce.cs" />
     <Compile Include="IBounceExceptionPresenter.cs" />
