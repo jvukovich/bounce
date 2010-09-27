@@ -89,6 +89,7 @@
     <Compile Include="IGitCommand.cs" />
     <Compile Include="IGitRepoParser.cs" />
     <Compile Include="IGlobToRegexConverter.cs" />
+    <Compile Include="Iis6Authentication.cs" />
     <Compile Include="Iis6WebSite.cs" />
     <Compile Include="IisWebServer.cs" />
     <Compile Include="IisWebSite.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="ProcessOutput.cs" />
     <Compile Include="ProjectFilePropertyExpressionParser.cs" />
     <Compile Include="PropertyValues.cs" />
+    <Compile Include="Iis6ScriptMap.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TargetBuilder.cs" />
     <Compile Include="TaskExtensions.cs" />

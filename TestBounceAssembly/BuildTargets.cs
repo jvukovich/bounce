@@ -57,6 +57,18 @@ namespace TestBounceAssembly {
         }
 
         [Targets]
+        public static object Iis6Targets(IParameters parameters) {
+            return new {
+                           WebSite = new Iis6WebSite() {
+                                                           Directory = @"C:\bzr\current\UI\OutputToFile\src\OutputToFile.UI.WebApplication",
+                                                           ScriptMapsToAdd = Iis6WebSite.MvcScriptMaps,
+                                                           Name = "OutputToFile (bounce)",
+                                                           Port = 5003,
+                                                           Authentication = new [] {Iis6Authentication.NTLM},
+                                                       }
+        };
+        }
+
         public static object RealTargets(IParameters parameters) {
             string version = "0.1";
 

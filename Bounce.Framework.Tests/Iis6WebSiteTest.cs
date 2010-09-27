@@ -19,11 +19,42 @@ namespace Bounce.Framework.Tests {
 //            CreateSite(scope);
 //            PrintSite(scope, "IIsWebServer='W3SVC/1180970907'");
 //            PrintSite(scope, @"IIsWebVirtualDir.Name=""W3SVC/1180970907/root""");
-            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""");
+//            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""");
+            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/698587803/root""");
 //            PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/2046576962'");
+//            SetNTLMAuth(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
+//            SetAuthBasic(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
+
+            // AuthBasic
+            // AuthNTLM
+            // AuthMD5
+            // AuthPassport
+            // AuthAnonymous
+
+//            SetAuth(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'", "AuthAnonymous");
+//            SetAuth(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""", "AuthNTLM", false);
 //            PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
 //            FindSite(scope, "My New Site");
 //            EnumerateWebsites(scope, "ScriptMap");
+//            AddScriptMapToSite(scope, "1180970907");
+        }
+
+        void SetNTLMAuth(ManagementScope scope, string path) {
+            var site = new ManagementObject(scope, new ManagementPath(path), null);
+            site["AuthNTLM"] = true;
+            site.Put();
+        }
+
+        void SetAuthBasic(ManagementScope scope, string path) {
+            var site = new ManagementObject(scope, new ManagementPath(path), null);
+            site["AuthBasic"] = true;
+            site.Put();
+        }
+
+        void SetAuth(ManagementScope scope, string path, string authSetting, bool setting) {
+            var site = new ManagementObject(scope, new ManagementPath(path), null);
+            site[authSetting] = setting;
+            site.Put();
         }
 
         [Test]
@@ -90,6 +121,69 @@ namespace Bounce.Framework.Tests {
                 foreach (var prop in website.SystemProperties) {
                     Console.WriteLine("  {0}: {1}", prop.Name, prop.Value);
                 }
+            }
+        }
+
+        private void AddScriptMapToSite(ManagementScope scope, string siteId, ScriptMap scriptMap) {
+            var site = new ManagementObject(scope, new ManagementPath(String.Format(@"IIsWebVirtualDirSetting.Name=""W3SVC/{0}/root""", siteId)), null);
+            var scriptMaps = (ManagementBaseObject[]) site["ScriptMaps"];
+
+            var newScriptMaps = new ManagementBaseObject[scriptMaps.Length + 1];
+            scriptMaps.CopyTo(newScriptMaps, 0);
+            ManagementObject newScriptMap = new ManagementClass(scope, new ManagementPath("ScriptMap"), null).CreateInstance();
+            newScriptMap["Extensions"] = scriptMap.Extension;
+            newScriptMap["Flags"] = scriptMap.Flags;
+            newScriptMap["IncludedVerbs"] = scriptMap.IncludedVerbs;
+            newScriptMap["ScriptProcessor"] = scriptMap.Executable;
+            newScriptMaps[newScriptMaps.Length - 1] = newScriptMap;
+
+            site["ScriptMaps"] = newScriptMaps;
+            site.Put();
+        }
+
+        private void AddScriptMapToSite(ManagementScope scope, string siteId) {
+            var scriptMap = new ScriptMap {
+                                              Executable = @"c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll",
+                                              Extension = ".mvc",
+                                          };
+            AddScriptMapToSite(scope, siteId, scriptMap);
+        }
+
+        class ScriptMap {
+            public string Extension;
+            public int Flags {
+                get {
+                    return (ScriptEngine ? 1 : 0) + (VerifyThatFileExists ? 4 : 0);
+                }
+            }
+            public bool ScriptEngine;
+            public bool VerifyThatFileExists;
+            public bool AllVerbs {
+                get {
+                    return _allVerbs;
+                }
+                set {
+                    _allVerbs = value;
+                    _includedVerbs = "";
+                }
+            }
+            public string IncludedVerbs {
+                get {
+                    return _includedVerbs;
+                }
+                set {
+                    _includedVerbs = value;
+                    _allVerbs = false;
+                }
+            }
+            public string Executable;
+            private bool _allVerbs;
+            private string _includedVerbs;
+
+            public ScriptMap () {
+                AllVerbs = true;
+                ScriptEngine = true;
+                VerifyThatFileExists = true;
             }
         }
 
