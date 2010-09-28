@@ -5,7 +5,7 @@ using System.Management;
 using System.Net;
 
 namespace Bounce.Framework {
-    class IisWebSite {
+    public class IisWebSite {
         private readonly ManagementScope scope;
         private readonly ManagementObject webSite;
         private readonly ManagementObject settings;
@@ -116,6 +116,16 @@ namespace Bounce.Framework {
                     virtualDirectory[GetAuthenticationProperty(authType)] = value.Contains(authType);
                 }
 
+                virtualDirectory.Put();
+            }
+        }
+
+        public string AppPoolName {
+            get {
+                return (string) virtualDirectory["AppPoolId"];
+            }
+            set {
+                virtualDirectory["AppPoolId"] = value;
                 virtualDirectory.Put();
             }
         }

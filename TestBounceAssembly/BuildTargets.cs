@@ -58,13 +58,17 @@ namespace TestBounceAssembly {
 
         [Targets]
         public static object Iis6Targets(IParameters parameters) {
+            var appPool = new Iis6AppPool {Name = "MyNewAppPoolForOutputToFile"};
+
             return new {
                            WebSite = new Iis6WebSite() {
-                                                           Directory = @"C:\bzr\current\UI\OutputToFile\src\OutputToFile.UI.WebApplication",
+                                                           Directory =
+                                                               @"C:\bzr\current\UI\OutputToFile\src\OutputToFile.UI.WebApplication",
                                                            ScriptMapsToAdd = Iis6WebSite.MvcScriptMaps,
                                                            Name = "OutputToFile (bounce)",
                                                            Port = 5003,
-                                                           Authentication = new [] {Iis6Authentication.NTLM},
+                                                           Authentication = new[] {Iis6Authentication.NTLM},
+                                                           AppPool = appPool,
                                                        }
         };
         }

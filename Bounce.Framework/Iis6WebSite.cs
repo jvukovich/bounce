@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Bounce.Framework {
-    public class Iis6WebSite : Task {
+    public class Iis6WebSite : Iis6Task {
         [Dependency]
         public Val<string> Directory;
         [Dependency]
@@ -13,8 +14,8 @@ namespace Bounce.Framework {
         public Val<IEnumerable<Iis6ScriptMap>> ScriptMapsToAdd;
         [Dependency]
         public Val<IEnumerable<Iis6Authentication>> Authentication;
-
-        private IisWebServer _iis;
+        [Dependency]
+        public Iis6AppPool AppPool;
 
         private static Iis6ScriptMap[] _mvcScriptMaps = null;
 
@@ -42,26 +43,11 @@ namespace Bounce.Framework {
         public override void Build() {
             DeleteIfExtant();
             IisWebSite webSite = Iis.CreateWebSite(Name.Value, new[] {new IisWebSiteBinding {Port = Port.Value}}, Directory.Value);
-            if (ScriptMapsToAdd != null) {
-                IEnumerable<Iis6ScriptMap> scriptMaps = ScriptMapsToAdd.Value;
-                if (scriptMaps != null) {
-                    webSite.AddScriptMapsToSite(scriptMaps);
-                }
-            }
-            if (Authentication != null) {
-                var auth = Authentication.Value;
-                if (auth != null) {
-                    webSite.Authentication = auth;
-                }
-            }
-        }
 
-        private IisWebServer Iis {
-            get {
-                if (_iis == null) {
-                    _iis = new IisWebServer("localhost");
-                }
-                return _iis;
+            WithOptionalProperty(ScriptMapsToAdd, scriptMaps => webSite.AddScriptMapsToSite(scriptMaps));
+            WithOptionalProperty(Authentication, auth => webSite.Authentication = auth);
+            if (AppPool != null) {
+                webSite.AppPoolName = AppPool.Name.Value;
             }
         }
 

@@ -19,8 +19,11 @@ namespace Bounce.Framework.Tests {
 //            CreateSite(scope);
 //            PrintSite(scope, "IIsWebServer='W3SVC/1180970907'");
 //            PrintSite(scope, @"IIsWebVirtualDir.Name=""W3SVC/1180970907/root""");
+//            PrintSite(scope, String.Format("IIsApplicationPool='W3SVC/AppPools/{0}'", "MyNewAppPool"));
 //            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""");
-            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/698587803/root""");
+//            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/698587803/root""");
+//            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/2046576962/root""");
+//            PrintSite(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/963332529/root""");
 //            PrintSite(scope, "IIsWebServerSetting.Name='W3SVC/2046576962'");
 //            SetNTLMAuth(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
 //            SetAuthBasic(scope, "IIsWebServerSetting.Name='W3SVC/1180970907'");
@@ -37,6 +40,37 @@ namespace Bounce.Framework.Tests {
 //            FindSite(scope, "My New Site");
 //            EnumerateWebsites(scope, "ScriptMap");
 //            AddScriptMapToSite(scope, "1180970907");
+
+//            FindAppPools(scope);
+            CreateNewAppPool(scope, "MyNewAppPool");
+//            DeleteAppPool(scope, "MyNewAppPool");
+            TryFindAppPool(scope, "MyNewAppPool");
+
+//            SetAppPool(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""", "Ui.Ingest");
+        }
+
+        private void DeleteAppPool(ManagementScope scope, string name) {
+            var pool = new IisAppPool(scope, name);
+            pool.Delete();
+        }
+
+        private void TryFindAppPool(ManagementScope scope, string name) {
+            var service = new IisService("localhost");
+            IisAppPool appPool = service.TryGetAppPoolByName(name);
+
+            Console.WriteLine("found app pool: " + (appPool != null));
+        }
+
+        private void CreateNewAppPool(ManagementScope scope, string name) {
+            ManagementObject appPool = new ManagementClass(scope, new ManagementPath("IIsApplicationPoolSetting"), null).CreateInstance();
+            appPool["Name"] = String.Format("W3SVC/AppPools/{0}", name);
+            appPool.Put();
+        }
+
+        private void SetAppPool(ManagementScope scope, string path, string appPoolId) {
+            var site = new ManagementObject(scope, new ManagementPath(path), null);
+            site["AppPoolId"] = appPoolId;
+            site.Put();
         }
 
         void SetNTLMAuth(ManagementScope scope, string path) {
@@ -110,6 +144,22 @@ namespace Bounce.Framework.Tests {
 
         private void FindSite(ManagementScope scope, string serverComment) {
             var query = new ManagementObjectSearcher(scope, new ObjectQuery(String.Format("select * from IIsWebServerSetting where ServerComment = '{0}'", serverComment.Replace("'", "''"))));
+            ManagementObjectCollection websites = query.Get();
+
+            foreach (var website in websites) {
+                Console.WriteLine(website.Properties["Name"].Value + ":");
+                foreach (var prop in website.Properties) {
+                    Console.WriteLine("  {0}: {1}", prop.Name, prop.Value);
+                }
+                Console.WriteLine("system props:");
+                foreach (var prop in website.SystemProperties) {
+                    Console.WriteLine("  {0}: {1}", prop.Name, prop.Value);
+                }
+            }
+        }
+
+        private void FindAppPools(ManagementScope scope) {
+            var query = new ManagementObjectSearcher(scope, new ObjectQuery(String.Format("select * from IIsApplicationPool")));
             ManagementObjectCollection websites = query.Get();
 
             foreach (var website in websites) {

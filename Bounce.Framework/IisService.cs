@@ -4,10 +4,10 @@ using System.Linq;
 using System.Management;
 
 namespace Bounce.Framework {
-    class IisWebServer {
+    public class IisService {
         private ManagementScope scope;
 
-        public IisWebServer(string host) {
+        public IisService(string host) {
             var options = new ConnectionOptions();
             scope = new ManagementScope(String.Format(@"\\{0}\root\MicrosoftIISV2", host), options);
             scope.Connect();
@@ -19,6 +19,17 @@ namespace Bounce.Framework {
 
             foreach (var website in websites) {
                 return new IisWebSite(scope, String.Format("IIsWebServer='{0}'", website["Name"]));
+            }
+
+            return null;
+        }
+
+        public IisAppPool TryGetAppPoolByName(string name) {
+            var query = new ManagementObjectSearcher(scope, new ObjectQuery(String.Format("select * from IIsApplicationPool where Name = 'W3SVC/AppPools/{0}'", name)));
+            ManagementObjectCollection appPools = query.Get();
+
+            foreach (var appPool in appPools) {
+                return new IisAppPool(scope, name);
             }
 
             return null;
@@ -50,6 +61,13 @@ namespace Bounce.Framework {
             }
 
             return serverBinding;
+        }
+
+        public IisAppPool CreateAppPool(string name) {
+            ManagementObject appPool = new ManagementClass(scope, new ManagementPath("IIsApplicationPoolSetting"), null).CreateInstance();
+            appPool["Name"] = String.Format("W3SVC/AppPools/{0}", name);
+            appPool.Put();
+            return new IisAppPool(scope, name);
         }
     }
 }
