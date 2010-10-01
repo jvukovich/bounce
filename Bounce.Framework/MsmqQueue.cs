@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Messaging;
 
 namespace Bounce.Framework {
@@ -6,16 +7,22 @@ namespace Bounce.Framework {
         public Val<bool> Private;
         public Val<string> Name;
         public Val<string> Machine;
+        public Val<IEnumerable<MsmqUserPermissions>> Permissions;
 
         public MsmqQueue() {
             Machine = ".";
             Transactional = false;
             Private = true;
+            Permissions = new MsmqUserPermissions[0];
         }
 
         public override void Build() {
             if (!MessageQueue.Exists(QueuePath)) {
-                MessageQueue.Create(QueuePath, Transactional.Value);
+                var mq = MessageQueue.Create(QueuePath, Transactional.Value);
+
+                foreach (var permission in Permissions.Value) {
+                    mq.SetPermissions(permission.UserName, permission.Permissions);
+                }
             }
         }
 
@@ -30,5 +37,10 @@ namespace Bounce.Framework {
                 return string.Format(@"{0}\{1}{2}", Machine.Value, Private.Value ? @"Private$\" : "", Name.Value);
             }
         }
+    }
+
+    public class MsmqUserPermissions {
+        public string UserName;
+        public MessageQueueAccessRights Permissions;
     }
 }
