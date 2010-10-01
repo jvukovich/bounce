@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Bounce.Framework {
@@ -42,7 +43,7 @@ namespace Bounce.Framework {
 
         public override void Build() {
             DeleteIfExtant();
-            IisWebSite webSite = Iis.CreateWebSite(Name.Value, new[] {new IisWebSiteBinding {Port = Port.Value}}, Directory.Value);
+            IisWebSite webSite = Iis.CreateWebSite(Name.Value, new[] {new IisWebSiteBinding {Port = Port.Value}}, Path.GetFullPath(Directory.Value));
 
             WithOptionalProperty(ScriptMapsToAdd, scriptMaps => webSite.AddScriptMapsToSite(scriptMaps));
             WithOptionalProperty(Authentication, auth => webSite.Authentication = auth);
