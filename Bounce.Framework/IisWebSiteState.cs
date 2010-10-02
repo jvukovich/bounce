@@ -1,5 +1,5 @@
 namespace Bounce.Framework {
-    internal enum IisWebSiteState {
+    public enum IisWebSiteState {
         Starting,
         Started,
         Stopping,

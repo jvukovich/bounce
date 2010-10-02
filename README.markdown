@@ -1,6 +1,9 @@
 # Bounce
 An experimental new build framework for C# projects.
 
+## Install
+Get the latest release from the [downloads](http://github.com/refractalize/bounce/downloads) page, extract, place `bounce.exe` in your `%PATH%`, and place the DLLs in your project references. Too easy?
+
 ## Why use Bounce?
 
 For clean, beautiful build scripts! Bounce is a build framework based on functional

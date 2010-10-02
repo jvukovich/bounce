@@ -12,13 +12,25 @@ namespace Bounce.Framework {
         public void Pull(string workingDirectory, ILog log) {
             using (new DirectoryChange(workingDirectory)) {
                 log.Info("pulling git repo in: " + workingDirectory);
-                ShellCommandExecutor.ExecuteAndExpectSuccess("cmd", @"/C git pull");
+                Git("pull");
             }
         }
 
         public void Clone(string repo, string directory, ILog log) {
             log.Info("cloning git repo: {0}, into: {1}", repo, directory);
-            ShellCommandExecutor.ExecuteAndExpectSuccess("cmd", String.Format(@"/C git clone {0} ""{1}""", repo, directory));
+            Git(@"clone {0} ""{1}""", repo, directory);
+        }
+
+        public void Tag(string tag, bool force) {
+            Git("tag {0}{1}", force? "-f ": "", tag);
+        }
+
+        private void Git(string format, params object [] args) {
+            Git(String.Format(format, args));
+        }
+
+        private void Git(string args) {
+            ShellCommandExecutor.ExecuteAndExpectSuccess("cmd", String.Format("/C git {0}", args));
         }
 
         class DirectoryChange : IDisposable {

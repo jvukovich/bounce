@@ -17,7 +17,7 @@ namespace Bounce.Framework {
             var builder = new TargetBuilder(_bounce);
 
             try {
-                var targets = getTargetsMethod.Invoke(null, new[] {parameters});
+                object targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
 
                 var parsedParameters = ParseCommandLineArguments(args);
                 InterpretParameters(parameters, parsedParameters, _bounce);
@@ -47,6 +47,22 @@ namespace Bounce.Framework {
                 ce.Explain(System.Console.Error);
                 Environment.Exit(1);
             }
+        }
+
+        private object GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
+            ParameterInfo[] methodParameters = getTargetsMethod.GetParameters();
+            if (methodParameters.Length == 1) {
+                if (methodParameters[0].ParameterType.IsAssignableFrom(typeof(IParameters)))
+                {
+                    return getTargetsMethod.Invoke(null, new[] { parameters });
+                }
+            }
+
+            if (methodParameters.Length == 0) {
+                return getTargetsMethod.Invoke(null, new object[0]);
+            }
+
+            throw new TargetsMethodWrongSignatureException(getTargetsMethod.Name);
         }
 
         private void InterpretParameters(CommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
