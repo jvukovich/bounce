@@ -14,8 +14,6 @@ namespace Bounce.Framework {
         public void Run(string[] args, MethodInfo getTargetsMethod) {
             CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
 
-            var builder = new TargetBuilder(_bounce);
-
             try {
                 object targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
 
@@ -26,27 +24,44 @@ namespace Bounce.Framework {
 
                 if (buildArguments.Length >= 2) {
                     string command = buildArguments[0];
-                    Action<TargetBuilder, ITask> commandAction = GetCommand(command);
+                    IEnumerable<string> targetsToBuild = TargetsToBuild(buildArguments);
 
-                    for (int i = 1; i < buildArguments.Length; i++) {
-                        string targetName = buildArguments[i];
-                        ITask task = FindTarget(targets, targetName);
-
-                        if (task != null) {
-                            commandAction(builder, task);
-                        } else {
-                            throw new NoSuchTargetException(targetName, GetTargetNames(targets));
-                        }
-                    }
+                    BuildTargets(command, targetsToBuild, targets);
                 } else {
                     System.Console.WriteLine("usage: bounce build|clean target-name");
                     PrintAvailableTargets(targets);
                     PrintAvailableParameters(parameters);
+                    Environment.Exit(1);
                 }
             } catch (BounceException ce) {
                 ce.Explain(System.Console.Error);
                 Environment.Exit(1);
             }
+        }
+
+        private void BuildTargets(string command, IEnumerable<string> targetsToBuild, object targets) {
+            var builder = new TargetBuilder(_bounce);
+            Action<ITask> commandAction = GetCommand(builder, command);
+
+            foreach(var targetName in targetsToBuild) {
+                BuildTarget(targets, targetName, commandAction);
+            }
+        }
+
+        private void BuildTarget(object targets, string targetName, Action<ITask> commandAction) {
+            ITask task = FindTarget(targets, targetName);
+
+            if (task != null) {
+                commandAction(task);
+            } else {
+                throw new NoSuchTargetException(targetName, GetTargetNames(targets));
+            }
+        }
+
+        private IEnumerable<string> TargetsToBuild(string [] args) {
+            string [] targets = new string[args.Length - 1];
+            Array.Copy(args, 1, targets, 0, targets.Length);
+            return targets;
         }
 
         private object GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
@@ -117,13 +132,13 @@ namespace Bounce.Framework {
             }
         }
 
-        private static Action<TargetBuilder, ITask> GetCommand(string command) {
+        private static Action<ITask> GetCommand(TargetBuilder builder, string command) {
             switch (command.ToLower()) {
                 case "build": {
-                        return (builder, task) => builder.Build(task);
+                        return builder.Build;
                     }
                 case "clean": {
-                        return (builder, task) => builder.Clean(task);
+                        return builder.Clean;
                     }
                 default: {
                         throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
