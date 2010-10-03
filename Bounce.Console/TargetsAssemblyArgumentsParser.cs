@@ -14,14 +14,14 @@ namespace Bounce.Console {
             if (args.Length > 0) {
                 var firstArg = args[0];
                 if (firstArg.StartsWith("/targets:")) {
-                    string[] remainingArgs = new string[args.Length - 1];
+                    var remainingArgs = new string[args.Length - 1];
                     Array.Copy(args, 1, remainingArgs, 0, remainingArgs.Length);
                     return new TargetsAssemblyAndArguments {
                         TargetsAssembly = firstArg.Substring("/targets:".Length),
                         RemainingArguments = remainingArgs,
                     };
                 } else if (firstArg == "/targets") {
-                    string[] remainingArgs = new string[args.Length - 2];
+                    var remainingArgs = new string[args.Length - 2];
                     Array.Copy(args, 2, remainingArgs, 0, remainingArgs.Length);
                     return new TargetsAssemblyAndArguments {
                         TargetsAssembly = args[1],

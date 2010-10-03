@@ -15,13 +15,23 @@ namespace Bounce.Console {
 
         private void FindTargetsAssemblyAndRunBounce(string[] args) {
             TargetsAssemblyAndArguments assemblyAndArguments = GetAssemblyFileName(args);
-            string assemblyFileName = assemblyAndArguments.TargetsAssembly;
+            string assemblyFileName = CopyTargetsAssembly(assemblyAndArguments.TargetsAssembly);
             args = assemblyAndArguments.RemainingArguments;
 
             Assembly a = Assembly.LoadFrom(assemblyFileName);
             BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty = GetTargetsMemberFromAssembly(a);
 
             RunAssembly(bounceAssemblyAndTargetsProperty, args);
+        }
+
+        private string CopyTargetsAssembly(string targetsAssembly) {
+            var tempFileName = Path.Combine(Path.GetDirectoryName(targetsAssembly),
+                                            Path.GetFileNameWithoutExtension(targetsAssembly) + ".tmp" +
+                                            Path.GetExtension(targetsAssembly));
+
+            File.Copy(targetsAssembly, tempFileName, true);
+
+            return tempFileName;
         }
 
         private TargetsAssemblyAndArguments GetAssemblyFileName(string[] args) {

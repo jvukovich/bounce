@@ -3,6 +3,8 @@ using System.IO;
 
 namespace Bounce.Console {
     class TargetsAssemblyFinder : ITargetsAssemblyFinder {
+        public static string TargetsDllPath = Path.Combine("Bounce", "Targets.dll");
+
         public string FindTargetsAssembly() {
             return FindTargetsAssembly(Directory.GetCurrentDirectory());
         }
@@ -12,7 +14,7 @@ namespace Bounce.Console {
                 return null;
             }
 
-            var targetsDll = Path.Combine(Path.Combine(currentDir, "Bounce"), "Targets.dll");
+            var targetsDll = Path.Combine(currentDir, TargetsDllPath);
             if (File.Exists(targetsDll)) {
                 return targetsDll;
             } else {

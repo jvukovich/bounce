@@ -16,5 +16,5 @@ feedback:
 - print off the build order, with properties, effectively making a dry run
 - some indication of what it did, success, which target it built, etc. nothing is a little disconcerting
 - team city output, hooks, or verbose output which we can parse and refashion for other purposes
-- copy the Targets.dll to another dll name, so we don't get conflicts when rebuilding Targets.dll
-- Iis6WebSite Directory is not full path
+- copy the Targets.dll to another dll name, so we don't get conflicts when rebuilding Targets.dll (fixed)
+- Iis6WebSite Directory is not full path (fixed)
