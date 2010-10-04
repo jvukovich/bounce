@@ -35,6 +35,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\InetSrv\Microsoft.Web.Administration.dll</HintPath>
@@ -118,6 +119,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogOptions.cs" />
+    <Compile Include="MSBuildLogger.cs" />
     <Compile Include="MsmqQueue.cs" />
     <Compile Include="NoSuchTargetException.cs" />
     <Compile Include="NullCommandLog.cs" />
