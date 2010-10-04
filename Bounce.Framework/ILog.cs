@@ -23,13 +23,4 @@ namespace Bounce.Framework {
         ICompilationLog CompilationLog { get; }
         IUnitTestLog UnitTestLog { get; }
     }
-
-    public interface ICompilationLog {
-        void Error(string message);
-        void Warning(string message);
-    }
-
-    public interface IUnitTestLog {
-        void TestFailed(string message);
-    }
 }

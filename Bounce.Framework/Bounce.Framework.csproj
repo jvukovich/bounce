@@ -65,6 +65,7 @@
     <Compile Include="CommandLineParameterParser.cs" />
     <Compile Include="CommandLog.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
+    <Compile Include="CompilationLog.cs" />
     <Compile Include="ConditionParseException.cs" />
     <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="IBounceExceptionPresenter.cs" />
     <Compile Include="ICommandLineParameterParser.cs" />
     <Compile Include="ICommandLog.cs" />
+    <Compile Include="ICompilationLog.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
     <Compile Include="IFileUtils.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="ITargetBuilderBounce.cs" />
     <Compile Include="ITaskLog.cs" />
     <Compile Include="ITaskLogFactory.cs" />
+    <Compile Include="IUnitTestLog.cs" />
     <Compile Include="IVisualStudioProjectFileLoader.cs" />
     <Compile Include="IVisualStudioSolutionFileLoader.cs" />
     <Compile Include="IZipFileCreator.cs" />

@@ -18,6 +18,7 @@ namespace Bounce.Framework {
             LogOptions = logOptions;
             this.LogMessageFormatter = logMessageFormatter;
             TaskLog = new TaskLog(stdout, stderr, logOptions);
+            CompilationLog = new CompilationLog(Stderr);
         }
 
         public void Debug(string format, params object[] args) {
