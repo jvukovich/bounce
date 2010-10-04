@@ -6,5 +6,6 @@ namespace Bounce.Framework {
         void BeforeBuild(IBounce bounce);
         void Build(IBounce bounce);
         void Clean(IBounce bounce);
+        bool IsLogged { get; }
     }
 }

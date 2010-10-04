@@ -17,8 +17,9 @@ namespace Bounce.Framework {
         }
 
         private void BeforeBuildAndLog(ITask task) {
-            using (Bounce.LogForTask(task)) {
+            using (var taskScope = Bounce.TaskScope(task, BounceCommand.Build, null)) {
                 task.BeforeBuild(Bounce);
+                taskScope.TaskSucceeded();
             }
         }
 
@@ -30,8 +31,9 @@ namespace Bounce.Framework {
         }
 
         private void BuildAndLog(ITask task) {
-            using (Bounce.LogForTask(task)) {
+            using (var taskScope = Bounce.TaskScope(task, BounceCommand.Build, null)) {
                 task.Build(Bounce);
+                taskScope.TaskSucceeded();
             }
         }
 
@@ -40,8 +42,9 @@ namespace Bounce.Framework {
         }
 
         private void CleanAndLog(ITask task) {
-            using (Bounce.LogForTask(task)) {
+            using (var taskScope = Bounce.TaskScope(task, BounceCommand.Clean, null)) {
                 task.Clean(Bounce);
+                taskScope.TaskSucceeded();
             }
         }
     }

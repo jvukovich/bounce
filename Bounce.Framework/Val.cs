@@ -11,5 +11,7 @@ namespace Bounce.Framework {
         public static implicit operator Val<T>(T v) {
             return new PlainValue<T>(v);
         }
+
+        public bool IsLogged { get { return false; }}
     }
 }

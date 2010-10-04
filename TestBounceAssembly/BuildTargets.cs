@@ -66,7 +66,7 @@ namespace TestBounceAssembly {
                                                                @"C:\bzr\current\UI\OutputToFile\src\OutputToFile.UI.WebApplication",
                                                            ScriptMapsToAdd = Iis6WebSite.MvcScriptMaps,
                                                            Name = "OutputToFile (bounce)",
-                                                           Port = 5003,
+                                                           Port = 7001,
                                                            Authentication = new[] {Iis6Authentication.NTLM},
                                                            AppPool = appPool,
                                                        }

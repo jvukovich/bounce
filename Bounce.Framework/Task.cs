@@ -25,5 +25,7 @@ namespace Bounce.Framework {
         }
 
         public virtual void Clean() {}
+
+        public bool IsLogged { get { return true; } }
     }
 }

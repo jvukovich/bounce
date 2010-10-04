@@ -8,11 +8,16 @@ namespace Bounce.Framework {
         private readonly LogOptions LogOptions;
         private readonly ILogMessageFormatter LogMessageFormatter;
 
+        public ITaskLog TaskLog { get; private set; }
+        public ICompilationLog CompilationLog { get; private set; }
+        public IUnitTestLog UnitTestLog { get; private set; }
+
         public Log(TextWriter stdout, TextWriter stderr, LogOptions logOptions, ILogMessageFormatter logMessageFormatter) {
             Stdout = stdout;
             Stderr = stderr;
             LogOptions = logOptions;
             this.LogMessageFormatter = logMessageFormatter;
+            TaskLog = new TaskLog(stdout, stderr, logOptions);
         }
 
         public void Debug(string format, params object[] args) {

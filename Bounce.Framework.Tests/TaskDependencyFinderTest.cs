@@ -56,6 +56,8 @@ namespace Bounce.Framework.Tests {
             public void Clean(IBounce bounce) {
                 throw new System.NotImplementedException();
             }
+
+            public bool IsLogged { get { return true; } }
         }
 
         class TaskWithFields : SomeTask {

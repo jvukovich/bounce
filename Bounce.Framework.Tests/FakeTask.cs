@@ -12,5 +12,7 @@ namespace Bounce.Framework.Tests {
 
         public virtual void Clean(IBounce bounce) {
         }
+
+        public bool IsLogged { get { return true; } }
     }
 }

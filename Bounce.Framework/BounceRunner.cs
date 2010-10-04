@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
+        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error, new TaskLogFactory());
 
         public static IBounce Bounce {
             get { return _bounce; }
@@ -41,18 +41,21 @@ namespace Bounce.Framework {
 
         private void BuildTargets(string command, IEnumerable<string> targetsToBuild, object targets) {
             var builder = new TargetBuilder(_bounce);
-            Action<ITask> commandAction = GetCommand(builder, command);
+            CommandAction commandAction = GetCommand(builder, command);
 
             foreach(var targetName in targetsToBuild) {
                 BuildTarget(targets, targetName, commandAction);
             }
         }
 
-        private void BuildTarget(object targets, string targetName, Action<ITask> commandAction) {
+        private void BuildTarget(object targets, string targetName, CommandAction commandAction) {
             ITask task = FindTarget(targets, targetName);
 
             if (task != null) {
-                commandAction(task);
+                using (var targetScope = _bounce.TaskScope(task, commandAction.Command, targetName)) {
+                    commandAction.Action(task);
+                    targetScope.TaskSucceeded();
+                }
             } else {
                 throw new NoSuchTargetException(targetName, GetTargetNames(targets));
             }
@@ -132,17 +135,19 @@ namespace Bounce.Framework {
             }
         }
 
-        private static Action<ITask> GetCommand(TargetBuilder builder, string command) {
+        private class CommandAction {
+            public BounceCommand Command;
+            public Action<ITask> Action;
+        }
+
+        private static CommandAction GetCommand(TargetBuilder builder, string command) {
             switch (command.ToLower()) {
-                case "build": {
-                        return builder.Build;
-                    }
-                case "clean": {
-                        return builder.Clean;
-                    }
-                default: {
-                        throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
-                    }
+                case "build":
+                    return new CommandAction {Action = builder.Build, Command = BounceCommand.Build};
+                case "clean":
+                    return new CommandAction { Action = builder.Clean, Command = BounceCommand.Clean };
+                default:
+                    throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
             }
         }
 

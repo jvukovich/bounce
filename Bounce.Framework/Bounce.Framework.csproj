@@ -59,6 +59,7 @@
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceExceptionPresenter.cs" />
     <Compile Include="BounceRunner.cs" />
+    <Compile Include="BuildResult.cs" />
     <Compile Include="CommandExecutionException.cs" />
     <Compile Include="CleanDirectory.cs" />
     <Compile Include="CommandLineParameterParser.cs" />
@@ -104,12 +105,16 @@
     <Compile Include="IPropertyValues.cs" />
     <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
+    <Compile Include="ITaskLog.cs" />
+    <Compile Include="ITaskLogFactory.cs" />
     <Compile Include="IVisualStudioProjectFileLoader.cs" />
     <Compile Include="IVisualStudioSolutionFileLoader.cs" />
     <Compile Include="IZipFileCreator.cs" />
     <Compile Include="LazyDirectoryUtils.cs" />
     <Compile Include="LazyFileUtils.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="LogOptions.cs" />
     <Compile Include="MsmqQueue.cs" />
     <Compile Include="NoSuchTargetException.cs" />
     <Compile Include="NullCommandLog.cs" />
@@ -129,8 +134,9 @@
     <Compile Include="TaskDependencyFinder.cs" />
     <Compile Include="TaskException.cs" />
     <Compile Include="TargetsAttribute.cs" />
-    <Compile Include="TaskLog.cs" />
+    <Compile Include="TaskLogFactory.cs" />
     <Compile Include="TaskLogMessageFormatter.cs" />
+    <Compile Include="TaskScope.cs" />
     <Compile Include="TaskWalker.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="Iis7WebSite.cs" />
