@@ -18,14 +18,5 @@ namespace Bounce.Framework {
                 return _iis;
             }
         }
-
-        protected static void WithOptionalProperty<T>(Val<T> property, Action<T> action) where T : class {
-            if (property != null) {
-                var prop = property.Value;
-                if (prop != null) {
-                    action(prop);
-                }
-            }
-        }
     }
 }
