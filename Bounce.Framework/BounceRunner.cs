@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error, new TaskLogFactory());
+        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error, new TeamCityLogFactory());
 
         public static IBounce Bounce {
             get { return _bounce; }

@@ -57,6 +57,7 @@
     <Compile Include="All.cs" />
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
+    <Compile Include="BounceCommand.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceExceptionPresenter.cs" />
     <Compile Include="BounceRunner.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="IBounceExceptionPresenter.cs" />
     <Compile Include="ICommandLineParameterParser.cs" />
     <Compile Include="ICommandLog.cs" />
+    <Compile Include="ICommandLogFactory.cs" />
     <Compile Include="ICompilationLog.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
@@ -139,8 +141,10 @@
     <Compile Include="TaskDependencyFinder.cs" />
     <Compile Include="TaskException.cs" />
     <Compile Include="TargetsAttribute.cs" />
+    <Compile Include="TaskLog.cs" />
     <Compile Include="TaskLogFactory.cs" />
     <Compile Include="TaskLogMessageFormatter.cs" />
+    <Compile Include="TaskResult.cs" />
     <Compile Include="TaskScope.cs" />
     <Compile Include="TaskWalker.cs" />
     <Compile Include="ITask.cs" />
@@ -149,6 +153,8 @@
     <Compile Include="IParameters.cs" />
     <Compile Include="ITypeParsers.cs" />
     <Compile Include="Copy.cs" />
+    <Compile Include="TeamCityLog.cs" />
+    <Compile Include="TeamCityLogFactory.cs" />
     <Compile Include="Val.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />

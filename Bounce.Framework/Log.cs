@@ -9,8 +9,6 @@ namespace Bounce.Framework {
         private readonly ILogMessageFormatter LogMessageFormatter;
 
         public ITaskLog TaskLog { get; private set; }
-        public ICompilationLog CompilationLog { get; private set; }
-        public IUnitTestLog UnitTestLog { get; private set; }
 
         public Log(TextWriter stdout, TextWriter stderr, LogOptions logOptions, ILogMessageFormatter logMessageFormatter) {
             Stdout = stdout;
@@ -18,7 +16,6 @@ namespace Bounce.Framework {
             LogOptions = logOptions;
             LogMessageFormatter = logMessageFormatter;
             TaskLog = new TaskLog(stdout, stderr, logOptions);
-            CompilationLog = new CompilationLog(Stderr);
         }
 
         public void Debug(string format, params object[] args) {
@@ -33,7 +30,7 @@ namespace Bounce.Framework {
             if (LogOptions.CommandOutput) {
                 return new CommandLog(command, args, Stdout, Stderr);
             } else {
-                return new NullCommandLog();
+                return new NullCommandLog(args);
             }
         }
 

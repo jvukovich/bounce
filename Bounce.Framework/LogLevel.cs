@@ -1,5 +1,5 @@
 namespace Bounce.Framework {
-    enum LogLevel {
+    public enum LogLevel {
         Error,
         Warning,
         Info,

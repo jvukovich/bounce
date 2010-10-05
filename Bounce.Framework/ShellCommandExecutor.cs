@@ -15,7 +15,7 @@ namespace Bounce.Framework {
         public ProcessOutput Execute(string commandName, string commandArgs) {
             var commandLog = BounceRunner.Bounce.Log.BeginExecutingCommand(commandName, commandArgs);
 
-            var processInfo = new ProcessStartInfo(commandName, commandArgs);
+            var processInfo = new ProcessStartInfo(commandName, commandLog.CommandArgumentsForLogging);
             processInfo.CreateNoWindow = true;
             processInfo.RedirectStandardError = true;
             processInfo.RedirectStandardOutput = true;

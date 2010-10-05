@@ -20,7 +20,5 @@ namespace Bounce.Framework {
 
         ICommandLog BeginExecutingCommand(string command, string args);
         ITaskLog TaskLog { get; }
-        ICompilationLog CompilationLog { get; }
-        IUnitTestLog UnitTestLog { get; }
     }
 }

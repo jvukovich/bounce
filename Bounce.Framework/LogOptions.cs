@@ -1,5 +1,5 @@
 namespace Bounce.Framework {
-    class LogOptions {
+    public class LogOptions {
         public LogLevel LogLevel;
         public bool ReportTaskStart;
         public bool ReportTaskEnd;
