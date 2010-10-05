@@ -119,6 +119,7 @@
     <Compile Include="LazyDirectoryUtils.cs" />
     <Compile Include="LazyFileUtils.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogFactoryRegistry.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogOptions.cs" />
     <Compile Include="MSBuildLogger.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Copy.cs" />
     <Compile Include="TeamCityLog.cs" />
     <Compile Include="TeamCityLogFactory.cs" />
+    <Compile Include="TeamCityTaskLog.cs" />
     <Compile Include="Val.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />

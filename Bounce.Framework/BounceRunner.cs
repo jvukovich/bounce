@@ -5,10 +5,15 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error, new TeamCityLogFactory());
+        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
+        private LogFactoryRegistry LogFactoryRegistry;
 
         public static IBounce Bounce {
             get { return _bounce; }
+        }
+
+        public BounceRunner () {
+            LogFactoryRegistry = LogFactoryRegistry.Default;
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -84,17 +89,15 @@ namespace Bounce.Framework {
         }
 
         private void InterpretParameters(CommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
-            var loglevel = parsedParameters.TryPopParameter("loglevel");
-            if (loglevel != null) {
-                bounce.LogOptions.LogLevel = ParseLogLevel(loglevel.Value);
-            }
-
-            var commandOutput = parsedParameters.TryPopParameter("command-output");
-            if (commandOutput != null) {
-                bounce.LogOptions.CommandOutput = commandOutput.Value.ToLower() == "true";
-            }
+            parsedParameters.IfParameterDo("loglevel", loglevel => bounce.LogOptions.LogLevel = ParseLogLevel(loglevel));
+            parsedParameters.IfParameterDo("command-output", commandOutput => bounce.LogOptions.CommandOutput = commandOutput.ToLower() == "true");
+            parsedParameters.IfParameterDo("logformat", logformat => bounce.LogFactory = GetLogFactoryByName(logformat));
 
             parameters.ParseCommandLineArguments(parsedParameters.Parameters);
+        }
+
+        private ITaskLogFactory GetLogFactoryByName(string name) {
+            return LogFactoryRegistry.GetLogFactoryByName(name);
         }
 
         private LogLevel ParseLogLevel(string loglevel) {

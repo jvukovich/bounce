@@ -8,8 +8,8 @@ namespace Bounce.Framework {
         private TextWriter output;
         private TeamCityFormatter TeamCityFormatter;
 
-        public TeamCityLog(TextWriter output, LogOptions logOptions) {
-            TaskLog = new TaskLog(output, output, logOptions);
+        public TeamCityLog(TextWriter output) {
+            TaskLog = new TeamCityTaskLog(output);
             this.output = output;
             TeamCityFormatter = new TeamCityFormatter();
         }
@@ -101,6 +101,8 @@ namespace Bounce.Framework {
                 output.Append(" " + fields[i] + "='" + TextFormatter.FormatTeamCityText(fields[i + 1]) + "'");
             }
 
+            output.Append("]");
+
             return output.ToString();
         }
     }
@@ -138,12 +140,15 @@ namespace Bounce.Framework {
         public void CommandOutput(string output) {
             if (output != null) {
                 if (warningRegex.IsMatch(output)) {
-                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage("message", "text", output, "status",
-                                                                             "WARNING"));
-                }
-                if (errorRegex.IsMatch(output)) {
-                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage("message", "text", output, "status",
-                                                                             "ERROR"));
+                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage(
+                        "message",
+                        "text", output,
+                        "status", "WARNING"));
+                } else if (errorRegex.IsMatch(output)) {
+                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage(
+                        "message",
+                        "text", output,
+                        "status", "ERROR"));
                 }
             }
         }

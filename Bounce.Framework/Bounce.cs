@@ -5,16 +5,16 @@ namespace Bounce.Framework {
     class Bounce : ITargetBuilderBounce {
         private readonly TextWriter stdout;
         private readonly TextWriter stderr;
-        private readonly ITaskLogFactory logFactory;
+        public ITaskLogFactory LogFactory { get; set; }
         public ILog Log { get; private set; }
 
         public LogOptions LogOptions { get; set; }
 
-        public Bounce(TextWriter stdout, TextWriter stderr, ITaskLogFactory logFactory) {
+        public Bounce(TextWriter stdout, TextWriter stderr) {
             this.stdout = stdout;
             this.stderr = stderr;
-            this.logFactory = logFactory;
-            LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning, ReportTargetEnd = true, ReportTargetStart = true, ReportTaskEnd = true, ReportTaskStart = true};
+            LogFactory = new TaskLogFactory();
+            LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning, ReportTargetEnd = true};
         }
 
         public ITaskScope TaskScope(ITask task, BounceCommand command, string targetName) {
@@ -23,7 +23,7 @@ namespace Bounce.Framework {
 
         private ITaskScope CreateTaskScope(ITask task, BounceCommand command, string targetName) {
             ILog previousLogger = Log;
-            Log = logFactory.CreateLogForTask(task, stdout, stderr, LogOptions);
+            Log = LogFactory.CreateLogForTask(task, stdout, stderr, LogOptions);
             if (targetName != null) {
                 Log.TaskLog.BeginTarget(task, targetName, command);
             } else {
