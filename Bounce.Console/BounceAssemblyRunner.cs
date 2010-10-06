@@ -10,6 +10,7 @@ namespace Bounce.Console {
                 FindTargetsAssemblyAndRunBounce(args);
             } catch (BounceConsoleException bce) {
                 bce.Explain(System.Console.Error);
+                Environment.Exit(1);
             }
         }
 
