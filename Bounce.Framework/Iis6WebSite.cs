@@ -18,7 +18,14 @@ namespace Bounce.Framework {
         [Dependency]
         public Iis6AppPool AppPool;
 
-        private static Iis6ScriptMap[] _mvcScriptMaps = null;
+        private static Iis6ScriptMap[] _mvcScriptMaps;
+
+        public Iis6WebSite() {
+            Port = 80;
+            ScriptMapsToAdd = new Iis6ScriptMap[0];
+            Authentication = new[] {Iis6Authentication.Basic, Iis6Authentication.NTLM};
+            AppPool = null;
+        }
 
         public static Iis6ScriptMap[] MvcScriptMaps {
             get {
@@ -45,8 +52,8 @@ namespace Bounce.Framework {
             DeleteIfExtant();
             IisWebSite webSite = Iis.CreateWebSite(Name.Value, new[] {new IisWebSiteBinding {Port = Port.Value}}, Path.GetFullPath(Directory.Value));
 
-            WithOptionalProperty(ScriptMapsToAdd, scriptMaps => webSite.AddScriptMapsToSite(scriptMaps));
-            WithOptionalProperty(Authentication, auth => webSite.Authentication = auth);
+            webSite.AddScriptMapsToSite(ScriptMapsToAdd.Value);
+            webSite.Authentication = Authentication.Value;
             if (AppPool != null) {
                 webSite.AppPoolName = AppPool.Name.Value;
             }

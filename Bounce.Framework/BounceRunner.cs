@@ -6,9 +6,14 @@ using System.Reflection;
 namespace Bounce.Framework {
     public class BounceRunner {
         private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
+        private LogFactoryRegistry LogFactoryRegistry;
 
         public static IBounce Bounce {
             get { return _bounce; }
+        }
+
+        public BounceRunner () {
+            LogFactoryRegistry = LogFactoryRegistry.Default;
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -41,18 +46,21 @@ namespace Bounce.Framework {
 
         private void BuildTargets(string command, IEnumerable<string> targetsToBuild, object targets) {
             var builder = new TargetBuilder(_bounce);
-            Action<ITask> commandAction = GetCommand(builder, command);
+            CommandAction commandAction = GetCommand(builder, command);
 
             foreach(var targetName in targetsToBuild) {
                 BuildTarget(targets, targetName, commandAction);
             }
         }
 
-        private void BuildTarget(object targets, string targetName, Action<ITask> commandAction) {
+        private void BuildTarget(object targets, string targetName, CommandAction commandAction) {
             ITask task = FindTarget(targets, targetName);
 
             if (task != null) {
-                commandAction(task);
+                using (var targetScope = _bounce.TaskScope(task, commandAction.Command, targetName)) {
+                    commandAction.Action(task);
+                    targetScope.TaskSucceeded();
+                }
             } else {
                 throw new NoSuchTargetException(targetName, GetTargetNames(targets));
             }
@@ -81,17 +89,15 @@ namespace Bounce.Framework {
         }
 
         private void InterpretParameters(CommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
-            var loglevel = parsedParameters.TryPopParameter("loglevel");
-            if (loglevel != null) {
-                bounce.LogOptions.LogLevel = ParseLogLevel(loglevel.Value);
-            }
-
-            var commandOutput = parsedParameters.TryPopParameter("command-output");
-            if (commandOutput != null) {
-                bounce.LogOptions.CommandOutput = commandOutput.Value.ToLower() == "true";
-            }
+            parsedParameters.IfParameterDo("loglevel", loglevel => bounce.LogOptions.LogLevel = ParseLogLevel(loglevel));
+            parsedParameters.IfParameterDo("command-output", commandOutput => bounce.LogOptions.CommandOutput = commandOutput.ToLower() == "true");
+            parsedParameters.IfParameterDo("logformat", logformat => bounce.LogFactory = GetLogFactoryByName(logformat));
 
             parameters.ParseCommandLineArguments(parsedParameters.Parameters);
+        }
+
+        private ITaskLogFactory GetLogFactoryByName(string name) {
+            return LogFactoryRegistry.GetLogFactoryByName(name);
         }
 
         private LogLevel ParseLogLevel(string loglevel) {
@@ -132,17 +138,19 @@ namespace Bounce.Framework {
             }
         }
 
-        private static Action<ITask> GetCommand(TargetBuilder builder, string command) {
+        private class CommandAction {
+            public BounceCommand Command;
+            public Action<ITask> Action;
+        }
+
+        private static CommandAction GetCommand(TargetBuilder builder, string command) {
             switch (command.ToLower()) {
-                case "build": {
-                        return builder.Build;
-                    }
-                case "clean": {
-                        return builder.Clean;
-                    }
-                default: {
-                        throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
-                    }
+                case "build":
+                    return new CommandAction {Action = builder.Build, Command = BounceCommand.Build};
+                case "clean":
+                    return new CommandAction { Action = builder.Clean, Command = BounceCommand.Clean };
+                default:
+                    throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
             }
         }
 

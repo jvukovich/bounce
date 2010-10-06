@@ -35,6 +35,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\InetSrv\Microsoft.Web.Administration.dll</HintPath>
@@ -56,14 +57,17 @@
     <Compile Include="All.cs" />
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
+    <Compile Include="BounceCommand.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceExceptionPresenter.cs" />
     <Compile Include="BounceRunner.cs" />
+    <Compile Include="BuildResult.cs" />
     <Compile Include="CommandExecutionException.cs" />
     <Compile Include="CleanDirectory.cs" />
     <Compile Include="CommandLineParameterParser.cs" />
     <Compile Include="CommandLog.cs" />
     <Compile Include="CommandOutputReceiver.cs" />
+    <Compile Include="CompilationLog.cs" />
     <Compile Include="ConditionParseException.cs" />
     <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
@@ -83,6 +87,8 @@
     <Compile Include="IBounceExceptionPresenter.cs" />
     <Compile Include="ICommandLineParameterParser.cs" />
     <Compile Include="ICommandLog.cs" />
+    <Compile Include="ICommandLogFactory.cs" />
+    <Compile Include="ICompilationLog.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
     <Compile Include="IFileUtils.cs" />
@@ -104,12 +110,19 @@
     <Compile Include="IPropertyValues.cs" />
     <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
+    <Compile Include="ITaskLog.cs" />
+    <Compile Include="ITaskLogFactory.cs" />
+    <Compile Include="IUnitTestLog.cs" />
     <Compile Include="IVisualStudioProjectFileLoader.cs" />
     <Compile Include="IVisualStudioSolutionFileLoader.cs" />
     <Compile Include="IZipFileCreator.cs" />
     <Compile Include="LazyDirectoryUtils.cs" />
     <Compile Include="LazyFileUtils.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogFactoryRegistry.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="LogOptions.cs" />
+    <Compile Include="MSBuildLogger.cs" />
     <Compile Include="MsmqQueue.cs" />
     <Compile Include="NoSuchTargetException.cs" />
     <Compile Include="NullCommandLog.cs" />
@@ -130,7 +143,10 @@
     <Compile Include="TaskException.cs" />
     <Compile Include="TargetsAttribute.cs" />
     <Compile Include="TaskLog.cs" />
+    <Compile Include="TaskLogFactory.cs" />
     <Compile Include="TaskLogMessageFormatter.cs" />
+    <Compile Include="TaskResult.cs" />
+    <Compile Include="TaskScope.cs" />
     <Compile Include="TaskWalker.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="Iis7WebSite.cs" />
@@ -138,6 +154,9 @@
     <Compile Include="IParameters.cs" />
     <Compile Include="ITypeParsers.cs" />
     <Compile Include="Copy.cs" />
+    <Compile Include="TeamCityLog.cs" />
+    <Compile Include="TeamCityLogFactory.cs" />
+    <Compile Include="TeamCityTaskLog.cs" />
     <Compile Include="Val.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />

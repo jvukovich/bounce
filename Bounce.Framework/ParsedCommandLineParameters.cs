@@ -7,13 +7,11 @@ namespace Bounce.Framework {
         public List<ParsedCommandLineParameter> Parameters = new List<ParsedCommandLineParameter>();
         public string[] RemainingArguments;
 
-        public ParsedCommandLineParameter TryPopParameter(string name) {
+        public void IfParameterDo(string name, Action<string> withParameter) {
             ParsedCommandLineParameter parameter = Parameters.FirstOrDefault(p => p.Name == name);
             if (parameter != null) {
                 Parameters.Remove(parameter);
-                return parameter;
-            } else {
-                return null;
+                withParameter(parameter.Value);
             }
         }
     }

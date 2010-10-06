@@ -8,6 +8,7 @@ namespace Bounce.Framework {
 
         public CommandLog(string command, string args, TextWriter stdout, TextWriter stderr) {
             Command = command;
+            CommandArgumentsForLogging = args;
             Stderr = stderr;
             Stdout = stdout;
 
@@ -26,5 +27,7 @@ namespace Bounce.Framework {
         public void CommandComplete(int exitCode) {
             Stdout.WriteLine("command: {0}, complete with: {1}", Command, exitCode);
         }
+
+        public string CommandArgumentsForLogging { get; private set; }
     }
 }

@@ -2,6 +2,6 @@ using System;
 
 namespace Bounce.Framework {
     public interface ITargetBuilderBounce : IBounce {
-        IDisposable LogForTask(ITask task);
+        ITaskScope TaskScope(ITask task, BounceCommand command, string targetName);
     }
 }

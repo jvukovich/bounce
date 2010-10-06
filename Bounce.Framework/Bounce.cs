@@ -5,6 +5,7 @@ namespace Bounce.Framework {
     class Bounce : ITargetBuilderBounce {
         private readonly TextWriter stdout;
         private readonly TextWriter stderr;
+        public ITaskLogFactory LogFactory { get; set; }
         public ILog Log { get; private set; }
 
         public LogOptions LogOptions { get; set; }
@@ -12,36 +13,39 @@ namespace Bounce.Framework {
         public Bounce(TextWriter stdout, TextWriter stderr) {
             this.stdout = stdout;
             this.stderr = stderr;
-            LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning};
+            LogFactory = new TaskLogFactory();
+            LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning, ReportTargetEnd = true};
         }
 
-        public IDisposable LogForTask(ITask task) {
-            Log = new TaskLog(task, stdout, stderr, LogOptions);
-            return new TaskLogRemover(this);
+        public ITaskScope TaskScope(ITask task, BounceCommand command, string targetName) {
+            return CreateTaskScope(task, command, targetName);
         }
 
-        class TaskLogRemover : IDisposable {
-            private readonly Bounce bounce;
-
-            public TaskLogRemover(Bounce bounce) {
-                this.bounce = bounce;
+        private ITaskScope CreateTaskScope(ITask task, BounceCommand command, string targetName) {
+            ILog previousLogger = Log;
+            Log = LogFactory.CreateLogForTask(task, stdout, stderr, LogOptions);
+            if (targetName != null) {
+                Log.TaskLog.BeginTarget(task, targetName, command);
+            } else {
+                Log.TaskLog.BeginTask(task, command);
             }
+            return new TaskScope(
+                outerLogger => EndTaskLog(task, command, TaskResult.Success, targetName, outerLogger),
+                outerLogger => EndTaskLog(task, command, TaskResult.Failure, targetName, outerLogger),
+                previousLogger);
+        }
 
-            public void Dispose() {
-                bounce.Log = null;
+        private void EndTaskLog(ITask task, BounceCommand command, TaskResult result, string targetName, ILog outerLogger) {
+            if (targetName != null) {
+                Log.TaskLog.EndTarget(task, targetName, command, result);
+            } else {
+                Log.TaskLog.EndTask(task, command, result);
             }
+            Log = outerLogger;
         }
     }
 
-    class LogOptions {
-        public LogLevel LogLevel;
-        public bool CommandOutput;
-    }
-
-    enum LogLevel {
-        Error,
-        Warning,
-        Info,
-        Debug
+    public interface ITaskScope : IDisposable {
+        void TaskSucceeded();
     }
 }
