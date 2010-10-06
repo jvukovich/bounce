@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -154,9 +154,13 @@
     <Compile Include="IParameters.cs" />
     <Compile Include="ITypeParsers.cs" />
     <Compile Include="Copy.cs" />
+    <Compile Include="TeamCityFormatter.cs" />
     <Compile Include="TeamCityLog.cs" />
     <Compile Include="TeamCityLogFactory.cs" />
+    <Compile Include="TeamCityMsBuildLogger.cs" />
+    <Compile Include="TeamCityNUnitLogger.cs" />
     <Compile Include="TeamCityTaskLog.cs" />
+    <Compile Include="TeamCityTextFormatter.cs" />
     <Compile Include="Val.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />

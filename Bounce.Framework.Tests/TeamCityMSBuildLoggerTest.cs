@@ -8,7 +8,7 @@ namespace Bounce.Framework.Tests {
         public void ShouldBeWarning() {
             TextWriter output = new StringWriter();
 
-            var logger = new TeamCityMSBuildLogger("SomeSolution.sln", output);
+            var logger = new TeamCityMsBuildLogger("SomeSolution.sln", output);
 
             logger.CommandOutput("BounceRunner.cs(103,32): warning CS0168: The variable 'e' is declared but never used");
 

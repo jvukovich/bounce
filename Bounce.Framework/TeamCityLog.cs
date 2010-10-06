@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
     class TeamCityLog : ILog {
@@ -76,89 +74,18 @@ namespace Bounce.Framework {
         }
 
         public ICommandLog BeginExecutingCommand(string command, string args) {
-            if (Path.GetFileName(command).ToLower() == "msbuild.exe") {
-                return new TeamCityMSBuildLogger(args, output);
-            } else {
-                return new NullCommandLog(args);
+            var commandName = Path.GetFileName(command).ToLower();
+
+            switch (commandName) {
+                case "msbuild.exe":
+                    return new TeamCityMsBuildLogger(args, output);
+                case "nunit-console.exe":
+                    return new TeamCityNUnitLogger(args, output);
+                default:
+                    return new NullCommandLog(args);
             }
         }
 
         public ITaskLog TaskLog { get; private set; }
-    }
-
-    public class TeamCityFormatter {
-        private TeamCityTextFormatter TextFormatter;
-
-        public TeamCityFormatter() {
-            TextFormatter = new TeamCityTextFormatter();
-        }
-
-        public string FormatTeamCityMessage(string name, params string [] fields) {
-            var output = new StringBuilder();
-            output.Append("##teamcity[" + name);
-
-            for (int i = 0; i < fields.Length - 1; i += 2) {
-                output.Append(" " + fields[i] + "='" + TextFormatter.FormatTeamCityText(fields[i + 1]) + "'");
-            }
-
-            output.Append("]");
-
-            return output.ToString();
-        }
-    }
-
-    public class TeamCityTextFormatter {
-        public string FormatTeamCityText(string text) {
-            return text.Replace("|", "||").Replace("'", "|'").Replace("\n", "|n").Replace("\r", "|r").Replace("]", "|]");
-        }
-    }
-
-    public class TeamCityMSBuildLogger : ICommandLog {
-        private readonly TextWriter stdout;
-        private Regex warningRegex;
-        private Regex errorRegex;
-        private TeamCityFormatter TeamCityFormatter;
-
-        public TeamCityMSBuildLogger(string args, TextWriter stdout) {
-            this.stdout = stdout;
-            
-            Type msBuildLoggerType = typeof(MSBuildLogger);
-
-            string loggerType = String.Format(@"""/l:{0},{1}""", msBuildLoggerType.FullName, msBuildLoggerType.Assembly.Location);
-
-            CommandArgumentsForLogging = args + " " + loggerType + " /nologo /noconsolelogger";
-            warningRegex = CreateRegexFor("warning");
-            errorRegex = CreateRegexFor("error");
-
-            TeamCityFormatter = new TeamCityFormatter();
-        }
-
-        private Regex CreateRegexFor(string type) {
-            return new Regex(@"(?<file>.*)\((?<line>\d+),(?<col>\d+)\): " + type + " (?<code>.*?): (?<message>.*)");
-        }
-
-        public void CommandOutput(string output) {
-            if (output != null) {
-                if (warningRegex.IsMatch(output)) {
-                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage(
-                        "message",
-                        "text", output,
-                        "status", "WARNING"));
-                } else if (errorRegex.IsMatch(output)) {
-                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage(
-                        "message",
-                        "text", output,
-                        "status", "ERROR"));
-                }
-            }
-        }
-
-        public void CommandError(string error) {
-        }
-
-        public void CommandComplete(int exitCode) {
-        }
-
-        public string CommandArgumentsForLogging { get; private set; }
     }
 }

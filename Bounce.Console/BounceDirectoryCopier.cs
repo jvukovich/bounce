@@ -18,8 +18,10 @@ namespace Bounce.Console {
         }
 
         private void CopyDirectory(string fromDirectory, string toDirectory) {
-            foreach (var file in Directory.GetFiles(fromDirectory)) {
-                File.Copy(file, Path.Combine(toDirectory, Path.GetFileName(file)));
+            foreach (var fromFile in Directory.GetFiles(fromDirectory)) {
+                var toFile = Path.Combine(toDirectory, Path.GetFileName(fromFile));
+                System.Console.WriteLine("copying {0} => {1}", fromFile, toFile);
+                File.Copy(fromFile, toFile);
             }
         }
     }
