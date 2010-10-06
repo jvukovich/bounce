@@ -9,11 +9,14 @@ namespace Bounce.Framework {
         public Val<string> SolutionPath;
         [Dependency]
         public Val<string> Configuration;
+        [Dependency]
+        public Val<string> MsBuildExe;
 
         private readonly IShellCommandExecutor ShellCommandExecutor;
 
         public VisualStudioSolution() {
             ShellCommandExecutor = new ShellCommandExecutor();
+            MsBuildExe = @"C:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe";
         }
 
         public VisualStudioSolutionProjects Projects {
@@ -25,7 +28,7 @@ namespace Bounce.Framework {
         public override void Build(IBounce bounce) {
             bounce.Log.Info("building solution at: " + SolutionPath.Value);
 
-            ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"""{0}""", SolutionPath.Value));
+            ShellCommandExecutor.ExecuteAndExpectSuccess(MsBuildExe.Value, String.Format(@"""{0}""", SolutionPath.Value));
         }
 
         internal VisualStudioSolutionDetails SolutionDetails {
