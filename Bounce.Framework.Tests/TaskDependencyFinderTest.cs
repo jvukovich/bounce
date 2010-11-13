@@ -45,10 +45,6 @@ namespace Bounce.Framework.Tests {
                 get { throw new System.NotImplementedException(); }
             }
 
-            public void BeforeBuild(IBounce bounce) {
-                throw new System.NotImplementedException();
-            }
-
             public void Build(IBounce bounce) {
                 throw new System.NotImplementedException();
             }

@@ -13,14 +13,7 @@ namespace Bounce.Framework {
         }
 
         public void Build(ITask task) {
-            Walker.Walk(task, BeforeBuildAndLog, BuildIfNotAlreadyBuilt);
-        }
-
-        private void BeforeBuildAndLog(ITask task) {
-            using (var taskScope = Bounce.TaskScope(task, BounceCommand.Build, null)) {
-                task.BeforeBuild(Bounce);
-                taskScope.TaskSucceeded();
-            }
+            Walker.Walk(task, null, BuildIfNotAlreadyBuilt);
         }
 
         private void BuildIfNotAlreadyBuilt(ITask task) {

@@ -8,12 +8,6 @@ namespace Bounce.Framework {
             }
         }
 
-        public virtual void BeforeBuild(IBounce bounce) {
-            BeforeBuild();
-        }
-
-        public virtual void BeforeBuild() {}
-
         public virtual void Build(IBounce bounce) {
             Build();
         }

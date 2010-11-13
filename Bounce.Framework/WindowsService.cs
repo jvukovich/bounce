@@ -29,14 +29,6 @@ namespace Bounce.Framework {
             Machine = "localhost";
         }
 
-        public override void BeforeBuild() {
-            if (Name.Value != null) {
-                if (ServiceInstalled && ServiceRunning) {
-                    StopService();
-                }
-            }
-        }
-
         protected bool ServiceRunning {
             get {
                 Regex statePattern = new Regex(@"STATE\s+:\s+\d\s+STARTED");

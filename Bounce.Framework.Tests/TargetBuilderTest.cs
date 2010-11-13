@@ -9,20 +9,23 @@ namespace Bounce.Framework.Tests {
         public void ShouldBuildDependenciesBeforeDependencts() {
             var dependent = new Mock<ITask>();
             var dependency = new Mock<ITask>();
-            var bounce = new Mock<ITargetBuilderBounce>().Object;
+            var bounceMock = new Mock<ITargetBuilderBounce>();
+            var bounce = bounceMock.Object;
 
             var buildActions = new StringWriter();
 
+            bounceMock
+                .Setup(b => b.TaskScope(It.IsAny<ITask>(), It.IsAny<BounceCommand>(), It.IsAny<string>()))
+                .Returns(new Mock<ITaskScope>().Object);
+
             dependent.Setup(d => d.Dependencies).Returns(new[] {dependency.Object});
-            dependent.Setup(d => d.BeforeBuild(bounce)).Callback(() => buildActions.Write("before build dependent;"));
             dependent.Setup(d => d.Build(bounce)).Callback(() => buildActions.Write("build dependent;"));
-            dependency.Setup(d => d.BeforeBuild(bounce)).Callback(() => buildActions.Write("before build dependency;"));
             dependency.Setup(d => d.Build(bounce)).Callback(() => buildActions.Write("build dependency;"));
 
             var builder = new TargetBuilder(bounce);
             builder.Build(dependent.Object);
 
-            Assert.That(buildActions.ToString(), Is.EqualTo(@"before build dependent;before build dependency;build dependency;build dependent;"));
+            Assert.That(buildActions.ToString(), Is.EqualTo(@"build dependency;build dependent;"));
         }
 
         [Test]
