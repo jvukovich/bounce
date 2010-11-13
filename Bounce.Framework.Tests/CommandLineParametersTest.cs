@@ -21,5 +21,21 @@ namespace Bounce.Framework.Tests {
 
             Assert.That(() => parms.ParseCommandLineArguments(new List<ParsedCommandLineParameter>()), Throws.InstanceOf(typeof(CommandLineParametersException)));
         }
+
+        [Test]
+        public void RequiredValueShouldThrowIfNotParsedYet() {
+            var parms = new CommandLineParameters();
+            var version = parms.Required<string>("version");
+
+            Assert.That(() => version.Value, Throws.Exception);
+        }
+
+        [Test]
+        public void DefaultValueShouldReturnIfNotParsed() {
+            var parms = new CommandLineParameters();
+            var version = parms.Default("version", "0.2");
+
+            Assert.That(version.Value, Is.EqualTo("0.2"));
+        }
     }
 }

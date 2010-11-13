@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    class Parameter<T> : Val<T>, IParameter {
+    internal class Parameter<T> : Val<T>, IParameter {
         public bool Required { get; set; }
         public string Name { get; set; }
         public bool HasValue { get; private set; }
@@ -14,7 +14,12 @@ namespace Bounce.Framework {
         }
 
         public override T Value {
-            get { return _value; }
+            get {
+                if (!HasValue) {
+                    throw new NoValueForParameterException(Name);
+                }
+                return _value;
+            }
         }
 
         public void SetValue(T val) {

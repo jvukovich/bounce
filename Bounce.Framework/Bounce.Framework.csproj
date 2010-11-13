@@ -126,6 +126,7 @@
     <Compile Include="MsmqQueue.cs" />
     <Compile Include="NoSuchTargetException.cs" />
     <Compile Include="NullCommandLog.cs" />
+    <Compile Include="NoValueForParameterException.cs" />
     <Compile Include="ParsedCommandLineParameter.cs" />
     <Compile Include="ParsedCommandLineParameters.cs" />
     <Compile Include="ParseResult.cs" />

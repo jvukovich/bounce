@@ -9,14 +9,10 @@ namespace Bounce.Framework.Tests {
         public void ShouldBuildDependenciesBeforeDependencts() {
             var dependent = new Mock<ITask>();
             var dependency = new Mock<ITask>();
-            var bounceMock = new Mock<ITargetBuilderBounce>();
-            var bounce = bounceMock.Object;
+            ITargetBuilderBounce bounce = GetBounce();
 
             var buildActions = new StringWriter();
 
-            bounceMock
-                .Setup(b => b.TaskScope(It.IsAny<ITask>(), It.IsAny<BounceCommand>(), It.IsAny<string>()))
-                .Returns(new Mock<ITaskScope>().Object);
 
             dependent.Setup(d => d.Dependencies).Returns(new[] {dependency.Object});
             dependent.Setup(d => d.Build(bounce)).Callback(() => buildActions.Write("build dependent;"));
@@ -28,11 +24,19 @@ namespace Bounce.Framework.Tests {
             Assert.That(buildActions.ToString(), Is.EqualTo(@"build dependency;build dependent;"));
         }
 
+        private ITargetBuilderBounce GetBounce() {
+            var bounceMock = new Mock<ITargetBuilderBounce>();
+            bounceMock
+                .Setup(b => b.TaskScope(It.IsAny<ITask>(), It.IsAny<BounceCommand>(), It.IsAny<string>()))
+                .Returns(new Mock<ITaskScope>().Object);
+            return bounceMock.Object;
+        }
+
         [Test]
         public void ShouldCleanDependentsBeforeDependencies() {
             var dependent = new Mock<ITask>();
             var dependency = new Mock<ITask>();
-            var bounce = new Mock<ITargetBuilderBounce>().Object;
+            ITargetBuilderBounce bounce = GetBounce();
 
             var cleanActions = new StringWriter();
 
@@ -54,7 +58,7 @@ namespace Bounce.Framework.Tests {
             var dependent1 = new Mock<ITask>();
             var dependent2 = new Mock<ITask>();
             var twiceADependency = new Mock<ITask>();
-            var bounce = new Mock<ITargetBuilderBounce>().Object;
+            ITargetBuilderBounce bounce = GetBounce();
 
             all.Setup(d => d.Dependencies).Returns(new[] { dependent1.Object, dependent2.Object });
             dependent1.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });

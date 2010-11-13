@@ -12,7 +12,7 @@ namespace Bounce.Framework.Tests {
 
             logger.CommandOutput("BounceRunner.cs(103,32): warning CS0168: The variable 'e' is declared but never used");
 
-            Assert.That(output.ToString(), Is.EqualTo("yep, it's a warning!\r\n"));
+            Assert.That(output.ToString(), Is.EqualTo("##teamcity[message text='BounceRunner.cs(103,32): warning CS0168: The variable |'e|' is declared but never used' status='WARNING']\r\n"));
         }
     }
 }

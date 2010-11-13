@@ -1,3 +1,4 @@
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 
@@ -21,7 +22,7 @@ namespace Bounce.Framework.Tests {
             var paths = new Val<string> [] {"one", "two"};
             var tests = new NUnitTests {DllPaths = paths};
             
-            Assert.That(tests.Dependencies, Is.EquivalentTo(paths));
+            Assert.That(tests.Dependencies.ToArray(), Has.Member(paths[0]).And.Member(paths[1]));
         }
     }
 }

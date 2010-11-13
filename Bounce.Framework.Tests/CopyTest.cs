@@ -16,7 +16,10 @@ namespace Bounce.Framework.Tests {
             var excludes = new string[0];
             var toDir = new Copy(copier.Object) {ToPath = toPath, FromPath = fromPath, Includes = includes, Excludes = excludes};
 
-            toDir.Build();
+            var bounce = new Mock<IBounce>();
+            bounce.SetupGet(b => b.Log).Returns(new Mock<ILog>().Object);
+
+            toDir.Build(bounce.Object);
 
             copier.Verify(c => c.Copy(fromPath, toPath, excludes, includes), Times.Once());
         }
