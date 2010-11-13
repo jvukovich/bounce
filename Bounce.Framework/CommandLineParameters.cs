@@ -5,24 +5,19 @@ using System.Linq;
 
 namespace Bounce.Framework {
     public class CommandLineParameters : IParameters {
-        private TypeParsers TypeParsers;
+        private ITypeParsers TypeParsers;
         private Dictionary<string, IParameter> RegisteredParameters;
 
-        public CommandLineParameters() {
-            TypeParsers = new TypeParsers();
+        public CommandLineParameters(ITypeParsers typeParsers) {
+            TypeParsers = typeParsers;
             RegisteredParameters = new Dictionary<string, IParameter>();
+        }
+
+        public CommandLineParameters() : this(Framework.TypeParsers.CreateWithStandardTypeParsers()) {
         }
 
         public IEnumerable<IParameter> Parameters {
             get { return RegisteredParameters.Values; }
-        }
-
-        public static CommandLineParameters ParametersWithUsualTypeParsers() {
-            var p = new CommandLineParameters();
-            p.RegisterTypeParser(s => int.Parse(s));
-            p.RegisterTypeParser(s => s);
-            p.RegisterTypeParser(s => DateTime.Parse(s));
-            return p;
         }
 
         private Parameter<T> RegisterParameter<T>(Parameter<T> p) {
@@ -51,7 +46,7 @@ namespace Bounce.Framework {
         }
 
         public void RegisterTypeParser<T>(Func<string, T> parser) {
-            TypeParsers.Add(typeof (T), s => parser(s));
+            TypeParsers.RegisterTypeParser(parser);
         }
 
         private void EnsureThatRequiredParametersAreSet(ParameterErrors parameterErrors) {

@@ -72,7 +72,6 @@ namespace TestBounceAssembly {
         };
         }
 
-        [Targets]
         public static object SomeTargets() {
             string version = "0.1";
 
@@ -104,8 +103,9 @@ namespace TestBounceAssembly {
             };
         }
 
-        public static object RealTargets() {
-            string version = "0.1";
+        [Targets]
+        public static object RealTargets(IParameters buildParameters) {
+            var version = buildParameters.Required<string>("version");
 
             var git = new GitCheckout {
                 Repository = "git://github.com/refractalize/bounce.git",
@@ -122,10 +122,10 @@ namespace TestBounceAssembly {
 
             var frameworkZip = new ZipFile {
                 Directory = frameworkProject.WhenBuilt(() => Path.GetDirectoryName(frameworkProject.OutputFile.Value)),
-                ZipFileName = downloadsDir.Files[string.Format("Bounce.Framework.{0}.zip", version)],
+                ZipFileName = downloadsDir.Files[version.WhenBuilt(() => string.Format("Bounce.Framework.{0}.zip", version.Value))],
             };
 
-            var downloads = new All(frameworkZip, new GitTag {Directory = ".", Tag = "v" + version});
+            var downloads = new All(frameworkZip, new GitTag {Directory = ".", Tag = version.WhenBuilt(() => "v" + version.Value)});
 
             return new {
                 Tests = new NUnitTests {

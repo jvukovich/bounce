@@ -17,7 +17,7 @@ namespace Bounce.Framework {
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
-            CommandLineParameters parameters = CommandLineParameters.ParametersWithUsualTypeParsers();
+            var parameters = new CommandLineParameters();
 
             try {
                 object targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
@@ -103,7 +103,7 @@ namespace Bounce.Framework {
         private LogLevel ParseLogLevel(string loglevel) {
             try {
                 return (LogLevel) Enum.Parse(typeof (LogLevel), loglevel, true);
-            } catch (Exception e) {
+            } catch (Exception) {
                 throw new ConfigurationException(String.Format("log level {0} not recognised, try one of {1}", loglevel, String.Join(", ", Enum.GetNames(typeof(LogLevel)))));
             }
         }

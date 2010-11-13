@@ -14,7 +14,7 @@ namespace Bounce.Framework {
         [Dependency]
         public IEnumerable<ITask> Tasks;
 
-        public All(params ITask [] tasks) {
+        public All(params ITask[] tasks) {
             Tasks = tasks;
         }
     }
