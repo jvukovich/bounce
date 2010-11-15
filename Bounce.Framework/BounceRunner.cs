@@ -23,11 +23,12 @@ namespace Bounce.Framework {
                 object targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
 
                 var parsedParameters = ParseCommandLineArguments(args);
-                InterpretParameters(parameters, parsedParameters, _bounce);
 
                 string[] buildArguments = parsedParameters.RemainingArguments;
 
                 if (buildArguments.Length >= 2) {
+                    InterpretParameters(parameters, parsedParameters, _bounce);
+
                     string command = buildArguments[0];
                     IEnumerable<string> targetsToBuild = TargetsToBuild(buildArguments);
 
