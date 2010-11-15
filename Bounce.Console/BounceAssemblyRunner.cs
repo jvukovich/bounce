@@ -16,6 +16,8 @@ namespace Bounce.Console {
             } catch (BounceConsoleException bce) {
                 bce.Explain(System.Console.Error);
                 Environment.Exit(1);
+            } catch (Exception e) {
+                System.Console.Error.WriteLine(e);
             }
         }
 
