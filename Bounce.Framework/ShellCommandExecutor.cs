@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 
@@ -27,16 +28,29 @@ namespace Bounce.Framework {
 
             p.ErrorDataReceived += output.ErrorDataReceived;
             p.OutputDataReceived += output.OutputDataReceived;
-            p.Start();
 
-            p.BeginErrorReadLine();
-            p.BeginOutputReadLine();
+            try {
+                p.Start();
 
-            p.WaitForExit();
+                p.BeginErrorReadLine();
+                p.BeginOutputReadLine();
 
-            commandLog.CommandComplete(p.ExitCode);
+                p.WaitForExit();
 
-            return new ProcessOutput {ExitCode = p.ExitCode, Output = output.Output, Error = output.Error, ErrorAndOutput = output.ErrorAndOutput};
+                commandLog.CommandComplete(p.ExitCode);
+
+                return new ProcessOutput {
+                                             ExitCode = p.ExitCode,
+                                             Output = output.Output,
+                                             Error = output.Error,
+                                             ErrorAndOutput = output.ErrorAndOutput
+                                         };
+            } catch (Win32Exception win32Ex) {
+                if (win32Ex.NativeErrorCode == 2) { // executable file not found
+                    throw new ShellExecutableNotFoundException(commandName);
+                }
+                throw;
+            }
         }
     }
 }
