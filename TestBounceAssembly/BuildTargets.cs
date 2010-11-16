@@ -72,38 +72,13 @@ namespace TestBounceAssembly {
         };
         }
 
+        [Targets]
         public static object SomeTargets() {
-            string version = "0.1";
-
-            var git = new GitCheckout {
-                Repository = "git://github.com/refractalize/bounce.git",
-                Directory = "tmp2",
-            };
-            var solution = new VisualStudioSolution {
-                SolutionPath = "Bounce.sln",
-            };
-            var frameworkProject = solution.Projects["Bounce.Framework"];
-
-            var downloadsDir = new CleanDirectory {
-                Path = "Downloads",
-            };
-
-            var frameworkZip = new ZipFile {
-                Directory = frameworkProject.WhenBuilt(() => Path.GetDirectoryName(frameworkProject.OutputFile.Value)),
-                ZipFileName = downloadsDir.Files[string.Format("Bounce.Framework.{0}.zip", version)],
-            };
-
-            var downloads = new All(frameworkZip);
-
             return new {
-                Tests = new NUnitTests {
-                    DllPaths = solution.Projects.Select(p => p.OutputFile),
-                },
-                Downloads = downloads,
-            };
+                           Copy = new Copy {FromPath = "TestFrom", ToPath = "TestTo"},
+                       };
         }
 
-        [Targets]
         public static object RealTargets(IParameters buildParameters) {
             var version = buildParameters.Required<string>("version");
 

@@ -8,7 +8,7 @@ namespace Bounce.Framework {
         private IEnumerable<Func<char[], int, ParsedRegex>> Parsers;
 
         public GlobToRegexConverter() {
-            Parsers = new Func<char[], int, ParsedRegex> [] {ParseStar, ParseDot, ParseQuesionMark};
+            Parsers = new Func<char[], int, ParsedRegex>[] { ParseStar, ParseDot, ParseQuesionMark, ParseTrailingSlash };
         }
 
         public Regex ConvertToRegex(string glob) {
@@ -88,6 +88,14 @@ namespace Bounce.Framework {
         private ParsedRegex ParseQuesionMark(char[] glob, int index) {
             if (glob[index] == '?') {
                 return new ParsedRegex(@"[^\\/]", index + 1);
+            } else {
+                return null;
+            }
+        }
+
+        private ParsedRegex ParseTrailingSlash(char[] glob, int index) {
+            if (glob.Length == (index + 1) && glob[index] == '\\') {
+                return new ParsedRegex(@"\\.*", index + 1);
             } else {
                 return null;
             }

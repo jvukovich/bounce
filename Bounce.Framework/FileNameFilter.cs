@@ -26,6 +26,7 @@ namespace Bounce.Framework {
         }
 
         public bool IncludeFile(string filename) {
+            System.Console.WriteLine("testing filename: " + filename);
             return !toExclude.Any(e => e.IsMatch(filename)) || toInclude.Any(e => e.IsMatch(filename));
         }
     }
