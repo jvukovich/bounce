@@ -9,6 +9,8 @@ namespace Bounce.Framework.Tests {
             AssertGlobConversion("**.xml", @"^.*\.xml$", new[] {@"something.xml", @"temp\something.xml", @"temp\b\something.xml", @"c:\temp\something.xml"}, new [] {@"somethingxml"});
             AssertGlobConversion("high.???", @"^high\.[^\\/][^\\/][^\\/]$", new[] {@"high.xml", @"high.txt"}, new[] {@"low.xml", @"high.xm"});
             AssertGlobConversion(@"_svn\", @"^_svn\\.*$", new[] {@"_svn\high.xml", @"_svn\blah\high.txt"}, new[] {@"high.xml", @"_svnk\high.txt", @"svn\low.txt"});
+            AssertGlobConversion(@"**\_svn\", @"^(|.*\\)_svn\\.*$", new[] { @"_svn\high.xml", @"_svn\blah\high.txt", @"blah\_svn\high.txt", @"blah\_svn\" }, new[] { @"high.xml", @"_svnk\high.txt", @"svn\low.txt" });
+            AssertGlobConversion(@"one\two", @"^one\\two$", new[] {@"one\two"}, new[] {@"one\two\three"});
         }
 
         private void AssertGlobConversion(string glob, string expectedRegex, string[] pathsThatMatch, string [] pathsThatDontMatch) {

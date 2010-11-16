@@ -17,6 +17,8 @@ namespace Bounce.Framework {
         public Val<IEnumerable<Iis6Authentication>> Authentication;
         [Dependency]
         public Iis6AppPool AppPool;
+        [Dependency]
+        public Val<bool> Started;
 
         private static Iis6ScriptMap[] _mvcScriptMaps;
 
@@ -25,6 +27,7 @@ namespace Bounce.Framework {
             ScriptMapsToAdd = new Iis6ScriptMap[0];
             Authentication = new[] {Iis6Authentication.Basic, Iis6Authentication.NTLM};
             AppPool = null;
+            Started = true;
         }
 
         public static Iis6ScriptMap[] MvcScriptMaps {
@@ -56,6 +59,10 @@ namespace Bounce.Framework {
             webSite.Authentication = Authentication.Value;
             if (AppPool != null) {
                 webSite.AppPoolName = AppPool.Name.Value;
+            }
+
+            if (Started.Value) {
+                webSite.Start();
             }
         }
 
