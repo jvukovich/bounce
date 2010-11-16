@@ -44,7 +44,10 @@ namespace Bounce.Framework {
             }
 
             foreach(var subdir in Directory.GetDirectories(from)) {
-                CopyDirectoryContents(originalFrom, subdir, Path.Combine(to, Path.GetFileName(subdir)), fileNameFilter);
+                if (fileNameFilter.IncludeFile(subdir.Substring(originalFrom.Length + 1) + @"\\")) {
+                    CopyDirectoryContents(originalFrom, subdir, Path.Combine(to, Path.GetFileName(subdir)),
+                                          fileNameFilter);
+                }
             }
         }
 
