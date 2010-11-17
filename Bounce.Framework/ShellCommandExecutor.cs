@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 
 namespace Bounce.Framework {
-    class ShellCommandExecutor : IShellCommandExecutor {
+    public class ShellCommandExecutor : IShellCommandExecutor {
         public void ExecuteAndExpectSuccess(string commandName, string commandArgs) {
             var output = Execute(commandName, commandArgs);
 
