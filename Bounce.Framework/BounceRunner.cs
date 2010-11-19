@@ -20,7 +20,7 @@ namespace Bounce.Framework {
             var parameters = new CommandLineParameters();
 
             try {
-                object targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
+                Dictionary<string, ITask> targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
 
                 var parsedParameters = ParseCommandLineArguments(args);
 
@@ -45,7 +45,7 @@ namespace Bounce.Framework {
             }
         }
 
-        private void BuildTargets(string command, IEnumerable<string> targetsToBuild, object targets) {
+        private void BuildTargets(string command, IEnumerable<string> targetsToBuild, Dictionary<string, ITask> targets) {
             var builder = new TargetBuilder(_bounce);
             CommandAction commandAction = GetCommand(builder, command);
 
@@ -54,17 +54,23 @@ namespace Bounce.Framework {
             }
         }
 
-        private void BuildTarget(object targets, string targetName, CommandAction commandAction) {
+        private void BuildTarget(Dictionary<string, ITask> targets, string targetName, CommandAction commandAction) {
             ITask task = FindTarget(targets, targetName);
 
-            if (task != null) {
-                using (var targetScope = _bounce.TaskScope(task, commandAction.Command, targetName)) {
-                    commandAction.Action(task);
-                    targetScope.TaskSucceeded();
-                }
-            } else {
-                throw new NoSuchTargetException(targetName, GetTargetNames(targets));
+            using (ITaskScope targetScope = _bounce.TaskScope(task, commandAction.Command, targetName)) {
+                commandAction.Action(task);
+                targetScope.TaskSucceeded();
             }
+        }
+
+        private ITask FindTarget(Dictionary<string, ITask> targets, string targetName) {
+            ITask task;
+            try {
+                task = targets[targetName];
+            } catch (KeyNotFoundException) {
+                throw new NoSuchTargetException(targetName, targets.Keys);
+            }
+            return task;
         }
 
         private IEnumerable<string> TargetsToBuild(string [] args) {
@@ -73,7 +79,19 @@ namespace Bounce.Framework {
             return targets;
         }
 
-        private object GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
+        private Dictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
+            object targetsObject = GetTargetsObjectFromAssembly(getTargetsMethod, parameters);
+
+            Dictionary<string, ITask> targets = new Dictionary<string, ITask>();
+
+            foreach (PropertyInfo property in targetsObject.GetType().GetProperties()) {
+                targets[property.Name] = (ITask) property.GetValue(targetsObject, new object[0]);
+            }
+
+            return targets;
+        }
+
+        private object GetTargetsObjectFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
             ParameterInfo[] methodParameters = getTargetsMethod.GetParameters();
             if (methodParameters.Length == 1) {
                 if (methodParameters[0].ParameterType.IsAssignableFrom(typeof(IParameters)))
@@ -114,10 +132,10 @@ namespace Bounce.Framework {
             return parser.ParseCommandLineParameters(args);
         }
 
-        private void PrintAvailableTargets(object targets) {
+        private void PrintAvailableTargets(Dictionary<string, ITask> targets) {
             System.Console.WriteLine();
             System.Console.WriteLine("targets:");
-            foreach (var name in GetTargetNames(targets)) {
+            foreach (var name in targets.Keys) {
                 System.Console.WriteLine("  " + name);
             }
         }
@@ -152,16 +170,6 @@ namespace Bounce.Framework {
                     return new CommandAction { Action = builder.Clean, Command = BounceCommand.Clean };
                 default:
                     throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
-            }
-        }
-
-        private static ITask FindTarget(object targets, string targetName) {
-            PropertyInfo propertyInfo = targets.GetType().GetProperty(targetName);
-
-            if (propertyInfo != null) {
-                return (ITask)propertyInfo.GetValue(targets, new object[0]);
-            } else {
-                return null;
             }
         }
 
