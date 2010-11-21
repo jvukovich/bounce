@@ -1,6 +1,6 @@
 ﻿namespace Bounce.Framework
 {
-    public class VisualStudioSolutionProject {
+    public class VisualStudioSolutionProjectReference {
         public string Path { get; set; }
         public string Name { get; set; }
     }

@@ -9,8 +9,11 @@ namespace Bounce.Framework.Tests {
             string path = @"TestFiles\Bounce.csproj";
             var details = loader.LoadProject(path, "name", "");
 
-            Assert.That(details.OutputFile, Is.EqualTo(@"bin\Debug\Bounce.dll"));
+            Assert.That(details.OutputDirectory, Is.EqualTo(@"TestFiles\bin\Debug"));
+            Assert.That(details.OutputFile, Is.EqualTo(@"TestFiles\bin\Debug\Bounce.dll"));
             Assert.That(details.Name, Is.EqualTo(@"name"));
+            Assert.That(details.ProjectFile, Is.EqualTo(@"TestFiles\Bounce.csproj"));
+            Assert.That(details.ProjectDirectory, Is.EqualTo(@"TestFiles"));
         }
 
         [Test]
@@ -19,8 +22,11 @@ namespace Bounce.Framework.Tests {
             string path = @"TestFiles\Bounce.csproj";
             var details = loader.LoadProject(path, "name", "Release");
 
-            Assert.That(details.OutputFile, Is.EqualTo(@"bin\Release\Bounce.dll"));
+            Assert.That(details.OutputDirectory, Is.EqualTo(@"TestFiles\bin\Release"));
+            Assert.That(details.OutputFile, Is.EqualTo(@"TestFiles\bin\Release\Bounce.dll"));
             Assert.That(details.Name, Is.EqualTo(@"name"));
+            Assert.That(details.ProjectFile, Is.EqualTo(@"TestFiles\Bounce.csproj"));
+            Assert.That(details.ProjectDirectory, Is.EqualTo(@"TestFiles"));
         }
     }
 }

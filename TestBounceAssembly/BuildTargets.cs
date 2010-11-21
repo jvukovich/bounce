@@ -18,7 +18,7 @@ namespace TestBounceAssembly {
 
             return new {
                 WebSite = new Iis7WebSite {
-                    Directory = webProject.Directory,
+                    Directory = webProject.ProjectDirectory,
                     Name = "BigWebSite",
                     Port = 5001
                 },
@@ -46,7 +46,7 @@ namespace TestBounceAssembly {
 
             return new {
                 WebSite = new Iis7WebSite {
-                    Directory = webProject.Directory,
+                    Directory = webProject.ProjectDirectory,
                     Name = "My Website",
                     Port = parameters.Default("port", 5001),
                 },

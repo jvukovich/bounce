@@ -18,9 +18,21 @@ namespace Bounce.Framework {
             }
         }
 
-        public Val<string> Directory {
+        public Val<string> OutputDirectory {
             get {
-                return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).Directory);
+                return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).OutputDirectory);
+            }
+        }
+
+        public Val<string> ProjectDirectory {
+            get {
+                return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).ProjectDirectory);
+            }
+        }
+
+        public Val<string> ProjectFile {
+            get {
+                return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).ProjectFile);
             }
         }
     }

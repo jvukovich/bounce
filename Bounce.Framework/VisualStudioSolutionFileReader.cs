@@ -17,19 +17,16 @@ namespace Bounce.Framework {
         public VisualStudioSolutionDetails ReadSolution(string solutionPath, string configuration) {
             VisualStudioSolutionFileDetails solutionDetails = SolutionLoader.LoadVisualStudioSolution(solutionPath);
 
-            var projects = new List<VisualStudioProjectDetails>();
+            var projects = new List<VisualStudioProjectFileDetails>();
 
             foreach (var project in solutionDetails.VisualStudioProjects) {
                 if (Path.GetExtension(project.Path) == ".csproj") {
                     string projectFileName = Path.Combine(Path.GetDirectoryName(solutionPath), project.Path);
-                    VisualStudioCSharpProjectFileDetails projectDetails = ProjectLoader.LoadProject(projectFileName,
+                    VisualStudioProjectFileDetails projectDetails = ProjectLoader.LoadProject(projectFileName,
                                                                                                     project.Name,
                                                                                                     configuration);
 
-                    string projectDirectory = Path.GetDirectoryName(projectFileName);
-                    string outputPath = Path.Combine(projectDirectory, projectDetails.OutputFile);
-                    projects.Add(new VisualStudioProjectDetails
-                    {Name = projectDetails.Name, OutputFile = outputPath, Directory = projectDirectory});
+                    projects.Add(projectDetails);
                 }
             }
 

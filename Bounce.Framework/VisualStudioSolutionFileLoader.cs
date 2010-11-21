@@ -10,7 +10,7 @@ namespace Bounce.Framework {
             string solutionContents = File.ReadAllText(path);
             Match match = csProjPattern.Match(solutionContents);
 
-            var projects = new List<VisualStudioSolutionProject>();
+            var projects = new List<VisualStudioSolutionProjectReference>();
 
             while (match.Success) {
                 projects.Add(GetProject(match));
@@ -20,8 +20,8 @@ namespace Bounce.Framework {
             return new VisualStudioSolutionFileDetails { VisualStudioProjects = projects };
         }
 
-        private VisualStudioSolutionProject GetProject(Match match) {
-            return new VisualStudioSolutionProject {Name = match.Groups["projname"].Value, Path = match.Groups["projpath"].Value};
+        private VisualStudioSolutionProjectReference GetProject(Match match) {
+            return new VisualStudioSolutionProjectReference {Name = match.Groups["projname"].Value, Path = match.Groups["projpath"].Value};
         }
     }
 }

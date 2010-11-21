@@ -13,31 +13,28 @@ namespace Bounce.Framework.Tests {
             var loader = new Mock<IVisualStudioSolutionFileLoader>();
             loader.Setup(l => l.LoadVisualStudioSolution(path)).Returns(new VisualStudioSolutionFileDetails
             {VisualStudioProjects = new[] {
-                new VisualStudioSolutionProject {Name = "Stuff", Path = @"Stuff\Stuff.csproj"},
-                new VisualStudioSolutionProject {Name = "Other", Path = @"Other\Other.csproj"},
+                new VisualStudioSolutionProjectReference {Name = "Stuff", Path = @"Stuff\Stuff.csproj"},
+                new VisualStudioSolutionProjectReference {Name = "Other", Path = @"Other\Other.csproj"},
             }});
 
             var projectLoader = new Mock<IVisualStudioProjectFileLoader>();
+            var stuff = new VisualStudioProjectFileDetails { OutputFile = @"solutionPath\Stuff\bin\stuff.dll", Name = "Stuff", ProjectDirectory = @"solutionPath\Stuff" };
+            var other = new VisualStudioProjectFileDetails { OutputFile = @"solutionPath\Other\bin\other.dll", Name = "Other", ProjectDirectory = @"solutionPath\Other"};
+
             projectLoader
                 .Setup(p => p.LoadProject(@"solutionPath\Stuff\Stuff.csproj", "Stuff", "configuration"))
-                .Returns(new VisualStudioCSharpProjectFileDetails { OutputFile = @"bin\stuff.dll", Name = "Stuff" });
+                .Returns(stuff);
             projectLoader
                 .Setup(p => p.LoadProject(@"solutionPath\Other\Other.csproj", "Other", "configuration"))
-                .Returns(new VisualStudioCSharpProjectFileDetails { OutputFile = @"bin\other.dll", Name = "Other" });
+                .Returns(other);
 
             var reader = new VisualStudioSolutionFileReader(loader.Object, projectLoader.Object);
 
             var solution = reader.ReadSolution(path, "configuration");
 
-            IEnumerable<VisualStudioProjectDetails> projects = solution.Projects;
+            IEnumerable<VisualStudioProjectFileDetails> projects = solution.Projects;
 
-            Assert.That(projects.Count(), Is.EqualTo(2));
-            Assert.That(projects.ElementAt(0).OutputFile, Is.EqualTo(@"solutionPath\Stuff\bin\stuff.dll"));
-            Assert.That(projects.ElementAt(0).Name, Is.EqualTo("Stuff"));
-            Assert.That(projects.ElementAt(0).Directory, Is.EqualTo(@"solutionPath\Stuff"));
-            Assert.That(projects.ElementAt(1).OutputFile, Is.EqualTo(@"solutionPath\Other\bin\other.dll"));
-            Assert.That(projects.ElementAt(1).Name, Is.EqualTo("Other"));
-            Assert.That(projects.ElementAt(1).Directory, Is.EqualTo(@"solutionPath\Other"));
+            Assert.That(projects, Is.EquivalentTo(new[] {stuff, other}));
         }
     }
 }

@@ -76,7 +76,7 @@ namespace Bounce.Framework {
             }
         }
 
-        internal VisualStudioProjectDetails GetProjectDetails(string name) {
+        internal VisualStudioProjectFileDetails GetProjectDetails(string name) {
             return SolutionDetails.Projects.First(p => p.Name == name);
         }
     }
