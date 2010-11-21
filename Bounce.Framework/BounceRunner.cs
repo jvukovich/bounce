@@ -107,7 +107,7 @@ namespace Bounce.Framework {
             throw new TargetsMethodWrongSignatureException(getTargetsMethod.Name);
         }
 
-        private void InterpretParameters(CommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
+        private void InterpretParameters(ICommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
             parsedParameters.IfParameterDo("loglevel", loglevel => bounce.LogOptions.LogLevel = ParseLogLevel(loglevel));
             parsedParameters.IfParameterDo("command-output", commandOutput => bounce.LogOptions.CommandOutput = commandOutput.ToLower() == "true");
             parsedParameters.IfParameterDo("logformat", logformat => bounce.LogFactory = GetLogFactoryByName(logformat));
@@ -140,7 +140,7 @@ namespace Bounce.Framework {
             }
         }
 
-        private void PrintAvailableParameters(CommandLineParameters parameters) {
+        private void PrintAvailableParameters(ICommandLineParameters parameters) {
             if (parameters.Parameters.Count() > 0) {
                 System.Console.WriteLine();
                 System.Console.WriteLine("arguments:");

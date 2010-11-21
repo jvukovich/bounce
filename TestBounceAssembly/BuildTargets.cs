@@ -72,13 +72,13 @@ namespace TestBounceAssembly {
         };
         }
 
-        [Targets]
         public static object SomeTargets() {
             return new {
                            Copy = new Copy {FromPath = "TestFrom", ToPath = "TestTo", Excludes = new [] {@"**\_svn\"} },
                        };
         }
 
+        [Targets]
         public static object RealTargets(IParameters buildParameters) {
             var version = buildParameters.Required<string>("version");
 

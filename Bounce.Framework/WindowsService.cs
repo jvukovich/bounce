@@ -22,10 +22,13 @@ namespace Bounce.Framework {
 
         public const string NetworkService = @"NT AUTHORITY\NetworkService";
 
-        private ShellCommandExecutor ShellCommandExecutor;
+        private IShellCommandExecutor ShellCommandExecutor;
 
-        public WindowsService() {
-            ShellCommandExecutor = new ShellCommandExecutor();
+        public WindowsService(IShellCommandExecutor shellCommandExecutor) {
+            ShellCommandExecutor = shellCommandExecutor;
+        }
+
+        public WindowsService() : this(BounceRunner.Bounce.ShellCommand) {
             Machine = "localhost";
         }
 

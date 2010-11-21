@@ -5,8 +5,11 @@ namespace Bounce.Framework {
     class GitCommand : IGitCommand {
         private readonly IShellCommandExecutor ShellCommandExecutor;
 
-        public GitCommand() {
-            ShellCommandExecutor = new ShellCommandExecutor();
+        public GitCommand(IShellCommandExecutor shellCommandExecutor) {
+            ShellCommandExecutor = shellCommandExecutor;
+        }
+
+        public GitCommand() : this(BounceRunner.Bounce.ShellCommand) {
         }
 
         public void Pull(string workingDirectory, ILog log) {

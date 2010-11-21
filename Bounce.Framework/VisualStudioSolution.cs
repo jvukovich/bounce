@@ -12,10 +12,7 @@ namespace Bounce.Framework {
         [Dependency]
         public Val<string> MsBuildExe;
 
-        private readonly IShellCommandExecutor ShellCommandExecutor;
-
         public VisualStudioSolution() {
-            ShellCommandExecutor = new ShellCommandExecutor();
             MsBuildExe = @"C:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe";
         }
 
@@ -28,7 +25,7 @@ namespace Bounce.Framework {
         public override void Build(IBounce bounce) {
             bounce.Log.Info("building solution at: " + SolutionPath.Value);
 
-            ShellCommandExecutor.ExecuteAndExpectSuccess(MsBuildExe.Value, String.Format(@"""{0}""", SolutionPath.Value));
+            bounce.ShellCommand.ExecuteAndExpectSuccess(MsBuildExe.Value, String.Format(@"""{0}""", SolutionPath.Value));
         }
 
         internal VisualStudioSolutionDetails SolutionDetails {
@@ -62,7 +59,7 @@ namespace Bounce.Framework {
         public override void Clean(IBounce bounce) {
             if (SolutionExists) {
                 bounce.Log.Info("cleaning solution at: " + SolutionPath.Value);
-                ShellCommandExecutor.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
+                bounce.ShellCommand.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
             }
         }
 

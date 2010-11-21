@@ -101,6 +101,7 @@ namespace Bounce.Framework.Tests {
             filter.Setup(f => f.IncludeFile(@"two.txt")).Returns(true);
             filter.Setup(f => f.IncludeFile(@"subdir\three.txt")).Returns(true);
             filter.Setup(f => f.IncludeFile(@"subdir\exclude.txt")).Returns(false);
+            filter.Setup(f => f.IncludeFile(@"subdir\")).Returns(true);
 
             new DirectoryUtils(filterFactory.Object).CopyDirectory("testfrom", "testto", excludes, includes);
 

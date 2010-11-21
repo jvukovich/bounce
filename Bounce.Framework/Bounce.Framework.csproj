@@ -89,6 +89,7 @@
     <Compile Include="IBounce.cs" />
     <Compile Include="IBounceExceptionPresenter.cs" />
     <Compile Include="ICommandLineParameterParser.cs" />
+    <Compile Include="ICommandLineParameters.cs" />
     <Compile Include="ICommandLog.cs" />
     <Compile Include="ICommandLogFactory.cs" />
     <Compile Include="ICompilationLog.cs" />

@@ -18,7 +18,7 @@ namespace Bounce.Framework {
 
             foreach (var dllPath in testDlls) {
                 bounce.Log.Info("running unit tests for: " + dllPath);
-                new ShellCommandExecutor().ExecuteAndExpectSuccess(NUnitConsolePath.Value, String.Format(@"""{0}""", dllPath));
+                bounce.ShellCommand.ExecuteAndExpectSuccess(NUnitConsolePath.Value, String.Format(@"""{0}""", dllPath));
             }
         }
     }

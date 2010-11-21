@@ -7,6 +7,7 @@ namespace Bounce.Framework {
         private readonly TextWriter stderr;
         public ITaskLogFactory LogFactory { get; set; }
         public ILog Log { get; private set; }
+        public IShellCommandExecutor ShellCommand { get; private set; }
 
         public LogOptions LogOptions { get; set; }
 
@@ -15,6 +16,7 @@ namespace Bounce.Framework {
             this.stderr = stderr;
             LogFactory = new TaskLogFactory();
             LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning, ReportTargetEnd = true};
+            ShellCommand = new ShellCommandExecutor(() => Log);
         }
 
         public ITaskScope TaskScope(ITask task, BounceCommand command, string targetName) {

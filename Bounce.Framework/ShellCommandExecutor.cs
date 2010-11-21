@@ -5,6 +5,12 @@ using System.IO;
 
 namespace Bounce.Framework {
     class ShellCommandExecutor : IShellCommandExecutor {
+        private Func<ILog> GetLog;
+
+        public ShellCommandExecutor(Func<ILog> getLog) {
+            GetLog = getLog;
+        }
+
         public void ExecuteAndExpectSuccess(string commandName, string commandArgs) {
             var output = Execute(commandName, commandArgs);
 
@@ -14,7 +20,7 @@ namespace Bounce.Framework {
         }
 
         public ProcessOutput Execute(string commandName, string commandArgs) {
-            var commandLog = BounceRunner.Bounce.Log.BeginExecutingCommand(commandName, commandArgs);
+            var commandLog = GetLog().BeginExecutingCommand(commandName, commandArgs);
 
             var processInfo = new ProcessStartInfo(commandName, commandLog.CommandArgumentsForLogging);
             processInfo.CreateNoWindow = true;

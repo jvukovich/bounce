@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 
 namespace Bounce.Framework {
-    public class CommandLineParameters : IParameters {
+    public class CommandLineParameters : ICommandLineParameters {
         private ITypeParsers TypeParsers;
         private Dictionary<string, IParameter> RegisteredParameters;
 
