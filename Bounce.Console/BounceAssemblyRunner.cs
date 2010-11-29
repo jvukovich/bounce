@@ -10,16 +10,15 @@ namespace Bounce.Console {
             BounceDirectoryCopier = new BounceDirectoryCopier();
         }
 
-        public void Run(string [] args) {
+        public void Run(string[] args) {
             try {
                 FindTargetsAssemblyAndRunBounce(args);
-            }
-            catch (BounceConsoleException bce)
-            {
+            } catch (BounceConsoleException bce) {
                 bce.Explain(System.Console.Error);
                 Environment.Exit(1);
             } catch (Exception e) {
                 System.Console.Error.WriteLine(e);
+                Environment.Exit(1);
             }
         }
 
