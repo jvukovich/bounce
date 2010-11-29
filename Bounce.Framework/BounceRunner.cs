@@ -33,7 +33,9 @@ namespace Bounce.Framework {
                     IEnumerable<string> targetsToBuild = TargetsToBuild(buildArguments);
 
                     BuildTargets(command, targetsToBuild, targets);
-                } else {
+                }
+                else
+                {
                     System.Console.WriteLine("usage: bounce build|clean target-name");
                     PrintAvailableTargets(targets);
                     PrintAvailableParameters(parameters);

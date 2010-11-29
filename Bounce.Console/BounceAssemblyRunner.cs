@@ -13,7 +13,9 @@ namespace Bounce.Console {
         public void Run(string [] args) {
             try {
                 FindTargetsAssemblyAndRunBounce(args);
-            } catch (BounceConsoleException bce) {
+            }
+            catch (BounceConsoleException bce)
+            {
                 bce.Explain(System.Console.Error);
                 Environment.Exit(1);
             } catch (Exception e) {
@@ -22,9 +24,9 @@ namespace Bounce.Console {
         }
 
         private void FindTargetsAssemblyAndRunBounce(string[] args) {
-            TargetsAssemblyAndArguments assemblyAndArguments = GetAssemblyFileName(args);
-            string assemblyFileName = BounceDirectoryCopier.CopyBounceDirectory(assemblyAndArguments.TargetsAssembly);
-            args = assemblyAndArguments.RemainingArguments;
+            OptionsAndArguments optionsAndArguments = GetAssemblyFileName(args);
+            string assemblyFileName = BounceDirectoryCopier.CopyBounceDirectory(optionsAndArguments);
+            args = optionsAndArguments.RemainingArguments;
 
             Assembly a = Assembly.LoadFrom(assemblyFileName);
             BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty = GetTargetsMemberFromAssembly(a);
@@ -32,7 +34,7 @@ namespace Bounce.Console {
             RunAssembly(bounceAssemblyAndTargetsProperty, args);
         }
 
-        private TargetsAssemblyAndArguments GetAssemblyFileName(string[] args) {
+        private OptionsAndArguments GetAssemblyFileName(string[] args) {
             return new TargetsAssemblyArgumentsParser().GetTargetsAssembly(args);
         }
 

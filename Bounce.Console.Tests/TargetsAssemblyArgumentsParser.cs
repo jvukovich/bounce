@@ -31,6 +31,30 @@ namespace Bounce.Console.Tests
         }
 
         [Test]
+        public void ShouldParseTargetsAndRecurseFromArguments() {
+            var finder = new Mock<ITargetsAssemblyFinder>();
+            var parser = new TargetsAssemblyArgumentsParser(finder.Object);
+            var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/targets", "one.dll", "/recurse", "other", "args"});
+
+            Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"other", "args"}));
+            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.Recurse);
+        }
+
+        [Test]
+        public void ShouldParseRecurseFromArguments() {
+            var finder = new Mock<ITargetsAssemblyFinder>();
+            finder.Setup(f => f.FindTargetsAssembly()).Returns("one.dll");
+
+            var parser = new TargetsAssemblyArgumentsParser(finder.Object);
+            var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/recurse", "other", "args"});
+
+            Assert.That(targetsAndArgs.Recurse);
+            Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] { "other", "args" }));
+            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+        }
+
+        [Test]
         public void ShouldFindTargetsIfNoTargetsParameterGiven() {
             var finder = new Mock<ITargetsAssemblyFinder>();
             finder.Setup(f => f.FindTargetsAssembly()).Returns("one.dll");
@@ -40,6 +64,7 @@ namespace Bounce.Console.Tests
 
             Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"build", "SomeTarget", "/other", "args"}));
             Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.Recurse, Is.False);
         }
 
         [Test]

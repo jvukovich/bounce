@@ -2,9 +2,10 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace Bounce.Framework {
-    class ShellCommandExecutor : IShellCommandExecutor {
+    public class ShellCommandExecutor : IShellCommandExecutor {
         private Func<ILog> GetLog;
 
         public ShellCommandExecutor(Func<ILog> getLog) {
@@ -13,7 +14,6 @@ namespace Bounce.Framework {
 
         public void ExecuteAndExpectSuccess(string commandName, string commandArgs) {
             var output = Execute(commandName, commandArgs);
-
             if (output.ExitCode != 0) {
                 throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
             }
@@ -27,22 +27,22 @@ namespace Bounce.Framework {
             processInfo.RedirectStandardError = true;
             processInfo.RedirectStandardOutput = true;
             processInfo.UseShellExecute = false;
-
+            processInfo.ErrorDialog = true;
+            
             var p = new Process { StartInfo = processInfo };
 
             var output = new CommandOutputReceiver(commandLog);
-
+            
             p.ErrorDataReceived += output.ErrorDataReceived;
             p.OutputDataReceived += output.OutputDataReceived;
 
             try {
                 p.Start();
-
+                
                 p.BeginErrorReadLine();
                 p.BeginOutputReadLine();
-
                 p.WaitForExit();
-
+                
                 commandLog.CommandComplete(p.ExitCode);
 
                 return new ProcessOutput {

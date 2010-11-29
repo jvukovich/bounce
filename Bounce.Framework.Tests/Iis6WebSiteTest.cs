@@ -104,6 +104,14 @@ namespace Bounce.Framework.Tests {
         }
 
         [Test]
+        public void ShouldAddHostHeaders()
+        {
+            var server = new WebServer("localhost");
+            WebSite webSite = server.CreateWebSite("A new site!", new[] {new WebSiteBinding {Port = 6020}},
+                                                   @"c:\anewsite");
+        }
+
+        [Test]
         public void ShouldAddNewSite() {
             var server = new WebServer("localhost");
             WebSite site = server.CreateWebSite("A new site!", new [] {new WebSiteBinding {Port = 6020}}, @"c:\anewsite");
