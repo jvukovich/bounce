@@ -54,7 +54,7 @@
     <Compile Include="ITargetsAssemblyFinder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TargetsAssemblyAndArguments.cs" />
+    <Compile Include="OptionsAndArguments.cs" />
     <Compile Include="TargetsAssemblyArgumentsParser.cs" />
     <Compile Include="TargetsAssemblyFinder.cs" />
     <Compile Include="TargetsAssemblyNotFoundException.cs" />

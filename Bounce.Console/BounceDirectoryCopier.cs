@@ -2,19 +2,23 @@
 
 namespace Bounce.Console {
     class BounceDirectoryCopier {
-        public string CopyBounceDirectory(string targetsAssembly) {
-            var bounceDirectory = Path.GetDirectoryName(targetsAssembly);
+        public string CopyBounceDirectory(OptionsAndArguments optionsAndArguments) {
+            var bounceDirectory = Path.GetDirectoryName(optionsAndArguments.TargetsAssembly);
             var tempBounceDir = Path.Combine(Path.GetDirectoryName(bounceDirectory), bounceDirectory + ".tmp");
 
-            if (Directory.Exists(tempBounceDir)) {
-                Directory.Delete(tempBounceDir, true);
+            if (!optionsAndArguments.Recurse)
+            {
+                if (Directory.Exists(tempBounceDir))
+                {
+                    Directory.Delete(tempBounceDir, true);
+                }
+
+                Directory.CreateDirectory(tempBounceDir);
+
+                CopyDirectory(bounceDirectory, tempBounceDir);
             }
 
-            Directory.CreateDirectory(tempBounceDir);
-
-            CopyDirectory(bounceDirectory, tempBounceDir);
-
-            return Path.Combine(tempBounceDir, Path.GetFileName(targetsAssembly));
+            return Path.Combine(tempBounceDir, Path.GetFileName(optionsAndArguments.TargetsAssembly));
         }
 
         private void CopyDirectory(string fromDirectory, string toDirectory) {
