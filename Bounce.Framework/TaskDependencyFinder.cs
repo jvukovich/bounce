@@ -30,7 +30,7 @@ namespace Bounce.Framework {
                     .ToArray();
             }
 
-            public IEnumerable<ITask> GetDependencies(ITask task) {
+            public IEnumerable<ITask> GetDependencies(object task) {
                 var allDependencies = new HashSet<ITask>();
 
                 IEnumerable<object> fieldValues = Fields
@@ -77,7 +77,7 @@ namespace Bounce.Framework {
             DependencyGetters = new Dictionary<Type, TypeDependencyGetter>();
         }
 
-        public IEnumerable<ITask> GetDependenciesFor(ITask task) {
+        public IEnumerable<ITask> GetDependenciesFor(object task) {
             TypeDependencyGetter getter;
             
             var type = task.GetType();

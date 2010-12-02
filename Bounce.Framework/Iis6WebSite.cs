@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Bounce.Framework
 {
@@ -9,15 +11,14 @@ namespace Bounce.Framework
         [Dependency] public Iis6AppPool AppPool;
         [Dependency] public Val<IEnumerable<Iis6Authentication>> Authentication;
         [Dependency] public Val<string> Directory;
-        [Dependency] public Val<string> HostHeader;
         [Dependency] public Val<string> Name;
-        [Dependency] public Val<int> Port;
+        public IEnumerable<Iis6WebSiteBinding> Bindings;
         [Dependency] public Val<IEnumerable<Iis6ScriptMap>> ScriptMapsToAdd;
         [Dependency] public Val<bool> Started;
 
         public Iis6WebSite()
         {
-            Port = 80;
+            Bindings = new[] {new Iis6WebSiteBinding {Port = 80}};
             ScriptMapsToAdd = new Iis6ScriptMap[0];
             Authentication = new[] {Iis6Authentication.Basic, Iis6Authentication.NTLM};
             AppPool = null;
@@ -56,13 +57,7 @@ namespace Bounce.Framework
         public override void Build()
         {
             DeleteIfExtant();
-            IisWebSite webSite = Iis.CreateWebSite(Name.Value,
-                                                   new[]
-                                                       {
-                                                           new IisWebSiteBinding
-                                                               {Port = Port.Value, Hostname = HostHeader.Value}
-                                                       },
-                                                   Path.GetFullPath(Directory.Value));
+            IisWebSite webSite = Iis.CreateWebSite(Name.Value, ToInternalBindings(Bindings), Path.GetFullPath(Directory.Value));
 
             webSite.AddScriptMapsToSite(ScriptMapsToAdd.Value);
             webSite.Authentication = Authentication.Value;
@@ -75,6 +70,26 @@ namespace Bounce.Framework
             {
                 webSite.Start();
             }
+        }
+
+        private static IEnumerable<IisWebSiteBindingDetails> ToInternalBindings(IEnumerable<Iis6WebSiteBinding> bindings)
+        {
+            return bindings.Select(b => ToInternalBinding(b));
+        }
+
+        private static IisWebSiteBindingDetails ToInternalBinding(Iis6WebSiteBinding binding)
+        {
+            if (binding.Port == null)
+            {
+                throw new ConfigurationException("Iis 6 port must not be null");
+            }
+
+            return new IisWebSiteBindingDetails
+                   {
+                       Hostname = binding.Hostname == null? null: binding.Hostname.Value,
+                       IPAddress = binding.IPAddress == null ? null : binding.IPAddress.Value,
+                       Port = binding.Port.Value,
+                   };
         }
 
         private void DeleteIfExtant()
@@ -90,6 +105,10 @@ namespace Bounce.Framework
         public override void Clean()
         {
             DeleteIfExtant();
+        }
+
+        protected override IEnumerable<ITask> RegisterAdditionalDependencies() {
+            return Bindings.SelectMany(b => TaskDependencyFinder.Instance.GetDependenciesFor(b));
         }
     }
 }

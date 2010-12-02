@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 
@@ -24,6 +25,14 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void ShouldReturnEnumerableFieldDependenciesForTaskSubClass() {
             AssertThatCreatedObjectReturnsDependencies((a, b, c) => new TaskWithEnumerationsInFields(a, b, c));
+        }
+
+        [Test]
+        public void Iis6WebSiteBindingShouldReturnPortAsDependency()
+        {
+            var port = new Mock<Val<int>>().Object;
+            var deps = new TaskDependencyFinder().GetDependenciesFor(new Iis6WebSiteBinding {Port = port});
+            Assert.That(deps, Has.Member(port));
         }
 
         private void AssertThatCreatedObjectReturnsDependencies(Func<ITask,ITask,SomeTask, ITask> createObject) {

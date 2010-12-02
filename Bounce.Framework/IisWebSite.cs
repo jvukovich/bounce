@@ -26,7 +26,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public IEnumerable<IisWebSiteBinding> Bindings {
+        public IEnumerable<IisWebSiteBindingDetails> Bindings {
             get {
                 var bindings = (ManagementBaseObject[]) settings["ServerBindings"];
                 return bindings.Select(b => CreateWebSiteBinding(b)).ToArray();
@@ -57,11 +57,11 @@ namespace Bounce.Framework {
             }
         }
 
-        private static IisWebSiteBinding CreateWebSiteBinding(ManagementBaseObject binding) {
+        private static IisWebSiteBindingDetails CreateWebSiteBinding(ManagementBaseObject binding) {
             var ip = (string) binding["IP"];
             var hostname = (string) binding["Hostname"];
 
-            return new IisWebSiteBinding {
+            return new IisWebSiteBindingDetails {
                                              Hostname = String.IsNullOrEmpty(hostname)? null: hostname,
                                              IPAddress = (String.IsNullOrEmpty(ip)? null: IPAddress.Parse(ip)),
                                              Port = int.Parse((string) binding["Port"])

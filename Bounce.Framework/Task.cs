@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bounce.Framework {
     public abstract class Task : ITask {
         public virtual IEnumerable<ITask> Dependencies {
             get {
-                return TaskDependencyFinder.Instance.GetDependenciesFor(this);
+                return TaskDependencyFinder.Instance.GetDependenciesFor(this).Concat(RegisterAdditionalDependencies());
             }
         }
 
@@ -21,5 +22,10 @@ namespace Bounce.Framework {
         public virtual void Clean() {}
 
         public bool IsLogged { get { return true; } }
+
+        protected virtual IEnumerable<ITask> RegisterAdditionalDependencies()
+        {
+            return new ITask[0];
+        }
     }
 }

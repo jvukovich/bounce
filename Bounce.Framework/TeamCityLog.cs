@@ -3,12 +3,14 @@ using System.IO;
 
 namespace Bounce.Framework {
     class TeamCityLog : ILog {
-        private TextWriter output;
+        private TextWriter Output;
+        private readonly LogOptions LogOptions;
         private TeamCityFormatter TeamCityFormatter;
 
-        public TeamCityLog(TextWriter output) {
+        public TeamCityLog(TextWriter output, LogOptions logOptions) {
             TaskLog = new TeamCityTaskLog(output);
-            this.output = output;
+            this.Output = output;
+            LogOptions = logOptions;
             TeamCityFormatter = new TeamCityFormatter();
         }
 
@@ -65,12 +67,12 @@ namespace Bounce.Framework {
         }
 
         private void LogErrorMessage(object message) {
-            output.WriteLine(FormatErrorMessage(message));
+            Output.WriteLine(FormatErrorMessage(message));
         }
 
         private void LogException(object message, Exception exception) {
             LogErrorMessage(message);
-            output.WriteLine(FormatException(exception));
+            Output.WriteLine(FormatException(exception));
         }
 
         public ICommandLog BeginExecutingCommand(string command, string args) {
@@ -78,11 +80,15 @@ namespace Bounce.Framework {
 
             switch (commandName) {
                 case "msbuild.exe":
-                    return new TeamCityMsBuildLogger(args, output);
+                    return new TeamCityMsBuildLogger(args, Output);
                 case "nunit-console.exe":
-                    return new TeamCityNUnitLogger(args, output);
+                    return new TeamCityNUnitLogger(args, Output);
                 default:
-                    return new NullCommandLog(args);
+                    if (LogOptions.CommandOutput) {
+                        return new CommandLog(command, args, Output, Output);
+                    } else {
+                        return new NullCommandLog(args);
+                    }
             }
         }
 

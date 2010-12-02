@@ -35,7 +35,7 @@ namespace Bounce.Framework {
             return null;
         }
 
-        public IisWebSite CreateWebSite(string serverComment, IEnumerable<IisWebSiteBinding> bindings, string documentRoot) {
+        public IisWebSite CreateWebSite(string serverComment, IEnumerable<IisWebSiteBindingDetails> bindings, string documentRoot) {
             var iis = new ManagementObject(scope, new ManagementPath("IIsWebService='W3SVC'"), null);
 
             ManagementBaseObject createNewSiteArgs = iis.GetMethodParameters("CreateNewSite");
@@ -49,7 +49,7 @@ namespace Bounce.Framework {
             return new IisWebSite(scope, id);
         }
 
-        private ManagementObject CreateBinding(IisWebSiteBinding binding) {
+        private ManagementObject CreateBinding(IisWebSiteBindingDetails binding) {
             ManagementObject serverBinding = new ManagementClass(scope, new ManagementPath("ServerBinding"), null).CreateInstance();
             serverBinding["Port"] = binding.Port.ToString();
 
