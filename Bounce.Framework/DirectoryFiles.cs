@@ -11,7 +11,7 @@ namespace Bounce.Framework {
             RootDirectory = rootDirectory;
         }
 
-        public Val<string> this[Val<string> filename] {
+        public Future<string> this[Future<string> filename] {
             get {
                 return Task.WhenBuilt(() => Path.Combine(RootDirectory(), filename.Value));
             }

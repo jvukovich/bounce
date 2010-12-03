@@ -1,16 +1,36 @@
+using System;
+using System.IO;
+
 namespace Bounce.Framework {
     public class Iis6AppPool : Iis6Task {
         [Dependency]
-        public Val<string> Name;
+        public Future<string> Name;
+        [Dependency]
+        public Future<Iis6AppPoolIdentity> Identity;
+
+        public Iis6AppPool()
+        {
+            Identity = new Iis6AppPoolIdentity {IdentityType = Iis6AppPoolIdentityType.NetworkService};
+        }
 
         public override void Build() {
-            DeleteIfExtant();
+            IisAppPool appPool = CreateIfNotExtant();
+            appPool.Identity = Identity.Value;
+        }
 
-            IisAppPool appPool = Iis.CreateAppPool(Name.Value);
+        private IisAppPool CreateIfNotExtant()
+        {
+            IisAppPool appPool = Iis.FindAppPoolByName(Name.Value);
+
+            if (appPool == null) {
+                appPool = Iis.CreateAppPool(Name.Value);
+            }
+
+            return appPool;
         }
 
         private void DeleteIfExtant() {
-            IisAppPool appPool = Iis.TryGetAppPoolByName(Name.Value);
+            IisAppPool appPool = Iis.FindAppPoolByName(Name.Value);
 
             if (appPool != null) {
                 appPool.Delete();
@@ -19,6 +39,11 @@ namespace Bounce.Framework {
 
         public override void Clean() {
             DeleteIfExtant();
+        }
+
+        public override void Describe(TextWriter output) {
+            output.WriteLine("Iis6AppPool");
+            output.WriteLine("Machine: {0}", Machine.Value);
         }
     }
 }

@@ -30,17 +30,27 @@ namespace Bounce.Framework {
                     .ToArray();
             }
 
-            public IEnumerable<ITask> GetDependencies(object task) {
-                var allDependencies = new HashSet<ITask>();
+            public class DependencyNameValue {
+                public DependencyNameValue(string name, object value) {
+                    Name = name;
+                    Value = value;
+                }
 
-                IEnumerable<object> fieldValues = Fields
-                    .Select(f => f.GetValue(task));
+                public string Name;
+                public object Value;
+            }
+
+            public IDictionary<string, ITask> GetDependencies(object task) {
+                var allDependencies = new Dictionary<string, ITask>();
+
+                IEnumerable<DependencyNameValue> fieldValues = Fields
+                    .Select(f => new DependencyNameValue(f.Name, f.GetValue(task)));
 
                 AddDependenciesToSet(allDependencies, fieldValues);
                 AddDependencyEnumerationsToSet(allDependencies, fieldValues);
 
-                IEnumerable<object> propertyValues = Properties
-                    .Select(p => p.GetValue(task, new object[0]));
+                IEnumerable<DependencyNameValue> propertyValues = Properties
+                    .Select(p => new DependencyNameValue(p.Name, p.GetValue(task, new object[0])));
 
                 AddDependenciesToSet(allDependencies, propertyValues);
                 AddDependencyEnumerationsToSet(allDependencies, propertyValues);
@@ -48,25 +58,25 @@ namespace Bounce.Framework {
                 return allDependencies;
             }
 
-            private static void AddDependencyEnumerationsToSet(HashSet<ITask> allDependencies, IEnumerable<object> propertyValues) {
+            private static void AddDependencyEnumerationsToSet(IDictionary<string, ITask> allDependencies, IEnumerable<DependencyNameValue> propertyValues) {
                 var edeps = propertyValues
-                    .Where(p => p is IEnumerable)
-                    .Cast<IEnumerable>();
+                    .Where(p => p.Value is IEnumerable);
 
-                foreach (IEnumerable edep in edeps) {
-                    foreach (ITask d in edep) {
-                        allDependencies.Add(d);
+                foreach (DependencyNameValue edep in edeps) {
+                    int n = 0;
+                    foreach (ITask d in (IEnumerable) edep.Value) {
+                        allDependencies.Add(edep.Name + "[" + n + "]", d);
+                        n++;
                     }
                 }
             }
 
-            private static void AddDependenciesToSet(HashSet<ITask> allDependencies, IEnumerable<object> depObjects) {
-                IEnumerable<ITask> deps = depObjects.ToArray()
-                    .Where(p => p is ITask)
-                    .Cast<ITask>();
+            private static void AddDependenciesToSet(IDictionary<string, ITask> allDependencies, IEnumerable<DependencyNameValue> depObjects) {
+                IEnumerable<DependencyNameValue> deps = depObjects.ToArray()
+                    .Where(p => p.Value is ITask);
 
-                foreach (ITask dep in deps) {
-                    allDependencies.Add(dep);
+                foreach (DependencyNameValue dep in deps) {
+                    allDependencies.Add(dep.Name, (ITask) dep.Value);
                 }
             }
         }
@@ -78,8 +88,12 @@ namespace Bounce.Framework {
         }
 
         public IEnumerable<ITask> GetDependenciesFor(object task) {
+            return GetDependencyFieldsFor(task).Values;
+        }
+
+        public IDictionary<string, ITask> GetDependencyFieldsFor(object task) {
             TypeDependencyGetter getter;
-            
+
             var type = task.GetType();
 
             if (!DependencyGetters.TryGetValue(type, out getter)) {

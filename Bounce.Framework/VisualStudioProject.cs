@@ -5,32 +5,32 @@ namespace Bounce.Framework {
         [Dependency]
         private readonly VisualStudioSolution Solution;
 
-        public VisualStudioProject(VisualStudioSolution solution, Val<string> name) {
+        public VisualStudioProject(VisualStudioSolution solution, Future<string> name) {
             Solution = solution;
             Name = name;
         }
 
-        public Val<string> Name { get; private set; }
+        public Future<string> Name { get; private set; }
 
-        public Val<string> OutputFile {
+        public Future<string> OutputFile {
             get {
                 return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).OutputFile);
             }
         }
 
-        public Val<string> OutputDirectory {
+        public Future<string> OutputDirectory {
             get {
                 return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).OutputDirectory);
             }
         }
 
-        public Val<string> ProjectDirectory {
+        public Future<string> ProjectDirectory {
             get {
                 return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).ProjectDirectory);
             }
         }
 
-        public Val<string> ProjectFile {
+        public Future<string> ProjectFile {
             get {
                 return this.WhenBuilt(() => Solution.GetProjectDetails(Name.Value).ProjectFile);
             }

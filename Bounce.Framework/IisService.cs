@@ -24,7 +24,7 @@ namespace Bounce.Framework {
             return null;
         }
 
-        public IisAppPool TryGetAppPoolByName(string name) {
+        public IisAppPool FindAppPoolByName(string name) {
             var query = new ManagementObjectSearcher(scope, new ObjectQuery(String.Format("select * from IIsApplicationPool where Name = 'W3SVC/AppPools/{0}'", name)));
             ManagementObjectCollection appPools = query.Get();
 

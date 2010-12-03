@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    internal class Parameter<T> : Val<T>, IParameter {
+    internal class Parameter<T> : Future<T>, IParameter {
         public bool Required { get; set; }
         public string Name { get; set; }
         public bool HasValue { get; private set; }

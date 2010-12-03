@@ -19,7 +19,7 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void NUnitTestShouldDependOnDlls() {
-            var paths = new Val<string> [] {"one", "two"};
+            var paths = new Future<string> [] {"one", "two"};
             var tests = new NUnitTests {DllPaths = paths};
             
             Assert.That(tests.Dependencies.ToArray(), Has.Member(paths[0]).And.Member(paths[1]));

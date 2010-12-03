@@ -1,8 +1,8 @@
 namespace Bounce.Framework {
     public class GitTag : Task {
-        [Dependency] public Val<string> Directory;
-        [Dependency] public Val<string> Tag;
-        [Dependency] public Val<bool> Force;
+        [Dependency] public Future<string> Directory;
+        [Dependency] public Future<string> Tag;
+        [Dependency] public Future<bool> Force;
 
         private readonly IGitCommand Git;
 

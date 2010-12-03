@@ -111,10 +111,15 @@ namespace Bounce.Framework {
 
         private void InterpretParameters(ICommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
             parsedParameters.IfParameterDo("loglevel", loglevel => bounce.LogOptions.LogLevel = ParseLogLevel(loglevel));
-            parsedParameters.IfParameterDo("command-output", commandOutput => bounce.LogOptions.CommandOutput = commandOutput.ToLower() == "true");
+            parsedParameters.IfParameterDo("command-output", commandOutput => bounce.LogOptions.CommandOutput = ParseBoolOption(commandOutput));
             parsedParameters.IfParameterDo("logformat", logformat => bounce.LogFactory = GetLogFactoryByName(logformat));
+            parsedParameters.IfParameterDo("describe-tasks", descTasks => bounce.LogOptions.DescribeTasks = ParseBoolOption(descTasks));
 
             parameters.ParseCommandLineArguments(parsedParameters.Parameters);
+        }
+
+        private bool ParseBoolOption(string option) {
+            return option.ToLower() == "true";
         }
 
         private ITaskLogFactory GetLogFactoryByName(string name) {

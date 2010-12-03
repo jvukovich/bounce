@@ -79,7 +79,7 @@
     <Compile Include="FileNameFilterFactory.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="FileSystemCopier.cs" />
-    <Compile Include="FutureValue.cs" />
+    <Compile Include="DependentFuture.cs" />
     <Compile Include="GitCommand.cs" />
     <Compile Include="GitCheckout.cs" />
     <Compile Include="DirectoryFiles.cs" />
@@ -168,7 +168,7 @@
     <Compile Include="TeamCityNUnitLogger.cs" />
     <Compile Include="TeamCityTaskLog.cs" />
     <Compile Include="TeamCityTextFormatter.cs" />
-    <Compile Include="Val.cs" />
+    <Compile Include="Future.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="CommandLineParameters.cs" />

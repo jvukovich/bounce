@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Bounce.Framework {
@@ -21,10 +23,21 @@ namespace Bounce.Framework {
 
         public virtual void Clean() {}
 
-        public bool IsLogged { get { return true; } }
+        public virtual bool IsLogged { get { return true; } }
 
-        protected virtual IEnumerable<ITask> RegisterAdditionalDependencies()
+        public virtual void Describe(TextWriter output)
         {
+            output.WriteLine("task: {0}", GetType().Name);
+
+            foreach(KeyValuePair<string, ITask> dependency in TaskDependencyFinder.Instance.GetDependencyFieldsFor(this))
+            {
+                output.Write("    {0}:", dependency.Key);
+                dependency.Value.Describe(output);
+                output.WriteLine();
+            }
+        }
+
+        protected virtual IEnumerable<ITask> RegisterAdditionalDependencies() {
             return new ITask[0];
         }
     }

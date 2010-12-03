@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class FutureValue<TP> : Val<TP> {
+    public class DependentFuture<TP> : Future<TP> {
         private readonly ITask dependency;
         private readonly Func<TP> getValue;
 
-        public FutureValue(ITask dependency, Func<TP> getValue) {
+        public DependentFuture(ITask dependency, Func<TP> getValue) {
             this.dependency = dependency;
             this.getValue = getValue;
         }

@@ -8,13 +8,19 @@ using System.Net;
 namespace Bounce.Framework.Tests {
     [TestFixture, Explicit]
     public class Iis6WebSiteTest {
-        [Test, STAThread]
-        public void Stuff() {
+        private ManagementScope Scope;
+
+        [SetUp]
+        public void SetUp()
+        {
             string host = "localhost";
             var options = new ConnectionOptions();
-            var scope = new ManagementScope(String.Format(@"\\{0}\root\MicrosoftIISV2", host), options);
-            scope.Connect();
+            Scope = new ManagementScope(String.Format(@"\\{0}\root\MicrosoftIISV2", host), options);
+            Scope.Connect();
+        }
 
+        [Test, STAThread]
+        public void Stuff() {
 //            EnumerateWebsites(scope);
 //            CreateSite(scope);
 //            PrintSite(scope, "IIsWebServer='W3SVC/1180970907'");
@@ -41,12 +47,42 @@ namespace Bounce.Framework.Tests {
 //            EnumerateWebsites(scope, "ScriptMap");
 //            AddScriptMapToSite(scope, "1180970907");
 
-//            FindAppPools(scope);
-            CreateNewAppPool(scope, "MyNewAppPool");
-//            DeleteAppPool(scope, "MyNewAppPool");
-            TryFindAppPool(scope, "MyNewAppPool");
 
-//            SetAppPool(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""", "Ui.Ingest");
+        }
+
+        [Test]
+        public void AppPools()
+        {
+            //            FindAppPools(scope);
+//            CreateNewAppPool(Scope, "MyNewAppPool");
+            DeleteAppPool(Scope, "GiP");
+//            TryFindAppPool(Scope, "MyNewAppPool");
+            //            SetAppPool(scope, @"IIsWebVirtualDirSetting.Name=""W3SVC/1180970907/root""", "Ui.Ingest");
+        }
+
+        [Test]
+        public void PrintAppPoolSettings()
+        {
+//            PrintObject(Scope, GetAppPoolPath("GiP"));
+            PrintObject(Scope, GetAppPoolSettingsPath("GiP"));
+        }
+
+        [Test]
+        public void SetAppPoolIdentity()
+        {
+            IisService service = new IisService("localhost");
+            IisAppPool appPool = service.FindAppPoolByName("GiP");
+            appPool.Identity = new Iis6AppPoolIdentity {IdentityType = Iis6AppPoolIdentityType.NetworkService};
+        }
+
+        private string GetAppPoolPath(string displayName)
+        {
+            return String.Format("IIsApplicationPool='W3SVC/AppPools/{0}'", displayName);
+        }
+
+        private string GetAppPoolSettingsPath(string displayName)
+        {
+            return String.Format("IIsApplicationPoolSetting.Name='W3SVC/AppPools/{0}'", displayName);
         }
 
         private void DeleteAppPool(ManagementScope scope, string name) {
@@ -56,7 +92,7 @@ namespace Bounce.Framework.Tests {
 
         private void TryFindAppPool(ManagementScope scope, string name) {
             var service = new IisService("localhost");
-            IisAppPool appPool = service.TryGetAppPoolByName(name);
+            IisAppPool appPool = service.FindAppPoolByName(name);
 
             Console.WriteLine("found app pool: " + (appPool != null));
         }
@@ -274,6 +310,26 @@ namespace Bounce.Framework.Tests {
                 foreach (var prop in scriptMap.SystemProperties) {
                     Console.WriteLine("    {0}: {1}", prop.Name, prop.Value);
                 }
+            }
+        }
+
+        private void PrintObject(ManagementScope scope, string path) {
+            var site = new ManagementObject(scope, new ManagementPath(path), null);
+            object desc = site["Description"];
+            foreach (var rel in site.GetRelationships()) {
+                Console.WriteLine("rel: " + rel);
+            }
+            foreach (var rel in site.GetRelated()) {
+                Console.WriteLine("related: " + rel);
+            }
+
+            Console.WriteLine("props:");
+            foreach (var prop in site.Properties) {
+                Console.WriteLine("  {0}: {1}", prop.Name, prop.Value);
+            }
+            Console.WriteLine("system props:");
+            foreach (var prop in site.SystemProperties) {
+                Console.WriteLine("  {0}: {1}", prop.Name, prop.Value);
             }
         }
 

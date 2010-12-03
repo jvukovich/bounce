@@ -45,6 +45,19 @@ namespace Bounce.Framework {
             }
             Log = outerLogger;
         }
+
+        public TextWriter DescriptionOutput {
+            get
+            {
+                if (LogOptions.DescribeTasks)
+                {
+                    return stdout;
+                } else
+                {
+                    return TextWriter.Null;
+                }
+            }
+        }
     }
 
     public interface ITaskScope : IDisposable {

@@ -3,10 +3,10 @@ using System.Net;
 namespace Bounce.Framework {
     public class Iis6WebSiteBinding {
         [Dependency]
-        public Val<string> Hostname;
+        public Future<string> Hostname;
         [Dependency]
-        public Val<int> Port;
+        public Future<int> Port;
         [Dependency]
-        public Val<IPAddress> IPAddress;
+        public Future<IPAddress> IPAddress;
     }
 }

@@ -7,9 +7,9 @@ namespace Bounce.Framework {
         private readonly IDirectoryUtils DirectoryUtils;
 
         [Dependency]
-        public Val<string> Directory;
+        public Future<string> Directory;
         [Dependency]
-        public Val<string> ZipFileName;
+        public Future<string> ZipFileName;
 
         public ZipFile() : this(new ZipFileCreator(), new FileUtils(), new DirectoryUtils()) {
         }

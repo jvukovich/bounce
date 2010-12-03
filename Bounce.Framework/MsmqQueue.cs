@@ -3,11 +3,11 @@ using System.Messaging;
 
 namespace Bounce.Framework {
     public class MsmqQueue : Task {
-        public Val<bool> Transactional;
-        public Val<bool> Private;
-        public Val<string> Name;
-        public Val<string> Machine;
-        public Val<IEnumerable<MsmqUserPermissions>> Permissions;
+        public Future<bool> Transactional;
+        public Future<bool> Private;
+        public Future<string> Name;
+        public Future<string> Machine;
+        public Future<IEnumerable<MsmqUserPermissions>> Permissions;
 
         public MsmqQueue() {
             Machine = ".";

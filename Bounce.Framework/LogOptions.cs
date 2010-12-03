@@ -1,3 +1,5 @@
+using System;
+
 namespace Bounce.Framework {
     public class LogOptions {
         public LogLevel LogLevel;
@@ -6,5 +8,6 @@ namespace Bounce.Framework {
         public bool ReportTargetStart;
         public bool ReportTargetEnd;
         public bool CommandOutput;
+        public bool DescribeTasks;
     }
 }

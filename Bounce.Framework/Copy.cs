@@ -13,13 +13,13 @@ namespace Bounce.Framework {
         }
 
         [Dependency]
-        public Val<string> FromPath { get; set; }
+        public Future<string> FromPath { get; set; }
         [Dependency]
-        public Val<string> ToPath { get; set; }
+        public Future<string> ToPath { get; set; }
         [Dependency]
-        public Val<IEnumerable<string>> Excludes;
+        public Future<IEnumerable<string>> Excludes;
         [Dependency]
-        public Val<IEnumerable<string>> Includes;
+        public Future<IEnumerable<string>> Includes;
 
         public override void Build(IBounce bounce) {
             var fromPath = FromPath.Value;
@@ -31,7 +31,7 @@ namespace Bounce.Framework {
             FileSystemCopier.Copy(fromPath, toPath, GetValueOf(Excludes), GetValueOf(Includes));
         }
 
-        private IEnumerable<string> GetValueOf(Val<IEnumerable<string>> paths) {
+        private IEnumerable<string> GetValueOf(Future<IEnumerable<string>> paths) {
             return paths != null ? paths.Value : null;
         }
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Bounce.Framework.Tests {
     public class FakeTask : ITask {
@@ -10,6 +12,8 @@ namespace Bounce.Framework.Tests {
         public virtual void Clean(IBounce bounce) {
         }
 
-        public bool IsLogged { get { return true; } }
+        public virtual bool IsLogged { get { return true; } }
+
+        public virtual void Describe(TextWriter output) {}
     }
 }

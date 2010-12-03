@@ -25,6 +25,7 @@ namespace Bounce.Framework {
 
         private void BuildAndLog(ITask task) {
             using (var taskScope = Bounce.TaskScope(task, BounceCommand.Build, null)) {
+                task.Describe(Bounce.DescriptionOutput);
                 task.Build(Bounce);
                 taskScope.TaskSucceeded();
             }
