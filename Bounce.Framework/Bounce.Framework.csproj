@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -115,6 +115,9 @@
     <Compile Include="IPropertyValues.cs" />
     <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
+    <Compile Include="ITargetsMethodInvoker.cs" />
+    <Compile Include="ITargetsParser.cs" />
+    <Compile Include="ITargetsRetriever.cs" />
     <Compile Include="ITaskLog.cs" />
     <Compile Include="ITaskLogFactory.cs" />
     <Compile Include="IUnitTestLog.cs" />
@@ -143,7 +146,10 @@
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="ShellExecutableNotFoundException.cs" />
     <Compile Include="TargetBuilder.cs" />
+    <Compile Include="TargetsMethodInvoker.cs" />
     <Compile Include="TargetsMethodWrongSignatureException.cs" />
+    <Compile Include="TargetsParser.cs" />
+    <Compile Include="TargetsRetriever.cs" />
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskDependencyFinder.cs" />

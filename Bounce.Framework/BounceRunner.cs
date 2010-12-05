@@ -6,21 +6,25 @@ using System.Reflection;
 namespace Bounce.Framework {
     public class BounceRunner {
         private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
-        private LogFactoryRegistry LogFactoryRegistry;
+        private readonly LogFactoryRegistry LogFactoryRegistry;
+        private readonly ITargetsRetriever TargetsRetriever;
 
         public static IBounce Bounce {
             get { return _bounce; }
         }
 
-        public BounceRunner () {
-            LogFactoryRegistry = LogFactoryRegistry.Default;
+        public BounceRunner() : this(new TargetsRetriever(), LogFactoryRegistry.Default) {}
+
+        public BounceRunner (ITargetsRetriever targetsRetriever, LogFactoryRegistry logFactoryRegistry) {
+            LogFactoryRegistry = logFactoryRegistry;
+            TargetsRetriever = targetsRetriever;
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
             var parameters = new CommandLineParameters();
 
             try {
-                Dictionary<string, ITask> targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
+                IDictionary<string, ITask> targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
 
                 var parsedParameters = ParseCommandLineArguments(args);
 
@@ -47,7 +51,7 @@ namespace Bounce.Framework {
             }
         }
 
-        private void BuildTargets(string command, IEnumerable<string> targetsToBuild, Dictionary<string, ITask> targets) {
+        private void BuildTargets(string command, IEnumerable<string> targetsToBuild, IDictionary<string, ITask> targets) {
             var builder = new TargetBuilder(_bounce);
             CommandAction commandAction = GetCommand(builder, command);
 
@@ -56,7 +60,7 @@ namespace Bounce.Framework {
             }
         }
 
-        private void BuildTarget(Dictionary<string, ITask> targets, string targetName, CommandAction commandAction) {
+        private void BuildTarget(IDictionary<string, ITask> targets, string targetName, CommandAction commandAction) {
             ITask task = FindTarget(targets, targetName);
 
             using (ITaskScope targetScope = _bounce.TaskScope(task, commandAction.Command, targetName)) {
@@ -65,7 +69,7 @@ namespace Bounce.Framework {
             }
         }
 
-        private ITask FindTarget(Dictionary<string, ITask> targets, string targetName) {
+        private ITask FindTarget(IDictionary<string, ITask> targets, string targetName) {
             ITask task;
             try {
                 task = targets[targetName];
@@ -81,32 +85,8 @@ namespace Bounce.Framework {
             return targets;
         }
 
-        private Dictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
-            object targetsObject = GetTargetsObjectFromAssembly(getTargetsMethod, parameters);
-
-            Dictionary<string, ITask> targets = new Dictionary<string, ITask>();
-
-            foreach (PropertyInfo property in targetsObject.GetType().GetProperties()) {
-                targets[property.Name] = (ITask) property.GetValue(targetsObject, new object[0]);
-            }
-
-            return targets;
-        }
-
-        private object GetTargetsObjectFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
-            ParameterInfo[] methodParameters = getTargetsMethod.GetParameters();
-            if (methodParameters.Length == 1) {
-                if (methodParameters[0].ParameterType.IsAssignableFrom(typeof(IParameters)))
-                {
-                    return getTargetsMethod.Invoke(null, new[] { parameters });
-                }
-            }
-
-            if (methodParameters.Length == 0) {
-                return getTargetsMethod.Invoke(null, new object[0]);
-            }
-
-            throw new TargetsMethodWrongSignatureException(getTargetsMethod.Name);
+        private IDictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
+            return TargetsRetriever.GetTargetsFromAssembly(getTargetsMethod, parameters);
         }
 
         private void InterpretParameters(ICommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
@@ -139,7 +119,7 @@ namespace Bounce.Framework {
             return parser.ParseCommandLineParameters(args);
         }
 
-        private void PrintAvailableTargets(Dictionary<string, ITask> targets) {
+        private void PrintAvailableTargets(IDictionary<string, ITask> targets) {
             System.Console.WriteLine();
             System.Console.WriteLine("targets:");
             foreach (var name in targets.Keys) {

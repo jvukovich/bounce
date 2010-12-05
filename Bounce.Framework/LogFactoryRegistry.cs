@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Bounce.Framework {
-    class LogFactoryRegistry {
+    public class LogFactoryRegistry {
         private Dictionary<string, ITaskLogFactory> LogFactories;
 
         public LogFactoryRegistry() {

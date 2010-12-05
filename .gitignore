@@ -9,5 +9,7 @@ obj/
 Bounce/
 docs/README.html
 .*.swp
+Bounce.tmp/
+Downloads/
 
 /TestResult.xml
