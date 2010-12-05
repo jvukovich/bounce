@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BounceTest.cs" />
+    <Compile Include="CommandAndTargetNameParserTest.cs" />
     <Compile Include="CommandLineParameterParserTest.cs" />
     <Compile Include="CommandLineParametersTest.cs" />
     <Compile Include="CommandLineTasksParametersGeneratorTest.cs" />

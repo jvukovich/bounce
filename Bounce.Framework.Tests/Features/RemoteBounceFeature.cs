@@ -15,7 +15,7 @@ namespace Bounce.Framework.Tests.Features {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"build", "One", "/hack:refactor", "/two:three"}, method);
 
-            Assert.That(Output.ToString(), Is.EqualTo("bounce.exe /describe-tasks:false /loglevel:warning /command-output:false RemoteOne /hack:refactor\r\n"));
+            Assert.That(Output.ToString(), Is.EqualTo("bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor\r\n"));
         }
 
         [Test]

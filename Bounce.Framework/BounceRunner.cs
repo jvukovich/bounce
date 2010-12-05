@@ -9,6 +9,7 @@ namespace Bounce.Framework {
         private readonly ITargetsRetriever TargetsRetriever;
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
         private readonly IParameterFinder ParameterFinder;
+        private CommandAndTargetParser CommandAndTargetParser;
 
         public static IBounce Bounce {
             get { return _bounce; }
@@ -20,6 +21,7 @@ namespace Bounce.Framework {
             TargetsRetriever = targetsRetriever;
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
             ParameterFinder = parameterFinder;
+            CommandAndTargetParser = new CommandAndTargetParser();
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -32,15 +34,13 @@ namespace Bounce.Framework {
 
                 string[] buildArguments = parsedParameters.RemainingArguments;
 
-                if (buildArguments.Length >= 2) {
+                CommandAndTargets commandAndTargets = CommandAndTargetParser.ParseCommandAndTargetNames(buildArguments, targets);
+
+                if (commandAndTargets.Targets.Count() >= 1) {
                     InterpretParameters(parameters, parsedParameters, _bounce);
+                    EnsureAllRequiredParametersAreSet(parameters, commandAndTargets.Targets);
 
-                    string command = buildArguments[0];
-                    IEnumerable<Target> targetsToBuild = TargetsToBuild(buildArguments, targets);
-
-                    EnsureAllRequiredParametersAreSet(parameters, targetsToBuild);
-
-                    BuildTargets(command, targetsToBuild);
+                    BuildTargets(commandAndTargets);
                 }
                 else
                 {
@@ -62,11 +62,11 @@ namespace Bounce.Framework {
             }
         }
 
-        private void BuildTargets(string command, IEnumerable<Target> targets) {
+        private void BuildTargets(CommandAndTargets commandAndTargets) {
             var builder = new TargetBuilder(_bounce);
-            CommandAction commandAction = GetCommand(builder, command);
+            CommandAction commandAction = GetCommand(builder, commandAndTargets.Command);
 
-            foreach(var target in targets) {
+            foreach(var target in commandAndTargets.Targets) {
                 BuildTarget(target, commandAction);
             }
         }
@@ -76,24 +76,6 @@ namespace Bounce.Framework {
                 commandAction.Action(target.Task);
                 targetScope.TaskSucceeded();
             }
-        }
-
-        private Target FindTarget(IDictionary<string, ITask> targets, string targetName) {
-            try {
-                return new Target {Name = targetName, Task = targets[targetName]};
-            } catch (KeyNotFoundException) {
-                throw new NoSuchTargetException(targetName, targets.Keys);
-            }
-        }
-
-        private IEnumerable<Target> TargetsToBuild(string [] args, IDictionary<string, ITask> targets) {
-            return GetTargetNamesFromArguments(args).Select(name => FindTarget(targets, name));
-        }
-
-        private IEnumerable<string> GetTargetNamesFromArguments(string[] args) {
-            string [] targets = new string[args.Length - 1];
-            Array.Copy(args, 1, targets, 0, targets.Length);
-            return targets;
         }
 
         private IDictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
@@ -139,24 +121,20 @@ namespace Bounce.Framework {
             public Action<ITask> Action;
         }
 
-        private static CommandAction GetCommand(TargetBuilder builder, string command) {
-            switch (command.ToLower()) {
-                case "build":
-                    return new CommandAction {Action = builder.Build, Command = BounceCommand.Build};
-                case "clean":
-                    return new CommandAction { Action = builder.Clean, Command = BounceCommand.Clean };
+        private static CommandAction GetCommand(TargetBuilder builder, BounceCommand command) {
+            switch (command) {
+                case BounceCommand.Build:
+                    return new CommandAction {Action = builder.Build, Command = command };
+                case BounceCommand.Clean:
+                    return new CommandAction { Action = builder.Clean, Command = command };
                 default:
                     throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
             }
         }
-
-        private static IEnumerable<string> GetTargetNames(object targets) {
-            return targets.GetType().GetProperties().Select(p => p.Name);
-        }
     }
 
-    internal class Target {
-        public string Name;
-        public ITask Task;
+    internal class CommandAndTargets {
+        public BounceCommand Command;
+        public IEnumerable<Target> Targets;
     }
 }

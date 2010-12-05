@@ -106,7 +106,5 @@ And, `bounce` will tell you what arguments you have available too:
 
 	targets:
 	  WebSite
+	    /port default: 5001
 	  Tests
-
-	arguments:
-	  /port default: 5001

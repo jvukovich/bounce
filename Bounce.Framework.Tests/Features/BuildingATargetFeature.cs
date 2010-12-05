@@ -20,6 +20,14 @@ namespace Bounce.Framework.Tests.Features {
         }
 
         [Test]
+        public void ShouldBuildTargetByDefaultIfNoCommandGiven() {
+            MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
+            new BounceRunner().Run(new[] {"One"}, method);
+
+            Assert.That(Output.ToString(), Is.EqualTo("one\r\n"));
+        }
+
+        [Test]
         public void ShouldBuildMoreThanOneTarget() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"build", "One", "Two"}, method);
