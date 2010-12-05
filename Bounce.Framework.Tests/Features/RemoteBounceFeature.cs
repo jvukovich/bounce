@@ -21,7 +21,7 @@ namespace Bounce.Framework.Tests.Features {
         [Test]
         public void ShouldIncludeRemoteTargetsSoTheyCanBeInvokedRemotely() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "RemoteOne", "/hack:refactor", "/two:three"}, method);
+            new BounceRunner().Run(new[] {"build", "RemoteOne", "/hack:refactor"}, method);
 
             Assert.That(Output.ToString(), Is.EqualTo("refactor\r\n"));
         }

@@ -50,28 +50,37 @@ namespace Bounce.Framework {
         }
 
         private void EnsureThatRequiredParametersAreSet(ParameterErrors parameterErrors) {
-            foreach (var required in RegisteredParameters.Select(p => p.Value).Where(p => p.Required && !p.HasValue)) {
-                if (required != null) {
-                    parameterErrors.RequiredParameterNotSet(required.Name);
-                }
-            }
         }
 
         public void ParseCommandLineArguments(List<ParsedCommandLineParameter> parameters) {
+            WithRiskOfParameterErrors(parameterErrors => {
+                foreach (var commandLineParameter in parameters) {
+                    IParameter parameter;
+                    if (RegisteredParameters.TryGetValue(commandLineParameter.Name, out parameter)) {
+                        parameter.Parse(commandLineParameter.Value, TypeParsers);
+                    } else {
+                        parameterErrors.NoSuchParameter(commandLineParameter.Name);
+                    }
+                }
+            });
+        }
+
+        private static void WithRiskOfParameterErrors(Action<ParameterErrors> action) {
             var parameterErrors = new ParameterErrors();
 
-            foreach (var commandLineParameter in parameters) {
-                IParameter parameter;
-                if (RegisteredParameters.TryGetValue(commandLineParameter.Name, out parameter)) {
-                    parameter.Parse(commandLineParameter.Value, TypeParsers);
-                } else {
-                    parameterErrors.NoSuchParameter(commandLineParameter.Name);
-                }
-            }
-
-            EnsureThatRequiredParametersAreSet(parameterErrors);
+            action(parameterErrors);
 
             parameterErrors.ThrowIfThereAreErrors();
+        }
+
+        public void EnsureAllRequiredParametersHaveValues(IEnumerable<IParameter> parameters) {
+            WithRiskOfParameterErrors(parameterErrors => {
+                foreach (var required in parameters.Where(p => p.Required && !p.HasValue)) {
+                    if (required != null) {
+                        parameterErrors.RequiredParameterNotSet(required.Name);
+                    }
+                }
+            });
         }
     }
 

@@ -12,11 +12,27 @@ namespace Bounce.Framework.Tests.Features {
         }
 
         [Test]
-        public void ShouldGenerateCommandLineForRemoteBounce() {
+        public void ShouldBuildOneTarget() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"build", "One"}, method);
 
             Assert.That(Output.ToString(), Is.EqualTo("one\r\n"));
+        }
+
+        [Test]
+        public void ShouldBuildMoreThanOneTarget() {
+            MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
+            new BounceRunner().Run(new[] {"build", "One", "Two"}, method);
+
+            Assert.That(Output.ToString(), Is.EqualTo("one\r\ntwo\r\n"));
+        }
+
+        [Test]
+        public void ShouldBuildOneTargetEvenIfAnotherTargetRequiresParametersThatAreNotSet() {
+            MethodInfo method = typeof (TargetsProviderWithRequiredParameters).GetMethod("GetTargets");
+            new BounceRunner().Run(new[] {"build", "One", "/one:thisisone"}, method);
+
+            Assert.That(Output.ToString(), Is.EqualTo("thisisone\r\n"));
         }
 
         private static TextWriter Output;
@@ -25,9 +41,24 @@ namespace Bounce.Framework.Tests.Features {
             [Targets]
             public static object GetTargets() {
                 var one = new PrintTask(Output) { Description = "one" };
+                var two = new PrintTask(Output) { Description = "two" };
 
                 return new {
                     One = one,
+                    Two = two,
+                };
+            }
+        }
+
+        class TargetsProviderWithRequiredParameters {
+            [Targets]
+            public static object GetTargets(IParameters parameters) {
+                var one = new PrintTask(Output) { Description = parameters.Required<string>("one") };
+                var two = new PrintTask(Output) { Description = parameters.Required<string>("two") };
+
+                return new {
+                    One = one,
+                    Two = two,
                 };
             }
         }

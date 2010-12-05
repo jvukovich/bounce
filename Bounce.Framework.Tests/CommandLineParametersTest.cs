@@ -17,9 +17,24 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void RequiredShouldThrowExceptionIfNoValueGiven() {
             var parms = new CommandLineParameters();
-            var version = parms.Required<string>("version");
 
-            Assert.That(() => parms.ParseCommandLineArguments(new List<ParsedCommandLineParameter>()), Throws.InstanceOf(typeof(CommandLineParametersException)));
+            var param1 = (IParameter) parms.Required<string>("provided");
+            var param2 = (IParameter) parms.Required<int>("notprovided");
+
+            var parsedCommandLineParameters = new List<ParsedCommandLineParameter>();
+            parsedCommandLineParameters.Add(new ParsedCommandLineParameter {Name = "provided", Value = "value"});
+            parms.ParseCommandLineArguments(parsedCommandLineParameters);
+
+            Assert.That(() => parms.EnsureAllRequiredParametersHaveValues(new [] {param1, param2}), Throws.InstanceOf(typeof(CommandLineParametersException)));
+        }
+
+        [Test]
+        public void ShouldThrowIfParameterGivenButNoneRegistered() {
+            var parms = new CommandLineParameters();
+
+            var parsedCommandLineParameters = new List<ParsedCommandLineParameter>();
+            parsedCommandLineParameters.Add(new ParsedCommandLineParameter {Name = "provided", Value = "value"});
+            Assert.That(() => parms.ParseCommandLineArguments(parsedCommandLineParameters), Throws.InstanceOf(typeof(CommandLineParametersException)));
         }
 
         [Test]

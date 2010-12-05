@@ -8,16 +8,18 @@ namespace Bounce.Framework {
         private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
         private readonly ITargetsRetriever TargetsRetriever;
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
+        private readonly IParameterFinder ParameterFinder;
 
         public static IBounce Bounce {
             get { return _bounce; }
         }
 
-        public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator()) {}
+        public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator(), new ParameterFinder()) {}
 
-        public BounceRunner (ITargetsRetriever targetsRetriever, ILogOptionCommandLineTranslator logOptionCommandLineTranslator) {
+        public BounceRunner (ITargetsRetriever targetsRetriever, ILogOptionCommandLineTranslator logOptionCommandLineTranslator, IParameterFinder parameterFinder) {
             TargetsRetriever = targetsRetriever;
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
+            ParameterFinder = parameterFinder;
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -26,7 +28,7 @@ namespace Bounce.Framework {
             try {
                 IDictionary<string, ITask> targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
 
-                var parsedParameters = ParseCommandLineArguments(args);
+                ParsedCommandLineParameters parsedParameters = ParseCommandLineArguments(args);
 
                 string[] buildArguments = parsedParameters.RemainingArguments;
 
@@ -34,15 +36,16 @@ namespace Bounce.Framework {
                     InterpretParameters(parameters, parsedParameters, _bounce);
 
                     string command = buildArguments[0];
-                    IEnumerable<string> targetsToBuild = TargetsToBuild(buildArguments);
+                    IEnumerable<Target> targetsToBuild = TargetsToBuild(buildArguments, targets);
 
-                    BuildTargets(command, targetsToBuild, targets);
+                    EnsureAllRequiredParametersAreSet(parameters, targetsToBuild);
+
+                    BuildTargets(command, targetsToBuild);
                 }
                 else
                 {
                     System.Console.WriteLine("usage: bounce build|clean target-name");
                     PrintAvailableTargets(targets);
-                    PrintAvailableParameters(parameters);
                     Environment.Exit(1);
                 }
             } catch (BounceException ce) {
@@ -51,35 +54,43 @@ namespace Bounce.Framework {
             }
         }
 
-        private void BuildTargets(string command, IEnumerable<string> targetsToBuild, IDictionary<string, ITask> targets) {
-            var builder = new TargetBuilder(_bounce);
-            CommandAction commandAction = GetCommand(builder, command);
-
-            foreach(var targetName in targetsToBuild) {
-                BuildTarget(targets, targetName, commandAction);
+        private void EnsureAllRequiredParametersAreSet(CommandLineParameters parameters, IEnumerable<Target> targetsToBuild) {
+            var tasks = targetsToBuild.Select(t => t.Task);
+            foreach (ITask task in tasks) {
+                IEnumerable<IParameter> parametersForTask = ParameterFinder.FindParametersInTask(task);
+                parameters.EnsureAllRequiredParametersHaveValues(parametersForTask);
             }
         }
 
-        private void BuildTarget(IDictionary<string, ITask> targets, string targetName, CommandAction commandAction) {
-            ITask task = FindTarget(targets, targetName);
+        private void BuildTargets(string command, IEnumerable<Target> targets) {
+            var builder = new TargetBuilder(_bounce);
+            CommandAction commandAction = GetCommand(builder, command);
 
-            using (ITaskScope targetScope = _bounce.TaskScope(task, commandAction.Command, targetName)) {
-                commandAction.Action(task);
+            foreach(var target in targets) {
+                BuildTarget(target, commandAction);
+            }
+        }
+
+        private void BuildTarget(Target target, CommandAction commandAction) {
+            using (ITaskScope targetScope = _bounce.TaskScope(target.Task, commandAction.Command, target.Name)) {
+                commandAction.Action(target.Task);
                 targetScope.TaskSucceeded();
             }
         }
 
-        private ITask FindTarget(IDictionary<string, ITask> targets, string targetName) {
-            ITask task;
+        private Target FindTarget(IDictionary<string, ITask> targets, string targetName) {
             try {
-                task = targets[targetName];
+                return new Target {Name = targetName, Task = targets[targetName]};
             } catch (KeyNotFoundException) {
                 throw new NoSuchTargetException(targetName, targets.Keys);
             }
-            return task;
         }
 
-        private IEnumerable<string> TargetsToBuild(string [] args) {
+        private IEnumerable<Target> TargetsToBuild(string [] args, IDictionary<string, ITask> targets) {
+            return GetTargetNamesFromArguments(args).Select(name => FindTarget(targets, name));
+        }
+
+        private IEnumerable<string> GetTargetNamesFromArguments(string[] args) {
             string [] targets = new string[args.Length - 1];
             Array.Copy(args, 1, targets, 0, targets.Length);
             return targets;
@@ -102,17 +113,16 @@ namespace Bounce.Framework {
         private void PrintAvailableTargets(IDictionary<string, ITask> targets) {
             System.Console.WriteLine();
             System.Console.WriteLine("targets:");
-            foreach (var name in targets.Keys) {
-                System.Console.WriteLine("  " + name);
+            foreach (var target in targets) {
+                System.Console.WriteLine("  " + target.Key);
+                PrintAvailableParameters(ParameterFinder.FindParametersInTask(target.Value));
             }
         }
 
-        private void PrintAvailableParameters(ICommandLineParameters parameters) {
-            if (parameters.Parameters.Count() > 0) {
-                System.Console.WriteLine();
-                System.Console.WriteLine("arguments:");
-                foreach (var param in parameters.Parameters) {
-                    System.Console.Write("  /" + param.Name);
+        private void PrintAvailableParameters(IEnumerable<IParameter> parameters) {
+            if (parameters.Count() > 0) {
+                foreach (var param in parameters) {
+                    System.Console.Write("    /" + param.Name);
                     if (param.Required) {
                         System.Console.Write(" required");
                     }
@@ -143,5 +153,10 @@ namespace Bounce.Framework {
         private static IEnumerable<string> GetTargetNames(object targets) {
             return targets.GetType().GetProperties().Select(p => p.Name);
         }
+    }
+
+    internal class Target {
+        public string Name;
+        public ITask Task;
     }
 }

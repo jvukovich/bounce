@@ -39,7 +39,14 @@ namespace Bounce.Framework {
         }
 
         public string Generate(ITypeParsers typeParsers) {
-            return String.Format("/{0}:{1}", Name, typeParsers.Generate(Value));
+            var valueAsString = typeParsers.Generate(Value);
+            var paramterAsString = String.Format("/{0}:{1}", Name, valueAsString);
+
+            if (valueAsString.Contains(" ")) {
+                return "\"" + paramterAsString + "\"";
+            } else {
+                return paramterAsString;
+            }
         }
     }
 }

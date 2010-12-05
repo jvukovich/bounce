@@ -69,6 +69,7 @@
     <Compile Include="FakeBounce.cs" />
     <Compile Include="Features\PrintTask.cs" />
     <Compile Include="Features\RemoteBounceFeature.cs" />
+    <Compile Include="Features\ShowingAvailableTargetsAndParametersFeature.cs" />
     <Compile Include="FileNameFilterTest.cs" />
     <Compile Include="FileSystemCopierTest.cs" />
     <Compile Include="FileUtilsTest.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="LogFactoryRegistryTest.cs" />
     <Compile Include="LogOptionCommandLineTranslatorTest.cs" />
     <Compile Include="ParameterFinderTest.cs" />
+    <Compile Include="ParameterTest.cs" />
     <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />
     <Compile Include="Features\BuildingATargetFeature.cs" />
     <Compile Include="RemoteBounceTaskTest.cs" />

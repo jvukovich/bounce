@@ -22,14 +22,4 @@ namespace Bounce.Framework.Tests {
             Assert.That(b.DescriptionOutput, Is.SameAs(stdout));
         }
     }
-
-    [TestFixture]
-    public class ParameterTest {
-        [Test]
-        public void ShouldGenerateParameter() {
-            var parameter = new Parameter<int>() {Name = "name", DefaultValue = 45};
-            Assert.That(parameter.Generate(TypeParsers.Default), Is.EqualTo("/name:45"));
-        }
-    }
-
 }
