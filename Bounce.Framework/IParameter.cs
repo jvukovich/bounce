@@ -3,6 +3,7 @@
 namespace Bounce.Framework {
     public interface IParameter {
         void Parse(string parameterValue, ITypeParsers typeParsers);
+        string Generate(ITypeParsers typeParsers);
         string Name { get; }
         bool Required { get; }
         bool HasValue { get; }

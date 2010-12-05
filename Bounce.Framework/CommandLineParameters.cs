@@ -13,7 +13,7 @@ namespace Bounce.Framework {
             RegisteredParameters = new Dictionary<string, IParameter>();
         }
 
-        public CommandLineParameters() : this(Framework.TypeParsers.CreateWithStandardTypeParsers()) {
+        public CommandLineParameters() : this(Framework.TypeParsers.Default) {
         }
 
         public IEnumerable<IParameter> Parameters {
@@ -45,8 +45,8 @@ namespace Bounce.Framework {
             return RegisterParameter(new Parameter<T> { Name = name, DefaultValue = defaultValue, AvailableValues = availableValues.Cast<object>() });
         }
 
-        public void RegisterTypeParser<T>(Func<string, T> parser) {
-            TypeParsers.RegisterTypeParser(parser);
+        public void RegisterTypeParser<T>(ITypeParser parser) {
+            TypeParsers.RegisterTypeParser<T>(parser);
         }
 
         private void EnsureThatRequiredParametersAreSet(ParameterErrors parameterErrors) {

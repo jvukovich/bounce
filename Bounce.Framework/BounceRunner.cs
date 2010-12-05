@@ -6,18 +6,18 @@ using System.Reflection;
 namespace Bounce.Framework {
     public class BounceRunner {
         private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
-        private readonly LogFactoryRegistry LogFactoryRegistry;
         private readonly ITargetsRetriever TargetsRetriever;
+        private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
 
         public static IBounce Bounce {
             get { return _bounce; }
         }
 
-        public BounceRunner() : this(new TargetsRetriever(), LogFactoryRegistry.Default) {}
+        public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator()) {}
 
-        public BounceRunner (ITargetsRetriever targetsRetriever, LogFactoryRegistry logFactoryRegistry) {
-            LogFactoryRegistry = logFactoryRegistry;
+        public BounceRunner (ITargetsRetriever targetsRetriever, ILogOptionCommandLineTranslator logOptionCommandLineTranslator) {
             TargetsRetriever = targetsRetriever;
+            LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -90,28 +90,8 @@ namespace Bounce.Framework {
         }
 
         private void InterpretParameters(ICommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
-            parsedParameters.IfParameterDo("loglevel", loglevel => bounce.LogOptions.LogLevel = ParseLogLevel(loglevel));
-            parsedParameters.IfParameterDo("command-output", commandOutput => bounce.LogOptions.CommandOutput = ParseBoolOption(commandOutput));
-            parsedParameters.IfParameterDo("logformat", logformat => bounce.LogFactory = GetLogFactoryByName(logformat));
-            parsedParameters.IfParameterDo("describe-tasks", descTasks => bounce.LogOptions.DescribeTasks = ParseBoolOption(descTasks));
-
+            LogOptionCommandLineTranslator.ParseCommandLine(parsedParameters, bounce);
             parameters.ParseCommandLineArguments(parsedParameters.Parameters);
-        }
-
-        private bool ParseBoolOption(string option) {
-            return option.ToLower() == "true";
-        }
-
-        private ITaskLogFactory GetLogFactoryByName(string name) {
-            return LogFactoryRegistry.GetLogFactoryByName(name);
-        }
-
-        private LogLevel ParseLogLevel(string loglevel) {
-            try {
-                return (LogLevel) Enum.Parse(typeof (LogLevel), loglevel, true);
-            } catch (Exception) {
-                throw new ConfigurationException(String.Format("log level {0} not recognised, try one of {1}", loglevel, String.Join(", ", Enum.GetNames(typeof(LogLevel)))));
-            }
         }
 
         public ParsedCommandLineParameters ParseCommandLineArguments(string [] args) {

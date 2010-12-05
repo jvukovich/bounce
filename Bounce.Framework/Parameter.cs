@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Bounce.Framework {
     internal class Parameter<T> : Future<T>, IParameter {
         public bool Required { get; set; }
+
         public string Name { get; set; }
         public bool HasValue { get; private set; }
         private T _value;
@@ -34,6 +36,10 @@ namespace Bounce.Framework {
 
         public void Parse(string parameterValue, ITypeParsers typeParsers) {
             SetValue(typeParsers.Parse<T>(parameterValue));
+        }
+
+        public string Generate(ITypeParsers typeParsers) {
+            return String.Format("/{0}:{1}", Name, typeParsers.Generate(Value));
         }
     }
 }
