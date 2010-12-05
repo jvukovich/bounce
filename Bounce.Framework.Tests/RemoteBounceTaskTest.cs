@@ -6,7 +6,7 @@ namespace Bounce.Framework.Tests {
     public class RemoteBounceTaskTest {
         [Test]
         public void ShouldInvokeBounceWithTargets() {
-            var remoteExecutor = new Mock<IRemoteProcessExecutor>();
+            var remoteExecutor = new Mock<IRemoteBounceExecutor>();
             var bounce = new FakeBounce();
 
             var a = new Mock<ITask>().Object;
@@ -20,14 +20,13 @@ namespace Bounce.Framework.Tests {
 
             var remoteBounce = new RemoteBounceTask(new TargetsParser(), logOptionTranslator.Object, commandLineParametersGenerator.Object);
 
-            remoteBounce.RemoteProcessExecutor = remoteExecutor.Object;
+            remoteBounce.RemoteBounceExecutor = remoteExecutor.Object;
 
             remoteBounce.Targets = new {Junk = a, Aspr = b};
-            remoteBounce.PathToBounceOnRemoteMachine = "bounce.exe";
 
             remoteBounce.Build(bounce);
 
-            remoteExecutor.Verify(r => r.ExecuteRemoteProcess("bounce.exe", "logoptions Junk Aspr buildarguments"));
+            remoteExecutor.Verify(r => r.ExecuteRemoteBounce("logoptions Junk Aspr buildarguments"));
         }
     }
 }

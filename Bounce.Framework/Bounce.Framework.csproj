@@ -117,7 +117,7 @@
     <Compile Include="ILogOptionCommandLineTranslator.cs" />
     <Compile Include="IParameterFinder.cs" />
     <Compile Include="IPropertyValues.cs" />
-    <Compile Include="IRemoteProcessExecutor.cs" />
+    <Compile Include="IRemoteBounceExecutor.cs" />
     <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
     <Compile Include="ITargetsMethodInvoker.cs" />
@@ -150,6 +150,7 @@
     <Compile Include="ProjectFilePropertyExpressionParser.cs" />
     <Compile Include="PropertyValues.cs" />
     <Compile Include="Iis6ScriptMap.cs" />
+    <Compile Include="RemoteBounce.cs" />
     <Compile Include="RemoteBounceTask.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="ShellExecutableNotFoundException.cs" />

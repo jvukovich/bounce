@@ -34,12 +34,9 @@ namespace Bounce.Framework.Tests.Features {
                 var remoteOne = new PrintTask(Output) {Description = parameters.Required<string>("hack")};
                 var two = new PrintTask(Output) {Description = parameters.Required<string>("two")};
 
-                var remoteBounce = new RemoteBounce {
-                    PathToBounceOnRemoteMachine = "bounce.exe",
-                    RemoteProcessExecutor = new RemoteProcessPrinter()
-                };
+                var remoteBounce = new RemoteBounce();
 
-                var one = remoteBounce.Targets(new {RemoteOne = remoteOne});
+                var one = remoteBounce.Targets(new {RemoteOne = remoteOne}, new RemoteBouncePrinter());
 
                 return remoteBounce.WithRemoteTargets(new {
                     One = one,
@@ -48,9 +45,9 @@ namespace Bounce.Framework.Tests.Features {
             }
         }
 
-        class RemoteProcessPrinter : IRemoteProcessExecutor {
-            public void ExecuteRemoteProcess(string command, string arguments) {
-                Output.WriteLine("{0} {1}", command, arguments);
+        class RemoteBouncePrinter : IRemoteBounceExecutor {
+            public void ExecuteRemoteBounce(string arguments) {
+                Output.WriteLine("bounce.exe " + arguments);
             }
         }
     }
