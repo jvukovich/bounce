@@ -38,7 +38,7 @@ namespace Bounce.Framework {
 
             string spaceDelimitedArgs = String.Join(" ", args.ToArray());
 
-            RemoteBounceExecutor.ExecuteRemoteBounce(spaceDelimitedArgs);
+            RemoteBounceExecutor.ExecuteRemoteBounce(bounce, spaceDelimitedArgs);
         }
     }
 }

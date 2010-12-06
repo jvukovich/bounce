@@ -46,7 +46,7 @@ namespace Bounce.Framework.Tests.Features {
         }
 
         class RemoteBouncePrinter : IRemoteBounceExecutor {
-            public void ExecuteRemoteBounce(string arguments) {
+            public void ExecuteRemoteBounce(IBounce bounce, string arguments) {
                 Output.WriteLine("bounce.exe " + arguments);
             }
         }

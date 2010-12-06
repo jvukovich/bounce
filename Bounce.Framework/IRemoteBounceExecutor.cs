@@ -1,5 +1,5 @@
 ﻿namespace Bounce.Framework {
     public interface IRemoteBounceExecutor {
-        void ExecuteRemoteBounce(string arguments);
+        void ExecuteRemoteBounce(IBounce bounce, string arguments);
     }
 }

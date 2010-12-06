@@ -54,17 +54,20 @@ namespace Bounce.Framework
             }
         }
 
-        public override void Build()
+        public override void Build(IBounce bounce)
         {
             DeleteIfExtant();
             IisWebSite webSite = Iis.CreateWebSite(Name.Value, ToInternalBindings(Bindings), Path.GetFullPath(Directory.Value));
 
             webSite.AddScriptMapsToSite(ScriptMapsToAdd.Value);
-            webSite.Authentication = Authentication.Value;
+
             if (AppPool != null)
             {
                 webSite.AppPoolName = AppPool.Name.Value;
             }
+            
+            //This needs to be set after the AppPool, otherwise the authentication settings are ignored
+            webSite.Authentication = Authentication.Value;
 
             if (Started.Value)
             {

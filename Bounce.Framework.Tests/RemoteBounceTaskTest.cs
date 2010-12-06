@@ -34,7 +34,7 @@ namespace Bounce.Framework.Tests {
 
             commandAction(remoteBounce, bounce);
 
-            remoteExecutor.Verify(r => r.ExecuteRemoteBounce("logoptions " + command + " Junk Aspr buildarguments"));
+            remoteExecutor.Verify(r => r.ExecuteRemoteBounce(bounce, "logoptions " + command + " Junk Aspr buildarguments"));
         }
     }
 }
