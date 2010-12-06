@@ -13,9 +13,9 @@ namespace Bounce.Framework.Tests.Features {
         [Test]
         public void ShouldGenerateCommandLineForRemoteBounceWithParametersUsedInRemoteTarget() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "One", "/hack:refactor", "/two:three"}, method);
+            new BounceRunner().Run(new[] {"build", "One", "/hack:refactor", "/two:three", "/machine:live"}, method);
 
-            Assert.That(Output.ToString(), Is.EqualTo("bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor\r\n"));
+            Assert.That(Output.ToString(), Is.EqualTo("rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor\r\n"));
         }
 
         [Test]
@@ -36,7 +36,11 @@ namespace Bounce.Framework.Tests.Features {
 
                 var remoteBounce = new RemoteBounce();
 
-                var one = remoteBounce.Targets(new {RemoteOne = remoteOne}, new RemoteBouncePrinter());
+                var one = new RemoteExec
+                          {
+                              BounceArguments = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne }),
+                              Machine = parameters.Required<string>("machine"),
+                          };
 
                 return remoteBounce.WithRemoteTargets(new {
                     One = one,
@@ -45,9 +49,13 @@ namespace Bounce.Framework.Tests.Features {
             }
         }
 
-        class RemoteBouncePrinter : IRemoteBounceExecutor {
-            public void ExecuteRemoteBounce(string arguments) {
-                Output.WriteLine("bounce.exe " + arguments);
+        class RemoteExec : Task
+        {
+            [Dependency] public Future<string> BounceArguments;
+            [Dependency] public Future<string> Machine;
+
+            public override void Build() {
+                Output.WriteLine("rexec -h {0} bounce.exe {1}", Machine.Value, BounceArguments.Value);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class RemoteBounce {
@@ -12,11 +13,6 @@ namespace Bounce.Framework {
 
         public RemoteBounce() : this(new TargetsParser()) { }
 
-        public ITask Targets(object targets, IRemoteBounceExecutor remoteBounceExecutor) {
-            RemoteTargets.Add(targets);
-            return new RemoteBounceTask() {RemoteBounceExecutor = remoteBounceExecutor, Targets = targets};
-        }
-
         public object WithRemoteTargets(object targetsObject) {
             var targets = TargetsParser.ParseTargetsFromObject(targetsObject);
 
@@ -27,6 +23,12 @@ namespace Bounce.Framework {
             }
 
             return targets;
+        }
+
+        public Future<string> ArgumentsForTargets(object targets)
+        {
+            RemoteTargets.Add(targets);
+            return new RemoteBounceTask() { Targets = targets };
         }
     }
 }

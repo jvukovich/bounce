@@ -60,11 +60,14 @@ namespace Bounce.Framework
             IisWebSite webSite = Iis.CreateWebSite(Name.Value, ToInternalBindings(Bindings), Path.GetFullPath(Directory.Value));
 
             webSite.AddScriptMapsToSite(ScriptMapsToAdd.Value);
-            webSite.Authentication = Authentication.Value;
+
             if (AppPool != null)
             {
                 webSite.AppPoolName = AppPool.Name.Value;
             }
+
+            // setting the app pool after this wipes the authentication settings, so we do it in this order.
+            webSite.Authentication = Authentication.Value;
 
             if (Started.Value)
             {

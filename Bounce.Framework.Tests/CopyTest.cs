@@ -35,5 +35,19 @@ namespace Bounce.Framework.Tests {
 
             copier.Verify(c => c.Delete(toPath), Times.Once());
         }
+
+        [Test]
+        public void TakingDependencyOnToPathShouldTakeDependencyOnCopyItself()
+        {
+            Future<string> fromPath = "fromPath";
+            Future<string> toPath = "toPath";
+
+            var copy = new Copy {FromPath = fromPath, ToPath = toPath};
+
+            Assert.That(copy.Dependencies, Has.Member(fromPath));
+            Assert.That(copy.Dependencies, Has.Member(toPath));
+
+            Assert.That(copy.ToPath.Dependencies, Has.Member(copy));
+        }
     }
 }

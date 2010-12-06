@@ -16,7 +16,6 @@ namespace Bounce.Framework.Tests {
         }
 
         private void AssertBounceCommand(Action<RemoteBounceTask, IBounce> commandAction, string command) {
-            var remoteExecutor = new Mock<IRemoteBounceExecutor>();
             var bounce = new FakeBounce();
 
             var a = new Mock<ITask>().Object;
@@ -29,12 +28,10 @@ namespace Bounce.Framework.Tests {
             commandLineParametersGenerator.Setup(c => c.GenerateCommandLineParametersForTasks(new [] {a, b})).Returns("buildarguments");
 
             var remoteBounce = new RemoteBounceTask(new TargetsParser(), logOptionTranslator.Object, commandLineParametersGenerator.Object);
-            remoteBounce.RemoteBounceExecutor = remoteExecutor.Object;
             remoteBounce.Targets = new {Junk = a, Aspr = b};
 
             commandAction(remoteBounce, bounce);
-
-            remoteExecutor.Verify(r => r.ExecuteRemoteBounce("logoptions " + command + " Junk Aspr buildarguments"));
+            Assert.That(remoteBounce.Value, Is.EqualTo("logoptions " + command + " Junk Aspr buildarguments"));
         }
     }
 }

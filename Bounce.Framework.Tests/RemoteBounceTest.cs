@@ -12,7 +12,7 @@ namespace Bounce.Framework.Tests {
             var remoteTwo = new Mock<ITask>().Object;
             var localOne = new Mock<ITask>().Object;
 
-            remote.Targets(new {RemoteOne = remoteOne, RemoteTwo = remoteTwo}, new Mock<IRemoteBounceExecutor>().Object);
+            remote.ArgumentsForTargets(new { RemoteOne = remoteOne, RemoteTwo = remoteTwo });
 
             var withRemoteTargets = (IDictionary<string, ITask>) remote.WithRemoteTargets(new {LocalOne = localOne});
 

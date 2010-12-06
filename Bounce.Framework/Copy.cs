@@ -14,8 +14,16 @@ namespace Bounce.Framework {
 
         [Dependency]
         public Future<string> FromPath { get; set; }
+
         [Dependency]
-        public Future<string> ToPath { get; set; }
+        private Future<string> _toPath;
+
+        public Future<string> ToPath
+        {
+            get { return this.WhenBuilt(() => _toPath.Value); }
+            set { _toPath = value; }
+        }
+
         [Dependency]
         public Future<IEnumerable<string>> Excludes;
         [Dependency]
