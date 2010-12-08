@@ -18,7 +18,7 @@ from git checkout to IIS deploy:
             SolutionPath = new GitCheckout {
                 Repository = "git@github.com:refractalize/website.git"
             }.Files["MySolution.sln"]
-        }.Projects["WebSite"],
+        }.Projects["WebSite"].ProjectDirectory,
         Name = "Some Website",
         Port = 5001,
 	}
@@ -45,7 +45,7 @@ We'd write a C# file containing our targets like this:
 
 			return new {
 				WebSite = new Iis7WebSite {
-					Directory = webProject.Directory,
+					Directory = webProject.ProjectDirectory,
 					Name = "My Website",
 					Port = 5001,
 				},
