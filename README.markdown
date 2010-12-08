@@ -13,15 +13,19 @@ programming semantics: In Bounce, each build task is seen as a function that acc
 (in the form of other tasks) and returns a built artefact that can be passed to yet other tasks. For example,
 from git checkout to IIS deploy:
 
-    new Iis7WebSite {
-        Directory = new VisualStudioSolution {
-            SolutionPath = new GitCheckout {
-                Repository = "git@github.com:refractalize/website.git"
-            }.Files["MySolution.sln"]
-        }.Projects["WebSite"].ProjectDirectory,
+    var checkout = new GitCheckout {
+        Repository = "git@github.com:refractalize/website.git"
+    };
+    
+    var solution = new VisualStudioSolution {
+        SolutionPath = checkout.Files["MySolution.sln"]
+    };
+    
+    var website = new Iis7WebSite {
+        Directory = solution.Projects["WebSite"].ProjectDirectory,
         Name = "Some Website",
         Port = 5001,
-	}
+    }
 
 Naturally, downstream tasks can use properties of built upstream tasks to perform their own builds, affording a refreshingly declarative style.
 
