@@ -6,7 +6,7 @@ namespace Bounce.Framework {
         public IEnumerable<IParameter> FindParametersInTask(ITask task) {
             var walker = new TaskWalker();
 
-            var parameters = new List<IParameter>();
+            var parameters = new HashSet<IParameter>();
 
             walker.Walk(task, null, maybeParam => {
                 if (maybeParam is IParameter) {

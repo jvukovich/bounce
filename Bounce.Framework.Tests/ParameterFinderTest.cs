@@ -7,7 +7,15 @@ namespace Bounce.Framework.Tests {
         public void ShouldReturnAllParametersForTask() {
             var param1 = new Parameter<string>();
             var param2 = new Parameter<string>();
-            var task = new TaskWithParameters {Param = param1, Task = new TaskWithParameters {Param = param2}};
+            var task = new TaskWithParameters
+                       {
+                           Param = param1,
+                           Task = new TaskWithParameters
+                                  {
+                                      Param = param2,
+                                      Task = new TaskWithParameters { Param = param1 }
+                                  }
+                       };
 
             var finder = new ParameterFinder();
             var parametersFound = finder.FindParametersInTask(task);
