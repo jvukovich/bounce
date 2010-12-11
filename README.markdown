@@ -68,7 +68,11 @@ Then you can build your website:
 
     > bounce build WebSite
 
-Or, just `bounce WebSite`, `build` the default.
+Or, just:
+
+    > bounce WebSite
+
+`build` is the default.
 
 This code has a `Tests` target too, returned in the anonymous object returned from the `Targets` method. We can watch our tests pass (or not) with this command:
 
