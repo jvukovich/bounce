@@ -6,7 +6,14 @@ namespace Bounce.Framework
 {
     public class NUnitTests : Task
     {
+        /// <summary>
+        /// List of paths to test DLLs
+        /// </summary>
         [Dependency] public IEnumerable<Future<string>> DllPaths;
+
+        /// <summary>
+        /// Full path to nunit-console.exe
+        /// </summary>
         [Dependency] public Future<string> NUnitConsolePath;
 
         public NUnitTests()
