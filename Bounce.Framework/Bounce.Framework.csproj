@@ -156,7 +156,7 @@
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="ShellExecutableNotFoundException.cs" />
     <Compile Include="Target.cs" />
-    <Compile Include="TargetBuilder.cs" />
+    <Compile Include="TargetInvoker.cs" />
     <Compile Include="TargetsMethodInvoker.cs" />
     <Compile Include="TargetsMethodWrongSignatureException.cs" />
     <Compile Include="TargetsParser.cs" />

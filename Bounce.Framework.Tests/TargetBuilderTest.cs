@@ -17,8 +17,8 @@ namespace Bounce.Framework.Tests {
             dependent.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependent;"));
             dependency.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependency;"));
 
-            var builder = new TargetBuilder(bounce);
-            builder.Build(dependent.Object);
+            var builder = new TargetInvoker(bounce);
+            builder.Invoke(BounceCommand.Build, dependent.Object);
 
             Assert.That(buildActions.ToString(), Is.EqualTo(@"build dependency;build dependent;"));
         }
@@ -31,8 +31,8 @@ namespace Bounce.Framework.Tests {
 
             ITargetBuilderBounce bounce = GetBounce();
 
-            var builder = new TargetBuilder(bounce);
-            builder.Build(dependent);
+            var builder = new TargetInvoker(bounce);
+            builder.Invoke(BounceCommand.Build, dependent);
 
             Assert.That(bounce.DescriptionOutput.ToString(), Is.EqualTo(@"two;one;"));
         }
@@ -73,8 +73,8 @@ namespace Bounce.Framework.Tests {
 
             dependency.Setup(d => d.Invoke(BounceCommand.Clean, bounce)).Callback(() => cleanActions.Write("clean dependency;"));
 
-            var builder = new TargetBuilder(bounce);
-            builder.Clean(dependent.Object);
+            var builder = new TargetInvoker(bounce);
+            builder.Invoke(BounceCommand.Clean, dependent.Object);
 
             Assert.That(cleanActions.ToString(), Is.EqualTo(@"clean dependent;clean dependency;"));
         }
@@ -92,8 +92,8 @@ namespace Bounce.Framework.Tests {
             dependent1.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });
             dependent2.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });
 
-            var builder = new TargetBuilder(bounce);
-            builder.Build(all.Object);
+            var builder = new TargetInvoker(bounce);
+            builder.Invoke(BounceCommand.Build, all.Object);
 
             twiceADependency.Verify(t => t.Invoke(BounceCommand.Build, bounce), Times.Once());
         }

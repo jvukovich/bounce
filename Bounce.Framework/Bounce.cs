@@ -9,7 +9,7 @@ namespace Bounce.Framework {
 
         public ILog Log { get; private set; }
         public IShellCommandExecutor ShellCommand { get; private set; }
-        private TargetBuilder TargetBuilder;
+        private TargetInvoker TargetInvoker;
 
         public LogOptions LogOptions { get; set; }
 
@@ -19,7 +19,7 @@ namespace Bounce.Framework {
             LogFactory = new TaskLogFactory();
             LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning, ReportTargetEnd = true};
             ShellCommand = new ShellCommandExecutor(() => Log);
-            TargetBuilder = new TargetBuilder(this);
+            TargetInvoker = new TargetInvoker(this);
         }
 
         public ITaskScope TaskScope(ITask task, BounceCommand command, string targetName) {
@@ -63,7 +63,7 @@ namespace Bounce.Framework {
         }
 
         public void Invoke(BounceCommand command, ITask task) {
-            command.InvokeCommand(() => TargetBuilder.Build(task), () => TargetBuilder.Clean(task));
+            TargetInvoker.Invoke(command, task);
         }
     }
 

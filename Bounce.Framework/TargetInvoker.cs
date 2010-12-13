@@ -1,18 +1,23 @@
 ﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class TargetBuilder {
+    public class TargetInvoker {
         public TaskWalker Walker;
         public HashSet<ITask> BuiltTasks;
         private readonly ITargetBuilderBounce Bounce;
 
-        public TargetBuilder(ITargetBuilderBounce bounce) {
+        public TargetInvoker(ITargetBuilderBounce bounce) {
             BuiltTasks = new HashSet<ITask>();
             Bounce = bounce;
             Walker = new TaskWalker();
         }
 
-        public void Build(ITask task) {
+        public void Invoke(BounceCommand command, ITask task)
+        {
+            command.InvokeCommand(() => Build(task), () => Clean(task));
+        }
+
+        private void Build(ITask task) {
             Walker.Walk(task, null, BuildIfNotAlreadyBuilt);
         }
 
@@ -27,7 +32,7 @@ namespace Bounce.Framework {
             InvokeAndLog(task, BounceCommand.Build);
         }
 
-        public void Clean(ITask task) {
+        private void Clean(ITask task) {
             Walker.Walk(task, CleanAndLog, null);
         }
 
