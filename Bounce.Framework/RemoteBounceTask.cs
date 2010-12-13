@@ -32,14 +32,6 @@ namespace Bounce.Framework {
             GeneratedBounceArguments = GetBounceArguments(bounce, command);
         }
 
-        public override void Build(IBounce bounce) {
-            GeneratedBounceArguments = GetBounceArguments(bounce, BounceCommand.Build);
-        }
-
-        public override void Clean(IBounce bounce) {
-            GeneratedBounceArguments = GetBounceArguments(bounce, BounceCommand.Clean);
-        }
-
         private string GetBounceArguments(IBounce bounce, BounceCommand command) {
             var args = new List<string>();
 

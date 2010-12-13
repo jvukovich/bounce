@@ -61,6 +61,7 @@
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
     <Compile Include="BounceCommand.cs" />
+    <Compile Include="BounceCommandExtensions.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceExceptionPresenter.cs" />
     <Compile Include="BounceRunner.cs" />
@@ -138,10 +139,11 @@
     <Compile Include="LogOptions.cs" />
     <Compile Include="MSBuildLogger.cs" />
     <Compile Include="MsmqQueue.cs" />
-    <Compile Include="MultiTask.cs" />
+    <Compile Include="EnumerableFuture.cs" />
     <Compile Include="NoSuchTargetException.cs" />
     <Compile Include="NullCommandLog.cs" />
     <Compile Include="NoValueForParameterException.cs" />
+    <Compile Include="OptionalTask.cs" />
     <Compile Include="ParameterFinder.cs" />
     <Compile Include="ParsedCommandLineParameter.cs" />
     <Compile Include="ParsedCommandLineParameters.cs" />

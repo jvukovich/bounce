@@ -68,6 +68,7 @@
     <Compile Include="CommandLineParametersTest.cs" />
     <Compile Include="CommandLineTasksParametersGeneratorTest.cs" />
     <Compile Include="FakeBounce.cs" />
+    <Compile Include="FakePrintTask.cs" />
     <Compile Include="Features\PrintTask.cs" />
     <Compile Include="Features\RemoteBounceFeature.cs" />
     <Compile Include="Features\ShowingAvailableTargetsAndParametersFeature.cs" />
@@ -82,7 +83,8 @@
     <Compile Include="LazyFileUtilsTest.cs" />
     <Compile Include="LogFactoryRegistryTest.cs" />
     <Compile Include="LogOptionCommandLineTranslatorTest.cs" />
-    <Compile Include="MultiTaskTest.cs" />
+    <Compile Include="SelectTasksTest.cs" />
+    <Compile Include="OptionalTaskTest.cs" />
     <Compile Include="ParameterFinderTest.cs" />
     <Compile Include="ParameterTest.cs" />
     <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />

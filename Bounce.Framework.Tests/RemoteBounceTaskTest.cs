@@ -7,12 +7,12 @@ namespace Bounce.Framework.Tests {
     public class RemoteBounceTaskTest {
         [Test]
         public void ShouldInvokeBounceBuildWithTargets() {
-            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Build(bounce), "build");
+            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(BounceCommand.Build, bounce), "build");
         }
 
         [Test]
         public void ShouldInvokeBounceCleanWithTargets() {
-            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Clean(bounce), "clean");
+            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(BounceCommand.Clean, bounce), "clean");
         }
 
         private void AssertBounceCommand(Action<RemoteBounceTask, IBounce> commandAction, string command) {
