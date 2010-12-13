@@ -154,7 +154,7 @@
     <Compile Include="PropertyValues.cs" />
     <Compile Include="Iis6ScriptMap.cs" />
     <Compile Include="RemoteBounce.cs" />
-    <Compile Include="RemoteBounceTask.cs" />
+    <Compile Include="FutureRemoteBounceArguments.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="ShellExecutableNotFoundException.cs" />
     <Compile Include="Target.cs" />

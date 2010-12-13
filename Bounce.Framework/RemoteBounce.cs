@@ -28,7 +28,7 @@ namespace Bounce.Framework {
         public Future<string> ArgumentsForTargets(object targets)
         {
             RemoteTargets.Add(targets);
-            return new RemoteBounceTask() { Targets = targets };
+            return new FutureRemoteBounceArguments() { Targets = targets };
         }
     }
 }

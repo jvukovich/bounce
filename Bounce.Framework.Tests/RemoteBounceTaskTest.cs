@@ -15,7 +15,7 @@ namespace Bounce.Framework.Tests {
             AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(BounceCommand.Clean, bounce), "clean");
         }
 
-        private void AssertBounceCommand(Action<RemoteBounceTask, IBounce> commandAction, string command) {
+        private void AssertBounceCommand(Action<FutureRemoteBounceArguments, IBounce> commandAction, string command) {
             var bounce = new FakeBounce();
 
             var a = new Mock<ITask>().Object;
@@ -27,7 +27,7 @@ namespace Bounce.Framework.Tests {
             var commandLineParametersGenerator = new Mock<ICommandLineTasksParametersGenerator>();
             commandLineParametersGenerator.Setup(c => c.GenerateCommandLineParametersForTasks(new [] {a, b})).Returns("buildarguments");
 
-            var remoteBounce = new RemoteBounceTask(new TargetsParser(), logOptionTranslator.Object, commandLineParametersGenerator.Object);
+            var remoteBounce = new FutureRemoteBounceArguments(new TargetsParser(), logOptionTranslator.Object, commandLineParametersGenerator.Object);
             remoteBounce.Targets = new {Junk = a, Aspr = b};
 
             commandAction(remoteBounce, bounce);
