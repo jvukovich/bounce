@@ -15,7 +15,7 @@ namespace Bounce.Framework {
         /// <summary>
         /// A file or directory to copy from
         /// </summary>
-        [Dependency]
+        [Dependency, CleanAfterBuild]
         public Future<string> FromPath { get; set; }
 
         [Dependency]
