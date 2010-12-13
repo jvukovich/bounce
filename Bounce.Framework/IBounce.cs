@@ -4,5 +4,7 @@ namespace Bounce.Framework {
         IShellCommandExecutor ShellCommand { get; }
         LogOptions LogOptions { get; }
         ITaskLogFactory LogFactory { get; set; }
+        void Build(ITask task);
+        void Clean(ITask task);
     }
 }

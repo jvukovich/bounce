@@ -3,37 +3,31 @@ using System.IO;
 
 namespace Bounce.Framework {
     class GitCommand : IGitCommand {
-        private readonly IShellCommandExecutor ShellCommandExecutor;
-
-        public GitCommand(IShellCommandExecutor shellCommandExecutor) {
-            ShellCommandExecutor = shellCommandExecutor;
-        }
-
-        public GitCommand() : this(BounceRunner.Bounce.ShellCommand) {
-        }
-
-        public void Pull(string workingDirectory, ILog log) {
+        public void Pull(string workingDirectory, ILog log, IBounce bounce)
+        {
             using (new DirectoryChange(workingDirectory)) {
                 log.Info("pulling git repo in: " + workingDirectory);
-                Git("pull");
+                Git(bounce, "pull");
             }
         }
 
-        public void Clone(string repo, string directory, ILog log) {
+        public void Clone(string repo, string directory, ILog log, IBounce bounce)
+        {
             log.Info("cloning git repo: {0}, into: {1}", repo, directory);
-            Git(@"clone {0} ""{1}""", repo, directory);
+            Git(bounce, @"clone {0} ""{1}""", repo, directory);
         }
 
-        public void Tag(string tag, bool force) {
-            Git("tag {0}{1}", force? "-f ": "", tag);
+        public void Tag(string tag, bool force, IBounce bounce)
+        {
+            Git(bounce, "tag {0}{1}", force? "-f ": "", tag);
         }
 
-        private void Git(string format, params object [] args) {
-            Git(String.Format(format, args));
+        private void Git(IBounce bounce, string format, params object [] args) {
+            Git(bounce, String.Format(format, args));
         }
 
-        private void Git(string args) {
-            ShellCommandExecutor.ExecuteAndExpectSuccess("cmd", String.Format("/C git {0}", args));
+        private void Git(IBounce bounce, string args) {
+            bounce.ShellCommand.ExecuteAndExpectSuccess("cmd", String.Format("/C git {0}", args));
         }
 
         class DirectoryChange : IDisposable {

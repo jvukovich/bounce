@@ -22,66 +22,59 @@ namespace Bounce.Framework {
 
         public const string NetworkService = @"NT AUTHORITY\NetworkService";
 
-        private IShellCommandExecutor ShellCommandExecutor;
-
-        public WindowsService(IShellCommandExecutor shellCommandExecutor) {
-            ShellCommandExecutor = shellCommandExecutor;
-        }
-
-        public WindowsService() : this(BounceRunner.Bounce.ShellCommand) {
+        public WindowsService() {
             Machine = "localhost";
         }
 
-        protected bool ServiceRunning {
-            get {
-                Regex statePattern = new Regex(@"STATE\s+:\s+\d\s+STARTED");
+        protected bool IsServiceRunning(IBounce bounce)
+        {
+            Regex statePattern = new Regex(@"STATE\s+:\s+\d\s+STARTED");
 
-                var queryOutput = ExecuteSc(@"query ""{0}""", Name.Value).Output;
+            var queryOutput = ExecuteSc(bounce, @"query ""{0}""", Name.Value).Output;
 
-                return statePattern.Match(queryOutput).Success;
-            }
+            return statePattern.Match(queryOutput).Success;
         }
 
-        private ProcessOutput ExecuteSc(string commandArgs, params object[] args) {
-            return ShellCommandExecutor.Execute("sc", OnMachine(commandArgs, args));
+        private ProcessOutput ExecuteSc(IBounce bounce, string commandArgs, params object[] args) {
+            return bounce.ShellCommand.Execute("sc", OnMachine(commandArgs, args));
         }
 
-        private void ExecuteScAndExpectSuccess(string commandArgs, params object[] args) {
-            ShellCommandExecutor.ExecuteAndExpectSuccess("sc", OnMachine(commandArgs, args));
+        private void ExecuteScAndExpectSuccess(IBounce bounce, string commandArgs, params object[] args)
+        {
+            bounce.ShellCommand.ExecuteAndExpectSuccess("sc", OnMachine(commandArgs, args));
         }
 
         private string OnMachine(string commandArgs, params object [] args) {
             return String.Format(@"\\{0} {1}", Machine.Value, String.Format(commandArgs, args));
         }
 
-        private void StopService() {
-            ExecuteScAndExpectSuccess(@"stop ""{0}""", Name.Value);
+        private void StopService(IBounce bounce) {
+            ExecuteScAndExpectSuccess(bounce, @"stop ""{0}""", Name.Value);
         }
 
         public override void Build(IBounce bounce) {
-            if (ServiceInstalled) {
+            if (IsServiceInstalled(bounce)) {
                 bounce.Log.Info("service {0} installed, deleting", Name.Value);
-                DeleteService();
+                DeleteService(bounce);
             }
-            InstallService();
+            InstallService(bounce);
         }
 
-        private void InstallService() {
+        private void InstallService(IBounce bounce) {
             System.Console.WriteLine("installing service {0}", Name.Value);
 
-            ExecuteScAndExpectSuccess(@"create ""{0}"" binPath= ""{1}""{2}", Name.Value, Path.GetFullPath(BinaryPath.Value), GetSettings());
+            ExecuteScAndExpectSuccess(bounce, @"create ""{0}"" binPath= ""{1}""{2}", Name.Value, Path.GetFullPath(BinaryPath.Value), GetSettings());
 
             if (Description != null && Description.Value != null) {
-                ExecuteScAndExpectSuccess(@"description ""{0}"" ""{1}""", Name.Value, Description.Value);
+                ExecuteScAndExpectSuccess(bounce, @"description ""{0}"" ""{1}""", Name.Value, Description.Value);
             }
         }
 
-        private bool ServiceInstalled {
-            get {
-                return !ExecuteSc(@"query ""{0}""", Name.Value)
+        private bool IsServiceInstalled(IBounce bounce)
+        {
+            return !ExecuteSc(bounce, @"query ""{0}""", Name.Value)
                         .Output
                         .Contains("service does not exist");
-            }
         }
 
         private string GetSettings() {
@@ -97,16 +90,16 @@ namespace Bounce.Framework {
         }
 
         public override void Clean(IBounce bounce) {
-            if (ServiceInstalled) {
+            if (IsServiceInstalled(bounce)) {
                 bounce.Log.Info("service {0} installed, deleting", Name.Value);
-                DeleteService();
+                DeleteService(bounce);
             } else {
                 bounce.Log.Info("service {0} not installed");
             }
         }
 
-        private void DeleteService() {
-            ExecuteScAndExpectSuccess(@"delete ""{0}""", Name.Value);
+        private void DeleteService(IBounce bounce) {
+            ExecuteScAndExpectSuccess(bounce, @"delete ""{0}""", Name.Value);
         }
     }
 }

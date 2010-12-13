@@ -5,15 +5,11 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        private static Bounce _bounce = new Bounce(System.Console.Out, System.Console.Error);
+        private Bounce _bounce;
         private readonly ITargetsRetriever TargetsRetriever;
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
         private readonly IParameterFinder ParameterFinder;
         private CommandAndTargetParser CommandAndTargetParser;
-
-        public static IBounce Bounce {
-            get { return _bounce; }
-        }
 
         public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator(), new ParameterFinder()) {}
 
@@ -22,6 +18,7 @@ namespace Bounce.Framework {
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
             ParameterFinder = parameterFinder;
             CommandAndTargetParser = new CommandAndTargetParser();
+            _bounce = new Bounce(System.Console.Out, System.Console.Error);
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -63,8 +60,7 @@ namespace Bounce.Framework {
         }
 
         private void BuildTargets(CommandAndTargets commandAndTargets) {
-            var builder = new TargetBuilder(_bounce);
-            CommandAction commandAction = GetCommand(builder, commandAndTargets.Command);
+            CommandAction commandAction = GetCommand(_bounce, commandAndTargets.Command);
 
             foreach(var target in commandAndTargets.Targets) {
                 BuildTarget(target, commandAction);
@@ -121,7 +117,7 @@ namespace Bounce.Framework {
             public Action<ITask> Action;
         }
 
-        private static CommandAction GetCommand(TargetBuilder builder, BounceCommand command) {
+        private static CommandAction GetCommand(IBounce builder, BounceCommand command) {
             switch (command) {
                 case BounceCommand.Build:
                     return new CommandAction {Action = builder.Build, Command = command };

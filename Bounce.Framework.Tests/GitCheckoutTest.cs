@@ -28,7 +28,7 @@ namespace Bounce.Framework.Tests {
 
             gitRepo.Build(Bounce.Object);
 
-            git.Verify(g => g.Pull("dir", Log), Times.Once());
+            git.Verify(g => g.Pull("dir", Log, Bounce.Object), Times.Once());
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Bounce.Framework.Tests {
             var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) {Repository = "repo"};
             gitRepo.Build(Bounce.Object);
 
-            git.Verify(g => g.Clone("repo", "dir", Log), Times.Once());
+            git.Verify(g => g.Clone("repo", "dir", Log, Bounce.Object), Times.Once());
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Bounce.Framework.Tests {
             var gitRepo = new GitCheckout(parser.Object, dirs.Object, git.Object) {Repository = "repo", Directory = "path"};
             gitRepo.Build(Bounce.Object);
 
-            git.Verify(g => g.Clone("repo", "path", Log), Times.Once());
+            git.Verify(g => g.Clone("repo", "path", Log, Bounce.Object), Times.Once());
         }
 
         [Test]

@@ -6,8 +6,10 @@ namespace Bounce.Framework {
         private readonly TextWriter stdout;
         private readonly TextWriter stderr;
         public ITaskLogFactory LogFactory { get; set; }
+
         public ILog Log { get; private set; }
         public IShellCommandExecutor ShellCommand { get; private set; }
+        private TargetBuilder TargetBuilder;
 
         public LogOptions LogOptions { get; set; }
 
@@ -17,6 +19,7 @@ namespace Bounce.Framework {
             LogFactory = new TaskLogFactory();
             LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning, ReportTargetEnd = true};
             ShellCommand = new ShellCommandExecutor(() => Log);
+            TargetBuilder = new TargetBuilder(this);
         }
 
         public ITaskScope TaskScope(ITask task, BounceCommand command, string targetName) {
@@ -57,6 +60,14 @@ namespace Bounce.Framework {
                     return TextWriter.Null;
                 }
             }
+        }
+
+        public void Build(ITask task) {
+            TargetBuilder.Build(task);
+        }
+
+        public void Clean(ITask task) {
+            TargetBuilder.Clean(task);
         }
     }
 

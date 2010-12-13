@@ -11,8 +11,8 @@ namespace Bounce.Framework {
             Force = false;
         }
 
-        public override void Build() {
-            Git.Tag(Tag.Value, Force.Value);
+        public override void Build(IBounce bounce) {
+            Git.Tag(Tag.Value, Force.Value, bounce);
         }
     }
 }
