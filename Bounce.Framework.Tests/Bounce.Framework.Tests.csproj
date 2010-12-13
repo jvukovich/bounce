@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0F0BBC36-D999-47EB-BA24-6A926C2B8641}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -82,6 +82,7 @@
     <Compile Include="LazyFileUtilsTest.cs" />
     <Compile Include="LogFactoryRegistryTest.cs" />
     <Compile Include="LogOptionCommandLineTranslatorTest.cs" />
+    <Compile Include="MultiTaskTest.cs" />
     <Compile Include="ParameterFinderTest.cs" />
     <Compile Include="ParameterTest.cs" />
     <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />

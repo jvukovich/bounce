@@ -60,16 +60,14 @@ namespace Bounce.Framework {
         }
 
         private void BuildTargets(CommandAndTargets commandAndTargets) {
-            CommandAction commandAction = GetCommand(_bounce, commandAndTargets.Command);
-
             foreach(var target in commandAndTargets.Targets) {
-                BuildTarget(target, commandAction);
+                BuildTarget(target, commandAndTargets.Command);
             }
         }
 
-        private void BuildTarget(Target target, CommandAction commandAction) {
-            using (ITaskScope targetScope = _bounce.TaskScope(target.Task, commandAction.Command, target.Name)) {
-                commandAction.Action(target.Task);
+        private void BuildTarget(Target target, BounceCommand command) {
+            using (ITaskScope targetScope = _bounce.TaskScope(target.Task, command, target.Name)) {
+                _bounce.Invoke(command, target.Task);
                 targetScope.TaskSucceeded();
             }
         }
@@ -97,7 +95,7 @@ namespace Bounce.Framework {
             }
         }
 
-        private void PrintAvailableParameters(IEnumerable<IParameter> parameters) {
+        private static void PrintAvailableParameters(IEnumerable<IParameter> parameters) {
             if (parameters.Count() > 0) {
                 foreach (var param in parameters) {
                     System.Console.Write("    /" + param.Name);
@@ -109,22 +107,6 @@ namespace Bounce.Framework {
                     }
                     System.Console.WriteLine();
                 }
-            }
-        }
-
-        private class CommandAction {
-            public BounceCommand Command;
-            public Action<ITask> Action;
-        }
-
-        private static CommandAction GetCommand(IBounce builder, BounceCommand command) {
-            switch (command) {
-                case BounceCommand.Build:
-                    return new CommandAction {Action = builder.Build, Command = command };
-                case BounceCommand.Clean:
-                    return new CommandAction { Action = builder.Clean, Command = command };
-                default:
-                    throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
             }
         }
     }

@@ -13,10 +13,9 @@ namespace Bounce.Framework.Tests {
 
             var buildActions = new StringWriter();
 
-
             dependent.Setup(d => d.Dependencies).Returns(new[] {dependency.Object});
-            dependent.Setup(d => d.Build(bounce)).Callback(() => buildActions.Write("build dependent;"));
-            dependency.Setup(d => d.Build(bounce)).Callback(() => buildActions.Write("build dependency;"));
+            dependent.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependent;"));
+            dependency.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependency;"));
 
             var builder = new TargetBuilder(bounce);
             builder.Build(dependent.Object);
@@ -70,9 +69,9 @@ namespace Bounce.Framework.Tests {
             var cleanActions = new StringWriter();
 
             dependent.Setup(d => d.Dependencies).Returns(new[] {dependency.Object});
-            dependent.Setup(d => d.Clean(bounce)).Callback(() => cleanActions.Write("clean dependent;"));
+            dependent.Setup(d => d.Invoke(BounceCommand.Clean, bounce)).Callback(() => cleanActions.Write("clean dependent;"));
 
-            dependency.Setup(d => d.Clean(bounce)).Callback(() => cleanActions.Write("clean dependency;"));
+            dependency.Setup(d => d.Invoke(BounceCommand.Clean, bounce)).Callback(() => cleanActions.Write("clean dependency;"));
 
             var builder = new TargetBuilder(bounce);
             builder.Clean(dependent.Object);
@@ -96,7 +95,7 @@ namespace Bounce.Framework.Tests {
             var builder = new TargetBuilder(bounce);
             builder.Build(all.Object);
 
-            twiceADependency.Verify(t => t.Build(bounce), Times.Once());
+            twiceADependency.Verify(t => t.Invoke(BounceCommand.Build, bounce), Times.Once());
         }
     }
 }

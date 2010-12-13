@@ -62,12 +62,8 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Build(ITask task) {
-            TargetBuilder.Build(task);
-        }
-
-        public void Clean(ITask task) {
-            TargetBuilder.Clean(task);
+        public void Invoke(BounceCommand command, ITask task) {
+            command.InvokeCommand(() => TargetBuilder.Build(task), () => TargetBuilder.Clean(task));
         }
     }
 

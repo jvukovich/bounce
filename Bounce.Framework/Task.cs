@@ -4,11 +4,33 @@ using System.IO;
 using System.Linq;
 
 namespace Bounce.Framework {
+    public static class BounceCommandExtensions
+    {
+        public static void InvokeCommand(this BounceCommand command, Action build, Action clean)
+        {
+            switch (command) {
+                case BounceCommand.Build:
+                    build();
+                    break;
+                case BounceCommand.Clean:
+                    clean();
+                    break;
+                default:
+                    throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
+            }
+        }
+    }
+
     public abstract class Task : ITask {
         public virtual IEnumerable<ITask> Dependencies {
             get {
                 return TaskDependencyFinder.Instance.GetDependenciesFor(this).Concat(RegisterAdditionalDependencies());
             }
+        }
+
+        public virtual void Invoke(BounceCommand command, IBounce bounce)
+        {
+            command.InvokeCommand(() => Build(bounce), () => Clean(bounce));
         }
 
         public virtual void Build(IBounce bounce) {

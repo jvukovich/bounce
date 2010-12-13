@@ -59,22 +59,7 @@ namespace Bounce.Framework.Tests {
             return enumerations ? s + "[0]" : s;
         }
 
-        class SomeTask : ITask {
-            public IEnumerable<ITask> Dependencies {
-                get { throw new System.NotImplementedException(); }
-            }
-
-            public void Build(IBounce bounce) {
-                throw new System.NotImplementedException();
-            }
-
-            public void Clean(IBounce bounce) {
-                throw new System.NotImplementedException();
-            }
-
-            public bool IsLogged { get { return true; } }
-
-            public void Describe(TextWriter output) { }
+        class SomeTask : FakeTask {
         }
 
         class TaskWithFields : SomeTask {

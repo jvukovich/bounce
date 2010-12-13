@@ -138,6 +138,7 @@
     <Compile Include="LogOptions.cs" />
     <Compile Include="MSBuildLogger.cs" />
     <Compile Include="MsmqQueue.cs" />
+    <Compile Include="MultiTask.cs" />
     <Compile Include="NoSuchTargetException.cs" />
     <Compile Include="NullCommandLog.cs" />
     <Compile Include="NoValueForParameterException.cs" />

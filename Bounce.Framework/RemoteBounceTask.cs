@@ -28,6 +28,10 @@ namespace Bounce.Framework {
             get { return new ITask[0]; }
         }
 
+        public override void Invoke(BounceCommand command, IBounce bounce) {
+            GeneratedBounceArguments = GetBounceArguments(bounce, command);
+        }
+
         public override void Build(IBounce bounce) {
             GeneratedBounceArguments = GetBounceArguments(bounce, BounceCommand.Build);
         }
@@ -37,7 +41,7 @@ namespace Bounce.Framework {
         }
 
         private string GetBounceArguments(IBounce bounce, BounceCommand command) {
-            List<string> args = new List<string>();
+            var args = new List<string>();
 
             args.Add(LogOptionCommandLineTranslator.GenerateCommandLine(bounce));
 

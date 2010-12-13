@@ -24,20 +24,23 @@ namespace Bounce.Framework {
         }
 
         private void BuildAndLog(ITask task) {
-            using (var taskScope = Bounce.TaskScope(task, BounceCommand.Build, null)) {
-                task.Describe(Bounce.DescriptionOutput);
-                task.Build(Bounce);
-                taskScope.TaskSucceeded();
-            }
+            InvokeAndLog(task, BounceCommand.Build);
         }
 
         public void Clean(ITask task) {
             Walker.Walk(task, CleanAndLog, null);
         }
 
-        private void CleanAndLog(ITask task) {
-            using (var taskScope = Bounce.TaskScope(task, BounceCommand.Clean, null)) {
-                task.Clean(Bounce);
+        private void CleanAndLog(ITask task)
+        {
+            InvokeAndLog(task, BounceCommand.Clean);
+        }
+
+        private void InvokeAndLog(ITask task, BounceCommand command)
+        {
+            using (var taskScope = Bounce.TaskScope(task, command, null)) {
+                task.Describe(Bounce.DescriptionOutput);
+                task.Invoke(command, Bounce);
                 taskScope.TaskSucceeded();
             }
         }
