@@ -12,12 +12,32 @@ namespace Bounce.Framework {
             FileSystemCopier = fileSystemCopier;
         }
 
-        [Dependency]
+        /// <summary>
+        /// A file or directory to copy from
+        /// </summary>
+        [Dependency, CleanAfterBuild]
         public Future<string> FromPath { get; set; }
+
         [Dependency]
-        public Future<string> ToPath { get; set; }
+        private Future<string> _toPath;
+
+        /// <summary>
+        /// A file or directory to copy to
+        /// </summary>
+        public Future<string> ToPath
+        {
+            get { return this.WhenBuilt(() => _toPath.Value); }
+            set { _toPath = value; }
+        }
+
+        /// <summary>
+        /// Glob patterns of files and directories not to copy
+        /// </summary>
         [Dependency]
         public Future<IEnumerable<string>> Excludes;
+        /// <summary>
+        /// Glob patterns of files and directories to copy, overriding Excludes
+        /// </summary>
         [Dependency]
         public Future<IEnumerable<string>> Includes;
 

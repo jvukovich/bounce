@@ -13,15 +13,19 @@ programming semantics: In Bounce, each build task is seen as a function that acc
 (in the form of other tasks) and returns a built artefact that can be passed to yet other tasks. For example,
 from git checkout to IIS deploy:
 
-    new Iis7WebSite {
-        Directory = new VisualStudioSolution {
-            SolutionPath = new GitCheckout {
-                Repository = "git@github.com:refractalize/website.git"
-            }.Files["MySolution.sln"]
-        }.Projects["WebSite"],
+    var checkout = new GitCheckout {
+        Repository = "git@github.com:refractalize/website.git"
+    };
+    
+    var solution = new VisualStudioSolution {
+        SolutionPath = checkout.Files["MySolution.sln"]
+    };
+    
+    var website = new Iis7WebSite {
+        Directory = solution.Projects["WebSite"].ProjectDirectory,
         Name = "Some Website",
         Port = 5001,
-	}
+    }
 
 Naturally, downstream tasks can use properties of built upstream tasks to perform their own builds, affording a refreshingly declarative style.
 
@@ -45,7 +49,7 @@ We'd write a C# file containing our targets like this:
 
 			return new {
 				WebSite = new Iis7WebSite {
-					Directory = webProject.Directory,
+					Directory = webProject.ProjectDirectory,
 					Name = "My Website",
 					Port = 5001,
 				},
@@ -63,6 +67,12 @@ and all parent directories.
 Then you can build your website:
 
     > bounce build WebSite
+
+Or, just:
+
+    > bounce WebSite
+
+`build` is the default.
 
 This code has a `Tests` target too, returned in the anonymous object returned from the `Targets` method. We can watch our tests pass (or not) with this command:
 

@@ -30,7 +30,7 @@ namespace Bounce.Framework {
                     .ToArray();
             }
 
-            public class DependencyNameValue {
+            private class DependencyNameValue {
                 public DependencyNameValue(string name, object value) {
                     Name = name;
                     Value = value;

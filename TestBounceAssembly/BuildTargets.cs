@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Net;
 using Bounce.Framework;
 
 namespace TestBounceAssembly {
@@ -76,6 +77,28 @@ namespace TestBounceAssembly {
             return new {
                            Copy = new Copy {FromPath = "TestFrom", ToPath = "TestTo", Excludes = new [] {@"**\_svn\"} },
                        };
+        }
+
+        public static object WebSiteDoco() {
+            var website = new Iis6WebSite {Name = "MyWebSite", Directory = @"c:\websites\mywebsite"};
+    website.Bindings = new[] {
+                                 new Iis6WebSiteBinding {Hostname = "mywebsite.com"},
+                                 new Iis6WebSiteBinding {IPAddress = IPAddress.Loopback, Port = 7010}
+                             };
+    website.ScriptMapsToAdd = new[] {new Iis6ScriptMap {
+                                                           AllVerbs = false, 
+                                                           Executable = @"c:\website\scriptmaps\myscriptmap.dll", 
+                                                           Extension = ".dat", 
+                                                           IncludedVerbs = "GET,POST,DELETE", 
+                                                           ScriptEngine = true, 
+                                                           VerifyThatFileExists = false
+                                                       }};
+    website.ScriptMapsToAdd = Iis6WebSite.MvcScriptMaps;
+    website.AppPool = new Iis6AppPool {Name = "MyAppPool"};
+    website.Authentication = new[] {Iis6Authentication.NTLM, Iis6Authentication.Anonymous};
+    website.Started = false;
+
+            return null;
         }
 
         public static object RealTargets(IParameters buildParameters) {

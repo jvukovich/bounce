@@ -69,6 +69,9 @@ namespace Bounce.Framework
             //This needs to be set after the AppPool, otherwise the authentication settings are ignored
             webSite.Authentication = Authentication.Value;
 
+            // setting the app pool after this wipes the authentication settings, so we do it in this order.
+            webSite.Authentication = Authentication.Value;
+
             if (Started.Value)
             {
                 webSite.Start();
