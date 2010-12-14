@@ -89,7 +89,7 @@
     <Compile Include="ParameterTest.cs" />
     <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />
     <Compile Include="Features\BuildingATargetFeature.cs" />
-    <Compile Include="RemoteBounceTaskTest.cs" />
+    <Compile Include="FutureRemoteBounceArgumentsTest.cs" />
     <Compile Include="RemoteBounceTest.cs" />
     <Compile Include="TargetBuilderTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />

@@ -2,6 +2,6 @@
 
 namespace Bounce.Framework {
     public interface ICommandLineTasksParametersGenerator {
-        string GenerateCommandLineParametersForTasks(IEnumerable<ITask> tasks);
+        string GenerateCommandLineParametersForTasks(IEnumerable<ITask> tasks, IEnumerable<IParameter> overridingParameters);
     }
 }

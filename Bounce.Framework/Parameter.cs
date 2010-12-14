@@ -10,6 +10,14 @@ namespace Bounce.Framework {
         private T _value;
         public IEnumerable<object> AvailableValues { get; set; }
 
+        public Parameter() {
+        }
+
+        public Parameter(string name, T value) {
+            Name = name;
+            SetValue(value);
+        }
+
         public override IEnumerable<ITask> Dependencies
         {
             get { return new ITask[0]; }

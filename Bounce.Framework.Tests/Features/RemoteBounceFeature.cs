@@ -15,7 +15,7 @@ namespace Bounce.Framework.Tests.Features {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"build", "One", "/hack:refactor", "/two:three", "/machine:live"}, method);
 
-            Assert.That(Output.ToString(), Is.EqualTo("rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor\r\n"));
+            Assert.That(Output.ToString(), Is.EqualTo("rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor /conf_index:3\r\n"));
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace Bounce.Framework.Tests.Features {
 
                 var one = new RemoteExec
                           {
-                              BounceArguments = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne }),
+                              BounceArguments = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne }, new Parameter<int>("conf_index", 3)),
                               Machine = parameters.Required<string>("machine"),
                           };
 

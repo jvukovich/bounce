@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bounce.Framework {
     public class FutureRemoteBounceArguments : TaskWithValue<string> {
         public object Targets { get; set; }
+        public IEnumerable<IParameter> Parameters { get; set; }
 
         private ITargetsParser TargetsParser;
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
@@ -14,6 +16,7 @@ namespace Bounce.Framework {
             TargetsParser = targetsParser;
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
             CommandLineTasksParametersGenerator = commandLineTasksParametersGenerator;
+            Parameters = new IParameter[0];
         }
 
         public FutureRemoteBounceArguments() : this(new TargetsParser(), new LogOptionCommandLineTranslator(), new CommandLineTasksParametersGenerator()) {}
@@ -35,9 +38,13 @@ namespace Bounce.Framework {
             IDictionary<string, ITask> targetsFromObject = TargetsParser.ParseTargetsFromObject(Targets);
             args.Add(command.ToString().ToLower());
             args.AddRange(targetsFromObject.Keys);
-            args.Add(CommandLineTasksParametersGenerator.GenerateCommandLineParametersForTasks(targetsFromObject.Values));
+            args.Add(CommandLineTasksParametersGenerator.GenerateCommandLineParametersForTasks(targetsFromObject.Values, Parameters));
 
             return String.Join(" ", args.ToArray());
+        }
+
+        public FutureRemoteBounceArguments WithRemoteParameter<T>(IParameter parameter, T value) {
+            return new FutureRemoteBounceArguments {Targets = Targets, Parameters = Parameters.Concat(new [] {new Parameter<T>(parameter.Name, value)})};
         }
     }
 }
