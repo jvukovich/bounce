@@ -43,8 +43,12 @@ namespace Bounce.Framework {
             return String.Join(" ", args.ToArray());
         }
 
-        public FutureRemoteBounceArguments WithRemoteParameter<T>(IParameter parameter, T value) {
-            return new FutureRemoteBounceArguments {Targets = Targets, Parameters = Parameters.Concat(new [] {new Parameter<T>(parameter.Name, value)})};
+        public FutureRemoteBounceArguments WithRemoteParameter<T>(Future<T> parameter, T value) {
+            IEnumerable<IParameter> newParameters = Parameters.Concat(new [] {((IParameter<T>) parameter).NewWithValue(value)});
+            return new FutureRemoteBounceArguments {
+                Targets = Targets,
+                Parameters = newParameters
+            };
         }
     }
 }

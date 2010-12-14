@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -15,7 +16,9 @@ namespace Bounce.Framework.Tests.Features {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"build", "One", "/hack:refactor", "/two:three", "/machine:live"}, method);
 
-            Assert.That(Output.ToString(), Is.EqualTo("rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor /conf_index:3\r\n"));
+            string rexecCommands = "rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor\r\n";
+
+            Assert.That(Output.ToString(), Is.EqualTo(rexecCommands));
         }
 
         [Test]
@@ -24,6 +27,19 @@ namespace Bounce.Framework.Tests.Features {
             new BounceRunner().Run(new[] {"build", "RemoteOne", "/hack:refactor"}, method);
 
             Assert.That(Output.ToString(), Is.EqualTo("refactor\r\n"));
+        }
+
+        [Test]
+        public void ShouldExecuteMultipleRemoteTasksEachWithDifferentParameters() {
+            MethodInfo method = typeof(MultipleRemoteTargetsProvider).GetMethod("GetTargets");
+            new BounceRunner().Run(new[] {"build", "One"}, method);
+
+            string rexecCommands =
+@"rexec -h machine1 bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /machineName:machine1
+rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /machineName:machine2
+";
+
+            Assert.That(Output.ToString(), Is.EqualTo(rexecCommands));
         }
 
         private static TextWriter Output;
@@ -36,11 +52,37 @@ namespace Bounce.Framework.Tests.Features {
 
                 var remoteBounce = new RemoteBounce();
 
+                FutureRemoteBounceArguments remoteOneArgs = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne });
+
                 var one = new RemoteExec
                           {
-                              BounceArguments = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne }, new Parameter<int>("conf_index", 3)),
+                              BounceArguments = remoteOneArgs,
                               Machine = parameters.Required<string>("machine"),
                           };
+
+                return remoteBounce.WithRemoteTargets(new {
+                    One = one,
+                    Two = two,
+                });
+            }
+        }
+
+        class MultipleRemoteTargetsProvider {
+            [Targets]
+            public static object GetTargets(IParameters parameters) {
+                var machineName = parameters.Required<string>("machineName");
+                var remoteOne = new PrintTask(Output) {Description = machineName};
+                var two = new PrintTask(Output) {Description = parameters.Required<string>("two")};
+
+                var remoteBounce = new RemoteBounce();
+
+                FutureRemoteBounceArguments remoteOneArgs = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne });
+
+                Future<IEnumerable<string>> machines = new [] {"machine1", "machine2"};
+                var one = machines.SelectTasks(machine => new RemoteExec {
+                    BounceArguments = remoteOneArgs.WithRemoteParameter(machineName, machine),
+                    Machine = machine,
+                });
 
                 return remoteBounce.WithRemoteTargets(new {
                     One = one,

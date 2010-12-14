@@ -18,12 +18,29 @@ namespace Bounce.Framework {
         public string GenerateCommandLineParametersForTasks(IEnumerable<ITask> tasks, IEnumerable<IParameter> overridingParameters) {
             IEnumerable<IParameter> taskParameters = tasks.SelectMany(t => ParameterFinder.FindParametersInTask(t)).Distinct();
 
-            var mergedParameters = new HashSet<IParameter>(overridingParameters, new ParameterComparer());
-            foreach (var taskParameter in taskParameters) {
-                mergedParameters.Add(taskParameter);
-            }
+            var mergedParameters = OverrideTaskParameters(taskParameters, overridingParameters);
 
             return GenerateCommandLineParameters(mergedParameters.OrderBy(p => p.Name));
+        }
+
+        private IEnumerable<IParameter> OverrideTaskParameters(IEnumerable<IParameter> taskParameters, IEnumerable<IParameter> overridingParameters)
+        {
+            Dictionary<string, IParameter> parameters = overridingParameters.ToDictionary(p => p.Name);
+            var mergedParameters = new List<IParameter>();
+
+            foreach (var taskParameter in taskParameters)
+            {
+                IParameter param;
+                if (parameters.TryGetValue(taskParameter.Name, out param))
+                {
+                    mergedParameters.Add(param);
+                } else
+                {
+                    mergedParameters.Add(taskParameter);
+                }
+            }
+
+            return mergedParameters;
         }
 
         class ParameterComparer : IEqualityComparer<IParameter> {

@@ -19,8 +19,8 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void CanBuildWithOverridingParameters() {
             var args = new FutureRemoteBounceArguments() {Targets = new {One = new Mock<ITask>().Object}};
-            IParameter param1 = new Parameter<string> {Name = "name1"};
-            IParameter param2 = new Parameter<string> {Name = "name2"};
+            var param1 = new Parameter<string> {Name = "name1"};
+            var param2 = new Parameter<string> { Name = "name2" };
 
             var argsWithParam1 = args.WithRemoteParameter(param1, "value1");
             var argsWithParam2 = args.WithRemoteParameter(param2, "value2");

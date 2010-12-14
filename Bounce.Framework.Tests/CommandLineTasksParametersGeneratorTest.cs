@@ -21,7 +21,11 @@ namespace Bounce.Framework.Tests {
             finder.Setup(f => f.FindParametersInTask(task2)).Returns(new[] {param1, param3});
 
             var generator = new CommandLineTasksParametersGenerator(finder.Object, typeParsers);
-            var args = generator.GenerateCommandLineParametersForTasks(new[] {task1, task2}, new [] {new FakeParameter {Name = "name2", GeneratedValue = "/name2:anothervalue2"}});
+
+            FakeParameter param2Override = new FakeParameter {Name = "name2", GeneratedValue = "/name2:anothervalue2"};
+            FakeParameter notUsedParameterOverride = new FakeParameter {Name = "notused", GeneratedValue = "/notused:notusedvalue"};
+
+            var args = generator.GenerateCommandLineParametersForTasks(new[] {task1, task2}, new [] {param2Override, notUsedParameterOverride});
 
             Assert.That(args, Is.EqualTo(@"/name1:value1 /name2:anothervalue2 ""/name3:value 3"""));
         }

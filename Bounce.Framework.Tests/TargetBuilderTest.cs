@@ -92,8 +92,8 @@ namespace Bounce.Framework.Tests {
             dependent1.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });
             dependent2.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });
 
-            var builder = new TargetInvoker(bounce);
-            builder.Invoke(BounceCommand.Build, all.Object);
+            var invoker = new TargetInvoker(bounce);
+            invoker.Invoke(BounceCommand.Build, all.Object);
 
             twiceADependency.Verify(t => t.Invoke(BounceCommand.Build, bounce), Times.Once());
         }
