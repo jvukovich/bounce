@@ -42,6 +42,16 @@ rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-ou
             Assert.That(Output.ToString(), Is.EqualTo(rexecCommands));
         }
 
+        [Test]
+        public void ShouldInvokeRemoteTargetWithArguments() {
+            MethodInfo method = typeof(MultipleRemoteTargetsProvider).GetMethod("GetTargets");
+            new BounceRunner().Run(new[] {"build", "RemoteOne", "/machineName:machine1"}, method);
+
+            string rexecCommands = "machine1\r\n";
+
+            Assert.That(Output.ToString(), Is.EqualTo(rexecCommands));
+        }
+
         private static TextWriter Output;
 
         class TargetsProvider {
