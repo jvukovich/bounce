@@ -9,8 +9,4 @@ namespace Bounce.Framework {
         bool IsLogged { get; }
         void Describe(TextWriter output);
     }
-
-    public class TaskDependency {
-        public ITask Task;
-    }
 }

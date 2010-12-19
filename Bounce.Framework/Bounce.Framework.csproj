@@ -164,6 +164,7 @@
     <Compile Include="TargetsMethodWrongSignatureException.cs" />
     <Compile Include="TargetsParser.cs" />
     <Compile Include="TargetsRetriever.cs" />
+    <Compile Include="TaskDependency.cs" />
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="Task.cs" />
     <Compile Include="TaskDependencyFinder.cs" />
