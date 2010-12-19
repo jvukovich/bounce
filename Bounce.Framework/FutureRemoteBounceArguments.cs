@@ -21,12 +21,12 @@ namespace Bounce.Framework {
 
         public FutureRemoteBounceArguments() : this(new TargetsParser(), new LogOptionCommandLineTranslator(), new CommandLineTasksParametersGenerator()) {}
 
-        public override string Value
+        public override string GetValue()
         {
-            get { return GeneratedBounceArguments; }
+            return GeneratedBounceArguments;
         }
 
-        public override void Invoke(BounceCommand command, IBounce bounce) {
+        public override void InvokeFuture(BounceCommand command, IBounce bounce) {
             GeneratedBounceArguments = GetBounceArguments(bounce, command);
         }
 

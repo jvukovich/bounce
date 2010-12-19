@@ -75,6 +75,7 @@
     <Compile Include="FileNameFilterTest.cs" />
     <Compile Include="FileSystemCopierTest.cs" />
     <Compile Include="FileUtilsTest.cs" />
+    <Compile Include="FutureTest.cs" />
     <Compile Include="GitRepoParserTest.cs" />
     <Compile Include="GitCheckoutTest.cs" />
     <Compile Include="GlobToRegexConverterTest.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Features\BuildingATargetFeature.cs" />
     <Compile Include="FutureRemoteBounceArgumentsTest.cs" />
     <Compile Include="RemoteBounceTest.cs" />
+    <Compile Include="SelectTaskTest.cs" />
     <Compile Include="TargetBuilderTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />
     <Compile Include="FakeTask.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="TaskDependencyFinderTest.cs" />
     <Compile Include="TaskTest.cs" />
     <Compile Include="CopyTest.cs" />
+    <Compile Include="TaskTestExtensions.cs" />
     <Compile Include="TeamCityMSBuildLoggerTest.cs" />
     <Compile Include="TeamCityTextFormatterTest.cs" />
     <Compile Include="TypeParsersTest.cs" />

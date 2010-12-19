@@ -11,8 +11,8 @@ namespace Bounce.Framework {
             this.getValue = getValue;
         }
 
-        public override TP Value {
-            get { return getValue(); }
+        public override TP GetValue() {
+            return getValue();
         }
 
         public override IEnumerable<ITask> Dependencies {

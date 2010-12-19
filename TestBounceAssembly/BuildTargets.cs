@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using Bounce.Framework;
@@ -130,6 +131,28 @@ namespace TestBounceAssembly {
                 },
                 Downloads = downloads,
             };
+        }
+    }
+
+    public class SimpleTask : Task {
+        [Dependency]
+        public Future<string> Description;
+
+        public override void Build(IBounce bounce) {
+            bounce.ShellCommand.ExecuteAndExpectSuccess("cmd", "/c dir");
+        }
+
+        public override void Clean(IBounce bounce) {
+            Console.WriteLine("Cleaning {0}", Description.Value);
+        }
+    }
+
+    public class TargetBuilder {
+        [Targets]
+        public static object GetTargets() {
+            return new {
+                           Simple = new SimpleTask {Description = "our simple task"},
+                       };
         }
     }
 }

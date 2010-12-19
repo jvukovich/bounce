@@ -43,10 +43,10 @@ namespace Bounce.Framework {
 
         public override void Build(IBounce bounce) {
             var fromPath = FromPath.Value;
-            var toPath = ToPath.Value;
+            var toPath = _toPath.Value;
 
             bounce.Log.Debug(Directory.GetCurrentDirectory());
-            bounce.Log.Debug("copying from: {0}, to: {1}", FromPath.Value, ToPath.Value);
+            bounce.Log.Debug("copying from: {0}, to: {1}", fromPath, toPath);
 
             FileSystemCopier.Copy(fromPath, toPath, GetValueOf(Excludes), GetValueOf(Includes));
         }
@@ -56,7 +56,7 @@ namespace Bounce.Framework {
         }
 
         public override void Clean() {
-            FileSystemCopier.Delete(ToPath.Value);
+            FileSystemCopier.Delete(_toPath.Value);
         }
     }
 }

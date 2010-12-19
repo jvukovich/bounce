@@ -5,9 +5,27 @@ using System.Linq;
 
 namespace Bounce.Framework {
     public abstract class Future<T> : ITask {
-        public abstract T Value { get; }
+        public T Value {
+            get {
+                if (Invoked) {
+                    return GetValue();
+                } else {
+                    throw new DependencyBuildFailureException(this, "no value for future");
+                }
+            }
+        }
+
+        private bool Invoked = true;
+
+        public abstract T GetValue();
         public abstract IEnumerable<ITask> Dependencies { get; }
-        public virtual void Invoke(BounceCommand command, IBounce bounce) { }
+
+        public void Invoke(BounceCommand command, IBounce bounce) {
+            InvokeFuture(command, bounce);
+            Invoked = true;
+        }
+
+        public virtual void InvokeFuture(BounceCommand command, IBounce bounce) {}
 
         public static implicit operator Future<T>(T v) {
             return new PlainValue<T>(v);

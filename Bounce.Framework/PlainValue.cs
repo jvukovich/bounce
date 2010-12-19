@@ -12,8 +12,8 @@ namespace Bounce.Framework {
             get { return new ITask[0]; }
         }
 
-        public override T Value {
-            get { return _value; }
+        public override T GetValue() {
+            return _value;
         }
 
         public void SetValue(T val) {

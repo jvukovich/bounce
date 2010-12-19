@@ -155,6 +155,7 @@
     <Compile Include="Iis6ScriptMap.cs" />
     <Compile Include="RemoteBounce.cs" />
     <Compile Include="FutureRemoteBounceArguments.cs" />
+    <Compile Include="SelectTask.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="ShellExecutableNotFoundException.cs" />
     <Compile Include="Target.cs" />

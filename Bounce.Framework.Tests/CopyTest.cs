@@ -19,7 +19,7 @@ namespace Bounce.Framework.Tests {
             var bounce = new Mock<IBounce>();
             bounce.SetupGet(b => b.Log).Returns(new Mock<ILog>().Object);
 
-            toDir.Build(bounce.Object);
+            toDir.TestBuild();
 
             copier.Verify(c => c.Copy(fromPath, toPath, excludes, includes), Times.Once());
         }
@@ -31,7 +31,7 @@ namespace Bounce.Framework.Tests {
 
             var toDir = new Copy(copier.Object) { ToPath = toPath};
 
-            toDir.Clean();
+            toDir.TestClean();
 
             copier.Verify(c => c.Delete(toPath), Times.Once());
         }

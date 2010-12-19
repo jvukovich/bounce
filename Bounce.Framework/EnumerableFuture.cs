@@ -7,7 +7,7 @@ namespace Bounce.Framework
     public abstract class EnumerableFuture<T> : TaskWithValue<IEnumerable<T>> where T : ITask {
         private IEnumerable<T> _value;
 
-        public override void Invoke(BounceCommand command, IBounce bounce) {
+        public override void InvokeFuture(BounceCommand command, IBounce bounce) {
             _value = GetTasks(bounce);
 
             foreach (var task in _value)
@@ -18,9 +18,9 @@ namespace Bounce.Framework
 
         public abstract IEnumerable<T> GetTasks(IBounce bounce);
 
-        public override IEnumerable<T> Value
+        public override IEnumerable<T> GetValue()
         {
-            get { return _value; }
+            return _value;
         }
     }
 
@@ -61,8 +61,12 @@ namespace Bounce.Framework
             return new ManyDependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }
 
-        public static ITask OptionalTask<T>(this Future<bool> condition, Func<T> getResult) where T : ITask {
-            return new OptionalTask<T>(condition, getResult);
+        public static ITask OptionalTask<T>(this Future<bool> condition, Func<T> getOptionalTask) where T : ITask {
+            return new OptionalTask<T>(condition, getOptionalTask);
+        }
+
+        public static ITask SelectTask<TInput, TTaskOutput>(this Future<TInput> input, Func<TInput, TTaskOutput> getTask) where TTaskOutput : ITask {
+            return new SelectTask<TInput, TTaskOutput>(input, getTask);
         }
     }
 }
