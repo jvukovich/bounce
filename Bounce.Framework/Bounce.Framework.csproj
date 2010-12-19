@@ -66,6 +66,7 @@
     <Compile Include="BounceExceptionPresenter.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildResult.cs" />
+    <Compile Include="CleanAfterBuildRegister.cs" />
     <Compile Include="CommandAndTargetParser.cs" />
     <Compile Include="CommandExecutionException.cs" />
     <Compile Include="CleanDirectory.cs" />

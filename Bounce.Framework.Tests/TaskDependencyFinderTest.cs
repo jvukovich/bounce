@@ -33,7 +33,23 @@ namespace Bounce.Framework.Tests {
         {
             var port = new Mock<Future<int>>().Object;
             var deps = new TaskDependencyFinder().GetDependenciesFor(new Iis6WebSiteBinding {Port = port});
-            Assert.That(deps.Select(d => d.Task), Has.Member(port));
+            Assert.That(deps.Select(d => d.Task).ToArray(), Has.Member(port));
+        }
+
+        [Test]
+        public void DependencyShouldIndicateCleanAfterBuild() {
+            var task = new TaskWithCleanAfterBuildDependencies();
+            var deps = new TaskDependencyFinder().GetDependenciesFor(task);
+
+            Assert.That(deps.First(d => d.Task == task.A).CleanAfterBuild, Is.True);
+            Assert.That(deps.First(d => d.Task == task.B).CleanAfterBuild, Is.False);
+            Assert.That(deps.Where(d => d.Task == task.C), Is.Empty);
+        }
+
+        class TaskWithCleanAfterBuildDependencies : Task {
+            [Dependency, CleanAfterBuild] public ITask A = new Mock<ITask>().Object;
+            [Dependency] public ITask B = new Mock<ITask>().Object;
+            [CleanAfterBuild] public ITask C = new Mock<ITask>().Object;
         }
 
         private void AssertThatCreatedObjectReturnsDependencies(Func<ITask,ITask,SomeTask, ITask> createObject, bool areEnumerations) {
@@ -45,12 +61,11 @@ namespace Bounce.Framework.Tests {
 
             var task = createObject(a, b, c);
 
-            IDictionary<string, ITask> depFields = finder.GetDependencyFieldsFor(task);
             IEnumerable<TaskDependency> deps = finder.GetDependenciesFor(task);
 
-            Assert.That(depFields[MakeEnumerationProperty("A", areEnumerations)], Is.SameAs(a));
-            Assert.That(depFields[MakeEnumerationProperty("B", areEnumerations)], Is.SameAs(b));
-            Assert.That(depFields[MakeEnumerationProperty("C", areEnumerations)], Is.SameAs(c));
+            Assert.That(deps.Single(d => d.Name == MakeEnumerationProperty("A", areEnumerations)).Task, Is.SameAs(a));
+            Assert.That(deps.Single(d => d.Name == MakeEnumerationProperty("B", areEnumerations)).Task, Is.SameAs(b));
+            Assert.That(deps.Single(d => d.Name == MakeEnumerationProperty("C", areEnumerations)).Task, Is.SameAs(c));
             Assert.That(deps.Select(d => d.Task), Is.EquivalentTo(new [] {a, b, c}));
         }
 

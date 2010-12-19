@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class TargetInvoker {
         public TaskWalker Walker;
         public HashSet<ITask> BuiltTasks;
         private readonly ITargetBuilderBounce Bounce;
+        private readonly CleanAfterBuildRegister CleanAfterBuildRegister;
 
         public TargetInvoker(ITargetBuilderBounce bounce) {
             BuiltTasks = new HashSet<ITask>();
             Bounce = bounce;
             Walker = new TaskWalker();
+            CleanAfterBuildRegister = new CleanAfterBuildRegister();
         }
 
         public void Invoke(BounceCommand command, ITask task)
@@ -18,13 +21,24 @@ namespace Bounce.Framework {
         }
 
         private void Build(ITask task) {
-            Walker.Walk(task, null, BuildIfNotAlreadyBuilt);
+            Walker.Walk(new TaskDependency {Task = task}, null, BuildIfNotAlreadyBuilt);
+            RegisterCleanupAfterBuild(task);
         }
 
-        private void BuildIfNotAlreadyBuilt(ITask task) {
-            if (!BuiltTasks.Contains(task)) {
-                BuildAndLog(task);
-                BuiltTasks.Add(task);
+        private void RegisterCleanupAfterBuild(ITask task) {
+            Walker.Walk(new TaskDependency {Task = task}, CleanAfterBuildRegister.RegisterDependency, null);
+        }
+
+        public void CleanAfterBuild() {
+            foreach (var taskToClean in CleanAfterBuildRegister.TasksToBeCleaned) {
+                InvokeAndLog(taskToClean, BounceCommand.Clean);
+            }
+        }
+
+        private void BuildIfNotAlreadyBuilt(TaskDependency dep) {
+            if (!BuiltTasks.Contains(dep.Task)) {
+                BuildAndLog(dep.Task);
+                BuiltTasks.Add(dep.Task);
             }
         }
 
@@ -33,12 +47,12 @@ namespace Bounce.Framework {
         }
 
         private void Clean(ITask task) {
-            Walker.Walk(task, CleanAndLog, null);
+            Walker.Walk(new TaskDependency {Task = task}, CleanAndLog, null);
         }
 
-        private void CleanAndLog(ITask task)
+        private void CleanAndLog(TaskDependency dep)
         {
-            InvokeAndLog(task, BounceCommand.Clean);
+            InvokeAndLog(dep.Task, BounceCommand.Clean);
         }
 
         private void InvokeAndLog(ITask task, BounceCommand command)

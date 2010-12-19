@@ -1,10 +1,11 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Moq;
 using NUnit.Framework;
 
 namespace Bounce.Framework.Tests {
     [TestFixture]
-    public class TargetBuilderTest {
+    public class TargetInvokerTest {
         [Test]
         public void ShouldBuildDependenciesBeforeDependencts() {
             var dependent = new Mock<ITask>();
@@ -96,6 +97,65 @@ namespace Bounce.Framework.Tests {
             invoker.Invoke(BounceCommand.Build, all.Object);
 
             twiceADependency.Verify(t => t.Invoke(BounceCommand.Build, bounce), Times.Once());
+        }
+
+        [Test]
+        public void ShouldCleanDependenciesAfterBuildIfMarkedSo() {
+            var artefacts = new HashSet<string>();
+
+            var a = new FakeArtefactTaskWithDependencies(artefacts, "a");
+            var b = new FakeArtefactTaskWithDependencies(artefacts, "b");
+            var cDeps = new[] {new TaskDependency {Task = a}, new TaskDependency {Task = b, CleanAfterBuild = true}};
+            var c = new FakeArtefactTaskWithDependencies(artefacts, "c", cDeps);
+
+            ITargetBuilderBounce bounce = GetBounce();
+            
+            var invoker = new TargetInvoker(bounce);
+            invoker.Invoke(BounceCommand.Build, c);
+            invoker.CleanAfterBuild();
+
+            Assert.That(artefacts, Has.Member("a"));
+            Assert.That(artefacts, Has.No.Member("b"));
+            Assert.That(b.Invoked);
+            Assert.That(artefacts, Has.Member("c"));
+        }
+
+        [Test]
+        public void ShouldNotCleanDepsIfMarkedCleanAfterBuildButAlsoDependedUponElsewhere() {
+            var artefacts = new HashSet<string>();
+
+            var b = new FakeArtefactTaskWithDependencies(artefacts, "b");
+            var cDeps = new[] {new TaskDependency {Task = b}, new TaskDependency {Task = b, CleanAfterBuild = true}};
+            var c = new FakeArtefactTaskWithDependencies(artefacts, "c", cDeps);
+
+            ITargetBuilderBounce bounce = GetBounce();
+            
+            var invoker = new TargetInvoker(bounce);
+            invoker.Invoke(BounceCommand.Build, c);
+
+            Assert.That(artefacts, Has.Member("b"));
+            Assert.That(artefacts, Has.Member("c"));
+        }
+
+        class FakeArtefactTaskWithDependencies : FakeArtefactTask {
+            private readonly IEnumerable<TaskDependency> AdditionalDependencies;
+            public bool Invoked;
+
+            public FakeArtefactTaskWithDependencies(HashSet<string> builtArtefacts, string artefactName) : this(builtArtefacts, artefactName, new TaskDependency[0]) {}
+
+            public FakeArtefactTaskWithDependencies(HashSet<string> builtArtefacts, string artefactName, IEnumerable<TaskDependency> additionalDependencies) : base(builtArtefacts, artefactName) {
+                AdditionalDependencies = additionalDependencies;
+            }
+
+            protected override IEnumerable<TaskDependency> RegisterAdditionalDependencies() {
+                return AdditionalDependencies;
+            }
+
+            public override void Invoke(BounceCommand command, IBounce bounce)
+            {
+                base.Invoke(command, bounce);
+                Invoked = true;
+            }
         }
     }
 }

@@ -33,10 +33,10 @@ namespace Bounce.Framework {
         {
             output.WriteLine("task: {0}", GetType().Name);
 
-            foreach(KeyValuePair<string, ITask> dependency in TaskDependencyFinder.Instance.GetDependencyFieldsFor(this))
+            foreach(TaskDependency dependency in TaskDependencyFinder.Instance.GetDependenciesFor(this))
             {
-                output.Write("    {0}:", dependency.Key);
-                dependency.Value.Describe(output);
+                output.Write("    {0}:", dependency.Name);
+                dependency.Task.Describe(output);
                 output.WriteLine();
             }
         }

@@ -65,6 +65,10 @@ namespace Bounce.Framework {
         public void Invoke(BounceCommand command, ITask task) {
             TargetInvoker.Invoke(command, task);
         }
+
+        public void CleanAfterBuild() {
+            TargetInvoker.CleanAfterBuild();
+        }
     }
 
     public interface ITaskScope : IDisposable {

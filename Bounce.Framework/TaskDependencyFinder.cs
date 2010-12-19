@@ -13,44 +13,84 @@ namespace Bounce.Framework {
         public static TaskDependencyFinder Instance { get; private set; }
 
         private class TypeDependencyGetter {
-            private IEnumerable<FieldInfo> Fields;
-            private IEnumerable<PropertyInfo> Properties;
+            private IEnumerable<TaskDependencyMember> Fields;
+            private IEnumerable<TaskDependencyMember> Properties;
 
             public TypeDependencyGetter(Type type) {
                 var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
 
                 Fields = type
                     .GetFields(bindingFlags)
-                    .Where(IsDependency)
+                    .Where(MemberHasAttribute<DependencyAttribute>)
+                    .Select(prop => new TaskDependencyMember {GetValue = prop.GetValue, Name = prop.Name, CleanAfterBuild = MemberHasAttribute<CleanAfterBuildAttribute>(prop)})
                     .ToArray();
 
                 Properties = type
                     .GetProperties(bindingFlags)
-                    .Where(IsDependency)
+                    .Where(MemberHasAttribute<DependencyAttribute>)
+                    .Select(prop => new TaskDependencyMember {GetValue = o => prop.GetValue(o, new object[0]), Name = prop.Name, CleanAfterBuild = MemberHasAttribute<CleanAfterBuildAttribute>(prop)})
                     .ToArray();
             }
 
-            private class DependencyNameValue {
-                public DependencyNameValue(string name, object value) {
-                    Name = name;
-                    Value = value;
-                }
-
-                public string Name;
-                public object Value;
+            private static bool MemberHasAttribute<T>(MemberInfo memberInfo) {
+                return memberInfo.GetCustomAttributes(typeof(T), true).Length > 0;
             }
 
-            public IDictionary<string, ITask> GetDependencies(object task) {
-                var allDependencies = new Dictionary<string, ITask>();
+            class TaskDependencyMember {
+                public bool CleanAfterBuild;
+                public string Name;
+                public Func<object, object> GetValue;
+            }
+
+            private class DependencyNameValue {
+                private readonly TaskDependencyMember Member;
+                private readonly object Obj;
+                private bool _hasCachedValue;
+                private object _cachedValue;
+
+                public DependencyNameValue(TaskDependencyMember member, object obj) {
+                    Member = member;
+                    Obj = obj;
+                }
+
+                public object Value {
+                    get {
+                        if (!_hasCachedValue) {
+                            _cachedValue = Member.GetValue(Obj);
+                            _hasCachedValue = true;
+                        }
+                        return _cachedValue;
+                    }
+                }
+
+                public TaskDependency CreateTaskDependency(ITask task, int i) {
+                    return CreateTaskDependency(task, Member.Name + "[" + i + "]");
+                }
+
+                private TaskDependency CreateTaskDependency(ITask task, string name) {
+                    return new TaskDependency {
+                                                  Task = task,
+                                                  Name = name,
+                                                  CleanAfterBuild = Member.CleanAfterBuild
+                                              };
+                }
+
+                public TaskDependency CreateTaskDependency() {
+                    return CreateTaskDependency((ITask) Value, Member.Name);
+                }
+            }
+
+            public IEnumerable<TaskDependency> GetDependencies(object task) {
+                var allDependencies = new List<TaskDependency>();
 
                 IEnumerable<DependencyNameValue> fieldValues = Fields
-                    .Select(f => new DependencyNameValue(f.Name, f.GetValue(task)));
+                    .Select(f => new DependencyNameValue(f, task));
 
                 AddDependenciesToSet(allDependencies, fieldValues);
                 AddDependencyEnumerationsToSet(allDependencies, fieldValues);
 
                 IEnumerable<DependencyNameValue> propertyValues = Properties
-                    .Select(p => new DependencyNameValue(p.Name, p.GetValue(task, new object[0])));
+                    .Select(p => new DependencyNameValue(p, task));
 
                 AddDependenciesToSet(allDependencies, propertyValues);
                 AddDependencyEnumerationsToSet(allDependencies, propertyValues);
@@ -58,25 +98,25 @@ namespace Bounce.Framework {
                 return allDependencies;
             }
 
-            private static void AddDependencyEnumerationsToSet(IDictionary<string, ITask> allDependencies, IEnumerable<DependencyNameValue> propertyValues) {
+            private static void AddDependencyEnumerationsToSet(ICollection<TaskDependency> allDependencies, IEnumerable<DependencyNameValue> propertyValues) {
                 var edeps = propertyValues
                     .Where(p => p.Value is IEnumerable);
 
                 foreach (DependencyNameValue edep in edeps) {
                     int n = 0;
                     foreach (ITask d in (IEnumerable) edep.Value) {
-                        allDependencies.Add(edep.Name + "[" + n + "]", d);
+                        allDependencies.Add(edep.CreateTaskDependency(d, n));
                         n++;
                     }
                 }
             }
 
-            private static void AddDependenciesToSet(IDictionary<string, ITask> allDependencies, IEnumerable<DependencyNameValue> depObjects) {
+            private static void AddDependenciesToSet(ICollection<TaskDependency> allDependencies, IEnumerable<DependencyNameValue> depObjects) {
                 IEnumerable<DependencyNameValue> deps = depObjects.ToArray()
                     .Where(p => p.Value is ITask);
 
                 foreach (DependencyNameValue dep in deps) {
-                    allDependencies.Add(dep.Name, (ITask) dep.Value);
+                    allDependencies.Add(dep.CreateTaskDependency());
                 }
             }
         }
@@ -88,10 +128,6 @@ namespace Bounce.Framework {
         }
 
         public IEnumerable<TaskDependency> GetDependenciesFor(object task) {
-            return GetDependencyFieldsFor(task).Values.Select(t => new TaskDependency {Task = t});
-        }
-
-        public IDictionary<string, ITask> GetDependencyFieldsFor(object task) {
             TypeDependencyGetter getter;
 
             var type = task.GetType();
@@ -101,10 +137,6 @@ namespace Bounce.Framework {
             }
 
             return getter.GetDependencies(task);
-        }
-
-        private static bool IsDependency(MemberInfo f) {
-            return f.GetCustomAttributes(typeof(DependencyAttribute), true).Length > 0;
         }
     }
 }

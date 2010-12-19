@@ -67,6 +67,8 @@
     <Compile Include="CommandLineParameterParserTest.cs" />
     <Compile Include="CommandLineParametersTest.cs" />
     <Compile Include="CommandLineTasksParametersGeneratorTest.cs" />
+    <Compile Include="FakeArtefactTask.cs" />
+    <Compile Include="Features\CleanAfterBuildFeature.cs" />
     <Compile Include="WhenBuiltTest.cs" />
     <Compile Include="FakeBounce.cs" />
     <Compile Include="FakePrintTask.cs" />
@@ -94,7 +96,7 @@
     <Compile Include="FutureRemoteBounceArgumentsTest.cs" />
     <Compile Include="RemoteBounceTest.cs" />
     <Compile Include="SelectTaskTest.cs" />
-    <Compile Include="TargetBuilderTest.cs" />
+    <Compile Include="TargetInvokerTest.cs" />
     <Compile Include="DirectoryUtilsTest.cs" />
     <Compile Include="FakeTask.cs" />
     <Compile Include="Iis7Admin.cs" />

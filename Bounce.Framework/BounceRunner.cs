@@ -5,7 +5,6 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        private Bounce _bounce;
         private readonly ITargetsRetriever TargetsRetriever;
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
         private readonly IParameterFinder ParameterFinder;
@@ -18,7 +17,6 @@ namespace Bounce.Framework {
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
             ParameterFinder = parameterFinder;
             CommandAndTargetParser = new CommandAndTargetParser();
-            _bounce = new Bounce(System.Console.Out, System.Console.Error);
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -34,10 +32,12 @@ namespace Bounce.Framework {
                 CommandAndTargets commandAndTargets = CommandAndTargetParser.ParseCommandAndTargetNames(buildArguments, targets);
 
                 if (commandAndTargets.Targets.Count() >= 1) {
-                    InterpretParameters(parameters, parsedParameters, _bounce);
+                    var bounce = new Bounce(System.Console.Out, System.Console.Error);
+
+                    InterpretParameters(parameters, parsedParameters, bounce);
                     EnsureAllRequiredParametersAreSet(parameters, commandAndTargets.Targets);
 
-                    BuildTargets(commandAndTargets);
+                    BuildTargets(bounce, commandAndTargets);
                 }
                 else
                 {
@@ -59,15 +59,16 @@ namespace Bounce.Framework {
             }
         }
 
-        private void BuildTargets(CommandAndTargets commandAndTargets) {
+        private void BuildTargets(Bounce bounce, CommandAndTargets commandAndTargets) {
             foreach(var target in commandAndTargets.Targets) {
-                BuildTarget(target, commandAndTargets.Command);
+                BuildTarget(bounce, target, commandAndTargets.Command);
             }
+            bounce.CleanAfterBuild();
         }
 
-        private void BuildTarget(Target target, BounceCommand command) {
-            using (ITaskScope targetScope = _bounce.TaskScope(target.Task, command, target.Name)) {
-                _bounce.Invoke(command, target.Task);
+        private void BuildTarget(Bounce bounce, Target target, BounceCommand command) {
+            using (ITaskScope targetScope = bounce.TaskScope(target.Task, command, target.Name)) {
+                bounce.Invoke(command, target.Task);
                 targetScope.TaskSucceeded();
             }
         }
