@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class PlainValue<T> : Future<T> {
+    public class PlainValue<T> : TaskWithValue<T> {
         private T _value;
 
         public PlainValue (T value) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    internal class Parameter<T> : Future<T>, IParameter<T> {
+    internal class Parameter<T> : TaskWithValue<T>, IParameter<T> {
         public bool Required { get; set; }
 
         public string Name { get; set; }
