@@ -27,7 +27,7 @@ namespace Bounce.Framework {
         public virtual void InvokeFuture(BounceCommand command, IBounce bounce) {}
 
         public static implicit operator Future<T>(T v) {
-            return new PlainValue<T>(v);
+            return new ImmediateValue<T>(v);
         }
 
         public virtual bool IsLogged { get { return false; } }

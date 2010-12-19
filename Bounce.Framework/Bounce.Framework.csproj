@@ -148,7 +148,7 @@
     <Compile Include="ParsedCommandLineParameter.cs" />
     <Compile Include="ParsedCommandLineParameters.cs" />
     <Compile Include="ParseResult.cs" />
-    <Compile Include="PlainValue.cs" />
+    <Compile Include="ImmediateValue.cs" />
     <Compile Include="ProcessOutput.cs" />
     <Compile Include="ProjectFilePropertyExpressionParser.cs" />
     <Compile Include="PropertyValues.cs" />

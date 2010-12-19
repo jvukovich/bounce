@@ -12,7 +12,7 @@ namespace Bounce.Framework.Tests {
         public void BuildsOutputFileOfFirstProject() {
             UnzipTestSolution();
 
-            var solution = new VisualStudioSolution { SolutionPath = new PlainValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln")) };
+            var solution = new VisualStudioSolution { SolutionPath = new ImmediateValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln")) };
 
             solution.Build();
 
@@ -23,7 +23,7 @@ namespace Bounce.Framework.Tests {
         public void CanAccessProjectsBeforeSolutionExists() {
             DeleteTestSolution();
 
-            var solution = new VisualStudioSolution {SolutionPath = new PlainValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln"))};
+            var solution = new VisualStudioSolution {SolutionPath = new ImmediateValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln"))};
 
             var outputFiles = solution.Projects.Select(p => p.OutputFile);
 
