@@ -67,6 +67,7 @@
     <Compile Include="CommandLineParameterParserTest.cs" />
     <Compile Include="CommandLineParametersTest.cs" />
     <Compile Include="CommandLineTasksParametersGeneratorTest.cs" />
+    <Compile Include="WhenBuiltTest.cs" />
     <Compile Include="FakeBounce.cs" />
     <Compile Include="FakePrintTask.cs" />
     <Compile Include="Features\PrintTask.cs" />

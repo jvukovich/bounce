@@ -181,6 +181,7 @@
     <Compile Include="IParameters.cs" />
     <Compile Include="ITypeParsers.cs" />
     <Compile Include="Copy.cs" />
+    <Compile Include="TaskWithValue.cs" />
     <Compile Include="TeamCityFormatter.cs" />
     <Compile Include="TeamCityLog.cs" />
     <Compile Include="TeamCityLogFactory.cs" />

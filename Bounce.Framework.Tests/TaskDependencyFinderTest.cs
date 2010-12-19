@@ -59,7 +59,7 @@ namespace Bounce.Framework.Tests {
             return enumerations ? s + "[0]" : s;
         }
 
-        class SomeTask : FakeTask {
+        class SomeTask : Task {
         }
 
         class TaskWithFields : SomeTask {
