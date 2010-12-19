@@ -7,12 +7,16 @@ namespace Bounce.Framework {
         public HashSet<ITask> BuiltTasks;
         private readonly ITargetBuilderBounce Bounce;
         private readonly CleanAfterBuildRegister CleanAfterBuildRegister;
+        private readonly OnceOnlyTaskInvoker OnceOnlyCleaner;
+        private readonly OnceOnlyTaskInvoker OnceOnlyBuilder;
 
         public TargetInvoker(ITargetBuilderBounce bounce) {
             BuiltTasks = new HashSet<ITask>();
             Bounce = bounce;
             Walker = new TaskWalker();
             CleanAfterBuildRegister = new CleanAfterBuildRegister();
+            OnceOnlyCleaner = new OnceOnlyTaskInvoker(task => InvokeAndLog(task, BounceCommand.Clean));
+            OnceOnlyBuilder = new OnceOnlyTaskInvoker(task => InvokeAndLog(task, BounceCommand.Build));
         }
 
         public void Invoke(BounceCommand command, ITask task)
@@ -31,28 +35,37 @@ namespace Bounce.Framework {
 
         public void CleanAfterBuild() {
             foreach (var taskToClean in CleanAfterBuildRegister.TasksToBeCleaned) {
-                InvokeAndLog(taskToClean, BounceCommand.Clean);
+                Clean(taskToClean);
             }
         }
 
         private void BuildIfNotAlreadyBuilt(TaskDependency dep) {
-            if (!BuiltTasks.Contains(dep.Task)) {
-                BuildAndLog(dep.Task);
-                BuiltTasks.Add(dep.Task);
-            }
-        }
-
-        private void BuildAndLog(ITask task) {
-            InvokeAndLog(task, BounceCommand.Build);
+            OnceOnlyBuilder.EnsureInvokedAtLeastOnce(dep.Task);
         }
 
         private void Clean(ITask task) {
-            Walker.Walk(new TaskDependency {Task = task}, CleanAndLog, null);
+            Walker.Walk(new TaskDependency {Task = task}, CleanIfNotAlreadyCleaned, null);
         }
 
-        private void CleanAndLog(TaskDependency dep)
-        {
-            InvokeAndLog(dep.Task, BounceCommand.Clean);
+        private void CleanIfNotAlreadyCleaned(TaskDependency dep) {
+            OnceOnlyCleaner.EnsureInvokedAtLeastOnce(dep.Task);
+        }
+
+        class OnceOnlyTaskInvoker {
+            private readonly Action<ITask> Invoke;
+            private HashSet<ITask> InvokedTasks;
+
+            public OnceOnlyTaskInvoker(Action<ITask> invoke) {
+                Invoke = invoke;
+                InvokedTasks = new HashSet<ITask>();
+            }
+
+            public void EnsureInvokedAtLeastOnce(ITask task) {
+                if (!InvokedTasks.Contains(task)) {
+                    Invoke(task);
+                    InvokedTasks.Add(task);
+                }
+            }
         }
 
         private void InvokeAndLog(ITask task, BounceCommand command)

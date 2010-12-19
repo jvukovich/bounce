@@ -100,11 +100,31 @@ namespace Bounce.Framework.Tests {
         }
 
         [Test]
-        public void ShouldCleanDependenciesAfterBuildIfMarkedSo() {
+        public void ShouldOnlyCleanTasksOnceEvenIfTheyAreDependedUponTwice()
+        {
+            var all = new Mock<ITask>();
+            var dependent1 = new Mock<ITask>();
+            var dependent2 = new Mock<ITask>();
+            var twiceADependency = new Mock<ITask>();
+            ITargetBuilderBounce bounce = GetBounce();
+
+            all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependent1.Object}, new TaskDependency {Task = dependent2.Object} });
+            dependent1.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
+            dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
+
+            var invoker = new TargetInvoker(bounce);
+            invoker.Invoke(BounceCommand.Clean, all.Object);
+
+            twiceADependency.Verify(t => t.Invoke(BounceCommand.Clean, bounce), Times.Once());
+        }
+
+        [Test]
+        public void ShouldCleanDependenciesAndTheirDependenciesAfterBuildIfMarkedSo() {
             var artefacts = new HashSet<string>();
 
+            var d = new FakeArtefactTaskWithDependencies(artefacts, "d");
             var a = new FakeArtefactTaskWithDependencies(artefacts, "a");
-            var b = new FakeArtefactTaskWithDependencies(artefacts, "b");
+            var b = new FakeArtefactTaskWithDependencies(artefacts, "b", new[] {new TaskDependency {Task = d}});
             var cDeps = new[] {new TaskDependency {Task = a}, new TaskDependency {Task = b, CleanAfterBuild = true}};
             var c = new FakeArtefactTaskWithDependencies(artefacts, "c", cDeps);
 
@@ -118,6 +138,8 @@ namespace Bounce.Framework.Tests {
             Assert.That(artefacts, Has.No.Member("b"));
             Assert.That(b.Invoked);
             Assert.That(artefacts, Has.Member("c"));
+            Assert.That(artefacts, Has.No.Member("d"));
+            Assert.That(d.Invoked);
         }
 
         [Test]
