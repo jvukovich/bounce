@@ -18,11 +18,6 @@ namespace Bounce.Framework {
             SetValue(value);
         }
 
-        public override IEnumerable<ITask> Dependencies
-        {
-            get { return new ITask[0]; }
-        }
-
         public override T GetValue() {
             if (!HasValue) {
                 throw new NoValueForParameterException(Name);
