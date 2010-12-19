@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Bounce.Framework.Tests {
     public class FakeTask : ITask {
-        public IEnumerable<ITask> Dependencies { get; set; }
+        public IEnumerable<TaskDependency> Dependencies { get; set; }
 
         public virtual void Build(IBounce bounce) { }
         public virtual void Clean(IBounce bounce) { }

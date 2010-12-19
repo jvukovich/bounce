@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Linq;
+using Moq;
 using NUnit.Framework;
 
 namespace Bounce.Framework.Tests {
@@ -80,7 +81,7 @@ namespace Bounce.Framework.Tests {
 
             var subPath = gitRepo.Files["test.txt"];
             Assert.That(subPath.Value, Is.EqualTo(@"dir\test.txt"));
-            Assert.That(subPath.Dependencies, Has.Member(gitRepo));
+            Assert.That(subPath.Dependencies.Select(d => d.Task), Has.Member(gitRepo));
         }
     }
 }

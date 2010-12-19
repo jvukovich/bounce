@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 
@@ -44,10 +45,10 @@ namespace Bounce.Framework.Tests {
 
             var copy = new Copy {FromPath = fromPath, ToPath = toPath};
 
-            Assert.That(copy.Dependencies, Has.Member(fromPath));
-            Assert.That(copy.Dependencies, Has.Member(toPath));
+            Assert.That(copy.Dependencies.Select(d => d.Task), Has.Member(fromPath));
+            Assert.That(copy.Dependencies.Select(d => d.Task), Has.Member(toPath));
 
-            Assert.That(copy.ToPath.Dependencies, Has.Member(copy));
+            Assert.That(copy.ToPath.Dependencies.Select(d => d.Task), Has.Member(copy));
         }
     }
 }

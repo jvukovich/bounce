@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Bounce.Framework {
     public abstract class Task : ITask {
-        public virtual IEnumerable<ITask> Dependencies {
+        public virtual IEnumerable<TaskDependency> Dependencies {
             get {
                 return TaskDependencyFinder.Instance.GetDependenciesFor(this).Concat(RegisterAdditionalDependencies());
             }
@@ -41,8 +41,8 @@ namespace Bounce.Framework {
             }
         }
 
-        protected virtual IEnumerable<ITask> RegisterAdditionalDependencies() {
-            return new ITask[0];
+        protected virtual IEnumerable<TaskDependency> RegisterAdditionalDependencies() {
+            return new TaskDependency[0];
         }
     }
 }

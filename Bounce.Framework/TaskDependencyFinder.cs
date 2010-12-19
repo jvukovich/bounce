@@ -87,8 +87,8 @@ namespace Bounce.Framework {
             DependencyGetters = new Dictionary<Type, TypeDependencyGetter>();
         }
 
-        public IEnumerable<ITask> GetDependenciesFor(object task) {
-            return GetDependencyFieldsFor(task).Values;
+        public IEnumerable<TaskDependency> GetDependenciesFor(object task) {
+            return GetDependencyFieldsFor(task).Values.Select(t => new TaskDependency {Task = t});
         }
 
         public IDictionary<string, ITask> GetDependencyFieldsFor(object task) {

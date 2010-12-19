@@ -13,7 +13,7 @@ namespace Bounce.Framework.Tests {
 
             var buildActions = new StringWriter();
 
-            dependent.Setup(d => d.Dependencies).Returns(new[] {dependency.Object});
+            dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependency.Object}});
             dependent.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependent;"));
             dependency.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependency;"));
 
@@ -27,7 +27,7 @@ namespace Bounce.Framework.Tests {
         public void EachTaskShouldDescribeThemSelvesBeforeBuild() {
             var dependent = new FakeDescribingTask("one");
             var dependency = new FakeDescribingTask("two");
-            dependent.Dependencies = new[] {dependency};
+            dependent.Dependencies = new[] {new TaskDependency {Task = dependency}};
 
             ITargetBuilderBounce bounce = GetBounce();
 
@@ -68,7 +68,7 @@ namespace Bounce.Framework.Tests {
 
             var cleanActions = new StringWriter();
 
-            dependent.Setup(d => d.Dependencies).Returns(new[] {dependency.Object});
+            dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependency.Object}});
             dependent.Setup(d => d.Invoke(BounceCommand.Clean, bounce)).Callback(() => cleanActions.Write("clean dependent;"));
 
             dependency.Setup(d => d.Invoke(BounceCommand.Clean, bounce)).Callback(() => cleanActions.Write("clean dependency;"));
@@ -88,9 +88,9 @@ namespace Bounce.Framework.Tests {
             var twiceADependency = new Mock<ITask>();
             ITargetBuilderBounce bounce = GetBounce();
 
-            all.Setup(d => d.Dependencies).Returns(new[] { dependent1.Object, dependent2.Object });
-            dependent1.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });
-            dependent2.Setup(d => d.Dependencies).Returns(new[] { twiceADependency.Object });
+            all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependent1.Object}, new TaskDependency {Task = dependent2.Object} });
+            dependent1.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
+            dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
 
             var invoker = new TargetInvoker(bounce);
             invoker.Invoke(BounceCommand.Build, all.Object);

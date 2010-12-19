@@ -113,7 +113,7 @@ namespace Bounce.Framework
             DeleteIfExtant();
         }
 
-        protected override IEnumerable<ITask> RegisterAdditionalDependencies() {
+        protected override IEnumerable<TaskDependency> RegisterAdditionalDependencies() {
             return Bindings.SelectMany(b => TaskDependencyFinder.Instance.GetDependenciesFor(b));
         }
     }

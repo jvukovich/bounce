@@ -10,7 +10,7 @@ namespace Bounce.Framework.Tests {
             ITask dep = new Mock<ITask>().Object;
             var task = new ATask {A = dep};
 
-            Assert.That(task.Dependencies, Is.EquivalentTo(new[] {dep}));
+            Assert.That(task.Dependencies.Select(d => d.Task), Is.EquivalentTo(new[] {dep}));
         }
 
         class ATask : Task {
@@ -22,7 +22,7 @@ namespace Bounce.Framework.Tests {
             var paths = new Future<string> [] {"one", "two"};
             var tests = new NUnitTests {DllPaths = paths};
             
-            Assert.That(tests.Dependencies.ToArray(), Has.Member(paths[0]).And.Member(paths[1]));
+            Assert.That(tests.Dependencies.Select(d => d.Task), Has.Member(paths[0]).And.Member(paths[1]));
         }
 
         [Test]

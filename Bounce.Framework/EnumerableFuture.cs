@@ -26,29 +26,29 @@ namespace Bounce.Framework
 
     public class DependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
         [Dependency] private Future<IEnumerable<TInput>> InputValues;
-        private Func<TInput, TOutput> GetValue;
+        private Func<TInput, TOutput> GetTask;
 
-        public DependentEnumerableFuture(Future<IEnumerable<TInput>> inputValues, Func<TInput, TOutput> getValue) {
+        public DependentEnumerableFuture(Future<IEnumerable<TInput>> inputValues, Func<TInput, TOutput> getTask) {
             InputValues = inputValues;
-            GetValue = getValue;
+            GetTask = getTask;
         }
 
         public override IEnumerable<TOutput> GetTasks(IBounce bounce) {
-            return InputValues.Value.Select(v => GetValue(v));
+            return InputValues.Value.Select(v => GetTask(v));
         }
     }
 
     public class ManyDependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
         [Dependency] private Future<IEnumerable<TInput>> InputValues;
-        private Func<TInput, IEnumerable<TOutput>> GetValue;
+        private Func<TInput, IEnumerable<TOutput>> GetManyTasks;
 
-        public ManyDependentEnumerableFuture(Future<IEnumerable<TInput>> inputValues, Func<TInput, IEnumerable<TOutput>> getValue) {
+        public ManyDependentEnumerableFuture(Future<IEnumerable<TInput>> inputValues, Func<TInput, IEnumerable<TOutput>> getManyTasks) {
             InputValues = inputValues;
-            GetValue = getValue;
+            GetManyTasks = getManyTasks;
         }
 
         public override IEnumerable<TOutput> GetTasks(IBounce bounce) {
-            return InputValues.Value.SelectMany(v => GetValue(v));
+            return InputValues.Value.SelectMany(v => GetManyTasks(v));
         }
     }
 

@@ -33,7 +33,7 @@ namespace Bounce.Framework.Tests {
         {
             var port = new Mock<Future<int>>().Object;
             var deps = new TaskDependencyFinder().GetDependenciesFor(new Iis6WebSiteBinding {Port = port});
-            Assert.That(deps, Has.Member(port));
+            Assert.That(deps.Select(d => d.Task), Has.Member(port));
         }
 
         private void AssertThatCreatedObjectReturnsDependencies(Func<ITask,ITask,SomeTask, ITask> createObject, bool areEnumerations) {
@@ -46,12 +46,12 @@ namespace Bounce.Framework.Tests {
             var task = createObject(a, b, c);
 
             IDictionary<string, ITask> depFields = finder.GetDependencyFieldsFor(task);
-            IEnumerable<ITask> deps = finder.GetDependenciesFor(task);
+            IEnumerable<TaskDependency> deps = finder.GetDependenciesFor(task);
 
             Assert.That(depFields[MakeEnumerationProperty("A", areEnumerations)], Is.SameAs(a));
             Assert.That(depFields[MakeEnumerationProperty("B", areEnumerations)], Is.SameAs(b));
             Assert.That(depFields[MakeEnumerationProperty("C", areEnumerations)], Is.SameAs(c));
-            Assert.That(deps, Is.EquivalentTo(new [] {a, b, c}));
+            Assert.That(deps.Select(d => d.Task), Is.EquivalentTo(new [] {a, b, c}));
         }
 
         private string MakeEnumerationProperty(string s, bool enumerations)

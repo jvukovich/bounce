@@ -23,7 +23,7 @@ namespace Bounce.Framework {
             if (deps == null) {
                 return new ITask[0];
             } else {
-                return deps.Where(d => d != null);
+                return deps.Where(d => d != null).Select(d => d.Task);
             }
         }
     }

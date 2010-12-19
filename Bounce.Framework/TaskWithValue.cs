@@ -24,14 +24,14 @@ namespace Bounce.Framework {
 
         public virtual void InvokeFuture(BounceCommand command, IBounce bounce) {}
 
-        public override IEnumerable<ITask> Dependencies {
+        public override IEnumerable<TaskDependency> Dependencies {
             get {
                 return TaskDependencyFinder.Instance.GetDependenciesFor(this).Concat(RegisterAdditionalDependencies());
             }
         }
 
-        protected virtual IEnumerable<ITask> RegisterAdditionalDependencies() {
-            return new ITask[0];
+        protected virtual IEnumerable<TaskDependency> RegisterAdditionalDependencies() {
+            return new TaskDependency[0];
         }
     }
 }

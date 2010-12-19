@@ -4,9 +4,13 @@ using System.Linq;
 
 namespace Bounce.Framework {
     public interface ITask {
-        IEnumerable<ITask> Dependencies { get; }
+        IEnumerable<TaskDependency> Dependencies { get; }
         void Invoke(BounceCommand command, IBounce bounce);
         bool IsLogged { get; }
         void Describe(TextWriter output);
+    }
+
+    public class TaskDependency {
+        public ITask Task;
     }
 }
