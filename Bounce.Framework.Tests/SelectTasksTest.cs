@@ -16,7 +16,7 @@ namespace Bounce.Framework.Tests
             Future<IEnumerable<string>> strings = new[] {"one", "two", "three"};
             Future<IEnumerable<FakePrintTask>> printers = strings.SelectTasks(s => new FakePrintTask(output, s));
 
-            printers.Invoke(BounceCommand.Build, new FakeBounce());
+            printers.TestBuild();
 
             Assert.That(printers.Value.Count(), Is.EqualTo(3));
             Assert.That(printers.Value, Has.All.AssignableTo(typeof (FakePrintTask)));
@@ -29,7 +29,7 @@ namespace Bounce.Framework.Tests
             Future<IEnumerable<string>> strings = new[] {"one", "two", "three"};
             Future<IEnumerable<FakePrintTask>> printers = strings.SelectManyTasks(s => new [] {new FakePrintTask(output, s), new FakePrintTask(output, "0")});
 
-            printers.Invoke(BounceCommand.Build, new FakeBounce());
+            printers.TestBuild();
 
             Assert.That(printers.Value.Count(), Is.EqualTo(6));
             Assert.That(printers.Value, Has.All.AssignableTo(typeof (FakePrintTask)));

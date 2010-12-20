@@ -23,6 +23,16 @@ namespace Bounce.Framework.Tests.Features {
         }
 
         [Test]
+        public void ShouldNotCleanIfBuildAndKeep() {
+            MethodInfo method = typeof (Targets).GetMethod("GetTargets");
+            new BounceRunner().Run(new[] {"buildandkeep", "C"}, method);
+
+            Assert.That(BuiltArtefacts, Has.Member("a"));
+            Assert.That(BuiltArtefacts, Has.Member("b"));
+            Assert.That(BuiltArtefacts, Has.Member("c"));
+        }
+
+        [Test]
         public void ShouldNotCleanTaskIfRequiredForDifferentTarget() {
             MethodInfo method = typeof (Targets).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"build", "C", "DependsOnTaskToBeCleaned"}, method);

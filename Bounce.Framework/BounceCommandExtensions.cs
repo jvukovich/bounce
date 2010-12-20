@@ -7,11 +7,24 @@ namespace Bounce.Framework {
         {
             switch (command) {
                 case BounceCommand.Build:
+                case BounceCommand.BuildAndKeep:
                     build();
                     break;
                 case BounceCommand.Clean:
                     clean();
                     break;
+                default:
+                    throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
+            }
+        }
+
+        public static bool CleanAfterBuild(this BounceCommand command) {
+            switch (command) {
+                case BounceCommand.Build:
+                    return true;
+                case BounceCommand.BuildAndKeep:
+                case BounceCommand.Clean:
+                    return false;
                 default:
                     throw new ConfigurationException(String.Format("no such command {0}, try build or clean", command));
             }

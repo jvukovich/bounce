@@ -11,7 +11,7 @@ namespace Bounce.Framework.Tests {
 
             ITask optionalTask = condition.OptionalTask(() => new FakePrintTask(output, "shouldn't see this"));
 
-            optionalTask.Invoke(BounceCommand.Build, new FakeBounce());
+            optionalTask.TestBuild();
 
             Assert.That(output.ToString(), Is.Empty);
         }
@@ -23,7 +23,7 @@ namespace Bounce.Framework.Tests {
 
             ITask optionalTask = condition.OptionalTask(() => new FakePrintTask(output, "task_built"));
 
-            optionalTask.Invoke(BounceCommand.Build, new FakeBounce());
+            optionalTask.TestBuild();
 
             Assert.That(output.ToString(), Is.EqualTo("task_built;"));
         }
