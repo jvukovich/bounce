@@ -4,8 +4,17 @@ using System.Linq;
 
 namespace Bounce.Framework {
     internal class CommandAndTargetParser {
+        private IBounceCommandParser BounceCommandParser;
+
+        public CommandAndTargetParser() : this(new BounceCommandParser()) {
+        }
+
+        public CommandAndTargetParser(IBounceCommandParser bounceCommandParser) {
+            BounceCommandParser = bounceCommandParser;
+        }
+
         public CommandAndTargets ParseCommandAndTargetNames(string[] buildArguments, IDictionary<string, ITask> allTargets) {
-            BounceCommand command = BounceCommand.Build;
+            IBounceCommand command = BounceCommandParser.Build;
             int targetNamesIndex;
             if (buildArguments.Length > 0 && TryParseCommand(buildArguments[0], ref command)) {
                 targetNamesIndex = 1;
@@ -20,15 +29,13 @@ namespace Bounce.Framework {
             };
         }
 
-        private bool TryParseCommand(string command, ref BounceCommand bounceCommand) {
-            if (command.ToLower() != command) {
-                return false;
-            }
+        private bool TryParseCommand(string commandString, ref IBounceCommand bounceCommand) {
+            var command = BounceCommandParser.Parse(commandString);
 
-            try {
-                bounceCommand = (BounceCommand) Enum.Parse(typeof (BounceCommand), command, true);
+            if (command != null) {
+                bounceCommand = command;
                 return true;
-            } catch (Exception) {
+            } else {
                 return false;
             }
         }

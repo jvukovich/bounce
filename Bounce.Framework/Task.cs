@@ -10,7 +10,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public virtual void Invoke(BounceCommand command, IBounce bounce)
+        public virtual void Invoke(IBounceCommand command, IBounce bounce)
         {
             command.InvokeCommand(() => Build(bounce), () => Clean(bounce));
         }

@@ -6,7 +6,7 @@ namespace Bounce.Framework {
     public abstract class Future<T> : ITask {
         public abstract T Value { get; }
         public abstract IEnumerable<TaskDependency> Dependencies { get; }
-        public abstract void Invoke(BounceCommand command, IBounce bounce);
+        public abstract void Invoke(IBounceCommand command, IBounce bounce);
 
         public static implicit operator Future<T>(T v) {
             return new ImmediateValue<T>(v);

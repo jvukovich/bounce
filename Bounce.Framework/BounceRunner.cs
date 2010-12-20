@@ -16,7 +16,7 @@ namespace Bounce.Framework {
             TargetsRetriever = targetsRetriever;
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
             ParameterFinder = parameterFinder;
-            CommandAndTargetParser = new CommandAndTargetParser();
+            CommandAndTargetParser = new CommandAndTargetParser(new BounceCommandParser());
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
@@ -63,10 +63,10 @@ namespace Bounce.Framework {
             foreach(var target in commandAndTargets.Targets) {
                 BuildTarget(bounce, target, commandAndTargets.Command);
             }
-            bounce.CleanAfterBuild();
+            bounce.CleanAfterBuild(commandAndTargets.Command);
         }
 
-        private void BuildTarget(Bounce bounce, Target target, BounceCommand command) {
+        private void BuildTarget(Bounce bounce, Target target, IBounceCommand command) {
             using (ITaskScope targetScope = bounce.TaskScope(target.Task, command, target.Name)) {
                 bounce.Invoke(command, target.Task);
                 targetScope.TaskSucceeded();
@@ -113,7 +113,7 @@ namespace Bounce.Framework {
     }
 
     internal class CommandAndTargets {
-        public BounceCommand Command;
+        public IBounceCommand Command;
         public IEnumerable<Target> Targets;
     }
 }

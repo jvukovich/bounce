@@ -15,17 +15,17 @@ namespace Bounce.Framework {
             Bounce = bounce;
             Walker = new TaskWalker();
             CleanAfterBuildRegister = new CleanAfterBuildRegister();
-            OnceOnlyCleaner = new OnceOnlyTaskInvoker(task => InvokeAndLog(task, BounceCommand.Clean));
-            OnceOnlyBuilder = new OnceOnlyTaskInvoker(task => InvokeAndLog(task, BounceCommand.Build));
+            OnceOnlyCleaner = new OnceOnlyTaskInvoker((task, command) => InvokeAndLog(task, command));
+            OnceOnlyBuilder = new OnceOnlyTaskInvoker((task, command) => InvokeAndLog(task, command));
         }
 
-        public void Invoke(BounceCommand command, ITask task)
+        public void Invoke(IBounceCommand command, ITask task)
         {
-            command.InvokeCommand(() => Build(task), () => Clean(task));
+            command.InvokeCommand(() => Build(task, command), () => Clean(task, command));
         }
 
-        private void Build(ITask task) {
-            Walker.Walk(new TaskDependency {Task = task}, null, BuildIfNotAlreadyBuilt);
+        private void Build(ITask task, IBounceCommand command) {
+            Walker.Walk(new TaskDependency {Task = task}, null, dep => BuildIfNotAlreadyBuilt(dep, command));
             RegisterCleanupAfterBuild(task);
         }
 
@@ -33,42 +33,45 @@ namespace Bounce.Framework {
             Walker.Walk(new TaskDependency {Task = task}, CleanAfterBuildRegister.RegisterDependency, null);
         }
 
-        public void CleanAfterBuild() {
-            foreach (var taskToClean in CleanAfterBuildRegister.TasksToBeCleaned) {
-                Clean(taskToClean);
+        public void CleanAfterBuild(IBounceCommand command) {
+            IBounceCommand cleanAfterBuildCommand = command.CleanAfterBuildCommand;
+            if (cleanAfterBuildCommand != null) {
+                foreach (var taskToClean in CleanAfterBuildRegister.TasksToBeCleaned) {
+                    Clean(taskToClean, cleanAfterBuildCommand);
+                }
             }
         }
 
-        private void BuildIfNotAlreadyBuilt(TaskDependency dep) {
-            OnceOnlyBuilder.EnsureInvokedAtLeastOnce(dep.Task);
+        private void BuildIfNotAlreadyBuilt(TaskDependency dep, IBounceCommand command) {
+            OnceOnlyBuilder.EnsureInvokedAtLeastOnce(dep.Task, command);
         }
 
-        private void Clean(ITask task) {
-            Walker.Walk(new TaskDependency {Task = task}, CleanIfNotAlreadyCleaned, null);
+        private void Clean(ITask task, IBounceCommand command) {
+            Walker.Walk(new TaskDependency {Task = task}, dep => CleanIfNotAlreadyCleaned(dep, command), null);
         }
 
-        private void CleanIfNotAlreadyCleaned(TaskDependency dep) {
-            OnceOnlyCleaner.EnsureInvokedAtLeastOnce(dep.Task);
+        private void CleanIfNotAlreadyCleaned(TaskDependency dep, IBounceCommand command) {
+            OnceOnlyCleaner.EnsureInvokedAtLeastOnce(dep.Task, command);
         }
 
         class OnceOnlyTaskInvoker {
-            private readonly Action<ITask> Invoke;
+            private readonly Action<ITask, IBounceCommand> Invoke;
             private HashSet<ITask> InvokedTasks;
 
-            public OnceOnlyTaskInvoker(Action<ITask> invoke) {
+            public OnceOnlyTaskInvoker(Action<ITask, IBounceCommand> invoke) {
                 Invoke = invoke;
                 InvokedTasks = new HashSet<ITask>();
             }
 
-            public void EnsureInvokedAtLeastOnce(ITask task) {
+            public void EnsureInvokedAtLeastOnce(ITask task, IBounceCommand command) {
                 if (!InvokedTasks.Contains(task)) {
-                    Invoke(task);
+                    Invoke(task, command);
                     InvokedTasks.Add(task);
                 }
             }
         }
 
-        private void InvokeAndLog(ITask task, BounceCommand command)
+        private void InvokeAndLog(ITask task, IBounceCommand command)
         {
             using (var taskScope = Bounce.TaskScope(task, command, null)) {
                 task.Describe(Bounce.DescriptionOutput);

@@ -8,12 +8,17 @@ namespace Bounce.Framework.Tests {
     public class FutureRemoteBounceArgumentsTest {
         [Test]
         public void ShouldInvokeBounceBuildWithTargets() {
-            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(BounceCommand.Build, bounce), "build");
+            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(new BounceCommandParser().Build, bounce), "build");
+        }
+
+        [Test]
+        public void ShouldInvokeBounceBuildAndKeepWithTargets() {
+            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(new BounceCommandParser().BuildAndKeep, bounce), "buildandkeep");
         }
 
         [Test]
         public void ShouldInvokeBounceCleanWithTargets() {
-            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(BounceCommand.Clean, bounce), "clean");
+            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(new BounceCommandParser().Clean, bounce), "clean");
         }
 
         [Test]

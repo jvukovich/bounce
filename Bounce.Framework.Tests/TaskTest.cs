@@ -31,7 +31,7 @@ namespace Bounce.Framework.Tests {
             var task = new BuildCleanTask();
             IBounce bounce = new Mock<IBounce>().Object;
 
-            task.Invoke(BounceCommand.Build, bounce);
+            task.Invoke(new BounceCommandParser().Build, bounce);
 
             Assert.That(task.BuiltWithBounce, Is.SameAs(bounce));
         }
@@ -42,7 +42,7 @@ namespace Bounce.Framework.Tests {
             var task = new BuildCleanTask();
             IBounce bounce = new Mock<IBounce>().Object;
 
-            task.Invoke(BounceCommand.Clean, bounce);
+            task.Invoke(new BounceCommandParser().Clean, bounce);
 
             Assert.That(task.CleanedWithBounce, Is.SameAs(bounce));
         }

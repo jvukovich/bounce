@@ -61,6 +61,7 @@
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
     <Compile Include="BounceCommand.cs" />
+    <Compile Include="BounceCommandBuild.cs" />
     <Compile Include="BounceCommandExtensions.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceExceptionPresenter.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="GitTag.cs" />
     <Compile Include="GlobToRegexConverter.cs" />
     <Compile Include="IBounce.cs" />
+    <Compile Include="IBounceCommand.cs" />
     <Compile Include="IBounceExceptionPresenter.cs" />
     <Compile Include="ICommandLineParameterParser.cs" />
     <Compile Include="ICommandLineParameters.cs" />

@@ -11,7 +11,7 @@ namespace Bounce.Framework.Tests {
             LogOptions = new LogOptions();
         }
 
-        public virtual void Invoke(BounceCommand command, ITask task)
+        public virtual void Invoke(IBounceCommand command, ITask task)
         {
             task.Invoke(command, this);
         }

@@ -5,14 +5,14 @@ using Moq;
 namespace Bounce.Framework.Tests {
     public static class TaskTestExtensions {
         public static void TestBuild(this ITask task) {
-            TestInvoke(task, BounceCommand.Build);
+            TestInvoke(task, new BounceCommandParser().Build);
         }
 
         public static void TestClean(this ITask task) {
-            TestInvoke(task, BounceCommand.Clean);
+            TestInvoke(task, new BounceCommandParser().Clean);
         }
 
-        public static void TestInvoke(this ITask task, BounceCommand command) {
+        public static void TestInvoke(this ITask task, IBounceCommand command) {
             new FakeTargetBuilderBounce().Invoke(command, task);
         }
 
@@ -38,11 +38,11 @@ namespace Bounce.Framework.Tests {
 
             public ITaskLogFactory LogFactory { get; set; }
 
-            public void Invoke(BounceCommand command, ITask task) {
+            public void Invoke(IBounceCommand command, ITask task) {
                 TargetInvoker.Invoke(command, task);
             }
 
-            public ITaskScope TaskScope(ITask task, BounceCommand command, string targetName) {
+            public ITaskScope TaskScope(ITask task, IBounceCommand command, string targetName) {
                 return new Mock<ITaskScope>().Object;
             }
 

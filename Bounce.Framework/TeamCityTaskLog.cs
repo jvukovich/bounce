@@ -10,16 +10,16 @@ namespace Bounce.Framework {
             TeamCityFormatter = new TeamCityFormatter();
         }
 
-        public void BeginTask(ITask task, BounceCommand command) {
+        public void BeginTask(ITask task, IBounceCommand command) {
         }
 
-        public void EndTask(ITask task, BounceCommand command, TaskResult result) {
+        public void EndTask(ITask task, IBounceCommand command, TaskResult result) {
         }
 
-        public void BeginTarget(ITask task, string name, BounceCommand command) {
+        public void BeginTarget(ITask task, string name, IBounceCommand command) {
         }
 
-        public void EndTarget(ITask task, string name, BounceCommand command, TaskResult result) {
+        public void EndTarget(ITask task, string name, IBounceCommand command, TaskResult result) {
             output.WriteLine(TeamCityFormatter.FormatTeamCityMessage("buildStatus", "status", result == TaskResult.Success? "SUCCESS": "FAILURE"));
         }
     }

@@ -22,11 +22,11 @@ namespace Bounce.Framework {
             TargetInvoker = new TargetInvoker(this);
         }
 
-        public ITaskScope TaskScope(ITask task, BounceCommand command, string targetName) {
+        public ITaskScope TaskScope(ITask task, IBounceCommand command, string targetName) {
             return CreateTaskScope(task, command, targetName);
         }
 
-        private ITaskScope CreateTaskScope(ITask task, BounceCommand command, string targetName) {
+        private ITaskScope CreateTaskScope(ITask task, IBounceCommand command, string targetName) {
             ILog previousLogger = Log;
             Log = LogFactory.CreateLogForTask(task, stdout, stderr, LogOptions);
             if (targetName != null) {
@@ -40,7 +40,7 @@ namespace Bounce.Framework {
                 previousLogger);
         }
 
-        private void EndTaskLog(ITask task, BounceCommand command, TaskResult result, string targetName, ILog outerLogger) {
+        private void EndTaskLog(ITask task, IBounceCommand command, TaskResult result, string targetName, ILog outerLogger) {
             if (targetName != null) {
                 Log.TaskLog.EndTarget(task, targetName, command, result);
             } else {
@@ -62,12 +62,12 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Invoke(BounceCommand command, ITask task) {
+        public void Invoke(IBounceCommand command, ITask task) {
             TargetInvoker.Invoke(command, task);
         }
 
-        public void CleanAfterBuild() {
-            TargetInvoker.CleanAfterBuild();
+        public void CleanAfterBuild(IBounceCommand command) {
+            TargetInvoker.CleanAfterBuild(command);
         }
     }
 

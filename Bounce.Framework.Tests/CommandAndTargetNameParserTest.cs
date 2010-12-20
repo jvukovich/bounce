@@ -6,34 +6,41 @@ using NUnit.Framework;
 namespace Bounce.Framework.Tests {
     [TestFixture]
     public class CommandAndTargetParserTest {
+        private BounceCommandParser BounceCommandParser;
+
+        [SetUp]
+        public void SetUp () {
+            BounceCommandParser = new BounceCommandParser();
+        }
+
         [Test]
         public void ShouldReturnCommandAndTargetNamesWhenCleanCommandIsProvided() {
-            AssertCommandAndTargetsParsed(BounceCommand.Clean, new[] {"clean", "Target1", "Target2"});
+            AssertCommandAndTargetsParsed(BounceCommandParser.Clean, new[] {"clean", "Target1", "Target2"});
         }
 
         [Test]
         public void ShouldReturnCommandAndTargetNamesWhenBuildCommandIsProvided() {
-            AssertCommandAndTargetsParsed(BounceCommand.Build, new[] {"build", "Target1", "Target2"});
+            AssertCommandAndTargetsParsed(BounceCommandParser.Build, new[] {"build", "Target1", "Target2"});
         }
 
         [Test]
         public void ShouldAssumeBuildWhenNoCommandIsProvided() {
-            AssertCommandAndTargetsParsed(BounceCommand.Build, new[] {"Target1", "Target2"});
+            AssertCommandAndTargetsParsed(BounceCommandParser.Build, new[] {"Target1", "Target2"});
         }
 
         [Test]
         public void ShouldReturnNoTargetsIfNoneSpecified() {
-            var parser = new CommandAndTargetParser();
+            var parser = new CommandAndTargetParser(BounceCommandParser);
             var targets = new Dictionary<string, ITask>();
             
             var commandAndTargetNames = parser.ParseCommandAndTargetNames(new [] {"build"}, targets);
-            Assert.That(commandAndTargetNames.Command, Is.EqualTo(BounceCommand.Build));
+            Assert.That(commandAndTargetNames.Command, Is.EqualTo(BounceCommandParser.Build));
             Assert.That(commandAndTargetNames.Targets.Count(), Is.EqualTo(0));
         }
 
         [Test]
         public void ShouldExpectTargetIfBuildIsUpperCase() {
-            var parser = new CommandAndTargetParser();
+            var parser = new CommandAndTargetParser(BounceCommandParser);
             var targets = new Dictionary<string, ITask>();
 
             Assert.That(() => parser.ParseCommandAndTargetNames(new[] {"Build"}, targets),
@@ -42,7 +49,7 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void ShouldThrowIfNoTargetFound() {
-            var parser = new CommandAndTargetParser();
+            var parser = new CommandAndTargetParser(BounceCommandParser);
             var targets = new Dictionary<string, ITask>();
 
             Assert.That(() => parser.ParseCommandAndTargetNames(new[] {"build", "NoTarget"}, targets),
@@ -51,16 +58,16 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void ShouldReturnNoTargetsIfNoneSpecifiedAndNoCommandSpecified() {
-            var parser = new CommandAndTargetParser();
+            var parser = new CommandAndTargetParser(BounceCommandParser);
             var targets = new Dictionary<string, ITask>();
             
             var commandAndTargetNames = parser.ParseCommandAndTargetNames(new string [0], targets);
-            Assert.That(commandAndTargetNames.Command, Is.EqualTo(BounceCommand.Build));
+            Assert.That(commandAndTargetNames.Command, Is.EqualTo(BounceCommandParser.Build));
             Assert.That(commandAndTargetNames.Targets.Count(), Is.EqualTo(0));
         }
 
-        private void AssertCommandAndTargetsParsed(BounceCommand bounceCommand, string[] buildArguments) {
-            var parser = new CommandAndTargetParser();
+        private void AssertCommandAndTargetsParsed(IBounceCommand bounceCommand, string[] buildArguments) {
+            var parser = new CommandAndTargetParser(BounceCommandParser);
             var targets = new Dictionary<string, ITask>();
             var target1 = new Mock<ITask>().Object;
             targets.Add("Target1", target1);

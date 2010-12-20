@@ -26,17 +26,17 @@ namespace Bounce.Framework {
             return GeneratedBounceArguments;
         }
 
-        public override void InvokeFuture(BounceCommand command, IBounce bounce) {
+        public override void InvokeFuture(IBounceCommand command, IBounce bounce) {
             GeneratedBounceArguments = GetBounceArguments(bounce, command);
         }
 
-        private string GetBounceArguments(IBounce bounce, BounceCommand command) {
+        private string GetBounceArguments(IBounce bounce, IBounceCommand command) {
             var args = new List<string>();
 
             args.Add(LogOptionCommandLineTranslator.GenerateCommandLine(bounce));
 
             IDictionary<string, ITask> targetsFromObject = TargetsParser.ParseTargetsFromObject(Targets);
-            args.Add(command.ToString().ToLower());
+            args.Add(command.CommandLineCommand);
             args.AddRange(targetsFromObject.Keys);
             args.Add(CommandLineTasksParametersGenerator.GenerateCommandLineParametersForTasks(targetsFromObject.Values, Parameters));
 

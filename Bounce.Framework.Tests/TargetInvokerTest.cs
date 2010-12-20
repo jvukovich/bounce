@@ -15,11 +15,12 @@ namespace Bounce.Framework.Tests {
             var buildActions = new StringWriter();
 
             dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependency.Object}});
-            dependent.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependent;"));
-            dependency.Setup(d => d.Invoke(BounceCommand.Build, bounce)).Callback(() => buildActions.Write("build dependency;"));
+            var bounceCommand = new BounceCommandParser().Build;
+            dependent.Setup(d => d.Invoke(bounceCommand, bounce)).Callback(() => buildActions.Write("build dependent;"));
+            dependency.Setup(d => d.Invoke(bounceCommand, bounce)).Callback(() => buildActions.Write("build dependency;"));
 
             var builder = new TargetInvoker(bounce);
-            builder.Invoke(BounceCommand.Build, dependent.Object);
+            builder.Invoke(bounceCommand, dependent.Object);
 
             Assert.That(buildActions.ToString(), Is.EqualTo(@"build dependency;build dependent;"));
         }
@@ -33,7 +34,7 @@ namespace Bounce.Framework.Tests {
             ITargetBuilderBounce bounce = GetBounce();
 
             var builder = new TargetInvoker(bounce);
-            builder.Invoke(BounceCommand.Build, dependent);
+            builder.Invoke(new BounceCommandParser().Build, dependent);
 
             Assert.That(bounce.DescriptionOutput.ToString(), Is.EqualTo(@"two;one;"));
         }
@@ -53,7 +54,7 @@ namespace Bounce.Framework.Tests {
         private ITargetBuilderBounce GetBounce() {
             var bounceMock = new Mock<ITargetBuilderBounce>();
             bounceMock
-                .Setup(b => b.TaskScope(It.IsAny<ITask>(), It.IsAny<BounceCommand>(), It.IsAny<string>()))
+                .Setup(b => b.TaskScope(It.IsAny<ITask>(), It.IsAny<IBounceCommand>(), It.IsAny<string>()))
                 .Returns(new Mock<ITaskScope>().Object);
             var descriptionOutput = new StringWriter();
             bounceMock
@@ -70,12 +71,13 @@ namespace Bounce.Framework.Tests {
             var cleanActions = new StringWriter();
 
             dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependency.Object}});
-            dependent.Setup(d => d.Invoke(BounceCommand.Clean, bounce)).Callback(() => cleanActions.Write("clean dependent;"));
+            var bounceCommand = new BounceCommandParser().Clean;
+            dependent.Setup(d => d.Invoke(bounceCommand, bounce)).Callback(() => cleanActions.Write("clean dependent;"));
 
-            dependency.Setup(d => d.Invoke(BounceCommand.Clean, bounce)).Callback(() => cleanActions.Write("clean dependency;"));
+            dependency.Setup(d => d.Invoke(bounceCommand, bounce)).Callback(() => cleanActions.Write("clean dependency;"));
 
             var builder = new TargetInvoker(bounce);
-            builder.Invoke(BounceCommand.Clean, dependent.Object);
+            builder.Invoke(bounceCommand, dependent.Object);
 
             Assert.That(cleanActions.ToString(), Is.EqualTo(@"clean dependent;clean dependency;"));
         }
@@ -94,9 +96,10 @@ namespace Bounce.Framework.Tests {
             dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
 
             var invoker = new TargetInvoker(bounce);
-            invoker.Invoke(BounceCommand.Build, all.Object);
+            var bounceCommand = new BounceCommandParser().Build;
+            invoker.Invoke(bounceCommand, all.Object);
 
-            twiceADependency.Verify(t => t.Invoke(BounceCommand.Build, bounce), Times.Once());
+            twiceADependency.Verify(t => t.Invoke(bounceCommand, bounce), Times.Once());
         }
 
         [Test]
@@ -113,9 +116,10 @@ namespace Bounce.Framework.Tests {
             dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
 
             var invoker = new TargetInvoker(bounce);
-            invoker.Invoke(BounceCommand.Clean, all.Object);
+            var bounceCommand = new BounceCommandParser().Clean;
+            invoker.Invoke(bounceCommand, all.Object);
 
-            twiceADependency.Verify(t => t.Invoke(BounceCommand.Clean, bounce), Times.Once());
+            twiceADependency.Verify(t => t.Invoke(bounceCommand, bounce), Times.Once());
         }
 
         [Test]
@@ -131,8 +135,9 @@ namespace Bounce.Framework.Tests {
             ITargetBuilderBounce bounce = GetBounce();
             
             var invoker = new TargetInvoker(bounce);
-            invoker.Invoke(BounceCommand.Build, c);
-            invoker.CleanAfterBuild();
+            var bounceCommand = new BounceCommandParser().Build;
+            invoker.Invoke(bounceCommand, c);
+            invoker.CleanAfterBuild(bounceCommand);
 
             Assert.That(artefacts, Has.Member("a"));
             Assert.That(artefacts, Has.No.Member("b"));
@@ -153,7 +158,7 @@ namespace Bounce.Framework.Tests {
             ITargetBuilderBounce bounce = GetBounce();
             
             var invoker = new TargetInvoker(bounce);
-            invoker.Invoke(BounceCommand.Build, c);
+            invoker.Invoke(new BounceCommandParser().Build, c);
 
             Assert.That(artefacts, Has.Member("b"));
             Assert.That(artefacts, Has.Member("c"));
@@ -173,7 +178,7 @@ namespace Bounce.Framework.Tests {
                 return AdditionalDependencies;
             }
 
-            public override void Invoke(BounceCommand command, IBounce bounce)
+            public override void Invoke(IBounceCommand command, IBounce bounce)
             {
                 base.Invoke(command, bounce);
                 Invoked = true;
