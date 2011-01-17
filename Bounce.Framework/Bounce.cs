@@ -3,8 +3,6 @@ using System.IO;
 
 namespace Bounce.Framework {
     class Bounce : ITargetBuilderBounce {
-        private readonly TextWriter stdout;
-        private readonly TextWriter stderr;
         public ITaskLogFactory LogFactory { get; set; }
 
         public ILog Log { get; private set; }
@@ -13,9 +11,7 @@ namespace Bounce.Framework {
 
         public LogOptions LogOptions { get; set; }
 
-        public Bounce(TextWriter stdout, TextWriter stderr) {
-            this.stdout = stdout;
-            this.stderr = stderr;
+        public Bounce() {
             LogFactory = new TaskLogFactory();
             LogOptions = new LogOptions {CommandOutput = false, LogLevel = LogLevel.Warning, ReportTargetEnd = true};
             ShellCommand = new ShellCommandExecutor(() => Log);
@@ -28,7 +24,7 @@ namespace Bounce.Framework {
 
         private ITaskScope CreateTaskScope(ITask task, IBounceCommand command, string targetName) {
             ILog previousLogger = Log;
-            Log = LogFactory.CreateLogForTask(task, stdout, stderr, LogOptions);
+            Log = LogFactory.CreateLogForTask(task, LogOptions.StdOut, LogOptions.StdErr, LogOptions);
             if (targetName != null) {
                 Log.TaskLog.BeginTarget(task, targetName, command);
             } else {
@@ -54,7 +50,7 @@ namespace Bounce.Framework {
             {
                 if (LogOptions.DescribeTasks)
                 {
-                    return stdout;
+                    return LogOptions.StdOut;
                 } else
                 {
                     return TextWriter.Null;

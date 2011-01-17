@@ -10,18 +10,18 @@ namespace Bounce.Framework.Tests {
             AssertBuildCommandProperties(buildCommand);
 
             var cleanAfterBuildCommand = buildCommand.CleanAfterBuildCommand;
-            Assert.That(cleanAfterBuildCommand, Is.Not.Null);
-            AssertCleanCommandProperties(cleanAfterBuildCommand);
+            Assert.That(cleanAfterBuildCommand, Is.Null);
         }
 
         [Test]
-        public void BuildAndKeepCommandTest() {
-            IBounceCommand buildCommand = new BounceCommandParser().Parse("buildandkeep");
-            Assert.That(buildCommand.CommandLineCommand, Is.EqualTo("buildandkeep"));
+        public void BuildAndCleanCommandTest() {
+            IBounceCommand buildCommand = new BounceCommandParser().Parse("buildandclean");
+            Assert.That(buildCommand.CommandLineCommand, Is.EqualTo("buildandclean"));
             AssertBuildCommandProperties(buildCommand);
 
             var cleanAfterBuildCommand = buildCommand.CleanAfterBuildCommand;
-            Assert.That(cleanAfterBuildCommand, Is.Null);
+            Assert.That(cleanAfterBuildCommand, Is.Not.Null);
+            AssertCleanCommandProperties(cleanAfterBuildCommand);
         }
 
         private void AssertBuildCommandProperties(IBounceCommand command) {

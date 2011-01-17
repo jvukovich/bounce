@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Bounce.Framework {
     public class LogOptions {
@@ -9,5 +10,7 @@ namespace Bounce.Framework {
         public bool ReportTargetEnd;
         public bool CommandOutput;
         public bool DescribeTasks;
+        public TextWriter StdOut = System.Console.Out;
+        public TextWriter StdErr = System.Console.Error;
     }
 }

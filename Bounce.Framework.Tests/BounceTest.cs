@@ -7,7 +7,7 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void ShouldReturnNullWriterIfLogOptionsAreNotDescribeTask() {
             var stdout = new StringWriter();
-            var b = new Bounce(stdout, new StringWriter());
+            var b = new Bounce();
 
             b.LogOptions.DescribeTasks = false;
             Assert.That(b.DescriptionOutput, Is.SameAs(TextWriter.Null));
@@ -16,9 +16,10 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void ShouldReturnStdOutIfLogOptionsAreDescribeTask() {
             var stdout = new StringWriter();
-            var b = new Bounce(stdout, new StringWriter());
+            var b = new Bounce();
 
             b.LogOptions.DescribeTasks = true;
+            b.LogOptions.StdOut = stdout;
             Assert.That(b.DescriptionOutput, Is.SameAs(stdout));
         }
     }

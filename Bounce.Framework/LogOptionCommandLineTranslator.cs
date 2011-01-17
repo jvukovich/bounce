@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Bounce.Framework {
     public class LogOptionCommandLineTranslator : ILogOptionCommandLineTranslator {
@@ -8,6 +9,7 @@ namespace Bounce.Framework {
         public const string CommandOutputParameter = "command-output";
         public const string LogFormatParameter = "logformat";
         public const string DescribeTasksParameter = "describe-tasks";
+        private const string LogFileParameter = "logfile";
 
         public LogOptionCommandLineTranslator(LogFactoryRegistry logFactoryRegistry) {
             LogFactoryRegistry = logFactoryRegistry;
@@ -20,6 +22,12 @@ namespace Bounce.Framework {
             parsedParameters.IfParameterDo(CommandOutputParameter, commandOutput => bounce.LogOptions.CommandOutput = ParseBoolOption(commandOutput));
             parsedParameters.IfParameterDo(LogFormatParameter, logformat => bounce.LogFactory = GetLogFactoryByName(logformat));
             parsedParameters.IfParameterDo(DescribeTasksParameter, descTasks => bounce.LogOptions.DescribeTasks = ParseBoolOption(descTasks));
+            parsedParameters.IfParameterDo(LogFileParameter, logFileName =>
+                                                      {
+                                                          var textWriter = File.AppendText(logFileName);
+                                                          bounce.LogOptions.StdOut = textWriter;
+                                                          bounce.LogOptions.StdErr = textWriter;
+                                                      });
         }
 
         private LogLevel ParseLogLevel(string loglevel) {

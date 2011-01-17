@@ -7,7 +7,7 @@ namespace Bounce.Framework {
         {
             switch (command) {
                 case BounceCommand.Build:
-                case BounceCommand.BuildAndKeep:
+                case BounceCommand.BuildAndClean:
                     build();
                     break;
                 case BounceCommand.Clean:
@@ -22,7 +22,7 @@ namespace Bounce.Framework {
             switch (command) {
                 case BounceCommand.Build:
                     return true;
-                case BounceCommand.BuildAndKeep:
+                case BounceCommand.BuildAndClean:
                 case BounceCommand.Clean:
                     return false;
                 default:
