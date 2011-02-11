@@ -135,7 +135,7 @@ namespace Bounce.Framework.Tests {
             ITargetBuilderBounce bounce = GetBounce();
             
             var invoker = new TargetInvoker(bounce);
-            var bounceCommand = new BounceCommandParser().Build;
+            var bounceCommand = new BounceCommandParser().BuildAndClean;
             invoker.Invoke(bounceCommand, c);
             invoker.CleanAfterBuild(bounceCommand);
 

@@ -45,6 +45,14 @@ namespace Bounce.Framework {
         public void Delete() {
             appPool.Delete();
         }
+
+        public void Start() {
+            appPool.InvokeMethod("Start", new object[0]);
+        }
+
+        public void Stop() {
+            appPool.InvokeMethod("Stop", new object[0]);
+        }
     }
 
     public class Iis6AppPoolIdentity {

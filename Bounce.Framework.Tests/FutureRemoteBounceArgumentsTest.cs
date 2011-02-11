@@ -13,7 +13,7 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void ShouldInvokeBounceBuildAndKeepWithTargets() {
-            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(new BounceCommandParser().BuildAndKeep, bounce), "buildandkeep");
+            AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(new BounceCommandParser().BuildAndClean, bounce), "buildandclean");
         }
 
         [Test]

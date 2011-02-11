@@ -16,6 +16,7 @@ namespace Bounce.Framework {
         public override void Build() {
             IisAppPool appPool = CreateIfNotExtant();
             appPool.Identity = Identity.Value;
+            appPool.Start();
         }
 
         private IisAppPool CreateIfNotExtant()

@@ -110,6 +110,8 @@
     <Compile Include="IGlobToRegexConverter.cs" />
     <Compile Include="Iis6AppPool.cs" />
     <Compile Include="Iis6Authentication.cs" />
+    <Compile Include="Iis6StoppedAppPool.cs" />
+    <Compile Include="Iis6StoppedWebSite.cs" />
     <Compile Include="Iis6Task.cs" />
     <Compile Include="Iis6WebSite.cs" />
     <Compile Include="IisAppPool.cs" />

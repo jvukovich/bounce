@@ -36,15 +36,15 @@ namespace Bounce.Framework {
 
     class BounceCommandParser : IBounceCommandParser {
         private IBounceCommand _build;
-        private IBounceCommand _buildAndKeep;
+        private IBounceCommand _buildAndClean;
         private IBounceCommand _clean;
 
         public IBounceCommand Parse(string command) {
             switch (command) {
                 case "build":
                     return Build;
-                case "buildandkeep":
-                    return BuildAndKeep;
+                case "buildandclean":
+                    return BuildAndClean;
                 case "clean":
                     return Clean;
                 default:
@@ -55,18 +55,18 @@ namespace Bounce.Framework {
         public IBounceCommand Build {
             get {
                 if (_build == null) {
-                    _build = new BounceCommandBuild(Clean, "build");
+                    _build = new BounceCommandBuild(null, "build");
                 }
                 return _build;
             }
         }
 
-        public IBounceCommand BuildAndKeep {
+        public IBounceCommand BuildAndClean {
             get {
-                if (_buildAndKeep == null) {
-                    _buildAndKeep = new BounceCommandBuild(null, "buildandkeep");
+                if (_buildAndClean == null) {
+                    _buildAndClean = new BounceCommandBuild(Clean, "buildandclean");
                 }
-                return _buildAndKeep;
+                return _buildAndClean;
             }
         }
 

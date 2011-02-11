@@ -13,9 +13,9 @@ namespace Bounce.Framework.Tests.Features {
         }
 
         [Test]
-        public void ShouldCleanTasksAfterBuildIfTheyreMarkedCleanAfterBuild() {
+        public void ShouldCleanTasksAfterBuildAndCleanIfTheyreMarkedCleanAfterBuild() {
             MethodInfo method = typeof (Targets).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "C"}, method);
+            new BounceRunner().Run(new[] {"buildandclean", "C"}, method);
 
             Assert.That(BuiltArtefacts, Has.Member("a"));
             Assert.That(BuiltArtefacts, Has.No.Member("b"));
@@ -23,9 +23,9 @@ namespace Bounce.Framework.Tests.Features {
         }
 
         [Test]
-        public void ShouldNotCleanIfBuildAndKeep() {
+        public void ShouldNotCleanIfBuild() {
             MethodInfo method = typeof (Targets).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"buildandkeep", "C"}, method);
+            new BounceRunner().Run(new[] {"build", "C"}, method);
 
             Assert.That(BuiltArtefacts, Has.Member("a"));
             Assert.That(BuiltArtefacts, Has.Member("b"));

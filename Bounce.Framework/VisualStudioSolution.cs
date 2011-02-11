@@ -59,7 +59,7 @@ namespace Bounce.Framework {
         public override void Clean(IBounce bounce) {
             if (SolutionExists) {
                 bounce.Log.Info("cleaning solution at: " + SolutionPath.Value);
-                bounce.ShellCommand.ExecuteAndExpectSuccess("msbuild.exe", String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
+                bounce.ShellCommand.ExecuteAndExpectSuccess(MsBuildExe.Value, String.Format(@"/target:Clean ""{0}""", SolutionPath.Value));
             }
         }
 

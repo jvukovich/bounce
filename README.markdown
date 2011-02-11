@@ -76,7 +76,7 @@ Or, just:
 
 This code has a `Tests` target too, returned in the anonymous object returned from the `Targets` method. We can watch our tests pass (or not) with this command:
 
-    > bounce build Tests
+    > bounce Tests
 
 If we're not sure what our build allows us, just run `bounce` alone and it will print our available targets:
 
@@ -107,7 +107,7 @@ passed in to our `Targets` method:
 
 Now we can build the website and override the port it will be deployed on:
 
-	> bounce build WebSite /port 80
+	> bounce WebSite /port 80
 
 And, `bounce` will tell you what arguments you have available too:
 

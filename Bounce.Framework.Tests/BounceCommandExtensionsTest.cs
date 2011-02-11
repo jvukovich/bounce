@@ -20,19 +20,11 @@ namespace Bounce.Framework.Tests {
         }
 
         [Test]
-        public void ShouldInvokeBuildActionOnBuildAndKeepCommand() {
+        public void ShouldInvokeBuildActionOnBuildAndCleanCommand() {
             bool built = false;
-            BounceCommand.BuildAndKeep.InvokeCommand(() => built = true, null);
+            BounceCommand.BuildAndClean.InvokeCommand(() => built = true, null);
 
             Assert.That(built);
         }
-
-        [Test]
-        public void CleanAfterBuildReturnsTrueIffBuildButNotCleanOrBuildAndKeep() {
-            Assert.That(BounceCommand.Build.CleanAfterBuild(), Is.True);
-            Assert.That(BounceCommand.Clean.CleanAfterBuild(), Is.False);
-            Assert.That(BounceCommand.BuildAndKeep.CleanAfterBuild(), Is.False);
-        }
-
     }
 }

@@ -32,7 +32,7 @@ namespace Bounce.Framework {
                 CommandAndTargets commandAndTargets = CommandAndTargetParser.ParseCommandAndTargetNames(buildArguments, targets);
 
                 if (commandAndTargets.Targets.Count() >= 1) {
-                    var bounce = new Bounce(System.Console.Out, System.Console.Error);
+                    var bounce = new Bounce();
 
                     InterpretParameters(parameters, parsedParameters, bounce);
                     EnsureAllRequiredParametersAreSet(parameters, commandAndTargets.Targets);
