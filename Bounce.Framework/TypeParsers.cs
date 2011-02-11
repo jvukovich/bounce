@@ -19,6 +19,7 @@ namespace Bounce.Framework {
             typeParsers.RegisterTypeParser<int>(new IntParser());
             typeParsers.RegisterTypeParser<string>(new StringParser());
             typeParsers.RegisterTypeParser<DateTime>(new DateTimeParser());
+            typeParsers.RegisterTypeParser<bool>(new BooleanParser());
             return typeParsers;
         }
 
@@ -52,6 +53,16 @@ namespace Bounce.Framework {
         }
     }
 
+    class BooleanParser : ITypeParser {
+        public object Parse(string s) {
+            return bool.Parse(s);
+        }
+
+        public string Generate(object o) {
+            return ((bool) o).ToString().ToLower();
+        }
+    }
+
     class StringParser : ITypeParser {
         public object Parse(string s) {
             return s;
@@ -68,7 +79,7 @@ namespace Bounce.Framework {
         }
 
         public string Generate(object s) {
-            return s.ToString();
+            return ((DateTime) s).ToString("yyyy-MM-dd H:mm:ss");
         }
     }
 }
