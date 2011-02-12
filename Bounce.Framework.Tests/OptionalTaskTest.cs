@@ -1,31 +1,42 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace Bounce.Framework.Tests {
     [TestFixture]
     public class OptionalTaskTest {
         [Test]
-        public void ShouldNotBuildTaskIfConditionFalse() {
-            var output = new StringWriter();
-            Future<bool> condition = false;
-
-            ITask optionalTask = condition.OptionalTask(() => new FakePrintTask(output, "shouldn't see this"));
-
-            optionalTask.TestBuild();
-
-            Assert.That(output.ToString(), Is.Empty);
+        public void IfTrueShouldNotBuildTaskIfConditionFalse() {
+            TestOptional(false, false, (task, printTask) => task.OptionalTask(() => printTask));
+            TestOptional(false, false, (task, printTask) => task.IfTrue(printTask));
         }
 
         [Test]
-        public void ShouldBuildTaskIfConditionTrue() {
-            var output = new StringWriter();
-            Future<bool> condition = true;
+        public void IfFalseShouldNotBuildTaskIfConditionTrue() {
+            TestOptional(true, false, (task, printTask) => task.IfFalse(printTask));
+        }
 
-            ITask optionalTask = condition.OptionalTask(() => new FakePrintTask(output, "task_built"));
+        [Test]
+        public void IfTrueShouldBuildTaskIfConditionTrue() {
+            TestOptional(true, true, (task, printTask) => task.OptionalTask(() => printTask));
+            TestOptional(true, true, (task, printTask) => task.IfTrue(printTask));
+        }
+
+        [Test]
+        public void IfFalseShouldBuildTaskIfConditionFalse() {
+            TestOptional(false, true, (task, printTask) => task.IfFalse(printTask));
+        }
+
+        private void TestOptional(bool conditionValue, bool shouldRun, Func<Future<bool>, ITask, ITask> getTask) {
+            var output = new StringWriter();
+            Future<bool> condition = conditionValue;
+
+            var text = "shouldn't see this";
+            ITask optionalTask = getTask(condition, new FakePrintTask(output, text));
 
             optionalTask.TestBuild();
 
-            Assert.That(output.ToString(), Is.EqualTo("task_built;"));
+            Assert.That(output.ToString(), Is.EqualTo(shouldRun? text + ";": String.Empty));
         }
     }
 }
