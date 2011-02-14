@@ -13,6 +13,7 @@ programming semantics: In Bounce, each build task is seen as a function that acc
 (in the form of other tasks) and returns a built artefact that can be passed to yet other tasks. For example,
 from git checkout to IIS deploy:
 
+```csharp
     var checkout = new GitCheckout {
         Repository = "git@github.com:refractalize/website.git"
     };
@@ -26,6 +27,7 @@ from git checkout to IIS deploy:
         Name = "Some Website",
         Port = 5001,
     }
+```
 
 Naturally, downstream tasks can use properties of built upstream tasks to perform their own builds, affording a refreshingly declarative style.
 
@@ -39,6 +41,7 @@ That way we can reuse code, configuration and know-how between production and bu
 Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0.
 We'd write a C# file containing our targets like this:
 
+```csharp
 	public class BuildTargets {
 		[Targets]
 		public static object Targets (IParameters parameters) {
@@ -59,6 +62,7 @@ We'd write a C# file containing our targets like this:
 			};
 		}
 	}
+```
 
 The above code should be compiled into an assembly called `Targets.dll`, and into an output directory called `Bounce`.
 This is how the `bounce` command will find our build configuration - it looks for `Bounce\Targets.dll` in the current
@@ -93,6 +97,7 @@ We can also change our build configuration from the command line, by passing in 
 want to specify the website port from the command line, but default it to 5001. We'll use the `IParameters` object
 passed in to our `Targets` method:
 
+```csharp
     public static object Targets(IParameters parameters) {
     ...
         return new {
@@ -104,6 +109,7 @@ passed in to our `Targets` method:
 			...
 		}
 	}
+```
 
 Now we can build the website and override the port it will be deployed on:
 
