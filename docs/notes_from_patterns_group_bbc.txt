@@ -13,7 +13,7 @@ Lets try Rake, Ruby's cool isn't it?
 - still no composability!
 
 feedback:
-- print off the build order, with properties, effectively making a dry run
+- print off the build order, with properties, effectively making a dry run (might be difficult...)
 - some indication of what it did, success, which target it built, etc. nothing is a little disconcerting (done)
 - team city output, hooks, or verbose output which we can parse and refashion for other purposes (done)
 - copy the Targets.dll to another dll name, so we don't get conflicts when rebuilding Targets.dll (fixed)
