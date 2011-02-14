@@ -7,7 +7,6 @@ namespace Bounce.Framework.Tests {
     public class OptionalTaskTest {
         [Test]
         public void IfTrueShouldNotBuildTaskIfConditionFalse() {
-            TestOptional(false, false, (task, printTask) => task.OptionalTask(() => printTask));
             TestOptional(false, false, (task, printTask) => task.IfTrue(printTask));
         }
 
@@ -18,7 +17,6 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void IfTrueShouldBuildTaskIfConditionTrue() {
-            TestOptional(true, true, (task, printTask) => task.OptionalTask(() => printTask));
             TestOptional(true, true, (task, printTask) => task.IfTrue(printTask));
         }
 

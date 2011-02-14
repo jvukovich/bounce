@@ -61,10 +61,6 @@ namespace Bounce.Framework
             return new ManyDependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }
 
-        public static ITask OptionalTask<T>(this Task<bool> condition, Func<T> getOptionalTask) where T : ITask {
-            return new OptionalTask<T>(condition, getOptionalTask, false);
-        }
-
         public static ITask IfTrue<T>(this Task<bool> condition, T optionalTask) where T : ITask {
             return new OptionalTask<T>(condition, () => optionalTask, false);
         }
