@@ -6,7 +6,7 @@ namespace Bounce.Framework.Tests {
     public class SelectTaskTest {
         [Test]
         public void ShouldReturnTaskThatIsBuiltFromFuture() {
-            Future<int> fn = 10;
+            Task<int> fn = 10;
 
             var output = new StringWriter();
             var printer = fn.SelectTask(n => new FakePrintTask(output, n.ToString()));

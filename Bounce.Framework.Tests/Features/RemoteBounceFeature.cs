@@ -88,7 +88,7 @@ rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-ou
 
                 FutureRemoteBounceArguments remoteOneArgs = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne });
 
-                Future<IEnumerable<string>> machines = new [] {"machine1", "machine2"};
+                Task<IEnumerable<string>> machines = new [] {"machine1", "machine2"};
                 var one = machines.SelectTasks(machine => new RemoteExec {
                     BounceArguments = remoteOneArgs.WithRemoteParameter(machineName, machine),
                     Machine = machine,
@@ -103,8 +103,8 @@ rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-ou
 
         class RemoteExec : Task
         {
-            [Dependency] public Future<string> BounceArguments;
-            [Dependency] public Future<string> Machine;
+            [Dependency] public Task<string> BounceArguments;
+            [Dependency] public Task<string> Machine;
 
             public override void Build() {
                 Output.WriteLine("rexec -h {0} bounce.exe {1}", Machine.Value, BounceArguments.Value);

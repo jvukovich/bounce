@@ -31,7 +31,7 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void Iis6WebSiteBindingShouldReturnPortAsDependency()
         {
-            var port = new Mock<Future<int>>().Object;
+            var port = new Mock<Task<int>>().Object;
             var deps = new TaskDependencyFinder().GetDependenciesFor(new Iis6WebSiteBinding {Port = port});
             Assert.That(deps.Select(d => d.Task).ToArray(), Has.Member(port));
         }

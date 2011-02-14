@@ -16,15 +16,15 @@ namespace Bounce.Framework {
         /// A file or directory to copy from
         /// </summary>
         [Dependency, CleanAfterBuild]
-        public Future<string> FromPath { get; set; }
+        public Task<string> FromPath { get; set; }
 
         [Dependency]
-        private Future<string> _toPath;
+        private Task<string> _toPath;
 
         /// <summary>
         /// A file or directory to copy to
         /// </summary>
-        public Future<string> ToPath
+        public Task<string> ToPath
         {
             get { return this.WhenBuilt(() => _toPath.Value); }
             set { _toPath = value; }
@@ -34,12 +34,12 @@ namespace Bounce.Framework {
         /// Glob patterns of files and directories not to copy
         /// </summary>
         [Dependency]
-        public Future<IEnumerable<string>> Excludes;
+        public Task<IEnumerable<string>> Excludes;
         /// <summary>
         /// Glob patterns of files and directories to copy, overriding Excludes
         /// </summary>
         [Dependency]
-        public Future<IEnumerable<string>> Includes;
+        public Task<IEnumerable<string>> Includes;
 
         public override void Build(IBounce bounce) {
             var fromPath = FromPath.Value;
@@ -51,7 +51,7 @@ namespace Bounce.Framework {
             FileSystemCopier.Copy(fromPath, toPath, GetValueOf(Excludes), GetValueOf(Includes));
         }
 
-        private IEnumerable<string> GetValueOf(Future<IEnumerable<string>> paths) {
+        private IEnumerable<string> GetValueOf(Task<IEnumerable<string>> paths) {
             return paths != null ? paths.Value : null;
         }
 

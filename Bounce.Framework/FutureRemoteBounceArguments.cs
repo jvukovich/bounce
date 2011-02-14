@@ -21,7 +21,7 @@ namespace Bounce.Framework {
 
         public FutureRemoteBounceArguments() : this(new TargetsParser(), new LogOptionCommandLineTranslator(), new CommandLineTasksParametersGenerator()) {}
 
-        public override string GetValue()
+        protected override string GetValue()
         {
             return GeneratedBounceArguments;
         }
@@ -43,7 +43,7 @@ namespace Bounce.Framework {
             return String.Join(" ", args.ToArray());
         }
 
-        public FutureRemoteBounceArguments WithRemoteParameter<T>(Future<T> parameter, T value) {
+        public FutureRemoteBounceArguments WithRemoteParameter<T>(Task<T> parameter, T value) {
             IEnumerable<IParameter> newParameters = Parameters.Concat(new [] {((IParameter<T>) parameter).NewWithValue(value)});
             return new FutureRemoteBounceArguments {
                 Targets = Targets,

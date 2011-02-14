@@ -81,7 +81,7 @@
     <Compile Include="FileNameFilterTest.cs" />
     <Compile Include="FileSystemCopierTest.cs" />
     <Compile Include="FileUtilsTest.cs" />
-    <Compile Include="FutureTest.cs" />
+    <Compile Include="TaskOfTTest.cs" />
     <Compile Include="GitRepoParserTest.cs" />
     <Compile Include="GitCheckoutTest.cs" />
     <Compile Include="GlobToRegexConverterTest.cs" />

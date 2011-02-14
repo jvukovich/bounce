@@ -8,7 +8,7 @@ namespace Bounce.Framework {
             _value = value;
         }
 
-        public override T GetValue() {
+        protected override T GetValue() {
             return _value;
         }
     }

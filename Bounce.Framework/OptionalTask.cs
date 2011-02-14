@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class OptionalTask<T> : EnumerableFuture<T> where T : ITask {
-        private readonly Future<bool> Condition;
+        private readonly Task<bool> Condition;
         private readonly Func<T> GetResult;
         private readonly bool Invert;
 
-        public OptionalTask(Future<bool> condition, Func<T> getResult, bool invert) {
+        public OptionalTask(Task<bool> condition, Func<T> getResult, bool invert) {
             Condition = condition;
             GetResult = getResult;
             Invert = invert;

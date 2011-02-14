@@ -2,7 +2,7 @@
 using System.Linq;
 
 namespace Bounce.Framework {
-    public abstract class TaskWithValue<T> : Future<T> {
+    public abstract class TaskWithValue<T> : Task<T> {
         public override T Value {
             get {
                 if (Invoked) {
@@ -15,7 +15,7 @@ namespace Bounce.Framework {
 
         private bool Invoked = true;
 
-        public abstract T GetValue();
+        protected abstract T GetValue();
 
         public override void Invoke(IBounceCommand command, IBounce bounce) {
             InvokeFuture(command, bounce);

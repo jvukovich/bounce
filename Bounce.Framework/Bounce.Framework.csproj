@@ -196,7 +196,7 @@
     <Compile Include="TeamCityNUnitLogger.cs" />
     <Compile Include="TeamCityTaskLog.cs" />
     <Compile Include="TeamCityTextFormatter.cs" />
-    <Compile Include="Future.cs" />
+    <Compile Include="TaskOfT.cs" />
     <Compile Include="NUnitTests.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="CommandLineParameters.cs" />

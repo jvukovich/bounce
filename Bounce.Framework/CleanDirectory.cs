@@ -1,6 +1,6 @@
 ﻿namespace Bounce.Framework {
     public class CleanDirectory : Task {
-        [Dependency] public Future<string> Path;
+        [Dependency] public Task<string> Path;
         private DirectoryUtils DirectoryUtils;
 
         public CleanDirectory() {

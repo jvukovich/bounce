@@ -18,17 +18,17 @@ namespace Bounce.Framework
 
         public abstract IEnumerable<T> GetTasks(IBounce bounce);
 
-        public override IEnumerable<T> GetValue()
+        protected override IEnumerable<T> GetValue()
         {
             return _value;
         }
     }
 
     public class DependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
-        [Dependency] private Future<IEnumerable<TInput>> InputValues;
+        [Dependency] private Task<IEnumerable<TInput>> InputValues;
         private Func<TInput, TOutput> GetTask;
 
-        public DependentEnumerableFuture(Future<IEnumerable<TInput>> inputValues, Func<TInput, TOutput> getTask) {
+        public DependentEnumerableFuture(Task<IEnumerable<TInput>> inputValues, Func<TInput, TOutput> getTask) {
             InputValues = inputValues;
             GetTask = getTask;
         }
@@ -39,10 +39,10 @@ namespace Bounce.Framework
     }
 
     public class ManyDependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
-        [Dependency] private Future<IEnumerable<TInput>> InputValues;
+        [Dependency] private Task<IEnumerable<TInput>> InputValues;
         private Func<TInput, IEnumerable<TOutput>> GetManyTasks;
 
-        public ManyDependentEnumerableFuture(Future<IEnumerable<TInput>> inputValues, Func<TInput, IEnumerable<TOutput>> getManyTasks) {
+        public ManyDependentEnumerableFuture(Task<IEnumerable<TInput>> inputValues, Func<TInput, IEnumerable<TOutput>> getManyTasks) {
             InputValues = inputValues;
             GetManyTasks = getManyTasks;
         }
@@ -53,27 +53,27 @@ namespace Bounce.Framework
     }
 
     public static class DependentEnumerableFutureExtensions {
-        public static Future<IEnumerable<TOutput>> SelectTasks<TInput, TOutput>(this Future<IEnumerable<TInput>> tasks, Func<TInput, TOutput> getResult) where TOutput : ITask {
+        public static Task<IEnumerable<TOutput>> SelectTasks<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, TOutput> getResult) where TOutput : ITask {
             return new DependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }
 
-        public static Future<IEnumerable<TOutput>> SelectManyTasks<TInput, TOutput>(this Future<IEnumerable<TInput>> tasks, Func<TInput, IEnumerable<TOutput>> getResult) where TOutput : ITask {
+        public static Task<IEnumerable<TOutput>> SelectManyTasks<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, IEnumerable<TOutput>> getResult) where TOutput : ITask {
             return new ManyDependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }
 
-        public static ITask OptionalTask<T>(this Future<bool> condition, Func<T> getOptionalTask) where T : ITask {
+        public static ITask OptionalTask<T>(this Task<bool> condition, Func<T> getOptionalTask) where T : ITask {
             return new OptionalTask<T>(condition, getOptionalTask, false);
         }
 
-        public static ITask IfTrue<T>(this Future<bool> condition, T optionalTask) where T : ITask {
+        public static ITask IfTrue<T>(this Task<bool> condition, T optionalTask) where T : ITask {
             return new OptionalTask<T>(condition, () => optionalTask, false);
         }
 
-        public static ITask IfFalse<T>(this Future<bool> condition, T optionalTask) where T : ITask {
+        public static ITask IfFalse<T>(this Task<bool> condition, T optionalTask) where T : ITask {
             return new OptionalTask<T>(condition, () => optionalTask, true);
         }
 
-        public static ITask SelectTask<TInput, TTaskOutput>(this Future<TInput> input, Func<TInput, TTaskOutput> getTask) where TTaskOutput : ITask {
+        public static ITask SelectTask<TInput, TTaskOutput>(this Task<TInput> input, Func<TInput, TTaskOutput> getTask) where TTaskOutput : ITask {
             return new SelectTask<TInput, TTaskOutput>(input, getTask);
         }
     }

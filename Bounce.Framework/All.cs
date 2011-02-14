@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class All<T> : All {
-        public Future<T> Result;
+        public Task<T> Result;
 
         public All(Func<T> result, params ITask [] tasks) : base(tasks) {
             Result = new DependentFuture<T>(this, result);

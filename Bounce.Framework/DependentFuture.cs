@@ -12,7 +12,7 @@ namespace Bounce.Framework {
             this.getValue = getValue;
         }
 
-        public override TP GetValue() {
+        protected override TP GetValue() {
             return getValue();
         }
     }

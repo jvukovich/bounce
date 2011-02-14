@@ -9,12 +9,12 @@ namespace Bounce.Framework
     {
         private static Iis6ScriptMap[] _mvcScriptMaps;
         [Dependency] public Iis6AppPool AppPool;
-        [Dependency] public Future<IEnumerable<Iis6Authentication>> Authentication;
-        [Dependency] public Future<string> Directory;
-        [Dependency] public Future<string> Name;
+        [Dependency] public Task<IEnumerable<Iis6Authentication>> Authentication;
+        [Dependency] public Task<string> Directory;
+        [Dependency] public Task<string> Name;
         public IEnumerable<Iis6WebSiteBinding> Bindings;
-        [Dependency] public Future<IEnumerable<Iis6ScriptMap>> ScriptMapsToAdd;
-        [Dependency] public Future<bool> Started;
+        [Dependency] public Task<IEnumerable<Iis6ScriptMap>> ScriptMapsToAdd;
+        [Dependency] public Task<bool> Started;
 
         public Iis6WebSite()
         {

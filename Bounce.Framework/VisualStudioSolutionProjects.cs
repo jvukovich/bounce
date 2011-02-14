@@ -18,7 +18,7 @@ namespace Bounce.Framework {
             return solution.SolutionDetails.Projects.Select(p => new VisualStudioProject(solution, new ImmediateValue<string>(p.Name))).GetEnumerator();
         }
 
-        public VisualStudioProject this[Future<string> name] {
+        public VisualStudioProject this[Task<string> name] {
             get {
                 return new VisualStudioProject(solution, name);
             }

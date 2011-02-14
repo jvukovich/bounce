@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Bounce.Framework.Tests {
     [TestFixture]
-    public class FutureTest {
+    public class TaskOfTTest {
         [Test, Ignore]
         public void ShouldFailIfFutureIsNotDependency() {
             var task = new TaskWithFutureNotDependency(new StringWriter()) {Description = "one"};
@@ -12,7 +12,7 @@ namespace Bounce.Framework.Tests {
         }
 
         class TaskWithFutureNotDependency : Task {
-            public Future<string> Description;
+            public Task<string> Description;
             private StringWriter Output;
 
             public TaskWithFutureNotDependency(StringWriter output) {

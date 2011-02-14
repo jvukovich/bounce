@@ -27,9 +27,9 @@ namespace Bounce.Framework.Tests {
             TestOptional(false, true, (task, printTask) => task.IfFalse(printTask));
         }
 
-        private void TestOptional(bool conditionValue, bool shouldRun, Func<Future<bool>, ITask, ITask> getTask) {
+        private void TestOptional(bool conditionValue, bool shouldRun, Func<Task<bool>, ITask, ITask> getTask) {
             var output = new StringWriter();
-            Future<bool> condition = conditionValue;
+            Task<bool> condition = conditionValue;
 
             var text = "shouldn't see this";
             ITask optionalTask = getTask(condition, new FakePrintTask(output, text));

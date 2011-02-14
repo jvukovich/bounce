@@ -6,11 +6,11 @@ using Microsoft.Web.Administration;
 namespace Bounce.Framework {
     public class Iis7WebSite : Task {
         [Dependency]
-        public Future<string> Directory;
+        public Task<string> Directory;
         [Dependency]
-        public Future<int> Port;
+        public Task<int> Port;
         [Dependency]
-        public Future<string> Name;
+        public Task<string> Name;
 
         public override void Build(IBounce bounce) {
             var iisServer = new ServerManager();

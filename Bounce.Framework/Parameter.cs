@@ -18,7 +18,7 @@ namespace Bounce.Framework {
             SetValue(value);
         }
 
-        public override T GetValue() {
+        protected override T GetValue() {
             if (!HasValue) {
                 throw new NoValueForParameterException(Name);
             }

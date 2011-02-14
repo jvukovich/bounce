@@ -40,8 +40,8 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void TakingDependencyOnToPathShouldTakeDependencyOnCopyItself()
         {
-            Future<string> fromPath = "fromPath";
-            Future<string> toPath = "toPath";
+            Task<string> fromPath = "fromPath";
+            Task<string> toPath = "toPath";
 
             var copy = new Copy {FromPath = fromPath, ToPath = toPath};
 

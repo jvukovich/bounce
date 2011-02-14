@@ -6,11 +6,11 @@ using System.IO;
 namespace Bounce.Framework {
     public class VisualStudioSolution : Task {
         [Dependency]
-        public Future<string> SolutionPath;
+        public Task<string> SolutionPath;
         [Dependency]
-        public Future<string> Configuration;
+        public Task<string> Configuration;
         [Dependency]
-        public Future<string> MsBuildExe;
+        public Task<string> MsBuildExe;
 
         public VisualStudioSolution() {
             MsBuildExe = @"C:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe";

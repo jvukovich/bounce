@@ -4,9 +4,9 @@ using System.IO;
 namespace Bounce.Framework {
     public class GitCheckout : Task {
         [Dependency]
-        public Future<string> Repository;
+        public Task<string> Repository;
         [Dependency]
-        public Future<string> Directory;
+        public Task<string> Directory;
 
         private IGitRepoParser GitRepoParser;
         private IDirectoryUtils DirectoryUtils;

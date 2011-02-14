@@ -3,7 +3,7 @@ using System;
 namespace Bounce.Framework {
     public abstract class Iis6Task : Task {
         [Dependency]
-        public Future<string> Machine;
+        public Task<string> Machine;
 
         public Iis6Task() {
             Machine = "localhost";

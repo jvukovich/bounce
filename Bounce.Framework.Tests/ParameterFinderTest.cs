@@ -24,7 +24,7 @@ namespace Bounce.Framework.Tests {
         }
 
         class TaskWithParameters : Task {
-            [Dependency] public Future<string> Param;
+            [Dependency] public Task<string> Param;
             [Dependency] public ITask Task;
         }
     }

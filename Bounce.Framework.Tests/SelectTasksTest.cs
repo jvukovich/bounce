@@ -13,8 +13,8 @@ namespace Bounce.Framework.Tests
         [Test]
         public void ShouldTaskListOfStringsAndProduceListOfPrinters() {
             var output = new StringWriter();
-            Future<IEnumerable<string>> strings = new[] {"one", "two", "three"};
-            Future<IEnumerable<FakePrintTask>> printers = strings.SelectTasks(s => new FakePrintTask(output, s));
+            Task<IEnumerable<string>> strings = new[] {"one", "two", "three"};
+            Task<IEnumerable<FakePrintTask>> printers = strings.SelectTasks(s => new FakePrintTask(output, s));
 
             printers.TestBuild();
 
@@ -26,8 +26,8 @@ namespace Bounce.Framework.Tests
         [Test]
         public void SelectManyTasksShouldInvokeAllCreatedTasks() {
             var output = new StringWriter();
-            Future<IEnumerable<string>> strings = new[] {"one", "two", "three"};
-            Future<IEnumerable<FakePrintTask>> printers = strings.SelectManyTasks(s => new [] {new FakePrintTask(output, s), new FakePrintTask(output, "0")});
+            Task<IEnumerable<string>> strings = new[] {"one", "two", "three"};
+            Task<IEnumerable<FakePrintTask>> printers = strings.SelectManyTasks(s => new [] {new FakePrintTask(output, s), new FakePrintTask(output, "0")});
 
             printers.TestBuild();
 

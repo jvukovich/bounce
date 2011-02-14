@@ -4,9 +4,9 @@ using System.IO;
 namespace Bounce.Framework {
     public class Iis6AppPool : Iis6Task {
         [Dependency]
-        public Future<string> Name;
+        public Task<string> Name;
         [Dependency]
-        public Future<Iis6AppPoolIdentity> Identity;
+        public Task<Iis6AppPoolIdentity> Identity;
 
         public Iis6AppPool()
         {

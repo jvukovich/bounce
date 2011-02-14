@@ -6,19 +6,19 @@ using System.Text.RegularExpressions;
 namespace Bounce.Framework {
     public class WindowsService : Task {
         [Dependency]
-        public Future<string> Name;
+        public Task<string> Name;
         [Dependency]
-        public Future<string> BinaryPath;
+        public Task<string> BinaryPath;
         [Dependency]
-        public Future<string> Description;
+        public Task<string> Description;
         [Dependency]
-        public Future<string> DisplayName;
+        public Task<string> DisplayName;
         [Dependency]
-        public Future<string> UserName;
+        public Task<string> UserName;
         [Dependency]
-        public Future<string> Password;
+        public Task<string> Password;
         [Dependency]
-        public Future<string> Machine;
+        public Task<string> Machine;
 
         public const string NetworkService = @"NT AUTHORITY\NetworkService";
 
@@ -81,7 +81,7 @@ namespace Bounce.Framework {
             return String.Join("", new [] {GetSetting(DisplayName, "DisplayName"), GetSetting(UserName, "obj"), GetSetting(Password, "Password")});
         }
 
-        private string GetSetting(Future<string> setting, string scSetting) {
+        private string GetSetting(Task<string> setting, string scSetting) {
             if (setting != null && setting.Value != null) {
                 return String.Format(@" {0}= ""{1}""", scSetting, setting.Value);
             } else {

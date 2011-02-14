@@ -136,7 +136,7 @@ namespace TestBounceAssembly {
 
     public class SimpleTask : Task {
         [Dependency]
-        public Future<string> Description;
+        public Task<string> Description;
 
         public override void Build(IBounce bounce) {
             bounce.ShellCommand.ExecuteAndExpectSuccess("cmd", "/c dir");

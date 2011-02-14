@@ -3,7 +3,7 @@
     public class Iis6StoppedWebSite : Iis6Task
     {
         [Dependency]
-        public Future<string> Name;
+        public Task<string> Name;
 
         public override void Build()
         {

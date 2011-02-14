@@ -3,7 +3,7 @@
 namespace Bounce.Framework.Tests.Features {
     class PrintTask : Task {
         [Dependency]
-        public Future<string> Description;
+        public Task<string> Description;
 
         private readonly TextWriter Output;
 
