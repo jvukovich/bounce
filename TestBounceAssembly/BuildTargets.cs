@@ -58,7 +58,6 @@ namespace TestBounceAssembly {
             };
         }
 
-        [Targets]
         public static object Iis6Targets(IParameters parameters) {
             var appPool = new Iis6AppPool {Name = "MyNewAppPoolForOutputToFile"};
 
@@ -148,11 +147,79 @@ namespace TestBounceAssembly {
     }
 
     public class TargetBuilder {
-        [Targets]
         public static object GetTargets() {
             return new {
                            Simple = new SimpleTask {Description = "our simple task"},
                        };
+        }
+    }
+
+    public class MultiStage {
+        [Targets]
+        public static object GetTargets (IParameters parameters) {
+            var archive = new Archive(parameters);
+            var solution = new VisualStudioSolution {
+                SolutionPath = @"C:\Users\Public\Documents\Development\BigSolution\BigSolution.sln",
+            };
+            var service = archive.Add("service", solution.Projects["BigWindowsService"].ProjectDirectory);
+            var tests = archive.Add("tests", solution.Projects["BigSolution.Tests"].ProjectDirectory);
+
+            return new {
+                Service = new PrintTask(Console.Out) { Description = service },
+                Tests = new PrintTask(Console.Out) { Description = tests },
+            };
+        }
+    }
+
+    public class Archive : Task {
+        public Task<bool> IsArchive;
+        public CleanDirectory ArchiveDirectory;
+
+        public Archive(IParameters parameters) {
+            IsArchive = parameters.Default("archive", false);
+            ArchiveDirectory = new CleanDirectory() {Path = "archive"};
+        }
+
+        public Task<string> Add(string service, Task<string> projectDirectory) {
+//            return IsArchive.IfTrue(new Copy {FromPath = projectDirectory, ToPath = ArchiveDirectory.Path}.ToPath, projectDirectory);
+            return new ArchivePath(projectDirectory, IsArchive, ArchiveDirectory);
+        }
+
+        class ArchivePath : TaskWithValue<string> {
+            [Dependency] private readonly Task<string> Directory;
+            [Dependency] private readonly Task<bool> IsArchive;
+            [Dependency] private readonly CleanDirectory ArchiveDirectory;
+            [Dependency] private readonly ITask ArchivedDirectory;
+
+            public ArchivePath(Task<string> directory, Task<bool> isArchive, CleanDirectory archiveDirectory) {
+                Directory = directory;
+                IsArchive = isArchive;
+                ArchivedDirectory = IsArchive.IfTrue(new Copy {FromPath = Directory, ToPath = archiveDirectory.Path});
+                ArchiveDirectory = archiveDirectory;
+            }
+
+            protected override string GetValue() {
+                if (IsArchive.Value) {
+                    return Path.Combine(ArchiveDirectory.Path.Value, Path.GetFileName(Directory.Value));
+                } else {
+                    return Directory.Value;
+                }
+            }
+        }
+    }
+
+    class PrintTask : Task {
+        [Dependency]
+        public Task<string> Description;
+
+        private readonly TextWriter Output;
+
+        public PrintTask(TextWriter output) {
+            Output = output;
+        }
+
+        public override void Build() {
+            Output.WriteLine(Description.Value);
         }
     }
 }
