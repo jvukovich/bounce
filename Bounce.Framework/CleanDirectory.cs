@@ -1,6 +1,6 @@
 ﻿namespace Bounce.Framework {
     public class CleanDirectory : Task {
-        [Dependency] public Task<string> Path;
+        [Dependency] private Task<string> _path;
         private DirectoryUtils DirectoryUtils;
 
         public CleanDirectory() {
@@ -8,16 +8,21 @@
         }
 
         public override void Build() {
-            DirectoryUtils.DeleteDirectory(Path.Value);
-            DirectoryUtils.CreateDirectory(Path.Value);
+            DirectoryUtils.DeleteDirectory(_path.Value);
+            DirectoryUtils.CreateDirectory(_path.Value);
         }
 
         public override void Clean() {
-            DirectoryUtils.DeleteDirectory(Path.Value);
+            DirectoryUtils.DeleteDirectory(_path.Value);
         }
 
         public DirectoryFiles Files {
-            get { return new DirectoryFiles(this, () => Path.Value); }
+            get { return new DirectoryFiles(this, () => _path.Value); }
+        }
+
+        public Task<string> Path {
+            get { return this.WhenBuilt(() => _path.Value); }
+            set { _path = value; }
         }
     }
 }
