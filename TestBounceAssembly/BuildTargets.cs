@@ -157,7 +157,7 @@ namespace TestBounceAssembly {
     public class MultiStage {
         [Targets]
         public static object GetTargets (IParameters parameters) {
-            var archive = new Archive(parameters);
+            var archive = new Archive(parameters.Default("archive", false), "archive");
             var solution = new VisualStudioSolution {
                 SolutionPath = @"C:\Users\Public\Documents\Development\BigSolution\BigSolution.sln",
             };
@@ -173,34 +173,34 @@ namespace TestBounceAssembly {
 
     public class Archive : Task {
         public Task<bool> IsArchive;
-        public CleanDirectory ArchiveDirectory;
+        private Task<string> ArchiveDirectory;
 
-        public Archive(IParameters parameters) {
-            IsArchive = parameters.Default("archive", false);
-            ArchiveDirectory = new CleanDirectory() {Path = "archive"};
+        public Archive(Task<bool> isArchive, Task<string> archiveDirectory) {
+            IsArchive = isArchive;
+            ArchiveDirectory = archiveDirectory;
         }
 
         public Task<string> Add(string service, Task<string> projectDirectory) {
-//            return IsArchive.IfTrue(new Copy {FromPath = projectDirectory, ToPath = ArchiveDirectory.Path}.ToPath, projectDirectory);
+            ArchiveDirectory = "archive";
             return new ArchivePath(projectDirectory, IsArchive, ArchiveDirectory);
         }
 
         class ArchivePath : TaskWithValue<string> {
             [Dependency] private readonly Task<string> Directory;
             [Dependency] private readonly Task<bool> IsArchive;
-            [Dependency] private readonly CleanDirectory ArchiveDirectory;
+            [Dependency] private readonly Task<string> ArchiveDirectory;
             [Dependency] private readonly ITask ArchivedDirectory;
 
-            public ArchivePath(Task<string> directory, Task<bool> isArchive, CleanDirectory archiveDirectory) {
+            public ArchivePath(Task<string> directory, Task<bool> isArchive, Task<string> archiveDirectory) {
                 Directory = directory;
                 IsArchive = isArchive;
-                ArchivedDirectory = IsArchive.IfTrue(new Copy {FromPath = Directory, ToPath = archiveDirectory.Path});
+                ArchivedDirectory = IsArchive.IfTrue(new Copy {FromPath = Directory, ToPath = new CleanDirectory {Path = archiveDirectory}.Path});
                 ArchiveDirectory = archiveDirectory;
             }
 
             protected override string GetValue() {
                 if (IsArchive.Value) {
-                    return Path.Combine(ArchiveDirectory.Path.Value, Path.GetFileName(Directory.Value));
+                    return Path.Combine(ArchiveDirectory.Value, Path.GetFileName(Directory.Value));
                 } else {
                     return Directory.Value;
                 }
