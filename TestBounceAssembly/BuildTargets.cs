@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -154,15 +155,14 @@ namespace TestBounceAssembly {
         }
     }
 
-    public class MultiStage {
-        [Targets]
+    public class MultiStage2 {
         public static object GetTargets (IParameters parameters) {
             var archive = new Archive(parameters.Default("archive", false), "archive");
             var solution = new VisualStudioSolution {
                 SolutionPath = @"C:\Users\Public\Documents\Development\BigSolution\BigSolution.sln",
             };
-            var service = archive.Add("service", solution.Projects["BigWindowsService"].ProjectDirectory);
-            var tests = archive.Add("tests", solution.Projects["BigSolution.Tests"].ProjectDirectory);
+            var service = archive.Begin("service", solution.Projects["BigWindowsService"].ProjectDirectory);
+            var tests = archive.Begin("tests", solution.Projects["BigSolution.Tests"].ProjectDirectory);
 
             return new {
                 Service = new PrintTask(Console.Out) { Description = service },
@@ -171,17 +171,58 @@ namespace TestBounceAssembly {
         }
     }
 
+    public class MultiStage {
+        [Targets]
+        public static object GetTargets (IParameters parameters) {
+            var archive = new Archive(
+                parameters.Default("archive", false),
+                "archive"
+            );
+
+            var beforeArchive1 = new PrintTaskWithPath() {
+                Description = "before archive 1",
+                Path = @"fromdir1",
+            };
+            var beforeArchive2 = new PrintTaskWithPath() {
+                Description = "before archive 2",
+                Path = @"fromdir2",
+            };
+
+            var webServiceDirectory1 = archive.Begin(
+                "WebSite",
+                beforeArchive1.Path
+            );
+            var webServiceDirectory2 = archive.Begin(
+                "WebSite",
+                beforeArchive2.Path
+            );
+
+            var webSite = new PrintTaskWithPath {
+                Description = "after archive",
+                Path = webServiceDirectory1,
+            };
+
+            return new {
+                Service = archive.End(webSite),
+            };
+        }
+    }
+
     public class Archive : Task {
         public Task<bool> IsArchive;
         private Task<string> ArchiveDirectory;
 
+        private List<Task<string>> ProjectDirectories;
+
         public Archive(Task<bool> isArchive, Task<string> archiveDirectory) {
             IsArchive = isArchive;
             ArchiveDirectory = archiveDirectory;
+            ProjectDirectories = new List<Task<string>>();
         }
 
-        public Task<string> Add(string service, Task<string> projectDirectory) {
+        public Task<string> Begin(string service, Task<string> projectDirectory) {
             ArchiveDirectory = "archive";
+            ProjectDirectories.Add(projectDirectory);
             return new ArchivePath(projectDirectory, IsArchive, ArchiveDirectory);
         }
 
@@ -199,11 +240,29 @@ namespace TestBounceAssembly {
             }
 
             protected override string GetValue() {
-                if (IsArchive.Value) {
-                    return Path.Combine(ArchiveDirectory.Value, Path.GetFileName(Directory.Value));
+                return Path.Combine(ArchiveDirectory.Value, Path.GetFileName(Directory.Value));
+            }
+        }
+
+        public ITask End(ITask task) {
+            return IsArchive.SelectTask(isArchive => {
+                if (isArchive) {
+                    return new MultiTask<Task<string>>(ProjectDirectories);
                 } else {
-                    return Directory.Value;
+                    return task;
                 }
+            });
+        }
+
+        public class MultiTask<TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
+            private readonly IEnumerable<TOutput> Tasks;
+
+            public MultiTask(IEnumerable<TOutput> tasks) {
+                Tasks = tasks;
+            }
+
+            public override IEnumerable<TOutput> GetTasks(IBounce bounce) {
+                return Tasks;
             }
         }
     }
@@ -212,14 +271,32 @@ namespace TestBounceAssembly {
         [Dependency]
         public Task<string> Description;
 
-        private readonly TextWriter Output;
+        protected readonly TextWriter Output;
 
         public PrintTask(TextWriter output) {
             Output = output;
         }
 
+        public PrintTask() {
+            Output = Console.Out;
+        }
+
         public override void Build() {
             Output.WriteLine(Description.Value);
+        }
+    }
+
+    class PrintTaskWithPath : PrintTask {
+        [Dependency] private Task<string> _path;
+
+        public Task<string> Path {
+            get { return this.WhenBuilt(() => _path.Value); }
+            set { _path = value; }
+        }
+
+        public override void Build() {
+            Output.WriteLine(Description.Value);
+            Output.WriteLine(_path.Value);
         }
     }
 }
