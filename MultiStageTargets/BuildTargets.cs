@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Bounce.Framework;
 
 namespace MultiStageTargets
@@ -26,9 +24,12 @@ namespace MultiStageTargets
             var remoteMachineOne = GetRemoteMachine(stage, machine, "one");
             var remoteMachineTwo = GetRemoteMachine(stage, machine, "two");
 
-            var bounceArchive = new RemoteDeployArchive(stage, "archive");
-            var service = bounceArchive.Add("service", "service").WithDeploy(deployService).WithRemoteDeploy(new All(remoteMachineOne.DeployTargets("Service"), remoteMachineTwo.DeployTargets("Service")));
-            var web = bounceArchive.Add("web", "web").WithDeploy(deployWeb).WithRemoteDeploy(remoteMachineTwo.DeployTargets("Web"));
+            Task<IEnumerable<RemoteMachine>> serviceMachines = new[] {remoteMachineOne, remoteMachineTwo};
+            Task<IEnumerable<RemoteMachine>> webMachines = new[] {remoteMachineTwo};
+
+            var deployArchive = new StagedDeployArchive(stage, "archive");
+            var service = deployArchive.Add("service", "service", deployService).WithRemoteDeploy(serviceMachines.SelectTasks(m => m.DeployTargets("Service")));
+            var web = deployArchive.Add("web", "web", deployWeb).WithRemoteDeploy(webMachines.SelectTasks(m => m.DeployTargets("Web")));
 
             return new {
                 Service = service,
@@ -81,83 +82,6 @@ namespace MultiStageTargets
                 bounce.ShellCommand.ExecuteAndExpectSuccess(@"bounce.exe", Arguments.Value);
             } finally {
                 Directory.SetCurrentDirectory(cwd);
-            }
-        }
-    }
-
-    public class BounceArchive {
-        private Task<string> ArchivedBounce;
-        private CleanDirectory ArchiveRoot;
-
-        public BounceArchive(Task<string> path) {
-            ArchiveRoot = new CleanDirectory {Path = path};
-
-            ArchivedBounce = new Copy {
-                FromPath = @"bounce",
-                ToPath = ArchiveRoot.Files["bounce"],
-            }.ToPath;
-        }
-
-        public Task<string> Add(Task<string> from, Task<string> archivePath) {
-            return new Copy {
-                FromPath = from,
-                ToPath = ArchiveRoot.Files[archivePath],
-                DependsOn = new [] {new TaskDependency {Task = ArchivedBounce}},
-            }.ToPath;
-        }
-    }
-
-    public class RemoteDeployArchive {
-        private Task<string> Stage;
-        private BounceArchive Archive;
-        public ITask RemoteDeploy { get; set; }
-
-        public RemoteDeployArchive(Task<string> stage, Task<string> path) {
-            Stage = stage;
-            Archive = new BounceArchive(path);
-        }
-
-        public StagedDeployTask Add(Task<string> archivePath, Task<string> from) {
-            var archiveTask = Archive.Add(from, archivePath);
-            return new StagedDeployTask(Stage, archiveTask).WithRemoteDeploy(RemoteDeploy);
-        }
-    }
-
-    public class StagedDeployTask : Task {
-        [Dependency] public Task<string> Stage;
-        public ITask Archive;
-        public ITask RemoteDeploy;
-        public ITask Deploy;
-
-        public StagedDeployTask(Task<string> stage, ITask archive) {
-            Stage = stage;
-            Archive = archive;
-        }
-
-        public StagedDeployTask WithDeploy(ITask deploy) {
-            Deploy = deploy;
-            return this;
-        }
-
-        public StagedDeployTask WithRemoteDeploy(ITask remoteDeploy) {
-            RemoteDeploy = remoteDeploy;
-            return this;
-        }
-
-        public override void Invoke(IBounceCommand command, IBounce bounce) {
-            bounce.Invoke(command, GetStageTask());
-        }
-
-        private ITask GetStageTask() {
-            switch (Stage.Value) {
-                case "archive":
-                    return Archive;
-                case "remoteDeploy":
-                    return RemoteDeploy;
-                case "deploy":
-                    return Deploy;
-                default:
-                    throw new ApplicationException("no such stage: " + Stage.Value);
             }
         }
     }

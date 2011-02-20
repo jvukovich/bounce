@@ -60,6 +60,7 @@
     <Compile Include="All.cs" />
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
+    <Compile Include="BounceArchive.cs" />
     <Compile Include="BounceCommand.cs" />
     <Compile Include="BounceCommandBuild.cs" />
     <Compile Include="BounceCommandExtensions.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="ICommandLog.cs" />
     <Compile Include="ICommandLogFactory.cs" />
     <Compile Include="ICompilationLog.cs" />
+    <Compile Include="IDeployArchive.cs" />
     <Compile Include="IDirectoryUtils.cs" />
     <Compile Include="IFileNameFilterFactory.cs" />
     <Compile Include="IFileUtils.cs" />
@@ -164,6 +166,8 @@
     <Compile Include="SelectTask.cs" />
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="ShellExecutableNotFoundException.cs" />
+    <Compile Include="StagedDeployArchive.cs" />
+    <Compile Include="StagedDeployTask.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="TargetInvoker.cs" />
     <Compile Include="TargetsMethodInvoker.cs" />
@@ -215,6 +219,7 @@
     <Compile Include="VisualStudioSolutionProjects.cs" />
     <Compile Include="WindowsService.cs" />
     <Compile Include="ZipFile.cs" />
+    <Compile Include="ZipFileCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.Console\Bounce.Console.csproj">
