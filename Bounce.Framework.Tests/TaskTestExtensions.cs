@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Moq;
 
 namespace Bounce.Framework.Tests {
@@ -47,6 +48,14 @@ namespace Bounce.Framework.Tests {
             }
 
             public TextWriter DescriptionOutput { get; private set; }
+        }
+
+        public static bool IsDependentOn(this ITask task, ITask dependency) {
+            if (task == dependency) {
+                return true;
+            } else {
+                return task.Dependencies.Select(d => d.Task).Any(t => t.IsDependentOn(dependency));
+            }
         }
     }
 }

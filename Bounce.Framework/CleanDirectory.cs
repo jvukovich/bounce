@@ -17,7 +17,7 @@
         }
 
         public DirectoryFiles Files {
-            get { return new DirectoryFiles(this, () => _path.Value); }
+            get { return new DirectoryFiles(Path); }
         }
 
         public Task<string> Path {

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0F0BBC36-D999-47EB-BA24-6A926C2B8641}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -69,6 +69,7 @@
     <Compile Include="CommandLineParameterParserTest.cs" />
     <Compile Include="CommandLineParametersTest.cs" />
     <Compile Include="CommandLineTasksParametersGeneratorTest.cs" />
+    <Compile Include="DirectoryFilesTest.cs" />
     <Compile Include="FakeArtefactTask.cs" />
     <Compile Include="Features\CleanAfterBuildFeature.cs" />
     <Compile Include="Features\CleanExecutedWithCleanDependenciesFeature.cs" />

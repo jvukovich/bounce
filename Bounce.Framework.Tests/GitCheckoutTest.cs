@@ -81,7 +81,7 @@ namespace Bounce.Framework.Tests {
 
             var subPath = gitRepo.Files["test.txt"];
             Assert.That(subPath.Value, Is.EqualTo(@"dir\test.txt"));
-            Assert.That(subPath.Dependencies.Select(d => d.Task), Has.Member(gitRepo));
+            Assert.That(subPath.IsDependentOn(gitRepo));
         }
     }
 }

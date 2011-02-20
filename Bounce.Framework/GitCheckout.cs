@@ -46,7 +46,7 @@ namespace Bounce.Framework {
 
         public DirectoryFiles Files {
             get {
-                return new DirectoryFiles(this, () => WorkingDirectory);
+                return new DirectoryFiles(this.WhenBuilt(() => WorkingDirectory));
             }
         }
     }
