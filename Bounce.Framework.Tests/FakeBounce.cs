@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Bounce.Framework.Tests {
     public class FakeBounce : IBounce {
@@ -10,6 +11,8 @@ namespace Bounce.Framework.Tests {
         public FakeBounce() {
             LogOptions = new LogOptions();
         }
+
+        public IEnumerable<IParameter> ParametersGiven { get; set; }
 
         public virtual void Invoke(IBounceCommand command, ITask task)
         {

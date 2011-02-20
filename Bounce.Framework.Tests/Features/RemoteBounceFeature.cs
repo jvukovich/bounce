@@ -16,7 +16,7 @@ namespace Bounce.Framework.Tests.Features {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"build", "One", "/hack:refactor", "/two:three", "/machine:live"}, method);
 
-            string rexecCommands = "rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor\r\n";
+            string rexecCommands = "rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor /machine:live /two:three\r\n";
 
             Assert.That(Output.ToString(), Is.EqualTo(rexecCommands));
         }
@@ -62,7 +62,7 @@ rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-ou
 
                 var remoteBounce = new RemoteBounce();
 
-                FutureRemoteBounceArguments remoteOneArgs = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne });
+                RemoteBounceArguments remoteOneArgs = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne });
 
                 var one = new RemoteExec
                           {
@@ -86,7 +86,7 @@ rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-ou
 
                 var remoteBounce = new RemoteBounce();
 
-                FutureRemoteBounceArguments remoteOneArgs = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne });
+                RemoteBounceArguments remoteOneArgs = remoteBounce.ArgumentsForTargets(new { RemoteOne = remoteOne });
 
                 Task<IEnumerable<string>> machines = new [] {"machine1", "machine2"};
                 var one = machines.SelectTasks(machine => new RemoteExec {

@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Bounce.Framework.Tests {
     [TestFixture]
-    public class FutureRemoteBounceArgumentsTest {
+    public class RemoteBounceArgumentsTest {
         [Test]
         public void ShouldInvokeBounceBuildWithTargets() {
             AssertBounceCommand((remoteBounceTask, bounce) => remoteBounceTask.Invoke(new BounceCommandParser().Build, bounce), "build");
@@ -23,7 +23,7 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void CanBuildWithOverridingParameters() {
-            var args = new FutureRemoteBounceArguments() {Targets = new {One = new Mock<ITask>().Object}};
+            var args = new RemoteBounceArguments() {Targets = new [] {"One"}};
             var param1 = new Parameter<string> {Name = "name1"};
             var param2 = new Parameter<string> { Name = "name2" };
 
@@ -40,8 +40,9 @@ namespace Bounce.Framework.Tests {
             Assert.That(args.Parameters, Is.Empty);
         }
 
-        private void AssertBounceCommand(Action<FutureRemoteBounceArguments, IBounce> commandAction, string command) {
+        private void AssertBounceCommand(Action<RemoteBounceArguments, IBounce> commandAction, string command) {
             var bounce = new FakeBounce();
+            bounce.ParametersGiven = new[] {new Parameter<string>("name", "value")};
 
             var a = new Mock<ITask>().Object;
             var b = new Mock<ITask>().Object;
@@ -51,14 +52,14 @@ namespace Bounce.Framework.Tests {
             logOptionTranslator.Setup(l => l.GenerateCommandLine(bounce)).Returns("logoptions");
 
             var commandLineParametersGenerator = new Mock<ICommandLineTasksParametersGenerator>();
-            commandLineParametersGenerator.Setup(c => c.GenerateCommandLineParametersForTasks(new [] {a, b}, overridingParameters)).Returns("build_arguments_and_params");
+            commandLineParametersGenerator.Setup(c => c.GenerateCommandLineParametersForTasks(bounce.ParametersGiven, overridingParameters)).Returns("build_arguments_and_params");
 
-            var remoteBounce = new FutureRemoteBounceArguments(new TargetsParser(), logOptionTranslator.Object, commandLineParametersGenerator.Object);
-            remoteBounce.Targets = new {Junk = a, Aspr = b};
+            var remoteBounce = new RemoteBounceArguments(new TargetsParser(), logOptionTranslator.Object, commandLineParametersGenerator.Object);
+            remoteBounce.Targets = new [] {"Junk"};
             remoteBounce.Parameters = overridingParameters;
 
             commandAction(remoteBounce, bounce);
-            Assert.That(remoteBounce.Value, Is.EqualTo("logoptions " + command + " Junk Aspr build_arguments_and_params"));
+            Assert.That(remoteBounce.Value, Is.EqualTo("logoptions " + command + " Junk build_arguments_and_params"));
         }
     }
 }

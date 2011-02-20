@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Bounce.Framework {
@@ -57,6 +58,8 @@ namespace Bounce.Framework {
                 }
             }
         }
+
+        public IEnumerable<IParameter> ParametersGiven { get; set; }
 
         public void Invoke(IBounceCommand command, ITask task) {
             TargetInvoker.Invoke(command, task);

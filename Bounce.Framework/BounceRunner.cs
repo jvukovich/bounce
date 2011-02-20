@@ -79,7 +79,7 @@ namespace Bounce.Framework {
 
         private void InterpretParameters(ICommandLineParameters parameters, ParsedCommandLineParameters parsedParameters, Bounce bounce) {
             LogOptionCommandLineTranslator.ParseCommandLine(parsedParameters, bounce);
-            parameters.ParseCommandLineArguments(parsedParameters.Parameters);
+            bounce.ParametersGiven = parameters.ParseCommandLineArguments(parsedParameters.Parameters);
         }
 
         public ParsedCommandLineParameters ParseCommandLineArguments(string [] args) {

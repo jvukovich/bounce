@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Moq;
@@ -38,6 +39,8 @@ namespace Bounce.Framework.Tests {
             }
 
             public ITaskLogFactory LogFactory { get; set; }
+
+            public IEnumerable<IParameter> ParametersGiven { get; set; }
 
             public void Invoke(IBounceCommand command, ITask task) {
                 TargetInvoker.Invoke(command, task);

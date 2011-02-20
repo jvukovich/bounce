@@ -2,7 +2,7 @@
 
 namespace Bounce.Framework {
     public interface ICommandLineParameters : IParameters {
-        void ParseCommandLineArguments(List<ParsedCommandLineParameter> parameters);
+        IEnumerable<IParameter> ParseCommandLineArguments(List<ParsedCommandLineParameter> parameters);
         IEnumerable<IParameter> Parameters { get; }
     }
 }

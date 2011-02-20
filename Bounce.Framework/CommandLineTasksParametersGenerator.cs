@@ -15,32 +15,20 @@ namespace Bounce.Framework {
         public CommandLineTasksParametersGenerator() : this(new ParameterFinder(), Framework.TypeParsers.Default) {
         }
 
-        public string GenerateCommandLineParametersForTasks(IEnumerable<ITask> tasks, IEnumerable<IParameter> overridingParameters) {
-            IEnumerable<IParameter> taskParameters = tasks.SelectMany(t => ParameterFinder.FindParametersInTask(t)).Distinct();
-
-            var mergedParameters = OverrideTaskParameters(taskParameters, overridingParameters);
+        public string GenerateCommandLineParametersForTasks(IEnumerable<IParameter> parameters, IEnumerable<IParameter> overridingParameters) {
+            var mergedParameters = OverrideTaskParameters(parameters, overridingParameters);
 
             return GenerateCommandLineParameters(mergedParameters.OrderBy(p => p.Name));
         }
 
-        private IEnumerable<IParameter> OverrideTaskParameters(IEnumerable<IParameter> taskParameters, IEnumerable<IParameter> overridingParameters)
-        {
-            Dictionary<string, IParameter> parameters = overridingParameters.ToDictionary(p => p.Name);
-            var mergedParameters = new List<IParameter>();
+        private IEnumerable<IParameter> OverrideTaskParameters(IEnumerable<IParameter> taskParameters, IEnumerable<IParameter> overridingParameters) {
+            var mergedParameters = new Dictionary<string, IParameter>(taskParameters.ToDictionary(p => p.Name));
 
-            foreach (var taskParameter in taskParameters)
-            {
-                IParameter param;
-                if (parameters.TryGetValue(taskParameter.Name, out param))
-                {
-                    mergedParameters.Add(param);
-                } else
-                {
-                    mergedParameters.Add(taskParameter);
-                }
+            foreach (var overridingParameter in overridingParameters) {
+                mergedParameters[overridingParameter.Name] = overridingParameter;
             }
 
-            return mergedParameters;
+            return mergedParameters.Values;
         }
 
         class ParameterComparer : IEqualityComparer<IParameter> {

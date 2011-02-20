@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 
 namespace Bounce.Framework {
@@ -6,6 +7,7 @@ namespace Bounce.Framework {
         IShellCommandExecutor ShellCommand { get; }
         LogOptions LogOptions { get; }
         ITaskLogFactory LogFactory { get; set; }
+        IEnumerable<IParameter> ParametersGiven { get; }
         void Invoke(IBounceCommand command, ITask task);
     }
 }

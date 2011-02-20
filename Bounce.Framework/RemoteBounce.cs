@@ -25,10 +25,10 @@ namespace Bounce.Framework {
             return targets;
         }
 
-        public FutureRemoteBounceArguments ArgumentsForTargets(object targets)
+        public RemoteBounceArguments ArgumentsForTargets(object targets)
         {
             RemoteTargets.Add(targets);
-            return new FutureRemoteBounceArguments { Targets = targets };
+            return new RemoteBounceArguments { Targets = TargetsParser.ParseTargetsFromObject(targets).Keys };
         }
     }
 }

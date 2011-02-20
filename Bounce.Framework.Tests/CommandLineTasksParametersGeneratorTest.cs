@@ -25,9 +25,9 @@ namespace Bounce.Framework.Tests {
             FakeParameter param2Override = new FakeParameter {Name = "name2", GeneratedValue = "/name2:anothervalue2"};
             FakeParameter notUsedParameterOverride = new FakeParameter {Name = "notused", GeneratedValue = "/notused:notusedvalue"};
 
-            var args = generator.GenerateCommandLineParametersForTasks(new[] {task1, task2}, new [] {param2Override, notUsedParameterOverride});
+            var args = generator.GenerateCommandLineParametersForTasks(new[] {param1, param2, param3}, new [] {param2Override, notUsedParameterOverride});
 
-            Assert.That(args, Is.EqualTo(@"/name1:value1 /name2:anothervalue2 ""/name3:value 3"""));
+            Assert.That(args, Is.EqualTo(@"/name1:value1 /name2:anothervalue2 ""/name3:value 3"" /notused:notusedvalue"));
         }
 
         class FakeParameter : IParameter {

@@ -52,17 +52,22 @@ namespace Bounce.Framework {
         private void EnsureThatRequiredParametersAreSet(ParameterErrors parameterErrors) {
         }
 
-        public void ParseCommandLineArguments(List<ParsedCommandLineParameter> parameters) {
+        public IEnumerable<IParameter> ParseCommandLineArguments(List<ParsedCommandLineParameter> parameters) {
+            var parametersGiven = new List<IParameter>();
+
             WithRiskOfParameterErrors(parameterErrors => {
                 foreach (var commandLineParameter in parameters) {
                     IParameter parameter;
                     if (RegisteredParameters.TryGetValue(commandLineParameter.Name, out parameter)) {
                         parameter.Parse(commandLineParameter.Value, TypeParsers);
+                        parametersGiven.Add(parameter);
                     } else {
                         parameterErrors.NoSuchParameter(commandLineParameter.Name);
                     }
                 }
             });
+
+            return parametersGiven;
         }
 
         private static void WithRiskOfParameterErrors(Action<ParameterErrors> action) {
