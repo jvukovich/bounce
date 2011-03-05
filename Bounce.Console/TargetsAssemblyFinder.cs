@@ -34,7 +34,26 @@ namespace Bounce.Console {
         }
 
         private BounceDirectoryExecutable BounceDirectoryExists(string currentDir) {
+            var bounceExecutableFinders = new Func<string, BounceDirectoryExecutable> [] {BeforeBounceScript, TargetsDll};
+
+            return bounceExecutableFinders.FirstNonNull(finder => finder(currentDir));
+        }
+
+        private BounceDirectoryExecutable BeforeBounceScript(string currentDir) {
+            var beforeBounceScript = Directory.GetFiles(Path.Combine(currentDir, @"Bounce"), "beforebounce.*").FirstOrDefault();
+            if (beforeBounceScript != null) {
+                return new BounceDirectoryExecutable {
+                    Executable = beforeBounceScript,
+                    ExecutableType = BounceDirectoryExecutableType.BeforeBounce
+                };
+            }
+
+            return null;
+        }
+
+        private BounceDirectoryExecutable TargetsDll(string currentDir) {
             var targetsDll = Path.Combine(currentDir, TargetsDllPath);
+
             if (File.Exists(targetsDll)) {
                 return new BounceDirectoryExecutable {
                     Executable = targetsDll,
@@ -42,15 +61,7 @@ namespace Bounce.Console {
                 };
             }
 
-            var beforeBounceScript = Directory.GetFiles(Path.Combine(currentDir, @"Bounce"), "beforebounce.*").FirstOrDefault();
-            if (beforeBounceScript != null) {
-                return new BounceDirectoryExecutable {
-                    Executable = beforeBounceScript,
-                    ExecutableType = BounceDirectoryExecutableType.BeforeBounce
-                };
-            } else {
-                return null;
-            }
+            return null;
         }
     }
 }

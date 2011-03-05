@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Bounce.Framework;
 using Bounce.TestHelpers;
 using ICSharpCode.SharpZipLib.Zip;

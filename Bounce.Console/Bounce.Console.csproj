@@ -53,6 +53,7 @@
     <Compile Include="BounceAssemblyRunner.cs" />
     <Compile Include="BounceConsoleException.cs" />
     <Compile Include="BounceDirectoryCopier.cs" />
+    <Compile Include="FirstNonNullIEnumerableExtension.cs" />
     <Compile Include="ITargetsAssemblyFinder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
