@@ -3,7 +3,7 @@
 namespace Bounce.Console {
     class BounceDirectoryCopier {
         public string CopyBounceDirectory(OptionsAndArguments optionsAndArguments) {
-            var bounceDirectory = Path.GetDirectoryName(optionsAndArguments.TargetsAssembly);
+            var bounceDirectory = Path.GetDirectoryName(optionsAndArguments.TargetsAssembly.Executable);
             var tempBounceDir = Path.Combine(Path.GetDirectoryName(bounceDirectory), bounceDirectory + ".tmp");
 
             if (!optionsAndArguments.Recurse)
@@ -18,7 +18,7 @@ namespace Bounce.Console {
                 CopyDirectory(bounceDirectory, tempBounceDir);
             }
 
-            return Path.Combine(tempBounceDir, Path.GetFileName(optionsAndArguments.TargetsAssembly));
+            return Path.Combine(tempBounceDir, Path.GetFileName(optionsAndArguments.TargetsAssembly.Executable));
         }
 
         private void CopyDirectory(string fromDirectory, string toDirectory) {

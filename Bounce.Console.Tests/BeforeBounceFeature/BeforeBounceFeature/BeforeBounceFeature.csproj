@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2DD987A2-8501-4265-A731-A06F7E210F1E}</ProjectGuid>
+    <ProjectGuid>{0B42D94A-9B54-4F19-A290-1461C4A17FF5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bounce.Console.Tests</RootNamespace>
-    <AssemblyName>Bounce.Console.Tests</AssemblyName>
+    <RootNamespace>BeforeBounceFeature</RootNamespace>
+    <AssemblyName>Targets</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Bounce\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,17 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+    <Reference Include="Bounce.Framework, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\..\Bounce.Framework\bin\Debug\Bounce.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+    <Reference Include="Bounce.Framework.Tests, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Moq\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\NUnit\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\Bounce.Framework.Tests\bin\Debug\Bounce.Framework.Tests.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -57,28 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RunsBatchFileBeforeRunningTargetsFeature.cs" />
-    <Compile Include="TargetsAssemblyArgumentsParser.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bounce.Console\Bounce.Console.csproj">
-      <Project>{BD123B60-C18A-4446-808E-F4B81D0EE23D}</Project>
-      <Name>Bounce.Console</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">
-      <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
-      <Name>Bounce.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Bounce.TestHelpers\Bounce.TestHelpers.csproj">
-      <Project>{E7E05DAC-9A59-41F5-9FED-47FDF809A699}</Project>
-      <Name>Bounce.TestHelpers</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BeforeBounceFeature.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

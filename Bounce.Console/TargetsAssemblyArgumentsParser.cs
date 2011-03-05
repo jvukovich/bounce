@@ -21,14 +21,20 @@ namespace Bounce.Console {
                 {
                     var remainingArgs = new string[args.Length - 1];
                     Array.Copy(args, 1, remainingArgs, 0, remainingArgs.Length);
-                    optionsAndArguments.TargetsAssembly = firstArg.Substring("/targets:".Length);
+                    optionsAndArguments.TargetsAssembly = new BounceDirectoryExecutable {
+                        Executable = firstArg.Substring("/targets:".Length),
+                        ExecutableType = BounceDirectoryExecutableType.Targets
+                    };
                     optionsAndArguments.RemainingArguments = remainingArgs;
                 }
                 else if (firstArg == "/targets")
                 {
                     var remainingArgs = new string[args.Length - 2];
                     Array.Copy(args, 2, remainingArgs, 0, remainingArgs.Length);
-                    optionsAndArguments.TargetsAssembly = args[1];
+                    optionsAndArguments.TargetsAssembly = new BounceDirectoryExecutable {
+                        Executable = args[1],
+                        ExecutableType = BounceDirectoryExecutableType.Targets
+                    };
                     optionsAndArguments.RemainingArguments = remainingArgs;
                 }
             }
@@ -51,10 +57,10 @@ namespace Bounce.Console {
         }
 
         public OptionsAndArguments GetTargetsAssembly(string[] args) {
-
-            OptionsAndArguments optionsAndArguments = new OptionsAndArguments {RemainingArguments = args};
+            var optionsAndArguments = new OptionsAndArguments {RemainingArguments = args};
 
             TryGetTargetsFromArguments(optionsAndArguments);
+
             TryGetRecurseFromArguments(optionsAndArguments);
 
             if (optionsAndArguments.TargetsAssembly != null)

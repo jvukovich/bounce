@@ -126,6 +126,10 @@
       <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
       <Name>Bounce.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Bounce.TestHelpers\Bounce.TestHelpers.csproj">
+      <Project>{E7E05DAC-9A59-41F5-9FED-47FDF809A699}</Project>
+      <Name>Bounce.TestHelpers</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestFiles\Bounce.csproj">

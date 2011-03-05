@@ -17,7 +17,8 @@ namespace Bounce.Console.Tests
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/targets:one.dll", "other", "args"});
 
             Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"other", "args"}));
-            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly.Executable, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly.ExecutableType, Is.EqualTo(BounceDirectoryExecutableType.Targets));
         }
 
         [Test]
@@ -27,7 +28,8 @@ namespace Bounce.Console.Tests
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/targets", "one.dll", "other", "args"});
 
             Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"other", "args"}));
-            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly.Executable, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly.ExecutableType, Is.EqualTo(BounceDirectoryExecutableType.Targets));
         }
 
         [Test]
@@ -37,40 +39,43 @@ namespace Bounce.Console.Tests
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/targets", "one.dll", "/recurse", "other", "args"});
 
             Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"other", "args"}));
-            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly.Executable, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly.ExecutableType, Is.EqualTo(BounceDirectoryExecutableType.Targets));
             Assert.That(targetsAndArgs.Recurse);
         }
 
         [Test]
         public void ShouldParseRecurseFromArguments() {
             var finder = new Mock<ITargetsAssemblyFinder>();
-            finder.Setup(f => f.FindTargetsAssembly()).Returns("one.dll");
+            var bounceDirectoryExecutable = new BounceDirectoryExecutable();
+            finder.Setup(f => f.FindTargetsAssembly()).Returns(bounceDirectoryExecutable);
 
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/recurse", "other", "args"});
 
             Assert.That(targetsAndArgs.Recurse);
             Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] { "other", "args" }));
-            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly, Is.SameAs(bounceDirectoryExecutable));
         }
 
         [Test]
         public void ShouldFindTargetsIfNoTargetsParameterGiven() {
             var finder = new Mock<ITargetsAssemblyFinder>();
-            finder.Setup(f => f.FindTargetsAssembly()).Returns("one.dll");
+            var bounceDirectoryExecutable = new BounceDirectoryExecutable();
+            finder.Setup(f => f.FindTargetsAssembly()).Returns(bounceDirectoryExecutable);
 
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"build", "SomeTarget", "/other", "args"});
 
             Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"build", "SomeTarget", "/other", "args"}));
-            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly, Is.SameAs(bounceDirectoryExecutable));
             Assert.That(targetsAndArgs.Recurse, Is.False);
         }
 
         [Test]
         public void ShouldThrowIfTargetsAssemblyNotFound() {
             var finder = new Mock<ITargetsAssemblyFinder>();
-            finder.Setup(f => f.FindTargetsAssembly()).Returns((string) null);
+            finder.Setup(f => f.FindTargetsAssembly()).Returns((BounceDirectoryExecutable) null);
 
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             Assert.That(() => parser.GetTargetsAssembly(new[] {"build", "SomeTarget", "/other", "args"}), Throws.InstanceOf(typeof(TargetsAssemblyNotFoundException)));
@@ -79,13 +84,14 @@ namespace Bounce.Console.Tests
         [Test]
         public void ShouldAttemptToFindAssemblyIfNoArgsGiven() {
             var finder = new Mock<ITargetsAssemblyFinder>();
-            finder.Setup(f => f.FindTargetsAssembly()).Returns("one.dll");
+            var bounceDirectoryExecutable = new BounceDirectoryExecutable();
+            finder.Setup(f => f.FindTargetsAssembly()).Returns(bounceDirectoryExecutable);
 
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new string[0]);
 
             Assert.That(targetsAndArgs.RemainingArguments, Is.Empty);
-            Assert.That(targetsAndArgs.TargetsAssembly, Is.EqualTo("one.dll"));
+            Assert.That(targetsAndArgs.TargetsAssembly, Is.SameAs(bounceDirectoryExecutable));
         }
     }
 }

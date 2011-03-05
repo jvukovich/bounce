@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Bounce.TestHelpers;
 using Moq;
 using NUnit.Framework;
 
@@ -17,13 +18,6 @@ namespace Bounce.Framework.Tests {
         }
 
         private const string Dir = @"testdir";
-
-        private void RecreateDirectory(string d) {
-            if (Directory.Exists(d)) {
-                Directory.Delete(d, true);
-            }
-            Directory.CreateDirectory(d);
-        }
 
         private void AssertFileContains(string filename, string contents) {
             Assert.That(File.Exists(filename), String.Format("file `{0}' should exist", filename));
@@ -82,8 +76,8 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void ShouldCopyContents() {
-            RecreateDirectory("testfrom");
-            RecreateDirectory("testto");
+            FileSystemTestHelper.RecreateDirectory("testfrom");
+            FileSystemTestHelper.RecreateDirectory("testto");
 
             Touch(@"testfrom\one.txt", "one");
             Touch(@"testfrom\two.txt", "two");
@@ -114,7 +108,7 @@ namespace Bounce.Framework.Tests {
         [Test]
         public void ShouldDeleteDirectory() {
             string dir = "test";
-            RecreateDirectory(dir);
+            FileSystemTestHelper.RecreateDirectory(dir);
 
             Assert.That(Directory.Exists(dir));
 

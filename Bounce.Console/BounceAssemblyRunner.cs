@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -24,6 +25,9 @@ namespace Bounce.Console {
 
         private void FindTargetsAssemblyAndRunBounce(string[] args) {
             OptionsAndArguments optionsAndArguments = GetAssemblyFileName(args);
+
+            RunBeforeBounceScript(optionsAndArguments);
+
             string assemblyFileName = BounceDirectoryCopier.CopyBounceDirectory(optionsAndArguments);
             args = optionsAndArguments.RemainingArguments;
 
@@ -31,6 +35,24 @@ namespace Bounce.Console {
             BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty = GetTargetsMemberFromAssembly(a);
 
             RunAssembly(bounceAssemblyAndTargetsProperty, args);
+        }
+
+        private void RunBeforeBounceScript(OptionsAndArguments optionsAndArguments) {
+            if (optionsAndArguments.TargetsAssembly.ExecutableType == BounceDirectoryExecutableType.BeforeBounce) {
+                var processInfo = new ProcessStartInfo("cmd", "/c " + optionsAndArguments.TargetsAssembly.Executable);
+                processInfo.CreateNoWindow = true;
+                processInfo.RedirectStandardError = false;
+                processInfo.RedirectStandardOutput = false;
+                processInfo.UseShellExecute = false;
+                processInfo.ErrorDialog = false;
+                
+                var p = new Process { StartInfo = processInfo };
+                p.Start();
+                p.WaitForExit();
+
+                optionsAndArguments.TargetsAssembly.Executable = @"Bounce\Targets.dll";
+                optionsAndArguments.TargetsAssembly.ExecutableType = BounceDirectoryExecutableType.Targets;
+            }
         }
 
         private OptionsAndArguments GetAssemblyFileName(string[] args) {

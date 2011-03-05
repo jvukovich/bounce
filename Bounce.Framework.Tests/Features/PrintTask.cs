@@ -1,11 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Bounce.Framework.Tests.Features {
-    class PrintTask : Task {
+    public class PrintTask : Task {
         [Dependency]
         public Task<string> Description;
 
         private readonly TextWriter Output;
+
+        public PrintTask() : this(Console.Out) {
+        }
 
         public PrintTask(TextWriter output) {
             Output = output;

@@ -20,7 +20,7 @@ namespace Bounce.Framework {
         }
 
         public ProcessOutput Execute(string commandName, string commandArgs) {
-            var commandLog = GetLog().BeginExecutingCommand(commandName, commandArgs);
+            ICommandLog commandLog = GetLog().BeginExecutingCommand(commandName, commandArgs);
 
             var processInfo = new ProcessStartInfo(commandName, commandLog.CommandArgumentsForLogging);
             processInfo.CreateNoWindow = true;
