@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Bounce.Framework;
+using MultiStageTargets;
 
 namespace TestBounceAssembly {
     public class BuildTargets {
@@ -298,5 +299,176 @@ namespace TestBounceAssembly {
             Output.WriteLine(Description.Value);
             Output.WriteLine(_path.Value);
         }
+    }
+
+    class Switch : Task
+    {
+        [Dependency]
+        public Task<string> Condition { get; set; }
+
+        private IDictionary<string, ITask> Cases;
+
+        public Switch(Task<string> condition)
+        {
+            Condition = condition;
+            Cases = new Dictionary<string, ITask>();
+        }
+
+        public ITask this [string _case]
+        {
+            get { return Cases[_case]; }
+            set { Cases[_case] = value; }
+        }
+
+        public override void Invoke(IBounceCommand command, IBounce bounce)
+        {
+            ITask action;
+            if (Cases.TryGetValue(Condition.Value, out action))
+            {
+                action.Invoke(command, bounce);
+            } else
+            {
+                throw new ConfigurationException(String.Format("no such case for `{0}'", Condition.Value));
+            }
+        }
+    }
+
+    public class StagedDeployer : Task
+    {
+        private readonly IDictionary<string, ITask> _targets;
+        private readonly IParameters _parameters;
+        private readonly Task<IEnumerable<DeployConfiguration>> _machineConfigurations;
+        private Task<string> _stage;
+        private Task<string> _machineName;
+
+        public StagedDeployer(IDictionary<string, ITask> targets, IParameters parameters, Task<IEnumerable<DeployConfiguration>> machineConfigurations)
+        {
+            _targets = targets;
+            _parameters = parameters;
+            _machineConfigurations = machineConfigurations;
+
+            _stage = _parameters.Default("stage", "archive");
+            _machineName = _parameters.Required<string>("machineName");
+        }
+
+        public StagedDeploy CreateDeployment(string name)
+        {
+            return new StagedDeploy(_targets, name, _stage, _machineName, _machineConfigurations);
+        }
+    }
+
+    public class StagedDeploy : Task
+    {
+        private readonly string _targetName;
+
+        [Dependency]
+        private readonly Task<string> _stage;
+        [Dependency]
+        private readonly Task<string> _machineName;
+        [Dependency]
+        private readonly Task<IEnumerable<DeployConfiguration>> _machineConfigurations;
+        [Dependency]
+        private Switch _switch;
+
+        private ITask _unArchive;
+
+        public StagedDeploy(IDictionary<string, ITask> targets, string targetName, Task<string> stage, Task<string> machineName, Task<IEnumerable<DeployConfiguration>> machineConfigurations)
+        {
+            _targetName = targetName;
+            _stage = stage;
+            _machineName = machineName;
+            _machineConfigurations = machineConfigurations;
+            _switch = new Switch(stage);
+            targets[targetName] = this;
+        }
+
+        public ITask UnArchive
+        {
+            get { return _unArchive; }
+            set
+            {
+                _unArchive = value;
+                _switch["remoteDeploy"] = GetRemoteDeploy();
+            }
+        }
+
+        private ITask GetRemoteDeploy()
+        {
+            return _machineConfigurations.SelectTasks(dir =>
+            {
+                var archiveOnRemote = new Copy
+                                                                                {
+                                                                                    FromPath = ".",
+                                                                                    ToPath = dir.RemotePath,
+                                                                                };
+
+                return new SubBounce
+                           {
+                               Arguments = new RemoteBounceArguments { Targets = new[] { _targetName } }.WithRemoteParameter(_stage, "deploy").WithRemoteParameter(_machineName, dir.Machine),
+                               DependsOn = new[] { new TaskDependency { Task = archiveOnRemote } },
+                               WorkingDirectory = dir.LocalPath,
+                           };
+            });
+        }
+
+        public Func<Task<string>, ITask> Deploy
+        {
+            set { _switch["deploy"] = GetDeploy(value); }
+        }
+
+        private ITask GetDeploy(Func<Task<string>, ITask> deployer)
+        {
+            var localPath =
+                new All(_machineName, _machineConfigurations).WhenBuilt(() => _machineConfigurations
+                                                                                           .Value.
+                                                                                           First(
+                                                                                               conf =>
+                                                                                               conf.
+                                                                                                   Machine ==
+                                                                                               _machineName
+                                                                                                   .
+                                                                                                   Value)
+                                                                                           .LocalPath.Value);
+            return deployer(localPath);
+        }
+
+        public ITask Archive
+        {
+            get { return _switch["archive"]; }
+            set { _switch["archive"] = value; }
+        }
+
+        public override void Invoke(IBounceCommand command, IBounce bounce)
+        {
+            _switch.Invoke(command, bounce);
+        }
+    }
+
+    public class Stuff
+    {
+        public object GetTargets(IParameters parameters)
+        {
+            IDictionary<string, ITask> targets = new Dictionary<string, ITask>();
+            Task<string> stage = parameters.Default("stage", "build");
+            Task<string> machineName = parameters.Required<string>("machine");
+
+            var machines = new[] {new DeployConfiguration {RemotePath = @"\\machine\deploy", Machine = "web1", LocalPath = @"c:\deploy"}};
+
+            var s = new StagedDeploy(targets, "website", stage, machineName, machines);
+            s.Deploy = archive => new Iis6WebSite
+                           {
+                               Directory = archive,
+                           };
+            s.Archive = new VisualStudioSolution().Projects["website"].ProjectDirectory;
+
+            return targets;
+        }
+    }
+
+    public class DeployConfiguration
+    {
+        public Task<string> RemotePath;
+        public string Machine;
+        public Task<string> LocalPath;
     }
 }
