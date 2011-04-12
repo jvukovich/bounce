@@ -40,12 +40,16 @@ namespace Bounce.Console {
         }
 
         private BounceDirectoryExecutable BeforeBounceScript(string currentDir) {
-            var beforeBounceScript = Directory.GetFiles(Path.Combine(currentDir, @"Bounce"), "beforebounce.*").FirstOrDefault();
-            if (beforeBounceScript != null) {
-                return new BounceDirectoryExecutable {
-                    Executable = beforeBounceScript,
-                    ExecutableType = BounceDirectoryExecutableType.BeforeBounce
-                };
+            var bounceDir = Path.Combine(currentDir, @"Bounce");
+
+            if (Directory.Exists(bounceDir)) {
+                var beforeBounceScript = Directory.GetFiles(bounceDir, "beforebounce.*").FirstOrDefault();
+                if (beforeBounceScript != null) {
+                    return new BounceDirectoryExecutable {
+                        Executable = beforeBounceScript,
+                        ExecutableType = BounceDirectoryExecutableType.BeforeBounce
+                    };
+                }
             }
 
             return null;

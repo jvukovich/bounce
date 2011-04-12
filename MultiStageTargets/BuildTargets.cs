@@ -57,7 +57,7 @@ namespace MultiStageTargets
 
             public SubBounce DeployTargets(params string [] targets) {
                 return new SubBounce {
-                    Arguments = new RemoteBounceArguments {Targets = targets}.WithRemoteParameter(Stage, "deploy").WithRemoteParameter(MachineParameter, MachineName),
+                    BounceArguments = new RemoteBounceArguments {Targets = targets}.WithRemoteParameter(Stage, "deploy").WithRemoteParameter(MachineParameter, MachineName),
                     DependsOn = new [] {new TaskDependency {Task = ArchiveCopiedToRemote}},
                     WorkingDirectory = LocalDeployDirectory,
                 };
@@ -72,14 +72,14 @@ namespace MultiStageTargets
     }
 
     public class SubBounce : Task {
-        [Dependency] public Task<string> Arguments;
+        [Dependency] public Task<string> BounceArguments;
         [Dependency] public Task<string> WorkingDirectory;
 
         public override void Build(IBounce bounce) {
             var cwd = Directory.GetCurrentDirectory();
             Directory.SetCurrentDirectory(WorkingDirectory.Value);
             try {
-                bounce.ShellCommand.ExecuteAndExpectSuccess(@"bounce.exe", Arguments.Value);
+                bounce.ShellCommand.ExecuteAndExpectSuccess(@"bounce.exe", BounceArguments.Value);
             } finally {
                 Directory.SetCurrentDirectory(cwd);
             }

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Bounce.Framework;
-using MultiStageTargets;
 
 namespace TestBounceAssembly {
     public class BuildTargets {
@@ -173,7 +172,6 @@ namespace TestBounceAssembly {
     }
 
     public class MultiStage {
-        [Targets]
         public static object GetTargets (IParameters parameters) {
             var archive = new Archive(
                 parameters.Default("archive", false),
@@ -323,41 +321,39 @@ namespace TestBounceAssembly {
         public override void Invoke(IBounceCommand command, IBounce bounce)
         {
             ITask action;
-            if (Cases.TryGetValue(Condition.Value, out action))
-            {
-                action.Invoke(command, bounce);
-            } else
-            {
+            if (Cases.TryGetValue(Condition.Value, out action)) {
+                bounce.Invoke(command, action);
+            } else {
                 throw new ConfigurationException(String.Format("no such case for `{0}'", Condition.Value));
             }
         }
     }
 
-    public class StagedDeployer : Task
+    public class StagedDeployer<T>
     {
         private readonly IDictionary<string, ITask> _targets;
         private readonly IParameters _parameters;
-        private readonly Task<IEnumerable<DeployConfiguration>> _machineConfigurations;
+        private readonly Task<IEnumerable<DeployMachine<T>>> _machineConfigurations;
         private Task<string> _stage;
         private Task<string> _machineName;
 
-        public StagedDeployer(IDictionary<string, ITask> targets, IParameters parameters, Task<IEnumerable<DeployConfiguration>> machineConfigurations)
+        public StagedDeployer(IDictionary<string, ITask> targets, IParameters parameters, Task<IEnumerable<DeployMachine<T>>> machineConfigurations)
         {
             _targets = targets;
             _parameters = parameters;
             _machineConfigurations = machineConfigurations;
 
-            _stage = _parameters.Default("stage", "archive");
+            _stage = _parameters.Default("stage", "buildDeploy");
             _machineName = _parameters.Required<string>("machineName");
         }
 
-        public StagedDeploy CreateDeployment(string name)
+        public StagedDeploy<T> CreateDeployment(string name)
         {
-            return new StagedDeploy(_targets, name, _stage, _machineName, _machineConfigurations);
+            return new StagedDeploy<T>(_targets, name, _stage, _machineName, _machineConfigurations);
         }
     }
 
-    public class StagedDeploy : Task
+    public class StagedDeploy<T> : Task
     {
         private readonly string _targetName;
 
@@ -366,13 +362,11 @@ namespace TestBounceAssembly {
         [Dependency]
         private readonly Task<string> _machineName;
         [Dependency]
-        private readonly Task<IEnumerable<DeployConfiguration>> _machineConfigurations;
+        private readonly Task<IEnumerable<DeployMachine<T>>> _machineConfigurations;
         [Dependency]
         private Switch _switch;
 
-        private ITask _unArchive;
-
-        public StagedDeploy(IDictionary<string, ITask> targets, string targetName, Task<string> stage, Task<string> machineName, Task<IEnumerable<DeployConfiguration>> machineConfigurations)
+        public StagedDeploy(IDictionary<string, ITask> targets, string targetName, Task<string> stage, Task<string> machineName, Task<IEnumerable<DeployMachine<T>>> machineConfigurations)
         {
             _targetName = targetName;
             _stage = stage;
@@ -382,93 +376,106 @@ namespace TestBounceAssembly {
             targets[targetName] = this;
         }
 
-        public ITask UnArchive
-        {
-            get { return _unArchive; }
-            set
-            {
-                _unArchive = value;
-                _switch["remoteDeploy"] = GetRemoteDeploy();
+        private void SetupSwitch() {
+            if (Build != null && Deploy != null) {
+                _switch["build"] = Build;
+                _switch["remoteDeploy"] = GetRemoteDeploy(".");
+                _switch["deploy"] = Deploy(GetLocalPathForMachine());
+                _switch["buildRemoteDeploy"] = GetRemoteDeploy(Build);
+                _switch["buildDeploy"] = Deploy(Build);
             }
         }
 
-        private ITask GetRemoteDeploy()
-        {
-            return _machineConfigurations.SelectTasks(dir =>
-            {
-                var archiveOnRemote = new Copy
-                                                                                {
-                                                                                    FromPath = ".",
-                                                                                    ToPath = dir.RemotePath,
-                                                                                };
+        private ITask GetRemoteDeploy(Task<string> archive) {
+            return _machineConfigurations.SelectTasks(machConf => {
+                var archiveOnRemote = new Copy {
+                    FromPath = archive,
+                    ToPath = machConf.RemotePath,
+                };
 
-                return new SubBounce
-                           {
-                               Arguments = new RemoteBounceArguments { Targets = new[] { _targetName } }.WithRemoteParameter(_stage, "deploy").WithRemoteParameter(_machineName, dir.Machine),
-                               DependsOn = new[] { new TaskDependency { Task = archiveOnRemote } },
-                               WorkingDirectory = dir.LocalPath,
-                           };
+                return new SubBounce {
+                    BounceArguments = new RemoteBounceArguments {Targets = new[] {_targetName}}
+                        .WithRemoteParameter(_stage, "deploy")
+                        .WithRemoteParameter(_machineName, machConf.Name),
+                    DependsOn = new[] {new TaskDependency {Task = archiveOnRemote}},
+                    WorkingDirectory = machConf.LocalPath,
+                };
             });
         }
 
-        public Func<Task<string>, ITask> Deploy
-        {
-            set { _switch["deploy"] = GetDeploy(value); }
+        private Func<Task<string>, ITask> _deploy;
+        public Func<Task<string>, ITask> Deploy {
+            get { return _deploy; }
+            set {
+               _deploy = value;
+                SetupSwitch();
+            }
         }
 
-        private ITask GetDeploy(Func<Task<string>, ITask> deployer)
-        {
-            var localPath =
-                new All(_machineName, _machineConfigurations).WhenBuilt(() => _machineConfigurations
-                                                                                           .Value.
-                                                                                           First(
-                                                                                               conf =>
-                                                                                               conf.
-                                                                                                   Machine ==
-                                                                                               _machineName
-                                                                                                   .
-                                                                                                   Value)
-                                                                                           .LocalPath.Value);
-            return deployer(localPath);
+        private Task<string> _build;
+        public new Task<string> Build {
+            get { return _build; }
+            set {
+                _build = value;
+                SetupSwitch();
+            }
         }
 
-        public ITask Archive
-        {
-            get { return _switch["archive"]; }
-            set { _switch["archive"] = value; }
+        private Task<string> GetLocalPathForMachine() {
+            return new All(_machineName, _machineConfigurations).WhenBuilt(() => {
+                return _machineConfigurations.Value.First(conf => conf.Name == _machineName.Value).LocalPath.Value;
+            });
         }
+    }
 
-        public override void Invoke(IBounceCommand command, IBounce bounce)
-        {
-            _switch.Invoke(command, bounce);
-        }
+    class Machine {
+        public string LocalPath;
     }
 
     public class Stuff
     {
-        public object GetTargets(IParameters parameters)
+        [Targets]
+        public static object GetTargets(IParameters parameters)
         {
             IDictionary<string, ITask> targets = new Dictionary<string, ITask>();
-            Task<string> stage = parameters.Default("stage", "build");
-            Task<string> machineName = parameters.Required<string>("machine");
+            var machines = new[] {
+                new DeployMachine<Machine> {
+                    RemotePath = @"\\localhost\deploy", Name = "web1", LocalPath = @"c:\Deploy"
+                }
+            };
+            var deployer = new StagedDeployer<Machine>(targets, parameters, machines);
 
-            var machines = new[] {new DeployConfiguration {RemotePath = @"\\machine\deploy", Machine = "web1", LocalPath = @"c:\deploy"}};
-
-            var s = new StagedDeploy(targets, "website", stage, machineName, machines);
-            s.Deploy = archive => new Iis6WebSite
-                           {
-                               Directory = archive,
-                           };
-            s.Archive = new VisualStudioSolution().Projects["website"].ProjectDirectory;
+            var website = deployer.CreateDeployment("Website");
+            website.Build = new Copy {FromPath = ".gitignore", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
+            website.Deploy = archive => new Copy {
+                FromPath = archive.WhenBuilt(a => Path.Combine(a, @".gitignore")),
+                ToPath = archive.WhenBuilt(a => Path.Combine(a, @"deployed"))
+            };
 
             return targets;
         }
     }
 
-    public class DeployConfiguration
+    public class SubBounce : Task {
+        [Dependency] public Task<string> BounceArguments;
+        [Dependency] public Task<string> WorkingDirectory;
+
+        public override void Build(IBounce bounce) {
+            var cwd = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(WorkingDirectory.Value);
+            try {
+                bounce.ShellCommand.ExecuteAndExpectSuccess(@"bounce.exe", BounceArguments.Value);
+            } finally {
+                Directory.SetCurrentDirectory(cwd);
+            }
+        }
+    }
+
+    public class DeployMachine<T>
     {
         public Task<string> RemotePath;
-        public string Machine;
+        public string Name;
+        public T Machine;
         public Task<string> LocalPath;
     }
 }
