@@ -27,8 +27,8 @@ namespace Bounce.Framework.Tests {
             var param1 = new Parameter<string> {Name = "name1"};
             var param2 = new Parameter<string> { Name = "name2" };
 
-            var argsWithParam1 = args.WithRemoteParameter(param1, "value1");
-            var argsWithParam2 = args.WithRemoteParameter(param2, "value2");
+            var argsWithParam1 = args.WithParameter(param1.WithValue("value1"));
+            var argsWithParam2 = args.WithParameter(param2.WithValue("value2"));
             Assert.That(argsWithParam1.Parameters.Count(), Is.EqualTo(1));
             Assert.That(argsWithParam1.Parameters.ElementAt(0).Name, Is.EqualTo("name1"));
             Assert.That(((Parameter<string>) argsWithParam1.Parameters.ElementAt(0)).Value, Is.EqualTo("value1"));

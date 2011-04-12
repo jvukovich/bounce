@@ -14,6 +14,6 @@ namespace Bounce.Framework {
     public interface IParameter<T> : IParameter
     {
         T Value { get; }
-        IParameter<T> NewWithValue(T value);
+        Parameter<T> WithValue(T value);
     }
 }

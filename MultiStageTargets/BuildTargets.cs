@@ -39,12 +39,12 @@ namespace MultiStageTargets
 
         public class RemoteMachine {
             private readonly Task<string> LocalDeployDirectory;
-            private readonly Task<string> Stage;
-            private readonly Task<string> MachineParameter;
+            private readonly Parameter<string> Stage;
+            private readonly Parameter<string> MachineParameter;
             private readonly string MachineName;
             private ITask ArchiveCopiedToRemote;
 
-            public RemoteMachine(Task<string> remoteDeployDirectory, Task<string> localDeployDirectory, Task<string> stage, Task<string> machineParameter, string machineName) {
+            public RemoteMachine(Task<string> remoteDeployDirectory, Task<string> localDeployDirectory, Parameter<string> stage, Parameter<string> machineParameter, string machineName) {
                 LocalDeployDirectory = localDeployDirectory;
                 Stage = stage;
                 MachineParameter = machineParameter;
@@ -57,14 +57,14 @@ namespace MultiStageTargets
 
             public SubBounce DeployTargets(params string [] targets) {
                 return new SubBounce {
-                    BounceArguments = new RemoteBounceArguments {Targets = targets}.WithRemoteParameter(Stage, "deploy").WithRemoteParameter(MachineParameter, MachineName),
+                    BounceArguments = new RemoteBounceArguments {Targets = targets}.WithParameter(Stage.WithValue("deploy")).WithParameter(MachineParameter.WithValue(MachineName)),
                     DependsOn = new [] {new TaskDependency {Task = ArchiveCopiedToRemote}},
                     WorkingDirectory = LocalDeployDirectory,
                 };
             }
         }
 
-        private static RemoteMachine GetRemoteMachine(Task<string> stage, Task<string> machine, string machineName) {
+        private static RemoteMachine GetRemoteMachine(Parameter<string> stage, Parameter<string> machine, string machineName) {
             return new RemoteMachine(Path.Combine(@"\\sonomorph\deployments\bigsolution", machineName),
                                     Path.Combine(@"c:\deployments\bigsolution", machineName), stage, machine,
                                     machineName);

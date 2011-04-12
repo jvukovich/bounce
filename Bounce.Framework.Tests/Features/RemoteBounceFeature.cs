@@ -90,7 +90,7 @@ rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-ou
 
                 Task<IEnumerable<string>> machines = new [] {"machine1", "machine2"};
                 var one = machines.SelectTasks(machine => new RemoteExec {
-                    BounceArguments = remoteOneArgs.WithRemoteParameter(machineName, machine),
+                    BounceArguments = remoteOneArgs.WithParameter(machineName.WithValue(machine)),
                     Machine = machine,
                 });
 

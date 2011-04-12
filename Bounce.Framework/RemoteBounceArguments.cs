@@ -42,8 +42,8 @@ namespace Bounce.Framework {
             return String.Join(" ", args.ToArray());
         }
 
-        public RemoteBounceArguments WithRemoteParameter<T>(Task<T> parameter, T value) {
-            IEnumerable<IParameter> newParameters = Parameters.Concat(new [] {((IParameter<T>) parameter).NewWithValue(value)});
+        public RemoteBounceArguments WithParameter(IParameter parameter) {
+            IEnumerable<IParameter> newParameters = Parameters.Concat(new [] {parameter});
             return new RemoteBounceArguments {
                 Targets = Targets,
                 Parameters = newParameters

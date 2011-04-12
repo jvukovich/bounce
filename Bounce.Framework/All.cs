@@ -17,5 +17,7 @@ namespace Bounce.Framework {
         public All(params ITask[] tasks) {
             Tasks = tasks;
         }
+
+        public override bool IsLogged { get { return false; } }
     }
 }

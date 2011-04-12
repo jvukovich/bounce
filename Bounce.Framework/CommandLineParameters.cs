@@ -29,19 +29,19 @@ namespace Bounce.Framework {
             return p;
         }
 
-        public Task<T> Required<T>(string name) {
+        public Parameter<T> Required<T>(string name) {
             return RegisterParameter(new Parameter<T> {Name = name, Required = true});
         }
 
-        public Task<T> Default<T>(string name, T defaultValue) {
+        public Parameter<T> Default<T>(string name, T defaultValue) {
             return RegisterParameter(new Parameter<T> {Name = name, DefaultValue = defaultValue});
         }
 
-        public Task<T> OneOf<T>(string name, IEnumerable<T> availableValues) {
+        public Parameter<T> OneOf<T>(string name, IEnumerable<T> availableValues) {
             return RegisterParameter(new Parameter<T> { Name = name, Required = true, AvailableValues = availableValues.Cast<object>() });
         }
 
-        public Task<T> OneOfWithDefault<T>(string name, T defaultValue, IEnumerable<T> availableValues) {
+        public Parameter<T> OneOfWithDefault<T>(string name, T defaultValue, IEnumerable<T> availableValues) {
             return RegisterParameter(new Parameter<T> { Name = name, DefaultValue = defaultValue, AvailableValues = availableValues.Cast<object>() });
         }
 

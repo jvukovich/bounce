@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    internal class Parameter<T> : TaskWithValue<T>, IParameter<T> {
+    public class Parameter<T> : TaskWithValue<T>, IParameter<T> {
         public bool Required { get; set; }
 
         public string Name { get; set; }
@@ -50,7 +50,7 @@ namespace Bounce.Framework {
             }
         }
 
-        public IParameter<T> NewWithValue(T value) {
+        public Parameter<T> WithValue(T value) {
             return new Parameter<T>(Name, value);
         }
     }
