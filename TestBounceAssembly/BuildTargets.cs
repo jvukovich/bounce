@@ -357,9 +357,7 @@ namespace TestBounceAssembly {
     {
         private readonly string _targetName;
 
-        [Dependency]
         private readonly Task<string> _stage;
-        [Dependency]
         private readonly Task<string> _machineName;
         [Dependency]
         private readonly Task<IEnumerable<DeployMachine<T>>> _machineConfigurations;
