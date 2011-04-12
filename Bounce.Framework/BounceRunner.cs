@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -9,6 +10,8 @@ namespace Bounce.Framework {
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
         private readonly IParameterFinder ParameterFinder;
         private CommandAndTargetParser CommandAndTargetParser;
+
+        public static string TargetsPath { get; private set; }
 
         public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator(), new ParameterFinder()) {}
 
@@ -20,6 +23,8 @@ namespace Bounce.Framework {
         }
 
         public void Run(string[] args, MethodInfo getTargetsMethod) {
+            TargetsPath = new Uri(getTargetsMethod.Module.Assembly.CodeBase).LocalPath;
+
             var parameters = new CommandLineParameters();
 
             try {

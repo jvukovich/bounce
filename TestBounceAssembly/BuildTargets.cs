@@ -378,10 +378,12 @@ namespace TestBounceAssembly {
 
         private void SetupSwitch() {
             if (Build != null && Deploy != null) {
-                _switch["build"] = Build;
+                var buildWithBounce = CopyBounceDirectoryIntoArchive(Build);
+
+                _switch["build"] = buildWithBounce;
                 _switch["remoteDeploy"] = GetRemoteDeploy(".");
                 _switch["deploy"] = Deploy(GetLocalPathForMachine());
-                _switch["buildRemoteDeploy"] = GetRemoteDeploy(Build);
+                _switch["buildRemoteDeploy"] = GetRemoteDeploy(buildWithBounce);
                 _switch["buildDeploy"] = Deploy(Build);
             }
         }
@@ -421,6 +423,13 @@ namespace TestBounceAssembly {
             }
         }
 
+        private Task<string> CopyBounceDirectoryIntoArchive(Task<string> archive) {
+            return new Copy {
+                FromPath = Path.GetDirectoryName(BounceRunner.TargetsPath),
+                ToPath = archive.SubPath("Bounce"),
+            }.ToPath;
+        }
+
         private Task<string> GetLocalPathForMachine() {
             return new All(_machineName, _machineConfigurations).WhenBuilt(() => {
                 return _machineConfigurations.Value.First(conf => conf.Name == _machineName.Value).LocalPath.Value;
@@ -448,8 +457,8 @@ namespace TestBounceAssembly {
             var website = deployer.CreateDeployment("Website");
             website.Build = new Copy {FromPath = ".gitignore", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
             website.Deploy = archive => new Copy {
-                FromPath = archive.WhenBuilt(a => Path.Combine(a, @".gitignore")),
-                ToPath = archive.WhenBuilt(a => Path.Combine(a, @"deployed"))
+                FromPath = archive.SubPath(".gitignore"),
+                ToPath = archive.SubPath("deployed")
             };
 
             return targets;

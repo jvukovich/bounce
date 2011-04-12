@@ -57,6 +57,18 @@ namespace Bounce.Framework {
             }
         }
 
+        public void DeleteDirectoryContents(string dir) {
+            if (Directory.Exists(dir)) {
+                foreach(var path in Directory.GetFiles(dir)) {
+                    if (File.Exists(path)) {
+                        File.Delete(path);
+                    } else if (Directory.Exists(path)) {
+                        Directory.Delete(path, true);
+                    }
+                }
+            }
+        }
+
         public bool DirectoryExists(string dir) {
             return Directory.Exists(dir);
         }

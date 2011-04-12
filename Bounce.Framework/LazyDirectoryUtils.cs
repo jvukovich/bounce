@@ -24,6 +24,10 @@ namespace Bounce.Framework {
             DirectoryUtils.DeleteDirectory(dir);
         }
 
+        public void DeleteDirectoryContents(string dir) {
+            DirectoryUtils.DeleteDirectoryContents(dir);
+        }
+
         public bool DirectoryExists(string dir) {
             return DirectoryUtils.DirectoryExists(dir);
         }

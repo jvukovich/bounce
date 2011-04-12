@@ -26,7 +26,7 @@ namespace Bounce.Framework {
 
         public void Copy(string from, string to, IEnumerable<string> excludes, IEnumerable<string> includes) {
             if (DirectoryUtils.DirectoryExists(from)) {
-                DirectoryUtils.DeleteDirectory(to);
+                DirectoryUtils.DeleteDirectoryContents(to);
                 DirectoryUtils.CopyDirectory(from, to, excludes, includes);
             } else {
                 string dest;

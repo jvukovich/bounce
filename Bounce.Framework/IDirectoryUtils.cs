@@ -6,6 +6,7 @@ namespace Bounce.Framework {
         void CopyDirectory(string from, string to, IEnumerable<string> excludes, IEnumerable<string> includes);
         DateTime GetLastModTimeForDirectory(string dir);
         void DeleteDirectory(string dir);
+        void DeleteDirectoryContents(string dir);
         bool DirectoryExists(string dir);
     }
 }
