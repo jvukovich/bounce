@@ -299,148 +299,6 @@ namespace TestBounceAssembly {
         }
     }
 
-    class Switch : Task
-    {
-        [Dependency]
-        public Task<string> Condition { get; set; }
-
-        private IDictionary<string, ITask> Cases;
-
-        public Switch(Task<string> condition)
-        {
-            Condition = condition;
-            Cases = new Dictionary<string, ITask>();
-        }
-
-        public ITask this [string _case]
-        {
-            get { return Cases[_case]; }
-            set { Cases[_case] = value; }
-        }
-
-        public override void Invoke(IBounceCommand command, IBounce bounce)
-        {
-            ITask action;
-            if (Cases.TryGetValue(Condition.Value, out action)) {
-                bounce.Invoke(command, action);
-            } else {
-                throw new ConfigurationException(String.Format("no such case for `{0}'", Condition.Value));
-            }
-        }
-    }
-
-    public class StagedDeployer
-    {
-        public IDictionary<string, ITask> Targets { get; private set; }
-        private readonly Task<IEnumerable<DeployMachine>> MachineConfigurations;
-        private readonly IRemoteBounceFactory RemoteBounceFactory;
-        private readonly Parameter<string> Stage;
-
-        public StagedDeployer(Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
-        {
-            Targets = new Dictionary<string, ITask>();
-            MachineConfigurations = machineConfigurations;
-            RemoteBounceFactory = remoteBounceFactory;
-            Stage = stage;
-        }
-
-        public StagedDeploy CreateDeployment(string name)
-        {
-            return new StagedDeploy(Targets, name, Stage, MachineConfigurations, RemoteBounceFactory);
-        }
-    }
-
-    public class StagedDeploy : Task
-    {
-        private readonly string TargetName;
-
-        private readonly Parameter<string> Stage;
-        [Dependency]
-        private readonly Task<IEnumerable<DeployMachine>> MachineConfigurations;
-
-        private readonly IRemoteBounceFactory RemoteBounceFactory;
-
-        [Dependency]
-        private readonly Switch Switch;
-
-        public StagedDeploy(IDictionary<string, ITask> targets, string targetName, Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
-        {
-            TargetName = targetName;
-            Stage = stage;
-            MachineConfigurations = machineConfigurations;
-            RemoteBounceFactory = remoteBounceFactory;
-            Switch = new Switch(stage);
-            targets[targetName] = this;
-        }
-
-        private void SetupSwitch() {
-            if (Build != null && Deploy != null) {
-                var buildWithBounce = CopyBounceDirectoryIntoArchive(Build);
-
-                Switch["build"] = buildWithBounce;
-                Switch["remoteDeploy"] = GetRemoteDeploy(".");
-                Switch["deploy"] = Deploy(".");
-                Switch["buildRemoteDeploy"] = GetRemoteDeploy(buildWithBounce);
-                Switch["buildDeploy"] = Deploy(Build);
-            }
-        }
-
-        private ITask GetRemoteDeploy(Task<string> archive) {
-            return MachineConfigurations.SelectTasks(machConf => {
-                var archiveOnRemote = new Copy {
-                    FromPath = archive,
-                    ToPath = machConf.RemotePath,
-                };
-
-                var parameters = new List<IParameter>();
-                parameters.Add(Stage.WithValue("deploy"));
-                parameters.AddRange(machConf.BounceParameters);
-
-                var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
-                return RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(TargetName, parameters), localPath);
-            });
-        }
-
-        private Func<Task<string>, ITask> _deploy;
-        public Func<Task<string>, ITask> Deploy {
-            get { return _deploy; }
-            set {
-               _deploy = value;
-                SetupSwitch();
-            }
-        }
-
-        private Task<string> _build;
-        public new Task<string> Build {
-            get { return _build; }
-            set {
-                _build = value;
-                SetupSwitch();
-            }
-        }
-
-        private Task<string> CopyBounceDirectoryIntoArchive(Task<string> archive) {
-            return new Copy {
-                FromPath = Path.GetDirectoryName(BounceRunner.TargetsPath),
-                ToPath = archive.SubPath("Bounce"),
-            }.ToPath.SubPath("..");
-        }
-    }
-
-    public static class BounceArguments {
-        public static RemoteBounceArguments ForTarget(string target, params IParameter [] parameters) {
-            return ForTarget(target, (IEnumerable<IParameter>) parameters);
-        }
-
-        public static RemoteBounceArguments ForTarget(string target, IEnumerable<IParameter> parameters) {
-            return new RemoteBounceArguments {Targets = new [] {target}, Parameters = parameters};
-        }
-    }
-
-    public interface IRemoteBounceFactory {
-        ITask CreateRemoteBounce(Task<string> bounceArguments, Task<string> workingDirectory);
-    }
-
     class SubBounceFactory : IRemoteBounceFactory {
         public ITask CreateRemoteBounce(Task<string> bounceArguments, Task<string> workingDirectory) {
             return new SubBounce {
@@ -466,16 +324,16 @@ namespace TestBounceAssembly {
                 },
             };
 
-            var deployer = new StagedDeployer(stage, machines, new SubBounceFactory());
+            var targets = new StagedDeployTargets(stage, machines, new SubBounceFactory());
 
-            var website = deployer.CreateDeployment("Website");
+            var website = targets.CreateTarget("Website");
             website.Build = new Copy {FromPath = "built", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
             website.Deploy = archive => new Copy {
                 FromPath = archive.SubPath("built"),
                 ToPath = archive.SubPath(webName)
             };
 
-            return deployer.Targets;
+            return targets.Targets;
         }
     }
 
@@ -492,12 +350,5 @@ namespace TestBounceAssembly {
                 Directory.SetCurrentDirectory(cwd);
             }
         }
-    }
-
-    public class DeployMachine
-    {
-        public Task<string> RemotePath;
-        public Task<string> LocalPath;
-        public IEnumerable<IParameter> BounceParameters = new IParameter[0];
     }
 }

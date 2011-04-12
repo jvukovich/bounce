@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -61,6 +61,7 @@
     <Compile Include="AspNetWebSiteDirectory.cs" />
     <Compile Include="Bounce.cs" />
     <Compile Include="BounceArchive.cs" />
+    <Compile Include="BounceArguments.cs" />
     <Compile Include="BounceCommand.cs" />
     <Compile Include="BounceCommandBuild.cs" />
     <Compile Include="BounceCommandExtensions.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="ConditionParseException.cs" />
     <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
+    <Compile Include="DeployMachine.cs" />
     <Compile Include="DirectoryUtils.cs" />
     <Compile Include="FileNameFilter.cs" />
     <Compile Include="FileNameFilterFactory.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="ILogOptionCommandLineTranslator.cs" />
     <Compile Include="IParameterFinder.cs" />
     <Compile Include="IPropertyValues.cs" />
+    <Compile Include="IRemoteBounceFactory.cs" />
     <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITargetBuilderBounce.cs" />
     <Compile Include="ITargetsMethodInvoker.cs" />
@@ -167,7 +170,10 @@
     <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="ShellExecutableNotFoundException.cs" />
     <Compile Include="StagedDeployArchive.cs" />
+    <Compile Include="StagedDeployTarget.cs" />
+    <Compile Include="StagedDeployTargets.cs" />
     <Compile Include="StagedDeployTask.cs" />
+    <Compile Include="Switch.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="TargetInvoker.cs" />
     <Compile Include="TargetsMethodInvoker.cs" />
