@@ -427,7 +427,7 @@ namespace TestBounceAssembly {
             return new Copy {
                 FromPath = Path.GetDirectoryName(BounceRunner.TargetsPath),
                 ToPath = archive.SubPath("Bounce"),
-            }.ToPath;
+            }.ToPath.SubPath("..");
         }
 
         private Task<string> GetLocalPathForMachine() {
