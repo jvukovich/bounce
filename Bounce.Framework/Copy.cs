@@ -10,6 +10,7 @@ namespace Bounce.Framework {
 
         public Copy(IFileSystemCopier fileSystemCopier) {
             FileSystemCopier = fileSystemCopier;
+            DeleteToDirectory = true;
         }
 
         /// <summary>
@@ -41,6 +42,9 @@ namespace Bounce.Framework {
         [Dependency]
         public Task<IEnumerable<string>> Includes;
 
+        [Dependency]
+        public Task<bool> DeleteToDirectory;
+
         public override void Build(IBounce bounce) {
             var fromPath = FromPath.Value;
             var toPath = _toPath.Value;
@@ -48,7 +52,7 @@ namespace Bounce.Framework {
             bounce.Log.Debug(Directory.GetCurrentDirectory());
             bounce.Log.Debug("copying from: {0}, to: {1}", fromPath, toPath);
 
-            FileSystemCopier.Copy(fromPath, toPath, GetValueOf(Excludes), GetValueOf(Includes));
+            FileSystemCopier.Copy(fromPath, toPath, GetValueOf(Excludes), GetValueOf(Includes), DeleteToDirectory.Value);
         }
 
         private IEnumerable<string> GetValueOf(Task<IEnumerable<string>> paths) {

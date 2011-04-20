@@ -5,6 +5,7 @@ namespace Bounce.Framework {
     {
         public Task<string> RemotePath;
         public Task<string> LocalPath;
+        public Task<string> Machine;
         public IEnumerable<IParameter> BounceParameters = new IParameter[0];
     }
 }

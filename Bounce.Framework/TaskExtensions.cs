@@ -11,6 +11,11 @@ namespace Bounce.Framework {
             return task.WhenBuilt(() => getValue(task.Value));
         }
 
+        public static Task<T> WithDependencyOn<T>(this Task<T> task, params ITask [] dependencies)
+        {
+            return new All(dependencies).WhenBuilt(() => task.Value);
+        }
+
         public static Task<string> SubPath(this Task<string> path, Task<string> subPath) {
             return new All(path, subPath).WhenBuilt(() => Path.Combine(path.Value, subPath.Value));
         }

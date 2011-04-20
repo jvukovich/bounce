@@ -50,7 +50,7 @@ namespace Bounce.Framework {
                 parameters.AddRange(machConf.BounceParameters);
 
                 var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
-                return RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(TargetName, parameters), localPath);
+                return RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(TargetName, parameters), localPath, machConf.Machine);
             });
         }
 
@@ -77,6 +77,14 @@ namespace Bounce.Framework {
                 FromPath = Path.GetDirectoryName(BounceRunner.TargetsPath),
                 ToPath = archive.SubPath("Bounce"),
             }.ToPath.SubPath("..");
+        }
+
+        public override bool IsLogged
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 }

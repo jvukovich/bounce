@@ -22,7 +22,7 @@ namespace Bounce.Framework.Tests {
 
             toDir.TestBuild();
 
-            copier.Verify(c => c.Copy(fromPath, toPath, excludes, includes), Times.Once());
+            copier.Verify(c => c.Copy(fromPath, toPath, excludes, includes, true), Times.Once());
         }
 
         [Test]

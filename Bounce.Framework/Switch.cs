@@ -30,5 +30,10 @@ namespace Bounce.Framework {
                 throw new ConfigurationException(String.Format("no such case for `{0}'", Condition.Value));
             }
         }
+
+        public override bool IsLogged
+        {
+            get { return false; }
+        }
     }
 }

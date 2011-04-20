@@ -300,7 +300,8 @@ namespace TestBounceAssembly {
     }
 
     class SubBounceFactory : IRemoteBounceFactory {
-        public ITask CreateRemoteBounce(Task<string> bounceArguments, Task<string> workingDirectory) {
+        public ITask CreateRemoteBounce(Task<string> bounceArguments, Task<string> workingDirectory, Task<string> machine)
+        {
             return new SubBounce {
                 BounceArguments = bounceArguments,
                 WorkingDirectory = workingDirectory,

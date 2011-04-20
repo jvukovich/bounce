@@ -18,7 +18,7 @@ namespace Bounce.Framework.Tests {
             dirs.Setup(d => d.DirectoryExists(from)).Returns(false);
             dirs.Setup(d => d.DirectoryExists(to)).Returns(true);
 
-            new FileSystemCopier(files.Object, dirs.Object).Copy(from, to, null, null);
+            new FileSystemCopier(files.Object, dirs.Object).Copy(from, to, null, null, true);
 
             files.Verify(f => f.CopyFile(from, @"to\dir\file"));
         }
@@ -35,7 +35,7 @@ namespace Bounce.Framework.Tests {
             dirs.Setup(d => d.DirectoryExists(from)).Returns(false);
             dirs.Setup(d => d.DirectoryExists(to)).Returns(false);
 
-            new FileSystemCopier(files.Object, dirs.Object).Copy(from, to, null, null);
+            new FileSystemCopier(files.Object, dirs.Object).Copy(from, to, null, null, true);
 
             files.Verify(f => f.CopyFile(from, @"to\file"));
         }
@@ -54,7 +54,7 @@ namespace Bounce.Framework.Tests {
 
             IEnumerable<string> excludes = new string[0];
             IEnumerable<string> includes = new string[0];
-            new FileSystemCopier(files.Object, dirs.Object).Copy(from, to, excludes, includes);
+            new FileSystemCopier(files.Object, dirs.Object).Copy(from, to, excludes, includes, true);
 
             dirs.Verify(d => d.DeleteDirectory(to));
             dirs.Verify(d => d.CopyDirectory(from, to, excludes, includes));
