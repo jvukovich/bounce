@@ -9,8 +9,13 @@ namespace Bounce.Framework {
         private readonly Parameter<string> Stage;
 
         public StagedDeployTargets(Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
+            : this(new Dictionary<string, ITask>(), stage, machineConfigurations, remoteBounceFactory)
         {
-            Targets = new Dictionary<string, ITask>();
+        }
+
+        public StagedDeployTargets(IDictionary<string, ITask> targets, Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
+        {
+            Targets = targets;
             MachineConfigurations = machineConfigurations;
             RemoteBounceFactory = remoteBounceFactory;
             Stage = stage;
@@ -18,7 +23,9 @@ namespace Bounce.Framework {
 
         public StagedDeployTarget CreateTarget(string name)
         {
-            return new StagedDeployTarget(Targets, name, Stage, MachineConfigurations, RemoteBounceFactory);
+            var target = new StagedDeployTarget(name, Stage, MachineConfigurations, RemoteBounceFactory);
+            Targets[name] = target;
+            return target;
         }
     }
 }

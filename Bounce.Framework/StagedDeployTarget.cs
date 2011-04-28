@@ -16,14 +16,13 @@ namespace Bounce.Framework {
         [Dependency]
         private readonly Switch Switch;
 
-        public StagedDeployTarget(IDictionary<string, ITask> targets, string targetName, Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
+        public StagedDeployTarget(string targetName, Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
         {
             TargetName = targetName;
             Stage = stage;
             MachineConfigurations = machineConfigurations;
             RemoteBounceFactory = remoteBounceFactory;
             Switch = new Switch(stage);
-            targets[targetName] = this;
         }
 
         private void SetupSwitch() {
