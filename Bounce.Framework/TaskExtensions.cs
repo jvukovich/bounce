@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Bounce.Framework {
     public static class TaskExtensions {
@@ -13,7 +14,7 @@ namespace Bounce.Framework {
 
         public static Task<T> WithDependencyOn<T>(this Task<T> task, params ITask [] dependencies)
         {
-            return new All(dependencies).WhenBuilt(() => task.Value);
+            return new All(dependencies.Concat(new [] {task}).ToArray()).WhenBuilt(() => task.Value);
         }
 
         public static Task<string> SubPath(this Task<string> path, Task<string> subPath) {
