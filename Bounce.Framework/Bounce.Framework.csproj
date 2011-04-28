@@ -172,6 +172,7 @@
     <Compile Include="ShellExecutableNotFoundException.cs" />
     <Compile Include="StagedDeployArchive.cs" />
     <Compile Include="StagedDeployTarget.cs" />
+    <Compile Include="StagedDeployTargetBuilder.cs" />
     <Compile Include="StagedDeployTargets.cs" />
     <Compile Include="StagedDeployTask.cs" />
     <Compile Include="StoppedWindowsService.cs" />
