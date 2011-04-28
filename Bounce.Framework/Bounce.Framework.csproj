@@ -173,6 +173,7 @@
     <Compile Include="StagedDeployTarget.cs" />
     <Compile Include="StagedDeployTargets.cs" />
     <Compile Include="StagedDeployTask.cs" />
+    <Compile Include="StoppedWindowsService.cs" />
     <Compile Include="Switch.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="TargetInvoker.cs" />
@@ -224,6 +225,8 @@
     <Compile Include="VisualStudioSolutionProjectReference.cs" />
     <Compile Include="VisualStudioSolutionProjects.cs" />
     <Compile Include="WindowsService.cs" />
+    <Compile Include="WindowsServiceBaseTask.cs" />
+    <Compile Include="WindowsServiceStartupType.cs" />
     <Compile Include="ZipFile.cs" />
     <Compile Include="ZipFileCreator.cs" />
   </ItemGroup>
