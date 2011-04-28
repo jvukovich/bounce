@@ -5,7 +5,7 @@ using System.IO;
 namespace Bounce.Framework {
     public class StagedDeployTarget : Task
     {
-        private readonly string TargetName;
+        public string Name { get; private set; }
 
         private readonly Parameter<string> Stage;
         [Dependency]
@@ -16,9 +16,9 @@ namespace Bounce.Framework {
         [Dependency]
         private readonly Switch Switch;
 
-        public StagedDeployTarget(string targetName, Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
+        public StagedDeployTarget(string name, Parameter<string> stage, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory)
         {
-            TargetName = targetName;
+            Name = name;
             Stage = stage;
             MachineConfigurations = machineConfigurations;
             RemoteBounceFactory = remoteBounceFactory;
@@ -49,7 +49,7 @@ namespace Bounce.Framework {
                 parameters.AddRange(machConf.BounceParameters);
 
                 var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
-                return RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(TargetName, parameters), localPath, machConf.Machine);
+                return RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(Name, parameters), localPath, machConf.Machine);
             });
         }
 
