@@ -15,19 +15,21 @@ namespace Bounce.Framework
         protected override void BuildTask(IBounce bounce)
         {
             if (IsServiceInstalled(bounce))
+            {
                 StopService(bounce);
 
-            DateTime timeWhenAskedToStop = DateTime.Now;
+                DateTime timeWhenAskedToStop = DateTime.Now;
 
-            do
-            {
-                Thread.Sleep(1000);
-
-                if (WaitedLongerThanTimeout(timeWhenAskedToStop))
+                do
                 {
-                    throw new BounceException(String.Format("service {0} could not be stopped", Name));
-                }
-            } while (!IsServiceStopped(bounce));
+                    Thread.Sleep(1000);
+
+                    if (WaitedLongerThanTimeout(timeWhenAskedToStop))
+                    {
+                        throw new BounceException(String.Format("service {0} could not be stopped", Name));
+                    }
+                } while (!IsServiceStopped(bounce));
+            }
         }
 
         private bool WaitedLongerThanTimeout(DateTime timeWhenAskedToStop)

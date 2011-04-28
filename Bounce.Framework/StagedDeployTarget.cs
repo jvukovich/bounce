@@ -33,39 +33,60 @@ namespace Bounce.Framework {
                 Switch["remoteDeploy"] = GetRemoteDeploy(".");
                 Switch["deploy"] = Deploy(".");
                 Switch["buildRemoteDeploy"] = GetRemoteDeploy(buildWithBounce);
-                Switch["buildDeploy"] = Deploy(Build);
+                Switch["buildDeploy"] = Deploy(BuildWithRemoteDeploy());
             }
         }
 
-        private ITask GetRemoteDeploy(Task<string> archive) {
-            return MachineConfigurations.SelectManyTasks(machConf => {
+        private Task<string> BuildWithRemoteDeploy()
+        {
+            if (RemoteDeploy != null)
+            {
+                return RemoteDeploy(Build).WhenBuilt(() => Build.Value);
+            } else
+            {
+                return Build;
+            }
+        }
+
+        private ITask GetRemoteDeploy(Task<string> archive)
+        {
+            ITask remoteDeploy = GetRemoteDeployTask(archive);
+
+            return MachineConfigurations.SelectManyTasks(machConf =>
+            {
                 if (Deploy != null)
                 {
                     var archiveOnRemote = new Copy
                     {
                         FromPath = archive,
                         ToPath = machConf.RemotePath,
-                    }.ToPath;
-
-                    if (RemoteDeploy != null)
-                    {
-                        archiveOnRemote = archiveOnRemote.WithDependencyOn(RemoteDeploy(archive));
-                    }
+                    }.ToPath.WithDependencyOn(remoteDeploy);
 
                     var parameters = new List<IParameter>();
                     parameters.Add(Stage.WithValue("deploy"));
                     parameters.AddRange(machConf.BounceParameters);
 
                     var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
-                    return new[] { RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(Name, parameters), localPath, machConf.Machine) };
-                } else if (RemoteDeploy != null)
+                    return new[]
+                    {
+                        RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(Name, parameters), localPath,
+                                                               machConf.Machine)
+                    };
+                }
+                else if (RemoteDeploy != null)
                 {
-                    return new[] {RemoteDeploy(archive)};
-                } else
+                    return new[] {remoteDeploy};
+                }
+                else
                 {
                     return new ITask[0];
                 }
             });
+        }
+
+        private ITask GetRemoteDeployTask(Task<string> archive)
+        {
+            return ((Task<bool>) (RemoteDeploy != null)).IfTrue(RemoteDeploy(archive));
         }
 
         private Func<Task<string>, ITask> _deploy;
