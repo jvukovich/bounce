@@ -38,18 +38,30 @@ namespace Bounce.Framework {
         }
 
         private ITask GetRemoteDeploy(Task<string> archive) {
-            return MachineConfigurations.SelectTasks(machConf => {
-                var archiveOnRemote = new Copy {
-                    FromPath = archive,
-                    ToPath = machConf.RemotePath,
-                };
+            return MachineConfigurations.SelectManyTasks(machConf => {
+                if (Deploy != null)
+                {
+                    var archiveOnRemote = new Copy
+                    {
+                        FromPath = archive,
+                        ToPath = machConf.RemotePath,
+                    }.ToPath;
 
-                var parameters = new List<IParameter>();
-                parameters.Add(Stage.WithValue("deploy"));
-                parameters.AddRange(machConf.BounceParameters);
+                    if (RemoteDeploy != null)
+                    {
+                        archiveOnRemote = archiveOnRemote.WithDependencyOn(RemoteDeploy);
+                    }
 
-                var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
-                return RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(Name, parameters), localPath, machConf.Machine);
+                    var parameters = new List<IParameter>();
+                    parameters.Add(Stage.WithValue("deploy"));
+                    parameters.AddRange(machConf.BounceParameters);
+
+                    var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
+                    return new[] { RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(Name, parameters), localPath, machConf.Machine) };
+                } else
+                {
+                    return new ITask[0];
+                }
             });
         }
 
@@ -67,6 +79,15 @@ namespace Bounce.Framework {
             get { return _build; }
             set {
                 _build = value;
+                SetupSwitch();
+            }
+        }
+
+        private Task<string> _remoteDeploy;
+        public new Task<string> RemoteDeploy {
+            get { return _remoteDeploy; }
+            set {
+                _remoteDeploy = value;
                 SetupSwitch();
             }
         }
