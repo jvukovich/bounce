@@ -19,10 +19,6 @@ namespace Bounce.Framework {
 
         public const string NetworkService = @"NT AUTHORITY\NetworkService";
 
-        public WindowsService() {
-            Machine = "localhost";
-        }
-
         protected bool IsServiceRunning(IBounce bounce)
         {
             Regex statePattern = new Regex(@"STATE\s+:\s+\d\s+STARTED");
@@ -102,6 +98,11 @@ namespace Bounce.Framework {
 
         [Dependency]
         public Task<string> Machine;
+
+        protected WindowsServiceBaseTask()
+        {
+            Machine = "localhost";
+        }
 
         protected abstract void BuildTask(IBounce bounce);
         
