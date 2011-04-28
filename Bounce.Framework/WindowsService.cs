@@ -15,10 +15,17 @@ namespace Bounce.Framework {
         public Task<string> UserName;
         [Dependency]
         public Task<string> Password;
+        [Dependency]
+        public Task<WindowsServiceStartupType> StartupType;
 
         [Dependency] public Task<bool> IsServiceStartRequired;
 
         public const string NetworkService = @"NT AUTHORITY\NetworkService";
+
+        public WindowsService()
+        {
+            StartupType = WindowsServiceStartupType.Manual;
+        }
 
         protected override void BuildTask(IBounce bounce) {
             if (IsServiceInstalled(bounce)) {
@@ -45,7 +52,33 @@ namespace Bounce.Framework {
         }
 
         private string GetSettings() {
-            return String.Join("", new [] {GetSetting(DisplayName, "DisplayName"), GetSetting(UserName, "obj"), GetSetting(Password, "Password")});
+            return String.Join("", new []
+                                       {
+                                           GetSetting(DisplayName, "DisplayName"),
+                                           GetSetting(UserName, "obj"),
+                                           GetSetting(Password, "password"),
+                                           GetStartSetting(),
+                                       });
+        }
+
+        private string GetStartSetting()
+        {
+            return String.Format(@" start= ""{0}""", GetStartupType());
+        }
+
+        private string GetStartupType()
+        {
+            switch(StartupType.Value)
+            {
+                case WindowsServiceStartupType.Automatic:
+                    return "auto";
+                case WindowsServiceStartupType.Disabled:
+                    return "disabled";
+                case WindowsServiceStartupType.Manual:
+                    return "demand";
+                default:
+                    throw new BounceException("windows service startup type not known");
+            };
         }
 
         private static string GetSetting(Task<string> setting, string scSetting) {
@@ -72,6 +105,13 @@ namespace Bounce.Framework {
         private void StartService(IBounce bounce) {
             ExecuteScAndExpectSuccess(bounce, @"start ""{0}""", Name.Value);
         }
+    }
+
+    public enum WindowsServiceStartupType
+    {
+        Disabled,
+        Automatic,
+        Manual
     }
 
     public class StoppedWindowsService : WindowsServiceBaseTask
