@@ -12,9 +12,8 @@ namespace Bounce.Framework {
             return task.WhenBuilt(() => getValue(task.Value));
         }
 
-        public static Task<T> WithDependencyOn<T>(this Task<T> task, params ITask [] dependencies)
-        {
-            return new All(dependencies.Concat(new [] {task}).ToArray()).WhenBuilt(() => task.Value);
+        public static Task<T> WithDependencyOn<T>(this Task<T> task, params ITask [] dependencies) {
+            return new DependentTask<T>(new All(dependencies), task);
         }
 
         public static Task<string> SubPath(this Task<string> path, Task<string> subPath) {

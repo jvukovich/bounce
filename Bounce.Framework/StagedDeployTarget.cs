@@ -49,7 +49,7 @@ namespace Bounce.Framework {
 
                     if (RemoteDeploy != null)
                     {
-                        archiveOnRemote = archiveOnRemote.WithDependencyOn(RemoteDeploy);
+                        archiveOnRemote = archiveOnRemote.WithDependencyOn(RemoteDeploy(archive));
                     }
 
                     var parameters = new List<IParameter>();
@@ -58,6 +58,9 @@ namespace Bounce.Framework {
 
                     var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
                     return new[] { RemoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(Name, parameters), localPath, machConf.Machine) };
+                } else if (RemoteDeploy != null)
+                {
+                    return new[] {RemoteDeploy(archive)};
                 } else
                 {
                     return new ITask[0];
@@ -83,8 +86,8 @@ namespace Bounce.Framework {
             }
         }
 
-        private Task<string> _remoteDeploy;
-        public new Task<string> RemoteDeploy {
+        private Func<Task<string>, ITask> _remoteDeploy;
+        public Func<Task<string>, ITask> RemoteDeploy {
             get { return _remoteDeploy; }
             set {
                 _remoteDeploy = value;

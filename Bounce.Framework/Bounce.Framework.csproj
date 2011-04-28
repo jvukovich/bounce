@@ -82,6 +82,7 @@
     <Compile Include="ConditionParseException.cs" />
     <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
+    <Compile Include="DependentTask.cs" />
     <Compile Include="DeployMachine.cs" />
     <Compile Include="DirectoryUtils.cs" />
     <Compile Include="FileNameFilter.cs" />
