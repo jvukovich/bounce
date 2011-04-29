@@ -5,13 +5,18 @@ namespace Bounce.Framework
     public class StagedDeployTargetBuilder
     {
         public IDictionary<string, ITask> Targets { get; private set; }
-        public Task<IEnumerable<DeployMachine>> MachineConfigurations { get; private set; }
-        public IRemoteBounceFactory RemoteBounceFactory { get; private set; }
-        public Parameter<string> Stage { get; private set; }
+        private Task<IEnumerable<DeployMachine>> MachineConfigurations;
+        private IRemoteBounceFactory RemoteBounceFactory;
+        private Parameter<string> Stage;
+        private CachedRemoteDeploy CachedRemoteDeploys;
 
-        public StagedDeployTargetBuilder()
-        {
+        public StagedDeployTargetBuilder(Parameter<string> stage) {
+            Stage = stage;
             Targets = new Dictionary<string, ITask>();
+            CachedRemoteDeploys = new CachedRemoteDeploy();
+        }
+
+        public StagedDeployTargetBuilder() : this(null) {
         }
 
         public StagedDeployTargetBuilder ForMachines(Task<IEnumerable<DeployMachine>> machineConfigurations)
@@ -44,20 +49,23 @@ namespace Bounce.Framework
 
         private StagedDeployTargetBuilder Clone()
         {
-            return new StagedDeployTargetBuilder
-                       {
+            return new StagedDeployTargetBuilder {
                            Targets = Targets,
                            MachineConfigurations = MachineConfigurations,
                            RemoteBounceFactory = RemoteBounceFactory,
-                           Stage = Stage
+                           Stage = Stage,
+                           CachedRemoteDeploys = CachedRemoteDeploys
                        };
         }
 
-        public StagedDeployTarget CreateTarget(string name)
-        {
-            var target = new StagedDeployTarget(name, Stage, MachineConfigurations, RemoteBounceFactory);
+        public StagedDeployTarget CreateTarget(string name, Task<IEnumerable<DeployMachine>> machines) {
+            var target = new StagedDeployTarget(name, Stage, machines, RemoteBounceFactory, CachedRemoteDeploys);
             Targets[name] = target;
             return target;
+        }
+
+        public StagedDeployTarget CreateTarget(string name) {
+            return CreateTarget(name, MachineConfigurations);
         }
     }
 }

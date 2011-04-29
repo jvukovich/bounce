@@ -300,8 +300,7 @@ namespace TestBounceAssembly {
     }
 
     class SubBounceFactory : IRemoteBounceFactory {
-        public ITask CreateRemoteBounce(Task<string> bounceArguments, Task<string> workingDirectory, Task<string> machine)
-        {
+        public ITask CreateRemoteBounce(Task<string> bounceArguments, Task<string> workingDirectory, Task<string> machine) {
             return new SubBounce {
                 BounceArguments = bounceArguments,
                 WorkingDirectory = workingDirectory,
@@ -325,10 +324,10 @@ namespace TestBounceAssembly {
                 },
             };
 
-            var targets = new StagedDeployTargets(stage, machines, new SubBounceFactory());
+            var targets = new StagedDeployTargetBuilder(stage);
+            var website = targets.CreateTarget("WebSite", machines);
 
-            var website = targets.CreateTarget("Website");
-            website.Build = new Copy {FromPath = "built", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
+            website.Package = new Copy {FromPath = "built", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
             website.Deploy = archive => new Copy {
                 FromPath = archive.SubPath("built"),
                 ToPath = archive.SubPath(webName)
