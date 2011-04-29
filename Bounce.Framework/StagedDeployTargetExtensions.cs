@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public static class StagedDeployTargetExtensions {
-        public static Func<Task<string>, ITask> CopyToAndInvokeOnMachines(this StagedDeployTarget target, Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory) {
+        public static Func<Task<string>, ITask> CopyToAndInvokeOnMachines(this StagedDeployTarget target,
+                                                                          Task<IEnumerable<DeployMachine>> machineConfigurations,
+                                                                          IRemoteBounceFactory remoteBounceFactory) {
             return package => machineConfigurations.SelectTasks(machConf => {
                 var archiveOnRemote = new Copy {
                     FromPath = package,
