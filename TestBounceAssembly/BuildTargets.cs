@@ -325,10 +325,11 @@ namespace TestBounceAssembly {
             };
 
             var targets = new StagedDeployTargetBuilder(stage);
-            var website = targets.CreateTarget("WebSite", machines);
+            var website = targets.CreateTarget("WebSite");
 
             website.Package = new Copy {FromPath = "built", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
-            website.Deploy = archive => new Copy {
+            website.InvokeRemoteDeploy = website.CopyToAndInvokeOnMachines(machines, new SubBounceFactory());
+            website.DeployOnHost = archive => new Copy {
                 FromPath = archive.SubPath("built"),
                 ToPath = archive.SubPath(webName)
             };

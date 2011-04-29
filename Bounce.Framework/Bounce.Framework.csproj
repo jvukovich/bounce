@@ -155,6 +155,7 @@
     <Compile Include="NoSuchTargetException.cs" />
     <Compile Include="NullCommandLog.cs" />
     <Compile Include="NoValueForParameterException.cs" />
+    <Compile Include="NullTask.cs" />
     <Compile Include="OptionalTask.cs" />
     <Compile Include="ParameterFinder.cs" />
     <Compile Include="ParsedCommandLineParameter.cs" />
