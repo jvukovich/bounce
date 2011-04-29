@@ -329,7 +329,7 @@ namespace TestBounceAssembly {
 
             website.Package = new Copy {FromPath = "built", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
             website.InvokeRemoteDeploy = website.CopyToAndInvokeOnMachines(machines, new SubBounceFactory());
-            website.DeployOnHost = archive => new Copy {
+            website.Deploy = archive => new Copy {
                 FromPath = archive.SubPath("built"),
                 ToPath = archive.SubPath(webName)
             };

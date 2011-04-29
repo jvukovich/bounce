@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Bounce.Framework {
@@ -14,7 +13,7 @@ namespace Bounce.Framework {
         public const string PackageDeployStage = "packageDeploy";
         public const string DeployStage = "deploy";
 
-        private readonly Parameter<string> Stage;
+        public Parameter<string> Stage { get; private set; }
         private readonly CachedDeploys CachedDeploys;
 
         [Dependency]
@@ -26,62 +25,42 @@ namespace Bounce.Framework {
             Stage = stage;
             CachedDeploys = cachedDeploys;
             Switch = new Switch(stage);
-            Deploy = package => new NullTask();
+            PrepareDeploy = package => new NullTask();
         }
 
         private void SetupSwitch() {
-            if (Package != null && DeployOnHost != null) {
+            if (Package != null && Deploy != null) {
                 var packageWithBounce = CopyBounceDirectoryIntoPackage(Package);
 
                 Switch[PackageStage] = packageWithBounce;
                 Switch[InvokeRemoteDeployStage] = GetInvokeRemoteDeploy(".");
-                Switch[RemoteDeployStage] = DeployOnHost(".");
+                Switch[RemoteDeployStage] = Deploy(".");
                 Switch[PackageInvokeRemoteDeployStage] = GetInvokeRemoteDeploy(packageWithBounce);
-                Switch[PackageDeployStage] = DeployOnHost(GetDeployedPackage(Package));
-                Switch[DeployStage] = DeployOnHost(GetDeployedPackage("."));
+                Switch[PackageDeployStage] = Deploy(GetPreparedDeployPackage(Package));
+                Switch[DeployStage] = Deploy(GetPreparedDeployPackage("."));
             }
         }
 
-        private Task<string> GetDeployedPackage(Task<string> package) {
-            return package.WithDependencyOn(CachedDeploys.Deploy(package, Deploy));
+        private Task<string> GetPreparedDeployPackage(Task<string> package) {
+            return package.WithDependencyOn(CachedDeploys.Deploy(package, PrepareDeploy));
         }
 
         private ITask GetInvokeRemoteDeploy(Task<string> package)
         {
-            Task<string> packageAfterDeploy = GetDeployedPackage(package);
+            Task<string> packageAfterDeploy = GetPreparedDeployPackage(package);
 
-            if (DeployOnHost != null) {
+            if (Deploy != null) {
                 return InvokeRemoteDeploy(packageAfterDeploy);
             } else {
                 return packageAfterDeploy;
             }
         }
 
-        public Func<Task<string>, ITask> CopyToAndInvokeOnMachines(Task<IEnumerable<DeployMachine>> machineConfigurations, IRemoteBounceFactory remoteBounceFactory) {
-            return package => machineConfigurations.SelectTasks(machConf =>
-            {
-                var archiveOnRemote = new Copy
-                {
-                    FromPath = package,
-                    ToPath = machConf.RemotePath,
-                };
-
-                var parameters = new List<IParameter>();
-                parameters.Add(Stage.WithValue(RemoteDeployStage));
-                parameters.AddRange(machConf.BounceParameters);
-
-                var localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
-                return remoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(Name, parameters),
-                                                              localPath,
-                                                              machConf.Machine);
-            });
-        }
-
-        private Func<Task<string>, ITask> _deployOnHost;
-        public Func<Task<string>, ITask> DeployOnHost {
-            get { return _deployOnHost; }
+        private Func<Task<string>, ITask> _deploy;
+        public Func<Task<string>, ITask> Deploy {
+            get { return _deploy; }
             set {
-                _deployOnHost = value;
+                _deploy = value;
                 SetupSwitch();
             }
         }
@@ -104,12 +83,12 @@ namespace Bounce.Framework {
             }
         }
 
-        private Func<Task<string>, ITask> _deploy;
+        private Func<Task<string>, ITask> _prepareDeploy;
 
-        public Func<Task<string>, ITask> Deploy {
-            get { return _deploy; }
+        public Func<Task<string>, ITask> PrepareDeploy {
+            get { return _prepareDeploy; }
             set {
-                _deploy = value;
+                _prepareDeploy = value;
                 SetupSwitch();
             }
         }
@@ -129,20 +108,5 @@ namespace Bounce.Framework {
             }
         }
 
-    }
-
-    public class CachedDeploys {
-        private Dictionary<Task<string>, ITask> RemoteDeploys;
-        public CachedDeploys() {
-            RemoteDeploys = new Dictionary<Task<string>, ITask>();
-        }
-
-        public ITask Deploy(Task<string> package, Func<Task<string>, ITask> remoteDeploy) {
-            ITask r;
-            if (!RemoteDeploys.TryGetValue(package, out r)) {
-                RemoteDeploys[package] = r = remoteDeploy(package);
-            }
-            return r;
-        }
     }
 }

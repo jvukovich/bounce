@@ -69,6 +69,7 @@
     <Compile Include="BounceExceptionPresenter.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="BuildResult.cs" />
+    <Compile Include="CachedDeploys.cs" />
     <Compile Include="CleanAfterBuildAttribute.cs" />
     <Compile Include="CleanAfterBuildRegister.cs" />
     <Compile Include="CommandAndTargetParser.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="StagedDeployArchive.cs" />
     <Compile Include="StagedDeployTarget.cs" />
     <Compile Include="StagedDeployTargetBuilder.cs" />
+    <Compile Include="StagedDeployTargetExtensions.cs" />
     <Compile Include="StagedDeployTask.cs" />
     <Compile Include="StoppedWindowsService.cs" />
     <Compile Include="Switch.cs" />
