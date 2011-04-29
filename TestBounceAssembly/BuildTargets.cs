@@ -310,32 +310,46 @@ namespace TestBounceAssembly {
 
     public class Stuff
     {
-        [Targets]
-        public static object GetTargets(IParameters parameters)
-        {
-            var stage = parameters.Default("stage", "buildDeploy");
-            var webName = parameters.Required<string>("webName");
+    [Targets]
+    public static object GetTargets(IParameters parameters)
+    {
+        var stage = parameters.Default("stage", "packageDeploy");
 
-            var machines = new[] {
-                new DeployMachine {
-                    RemotePath = @"\\localhost\deploy",
-                    LocalPath = @"c:\Deploy",
-                    BounceParameters = new [] {webName.WithValue("heart")},
-                },
-            };
+        var solution = new VisualStudioSolution {SolutionPath = "Solution.sln"};
 
-            var targets = new StagedDeployTargetBuilder(stage);
-            var website = targets.CreateTarget("WebSite");
+        var machines = new[] {
+            new DeployMachine {
+                LocalPath = @"c:\Deployments",
+                Machine = "liveserver1",
+                RemotePath = @"\\liveserver1\Deployments"
+            },
+            new DeployMachine {
+                LocalPath = @"c:\Deployments",
+                Machine = "liveserver2",
+                RemotePath = @"\\liveserver2\Deployments"
+            }
+        };
 
-            website.Package = new Copy {FromPath = "built", ToPath = new CleanDirectory {Path = "tmp"}.Path}.ToPath;
-            website.InvokeRemoteDeploy = website.CopyToAndInvokeOnMachines(machines, new SubBounceFactory());
-            website.Deploy = archive => new Copy {
-                FromPath = archive.SubPath("built"),
-                ToPath = archive.SubPath(webName)
-            };
+        var targets = new StagedDeployTargetBuilder(stage);
+        var website = targets.CreateTarget("WebSite");
 
-            return targets.Targets;
-        }
+        website.Package = new Copy {
+            FromPath = solution.Projects["WebSite"].ProjectDirectory,
+            ToPath = new CleanDirectory {Path = "package"}.Path.SubPath("WebSite")
+        }.ToPath;
+
+        website.InvokeRemoteDeploy = website.CopyToAndInvokeOnMachines(machines, new SubBounceFactory());
+
+        website.Deploy = package => new Iis7WebSite {
+            Directory = new Copy {
+                FromPath = package.SubPath("WebSite"),
+                ToPath = @"C:\Sites\WebSite"
+            }.ToPath,
+            Name = "WebSite"
+        };
+
+        return targets.Targets;
+    }
     }
 
     public class SubBounce : Task {
