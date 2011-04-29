@@ -4,7 +4,7 @@
         [Dependency]
         private readonly ITask DependencyTask;
         private readonly Task<T> Task;
-        private T Value;
+        private T TaskValue;
 
         public DependentTask(ITask dependencyTask, Task<T> task)
         {
@@ -15,12 +15,12 @@
         public override void InvokeFuture(IBounceCommand command, IBounce bounce)
         {
             bounce.Invoke(command, Task);
-            Value = Task.Value;
+            TaskValue = Task.Value;
         }
 
         protected override T GetValue()
         {
-            return Value;
+            return TaskValue;
         }
     }
 }
