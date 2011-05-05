@@ -3,17 +3,22 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class CachedDeploys {
-        private Dictionary<Task<string>, ITask> RemoteDeploys;
+        private Dictionary<string, ITask> Deploys;
         public CachedDeploys() {
-            RemoteDeploys = new Dictionary<Task<string>, ITask>();
+            Deploys = new Dictionary<string, ITask>();
         }
 
-        public ITask Deploy(Task<string> package, Func<Task<string>, ITask> remoteDeploy) {
-            ITask r;
-            if (!RemoteDeploys.TryGetValue(package, out r)) {
-                RemoteDeploys[package] = r = remoteDeploy(package);
-            }
-            return r;
+        public ITask Deploy(Task<string> package, Func<Task<string>, ITask> deploy) {
+            return package.SelectTask(p =>
+            {
+                ITask r;
+
+                if (!Deploys.TryGetValue(p, out r))
+                {
+                    Deploys[p] = r = deploy(package);
+                }
+                return r;
+            });
         }
     }
 }
