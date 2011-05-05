@@ -65,8 +65,19 @@ namespace Bounce.Framework
             return new OptionalTask<T>(condition, () => optionalTask, false);
         }
 
+        public static ITask IfTrue<T>(this Task<bool> condition, T ifTrueTask, T ifFalseTask) where T : ITask {
+            return new All(
+                new OptionalTask<T>(condition, () => ifTrueTask, false),
+                new OptionalTask<T>(condition, () => ifFalseTask, true)
+            );
+        }
+
         public static ITask IfFalse<T>(this Task<bool> condition, T optionalTask) where T : ITask {
             return new OptionalTask<T>(condition, () => optionalTask, true);
+        }
+
+        public static ITask IfFalse<T>(this Task<bool> condition, T ifFalseTask, T ifTrueTask) where T : ITask {
+            return condition.IfTrue(ifTrueTask, ifFalseTask);
         }
 
         public static ITask SelectTask<TInput, TTaskOutput>(this Task<TInput> input, Func<TInput, TTaskOutput> getTask) where TTaskOutput : ITask {
