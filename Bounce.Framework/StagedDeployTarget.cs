@@ -93,11 +93,17 @@ namespace Bounce.Framework {
             }
         }
 
-        private Task<string> CopyBounceDirectoryIntoPackage(Task<string> package) {
-            return new Copy {
+        private Task<string> CopyBounceDirectoryIntoPackage(Task<string> package)
+        {
+            Task<string> copiedBounceDirectory = new Copy
+            {
                 FromPath = Path.GetDirectoryName(BounceRunner.TargetsPath),
                 ToPath = package.SubPath("Bounce"),
-            }.ToPath.SubPath("..");
+            }.ToPath;
+
+            var deletedBeforeBounce = new Delete {Path = copiedBounceDirectory.SubPath("beforebounce.*")};
+
+            return copiedBounceDirectory.SubPath("..").WithDependencyOn(deletedBeforeBounce);
         }
 
         public override bool IsLogged

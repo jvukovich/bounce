@@ -81,6 +81,7 @@
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="CompilationLog.cs" />
     <Compile Include="ConditionParseException.cs" />
+    <Compile Include="Delete.cs" />
     <Compile Include="DependencyAttribute.cs" />
     <Compile Include="DependencyBuildFailureException.cs" />
     <Compile Include="DependentTask.cs" />
