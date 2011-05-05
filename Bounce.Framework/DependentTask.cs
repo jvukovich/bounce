@@ -1,6 +1,6 @@
 ﻿namespace Bounce.Framework
 {
-    public class DependentTask<T> : TaskWithValue<T> {
+    class DependentTask<T> : TaskWithValue<T> {
         [Dependency]
         private readonly ITask DependencyTask;
         private readonly Task<T> Task;
@@ -21,6 +21,30 @@
         protected override T GetValue()
         {
             return TaskValue;
+        }
+    }
+
+    class DependentTask : Task
+    {
+        [Dependency]
+        private readonly ITask DependencyTask;
+
+        private readonly ITask Task;
+
+        public DependentTask(ITask dependencyTask, ITask task)
+        {
+            DependencyTask = dependencyTask;
+            Task = task;
+        }
+
+        public override void Invoke(IBounceCommand command, IBounce bounce)
+        {
+            bounce.Invoke(command, Task);
+        }
+
+        public override bool IsLogged
+        {
+            get { return false; }
         }
     }
 }
