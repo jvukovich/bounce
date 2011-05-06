@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 
 namespace Bounce.Framework {
     public static class TaskExtensions {
