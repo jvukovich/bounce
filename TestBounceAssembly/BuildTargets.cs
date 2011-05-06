@@ -102,6 +102,7 @@ namespace TestBounceAssembly {
             return null;
         }
 
+        [Targets]
         public static object RealTargets(IParameters buildParameters) {
             var version = buildParameters.Required<string>("version");
 
@@ -123,7 +124,8 @@ namespace TestBounceAssembly {
                 ZipFileName = downloadsDir.Files[version.WhenBuilt(() => string.Format("Bounce.Framework.{0}.zip", version.Value))],
             };
 
-            var downloads = new All(frameworkZip, new GitTag {Directory = ".", Tag = version.WhenBuilt(() => "v" + version.Value)});
+            var gitTag = new GitTag {Directory = ".", Tag = version.WhenBuilt(() => "v" + version.Value)};
+            var downloads = new All(frameworkZip);
 
             return new {
                 Tests = new NUnitTests {
@@ -310,7 +312,6 @@ namespace TestBounceAssembly {
 
     public class Stuff
     {
-    [Targets]
     public static object GetTargets(IParameters parameters)
     {
         var stage = parameters.Default("stage", "packageDeploy");

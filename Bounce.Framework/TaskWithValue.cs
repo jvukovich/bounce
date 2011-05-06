@@ -18,11 +18,11 @@ namespace Bounce.Framework {
         protected abstract T GetValue();
 
         public override void Invoke(IBounceCommand command, IBounce bounce) {
-            InvokeFuture(command, bounce);
+            InvokeTask(command, bounce);
             Invoked = true;
         }
 
-        public virtual void InvokeFuture(IBounceCommand command, IBounce bounce) {}
+        public virtual void InvokeTask(IBounceCommand command, IBounce bounce) {}
 
         public override IEnumerable<TaskDependency> Dependencies {
             get {

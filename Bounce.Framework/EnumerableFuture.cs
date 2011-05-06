@@ -7,7 +7,7 @@ namespace Bounce.Framework
     public abstract class EnumerableFuture<T> : TaskWithValue<IEnumerable<T>> where T : ITask {
         private IEnumerable<T> _value;
 
-        public override void InvokeFuture(IBounceCommand command, IBounce bounce) {
+        public override void InvokeTask(IBounceCommand command, IBounce bounce) {
             _value = GetTasks(bounce);
 
             foreach (var task in _value)

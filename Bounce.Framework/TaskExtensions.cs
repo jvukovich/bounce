@@ -44,5 +44,13 @@ namespace Bounce.Framework {
             s[case3] = task3;
             return s;
         }
+
+        public static Task<T> LogDebug<T>(this Task<T> value, Task<string> message) {
+            return new LogValue<T>(true) {Message = message, Value = value};
+        }
+
+        public static Task<T> LogInfo<T>(this Task<T> value, Task<string> message) {
+            return new LogValue<T>(false) {Message = message, Value = value};
+        }
     }
 }

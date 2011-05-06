@@ -12,7 +12,7 @@
             Task = task;
         }
 
-        public override void InvokeFuture(IBounceCommand command, IBounce bounce)
+        public override void InvokeTask(IBounceCommand command, IBounce bounce)
         {
             bounce.Invoke(command, Task);
             TaskValue = Task.Value;

@@ -16,7 +16,7 @@ namespace Bounce.Framework {
             return _value;
         }
 
-        public override void InvokeFuture(IBounceCommand command, IBounce bounce) {
+        public override void InvokeTask(IBounceCommand command, IBounce bounce) {
             _value = GetTask(Input.Value);
             bounce.Invoke(command, _value);
         }

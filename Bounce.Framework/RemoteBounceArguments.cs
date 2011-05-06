@@ -26,7 +26,7 @@ namespace Bounce.Framework {
             return GeneratedBounceArguments;
         }
 
-        public override void InvokeFuture(IBounceCommand command, IBounce bounce) {
+        public override void InvokeTask(IBounceCommand command, IBounce bounce) {
             GeneratedBounceArguments = GetBounceArguments(bounce, command);
         }
 

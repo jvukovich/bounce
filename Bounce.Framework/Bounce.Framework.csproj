@@ -151,6 +151,7 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogOptionCommandLineTranslator.cs" />
     <Compile Include="LogOptions.cs" />
+    <Compile Include="LogValue.cs" />
     <Compile Include="MSBuildLogger.cs" />
     <Compile Include="MsmqQueue.cs" />
     <Compile Include="EnumerableFuture.cs" />
