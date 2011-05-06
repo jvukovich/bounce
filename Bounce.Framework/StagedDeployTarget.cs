@@ -17,14 +17,14 @@ namespace Bounce.Framework {
         private readonly CachedDeploys CachedDeploys;
 
         [Dependency]
-        private readonly Switch Switch;
+        private readonly Switch<string> Switch;
 
         public StagedDeployTarget(string name, Parameter<string> stage, CachedDeploys cachedDeploys)
         {
             Name = name;
             Stage = stage;
             CachedDeploys = cachedDeploys;
-            Switch = new Switch(stage);
+            Switch = new Switch<string>(stage);
             PrepareDeploy = package => new NullTask();
         }
 

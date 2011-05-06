@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    class Switch : Task
+    public class Switch<T> : Task
     {
         [Dependency]
-        public Task<string> Condition { get; set; }
+        public Task<T> Condition { get; set; }
 
-        private IDictionary<string, ITask> Cases;
+        private Dictionary<T, ITask> Cases;
 
-        public Switch(Task<string> condition)
+        public Switch(Task<T> condition)
         {
             Condition = condition;
-            Cases = new Dictionary<string, ITask>();
+            Cases = new Dictionary<T, ITask>();
         }
 
-        public ITask this [string _case]
+        public ITask this [T _case]
         {
             get { return Cases[_case]; }
             set { Cases[_case] = value; }

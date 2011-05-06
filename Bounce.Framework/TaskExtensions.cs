@@ -23,5 +23,27 @@ namespace Bounce.Framework {
         public static Task<string> SubPath(this Task<string> path, Task<string> subPath) {
             return new All(path, subPath).WhenBuilt(() => Path.Combine(path.Value, subPath.Value));
         }
+
+        public static Switch<T> Switch<T>(this Task<T> condition) {
+            return new Switch<T>(condition);
+        }
+
+        public static Switch<T> Switch<T>(this Task<T> condition, T case1, ITask task1) {
+            var s = condition.Switch();
+            s[case1] = task1;
+            return s;
+        }
+
+        public static Switch<T> Switch<T>(this Task<T> condition, T case1, ITask task1, T case2, ITask task2) {
+            var s = condition.Switch(case1, task1);
+            s[case2] = task2;
+            return s;
+        }
+
+        public static Switch<T> Switch<T>(this Task<T> condition, T case1, ITask task1, T case2, ITask task2, T case3, ITask task3) {
+            var s = condition.Switch(case1, task1, case2, task2);
+            s[case3] = task3;
+            return s;
+        }
     }
 }
