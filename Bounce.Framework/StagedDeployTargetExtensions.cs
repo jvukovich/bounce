@@ -14,9 +14,11 @@ namespace Bounce.Framework {
 
                 var parameters = new List<IParameter>();
                 parameters.Add(target.Stage.WithValue(StagedDeployTarget.RemoteDeployStage));
-                parameters.AddRange(machConf.BounceParameters);
+                if (machConf.BounceParameters != null) {
+                    parameters.AddRange(machConf.BounceParameters);
+                }
 
-                Task<string> localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
+                                                                                Task<string> localPath = new All(archiveOnRemote, machConf.LocalPath).WhenBuilt(() => machConf.LocalPath.Value);
                 return remoteBounceFactory.CreateRemoteBounce(BounceArguments.ForTarget(target.Name, parameters),
                                                               localPath,
                                                               machConf.Machine);

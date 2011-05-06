@@ -12,7 +12,7 @@ namespace Bounce.Framework
         [Dependency] public Task<IEnumerable<Iis6Authentication>> Authentication;
         [Dependency] public Task<string> Directory;
         [Dependency] public Task<string> Name;
-        public IEnumerable<Iis6WebSiteBinding> Bindings;
+        [Dependency] public Task<IEnumerable<Iis6WebSiteBinding>> Bindings;
         [Dependency] public Task<IEnumerable<Iis6ScriptMap>> ScriptMapsToAdd;
         [Dependency] public Task<bool> Started;
 
@@ -57,7 +57,7 @@ namespace Bounce.Framework
         public override void Build(IBounce bounce)
         {
             DeleteIfExtant();
-            IisWebSite webSite = Iis.CreateWebSite(Name.Value, ToInternalBindings(Bindings), Path.GetFullPath(Directory.Value));
+            IisWebSite webSite = Iis.CreateWebSite(Name.Value, ToInternalBindings(Bindings.Value), Path.GetFullPath(Directory.Value));
 
             webSite.AddScriptMapsToSite(ScriptMapsToAdd.Value);
 
@@ -111,7 +111,7 @@ namespace Bounce.Framework
         }
 
         protected override IEnumerable<TaskDependency> RegisterAdditionalDependencies() {
-            return Bindings.SelectMany(b => TaskDependencyFinder.Instance.GetDependenciesFor(b));
+            return Bindings.Value.SelectMany(b => TaskDependencyFinder.Instance.GetDependenciesFor(b));
         }
     }
 }
