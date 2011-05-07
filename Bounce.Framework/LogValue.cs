@@ -5,7 +5,7 @@ namespace Bounce.Framework {
         [Dependency]
         public Task<string> Message;
         [Dependency]
-        public Task<T> Value;
+        public new Task<T> Value;
 
         private bool IsDebug;
 

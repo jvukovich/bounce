@@ -65,6 +65,7 @@
     <Compile Include="BounceCommandTest.cs" />
     <Compile Include="BounceCommandExtensionsTest.cs" />
     <Compile Include="BounceTest.cs" />
+    <Compile Include="BuilderTest.cs" />
     <Compile Include="CommandAndTargetNameParserTest.cs" />
     <Compile Include="CommandLineParameterParserTest.cs" />
     <Compile Include="CommandLineParametersTest.cs" />
