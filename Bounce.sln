@@ -21,6 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiStageTargets", "MultiS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.TestHelpers", "Bounce.TestHelpers\Bounce.TestHelpers.csproj", "{E7E05DAC-9A59-41F5-9FED-47FDF809A699}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bounce", "Bounce", "{6B9741C2-D739-4C73-A613-9AA6F72A979A}"
+	ProjectSection(SolutionItems) = preProject
+		Bounce\beforebounce.bat = Bounce\beforebounce.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

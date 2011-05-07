@@ -58,7 +58,7 @@ namespace MultiStageTargets
             public SubBounce DeployTargets(params string [] targets) {
                 return new SubBounce {
                     BounceArguments = new RemoteBounceArguments {Targets = targets}.WithParameter(Stage.WithValue("deploy")).WithParameter(MachineParameter.WithValue(MachineName)),
-                    DependsOn = new [] {new TaskDependency {Task = ArchiveCopiedToRemote}},
+                    DependsOn = new [] {ArchiveCopiedToRemote},
                     WorkingDirectory = LocalDeployDirectory,
                 };
             }

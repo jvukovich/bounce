@@ -34,16 +34,8 @@ namespace Bounce.Framework
     }
 
     public class Builder<T> : BuilderWithCreator<T> where T : new() {
-        private Func<T> Creator;
-
         public Builder(Func<T> creator) : base(creator) {}
         public Builder() : this(() => new T()) {}
-
-        public override T Build {
-            get {
-                return Creator();
-            }
-        }
     }
 
     class ActionBuilder<T> : BaseBuilder<T> {

@@ -173,6 +173,7 @@
     <Compile Include="Iis6ScriptMap.cs" />
     <Compile Include="RemoteBounce.cs" />
     <Compile Include="RemoteBounceArguments.cs" />
+    <Compile Include="RewriteFile.cs" />
     <Compile Include="ScheduledTask.cs" />
     <Compile Include="SelectTask.cs" />
     <Compile Include="ShellCommandExecutor.cs" />

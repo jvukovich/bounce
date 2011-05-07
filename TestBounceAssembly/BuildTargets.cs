@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Bounce.Framework;
+using System.Text.RegularExpressions;
 
 namespace TestBounceAssembly {
     public class BuildTargets {
@@ -102,6 +103,15 @@ namespace TestBounceAssembly {
             return null;
         }
 
+        private static Func<string, string> RewriteVersion(Task<string> version) {
+            Regex asmVersion = new Regex(@"^(\s*\[assembly:\s*Assembly(File)?Version\s*\(\s*"").*?(""\s*\)\s*\])", RegexOptions.Multiline);
+            return contents => {
+                return asmVersion.Replace(contents, match => {
+                    return match.Groups[1].Value + version.Value + match.Groups[3].Value;
+                });
+            };
+        }
+
         [Targets]
         public static object RealTargets(IParameters buildParameters) {
             var version = buildParameters.Required<string>("version");
@@ -110,9 +120,17 @@ namespace TestBounceAssembly {
                 Repository = "git://github.com/refractalize/bounce.git",
                 Directory = "tmp2",
             };
+
+            var asmInfoWithVersion = new RewriteFile {
+                FilePath = "SolutionAssemblyInfo.cs",
+                Rewriter = RewriteVersion(version),
+            };
+
             var solution = new VisualStudioSolution {
                 SolutionPath = "Bounce.sln",
+                DependsOn = new [] {asmInfoWithVersion}
             };
+
             var frameworkProject = solution.Projects["Bounce.Framework"];
 
             var downloadsDir = new CleanDirectory {
@@ -125,13 +143,14 @@ namespace TestBounceAssembly {
             };
 
             var gitTag = new GitTag {Directory = ".", Tag = version.WhenBuilt(() => "v" + version.Value)};
-            var downloads = new All(frameworkZip);
+            var downloads = new All(frameworkZip, gitTag);
 
             return new {
                 Tests = new NUnitTests {
                     DllPaths = solution.Projects.Select(p => p.OutputFile),
                 },
                 Downloads = downloads,
+                RewriteAsmInfo = asmInfoWithVersion,
             };
         }
     }

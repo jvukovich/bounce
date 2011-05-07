@@ -16,7 +16,7 @@
             return new Copy {
                 FromPath = from,
                 ToPath = ArchiveRoot.Files[archivePath],
-                DependsOn = new [] {new TaskDependency {Task = ArchivedBounce}},
+                DependsOn = new [] {ArchivedBounce},
             }.ToPath;
         }
     }
