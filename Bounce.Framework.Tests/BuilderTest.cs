@@ -43,8 +43,8 @@ namespace Bounce.Framework.Tests
             var stage = webSite.WithHostName("mywebsitestage.com");
             envs["stage"] = stage.OnMachines("stage1", "stage2");
 
-            var test = webSite.WithHostName("mywebsitetest.com");
-            envs["test"] = test.OnMachines("test1", "test2");
+            var test = webSite.WithHostName("mywebsitetest");
+            envs["test"] = test.OnMachines("test1");
 
             var dev = webSite.WithNoHostName().WithPort(6001);
             envs["dev"] = dev.OnMachines("localhost");
