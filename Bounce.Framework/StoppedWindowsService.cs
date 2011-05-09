@@ -5,11 +5,15 @@ namespace Bounce.Framework
 {
     public class StoppedWindowsService : WindowsServiceBaseTask
     {
+        [Dependency]
         public Task<TimeSpan> Timeout;
+        [Dependency]
+        public Task<TimeSpan> Wait;
 
         public StoppedWindowsService()
         {
             Timeout = TimeSpan.FromMinutes(5);
+            Wait = TimeSpan.FromMinutes(0);
         }
 
         protected override void BuildTask(IBounce bounce)
@@ -29,6 +33,8 @@ namespace Bounce.Framework
                         throw new BounceException(String.Format("service {0} could not be stopped", Name));
                     }
                 } while (!IsServiceStopped(bounce));
+
+                Thread.Sleep(Wait.Value);
             }
         }
 
