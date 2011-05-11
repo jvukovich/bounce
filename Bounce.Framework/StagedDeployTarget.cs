@@ -25,7 +25,9 @@ namespace Bounce.Framework {
             Stage = stage;
             CachedDeploys = cachedDeploys;
             Switch = new Switch<string>(stage);
-            PrepareDeploy = package => new NullTask();
+            PrepareDeploy = package => package;
+            InvokeRemoteDeploy = package => package;
+            Deploy = package => package;
         }
 
         private void SetupSwitch() {
