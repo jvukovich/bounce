@@ -18,15 +18,18 @@ namespace Bounce.Framework {
             TaskLog = new TaskLog(stdout, stderr, logOptions);
         }
 
-        public void Debug(string format, params object[] args) {
+        public virtual void Debug(string format, params object[] args)
+        {
             WriteLogMessage(Stdout, LogLevel.Debug, String.Format(format, args));
         }
 
-        public void Debug(object message) {
+        public virtual void Debug(object message)
+        {
             WriteLogMessage(Stdout, LogLevel.Debug, message);
         }
 
-        public ICommandLog BeginExecutingCommand(string command, string args) {
+        public virtual ICommandLog BeginExecutingCommand(string command, string args)
+        {
             if (LogOptions.CommandOutput) {
                 return new CommandLog(command, args, Stdout, Stderr);
             } else {
@@ -34,43 +37,52 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Info(string format, params object[] args) {
+        public virtual void Info(string format, params object[] args)
+        {
             WriteLogMessage(Stdout, LogLevel.Info, String.Format(format, args));
         }
 
-        public void Info(object message) {
+        public virtual void Info(object message)
+        {
             WriteLogMessage(Stdout, LogLevel.Info, message);
         }
 
-        public void Warning(string format, params object[] args) {
+        public virtual void Warning(string format, params object[] args)
+        {
             WriteLogMessage(Stdout, LogLevel.Warning, String.Format(format, args));
         }
 
-        public void Warning(object message) {
+        public virtual void Warning(object message)
+        {
             WriteLogMessage(Stdout, LogLevel.Warning, message);
         }
 
-        public void Warning(Exception exception, string format, params object[] args) {
+        public virtual void Warning(Exception exception, string format, params object[] args)
+        {
             LogException(Stdout, LogLevel.Warning, String.Format(format, args), exception);
         }
 
-        public void Warning(Exception exception, object message) {
+        public virtual void Warning(Exception exception, object message)
+        {
             LogException(Stdout, LogLevel.Warning, message, exception);
         }
 
-        public void Error(string format, params object[] args) {
+        public virtual void Error(string format, params object[] args) {
             WriteLogMessage(Stderr, LogLevel.Error, String.Format(format, args));
         }
 
-        public void Error(object message) {
+        public virtual void Error(object message)
+        {
             WriteLogMessage(Stderr, LogLevel.Error, message);
         }
 
-        public void Error(Exception exception, string format, params object[] args) {
+        public virtual void Error(Exception exception, string format, params object[] args)
+        {
             LogException(Stderr, LogLevel.Error, String.Format(format, args), exception);
         }
 
-        public void Error(Exception exception, object message) {
+        public virtual void Error(Exception exception, object message)
+        {
             LogException(Stderr, LogLevel.Error, message, exception);
         }
 

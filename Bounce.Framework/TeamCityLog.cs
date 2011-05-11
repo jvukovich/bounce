@@ -2,55 +2,34 @@ using System;
 using System.IO;
 
 namespace Bounce.Framework {
-    class TeamCityLog : ILog {
+    class TeamCityLog : Log {
         private TextWriter Output;
         private readonly LogOptions LogOptions;
         private TeamCityFormatter TeamCityFormatter;
 
-        public TeamCityLog(TextWriter output, LogOptions logOptions) {
-            TaskLog = new TeamCityTaskLog(output);
+        public TeamCityLog(TextWriter output, LogOptions logOptions, ILogMessageFormatter logMessageFormatter) : base(output, output, logOptions, logMessageFormatter) {
             this.Output = output;
             LogOptions = logOptions;
             TeamCityFormatter = new TeamCityFormatter();
         }
 
-        public void Debug(string format, params object[] args) {
-        }
-
-        public void Debug(object message) {
-        }
-
-        public void Info(string format, params object[] args) {
-        }
-
-        public void Info(object message) {
-        }
-
-        public void Warning(string format, params object[] args) {
-        }
-
-        public void Warning(Exception exception, string format, params object[] args) {
-        }
-
-        public void Warning(object message) {
-        }
-
-        public void Warning(Exception exception, object message) {
-        }
-
-        public void Error(string format, params object[] args) {
+        public override void Error(string format, params object[] args) {
+            base.Error(format, args);
             LogErrorMessage(String.Format(format, args));
         }
 
-        public void Error(Exception exception, string format, params object[] args) {
+        public override void Error(Exception exception, string format, params object[] args) {
+            base.Error(exception, format, args);
             LogException(String.Format(format, args), exception);
         }
 
-        public void Error(object message) {
+        public override void Error(object message) {
+            base.Error(message);
             LogErrorMessage(message);
         }
 
-        public void Error(Exception exception, object message) {
+        public override void Error(Exception exception, object message) {
+            base.Error(exception, message);
             LogException(message, exception);
         }
 
@@ -62,10 +41,6 @@ namespace Bounce.Framework {
             return TeamCityFormatter.FormatTeamCityMessage("message", "text", message.Message, "errorDetails", message.ToString(), "status", "ERROR");
         }
 
-        private string FormatTeamCityText(string text) {
-            throw new NotImplementedException();
-        }
-
         private void LogErrorMessage(object message) {
             Output.WriteLine(FormatErrorMessage(message));
         }
@@ -75,7 +50,7 @@ namespace Bounce.Framework {
             Output.WriteLine(FormatException(exception));
         }
 
-        public ICommandLog BeginExecutingCommand(string command, string args) {
+        public override ICommandLog BeginExecutingCommand(string command, string args) {
             var commandName = Path.GetFileName(command).ToLower();
 
             switch (commandName) {
@@ -84,14 +59,8 @@ namespace Bounce.Framework {
                 case "nunit-console.exe":
                     return new TeamCityNUnitLogger(args, Output);
                 default:
-                    if (LogOptions.CommandOutput) {
-                        return new CommandLog(command, args, Output, Output);
-                    } else {
-                        return new NullCommandLog(args);
-                    }
+                    return base.BeginExecutingCommand(command, args);
             }
         }
-
-        public ITaskLog TaskLog { get; private set; }
     }
 }
