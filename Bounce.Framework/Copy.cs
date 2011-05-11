@@ -49,8 +49,7 @@ namespace Bounce.Framework {
             var fromPath = FromPath.Value;
             var toPath = _toPath.Value;
 
-            bounce.Log.Debug(Directory.GetCurrentDirectory());
-            bounce.Log.Debug("copying from: {0}, to: {1}", fromPath, toPath);
+            bounce.Log.Debug("copying from: `{0}', to: `{1}'", fromPath, toPath);
 
             FileSystemCopier.Copy(fromPath, toPath, GetValueOf(Excludes), GetValueOf(Includes), DeleteToDirectory.Value);
         }
