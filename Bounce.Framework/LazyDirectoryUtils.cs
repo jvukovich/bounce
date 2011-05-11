@@ -31,5 +31,9 @@ namespace Bounce.Framework {
         public bool DirectoryExists(string dir) {
             return DirectoryUtils.DirectoryExists(dir);
         }
+
+        public void CreateDirectory(string dir) {
+            DirectoryUtils.CreateDirectory(dir);
+        }
     }
 }

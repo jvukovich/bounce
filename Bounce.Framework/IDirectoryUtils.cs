@@ -8,5 +8,6 @@ namespace Bounce.Framework {
         void DeleteDirectory(string dir);
         void DeleteDirectoryContents(string dir);
         bool DirectoryExists(string dir);
+        void CreateDirectory(string dir);
     }
 }

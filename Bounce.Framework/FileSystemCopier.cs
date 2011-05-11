@@ -36,7 +36,9 @@ namespace Bounce.Framework {
 
                 if (DirectoryUtils.DirectoryExists(to)) {
                     dest = Path.Combine(to, Path.GetFileName(from));
-                } else {
+                } else
+                {
+                    DirectoryUtils.CreateDirectory(Path.GetDirectoryName(to));
                     dest = to;
                 }
                 FileUtils.CopyFile(from, dest);
