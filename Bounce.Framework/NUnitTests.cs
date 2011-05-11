@@ -23,7 +23,7 @@ namespace Bounce.Framework
 
         public override void Build(IBounce bounce)
         {
-            IEnumerable<string> testDlls = DllPaths.Select(dll => dll.Value).Where(dll => dll.EndsWith("Tests.dll"));
+            IEnumerable<string> testDlls = DllPaths.Select(dll => dll.Value);
             string joinedTestDlls = "\"" + String.Join("\" \"", testDlls.ToArray()) + "\"";
 
             bounce.Log.Info("running unit tests for: " + joinedTestDlls);
