@@ -5,13 +5,21 @@ namespace Bounce.Framework
 {
     public class ScheduledTask : Task
     {
+        [Dependency]
         public Task<string> Machine;
+        [Dependency]
         public Task<string> UserName;
+        [Dependency]
         public Task<string> Password;
+        [Dependency]
         public Task<string> Name;
+        [Dependency]
         public Task<string> BinaryPath;
+        [Dependency]
         public Task<string> SchTasksArguments;
+        [Dependency]
         public Task<bool> ForceDelete;
+        [Dependency]
         public Task<string> SchTasksCommandPath;
 
         public ScheduledTask()
@@ -47,7 +55,7 @@ namespace Bounce.Framework
         }
 
         private string GetCreateSettings() {
-            return String.Join("", new []
+            return String.Join(" ", new []
                                        {
                                            GetSetting(Machine, "S"),
                                            GetSetting(UserName, "RU"),
@@ -59,7 +67,7 @@ namespace Bounce.Framework
         }
 
         private string GetDeleteSettings() {
-            return String.Join("", new []
+            return String.Join(" ", new []
                                        {
                                            GetSetting(Machine, "S"),
                                            GetSetting(UserName, "RU"),
