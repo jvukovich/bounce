@@ -25,12 +25,12 @@ namespace Bounce.Framework {
         }
 
         private void Build(ITask task, IBounceCommand command) {
-            Walker.Walk(new TaskDependency {Task = task}, null, dep => BuildIfNotAlreadyBuilt(dep, command));
+            Walker.Walk(new TaskDependency(task), null, dep => BuildIfNotAlreadyBuilt(dep, command));
             RegisterCleanupAfterBuild(task);
         }
 
         private void RegisterCleanupAfterBuild(ITask task) {
-            Walker.Walk(new TaskDependency {Task = task}, CleanAfterBuildRegister.RegisterDependency, null);
+            Walker.Walk(new TaskDependency(task), CleanAfterBuildRegister.RegisterDependency, null);
         }
 
         public void CleanAfterBuild(IBounceCommand command) {
@@ -47,7 +47,7 @@ namespace Bounce.Framework {
         }
 
         private void Clean(ITask task, IBounceCommand command) {
-            Walker.Walk(new TaskDependency {Task = task}, dep => CleanIfNotAlreadyCleaned(dep, command), null);
+            Walker.Walk(new TaskDependency(task), dep => CleanIfNotAlreadyCleaned(dep, command), null);
         }
 
         private void CleanIfNotAlreadyCleaned(TaskDependency dep, IBounceCommand command) {

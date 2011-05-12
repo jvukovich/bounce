@@ -8,7 +8,7 @@ namespace Bounce.Framework {
 
             var parameters = new HashSet<IParameter>();
 
-            walker.Walk(new TaskDependency {Task = task}, null, dependency => {
+            walker.Walk(new TaskDependency(task), null, dependency => {
                 var param = dependency.Task as IParameter;
                 if (param != null) {
                     parameters.Add(param);

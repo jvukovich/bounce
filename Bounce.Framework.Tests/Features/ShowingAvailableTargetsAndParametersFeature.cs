@@ -13,8 +13,8 @@ namespace Bounce.Framework.Tests.Features {
         class TargetsProvider {
             [Targets]
             public static object GetTargets(IParameters parameters) {
-                var one = new FakeTask {Dependencies = new [] {new TaskDependency {Task = parameters.Required<int>("port")}}};
-                var two = new FakeTask {Dependencies = new [] {new TaskDependency {Task = parameters.Default("name", "Some Web Site")}}};
+                var one = new FakeTask {Dependencies = new [] {new TaskDependency (parameters.Required<int>("port"))}};
+                var two = new FakeTask {Dependencies = new [] {new TaskDependency (parameters.Default("name", "Some Web Site"))}};
 
                 return new {
                     One = one,

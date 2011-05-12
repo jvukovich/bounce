@@ -14,7 +14,7 @@ namespace Bounce.Framework {
             get {
                 return TaskDependencyFinder.Instance.GetDependenciesFor(this)
                     .Concat(RegisterAdditionalDependencies())
-                    .Concat(DependsOn.Select(t => new TaskDependency {Task = t}));
+                    .Concat(DependsOn.Select(t => new TaskDependency(t)));
             }
         }
 

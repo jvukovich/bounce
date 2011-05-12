@@ -14,7 +14,7 @@ namespace Bounce.Framework.Tests {
 
             var buildActions = new StringWriter();
 
-            dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependency.Object}});
+            dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency (dependency.Object)});
             var bounceCommand = new BounceCommandParser().Build;
             dependent.Setup(d => d.Invoke(bounceCommand, bounce)).Callback(() => buildActions.Write("build dependent;"));
             dependency.Setup(d => d.Invoke(bounceCommand, bounce)).Callback(() => buildActions.Write("build dependency;"));
@@ -29,7 +29,7 @@ namespace Bounce.Framework.Tests {
         public void EachTaskShouldDescribeThemSelvesBeforeBuild() {
             var dependent = new FakeDescribingTask("one");
             var dependency = new FakeDescribingTask("two");
-            dependent.Dependencies = new[] {new TaskDependency {Task = dependency}};
+            dependent.Dependencies = new[] {new TaskDependency(dependency)};
 
             ITargetBuilderBounce bounce = GetBounce();
 
@@ -70,7 +70,7 @@ namespace Bounce.Framework.Tests {
 
             var cleanActions = new StringWriter();
 
-            dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependency.Object}});
+            dependent.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency(dependency.Object)});
             var bounceCommand = new BounceCommandParser().Clean;
             dependent.Setup(d => d.Invoke(bounceCommand, bounce)).Callback(() => cleanActions.Write("clean dependent;"));
 
@@ -91,9 +91,9 @@ namespace Bounce.Framework.Tests {
             var twiceADependency = new Mock<ITask>();
             ITargetBuilderBounce bounce = GetBounce();
 
-            all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependent1.Object}, new TaskDependency {Task = dependent2.Object} });
-            dependent1.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
-            dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
+            all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency(dependent1.Object), new TaskDependency(dependent2.Object) });
+            dependent1.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency(twiceADependency.Object) });
+            dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency(twiceADependency.Object) });
 
             var invoker = new TargetInvoker(bounce);
             var bounceCommand = new BounceCommandParser().Build;
@@ -111,9 +111,9 @@ namespace Bounce.Framework.Tests {
             var twiceADependency = new Mock<ITask>();
             ITargetBuilderBounce bounce = GetBounce();
 
-            all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = dependent1.Object}, new TaskDependency {Task = dependent2.Object} });
-            dependent1.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
-            dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency {Task = twiceADependency.Object} });
+            all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency(dependent1.Object), new TaskDependency (dependent2.Object) });
+            dependent1.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency (twiceADependency.Object) });
+            dependent2.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency (twiceADependency.Object) });
 
             var invoker = new TargetInvoker(bounce);
             var bounceCommand = new BounceCommandParser().Clean;
@@ -128,8 +128,8 @@ namespace Bounce.Framework.Tests {
 
             var d = new FakeArtefactTaskWithDependencies(artefacts, "d");
             var a = new FakeArtefactTaskWithDependencies(artefacts, "a");
-            var b = new FakeArtefactTaskWithDependencies(artefacts, "b", new[] {new TaskDependency {Task = d}});
-            var cDeps = new[] {new TaskDependency {Task = a}, new TaskDependency {Task = b, CleanAfterBuild = true}};
+            var b = new FakeArtefactTaskWithDependencies(artefacts, "b", new[] {new TaskDependency(d)});
+            var cDeps = new[] {new TaskDependency(a), new TaskDependency(b) {CleanAfterBuild = true}};
             var c = new FakeArtefactTaskWithDependencies(artefacts, "c", cDeps);
 
             ITargetBuilderBounce bounce = GetBounce();
@@ -152,7 +152,7 @@ namespace Bounce.Framework.Tests {
             var artefacts = new HashSet<string>();
 
             var b = new FakeArtefactTaskWithDependencies(artefacts, "b");
-            var cDeps = new[] {new TaskDependency {Task = b}, new TaskDependency {Task = b, CleanAfterBuild = true}};
+            var cDeps = new[] {new TaskDependency(b), new TaskDependency (b) {CleanAfterBuild = true}};
             var c = new FakeArtefactTaskWithDependencies(artefacts, "c", cDeps);
 
             ITargetBuilderBounce bounce = GetBounce();

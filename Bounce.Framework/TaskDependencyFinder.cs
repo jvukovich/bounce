@@ -68,8 +68,7 @@ namespace Bounce.Framework {
                 }
 
                 private TaskDependency CreateTaskDependency(ITask task, string name) {
-                    return new TaskDependency {
-                                                  Task = task,
+                    return new TaskDependency(task) {
                                                   Name = name,
                                                   CleanAfterBuild = Member.CleanAfterBuild
                                               };
