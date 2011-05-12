@@ -8,6 +8,7 @@ namespace Bounce.Framework
     public class Iis6WebSite : Iis6Task
     {
         private static Iis6ScriptMap[] _mvcScriptMaps;
+        [Dependency] public Task<Iis6WebSiteAccessFlags> AccessFlags;
         [Dependency] public Iis6AppPool AppPool;
         [Dependency] public Task<IEnumerable<Iis6Authentication>> Authentication;
         [Dependency] public Task<string> Directory;
@@ -23,6 +24,7 @@ namespace Bounce.Framework
             Authentication = new[] {Iis6Authentication.Basic, Iis6Authentication.NTLM};
             AppPool = null;
             Started = true;
+            AccessFlags = Iis6WebSiteAccessFlags.Read;
         }
 
         public static Iis6ScriptMap[] MvcScriptMaps
@@ -68,6 +70,8 @@ namespace Bounce.Framework
             
             //This needs to be set after the AppPool, otherwise the authentication settings are ignored
             webSite.Authentication = Authentication.Value;
+
+            webSite.IisWebSiteAccessPermissions = AccessFlags.Value;
 
             if (Started.Value)
             {

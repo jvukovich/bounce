@@ -120,6 +120,19 @@ namespace Bounce.Framework {
             }
         }
 
+        public Iis6WebSiteAccessFlags IisWebSiteAccessPermissions
+        {
+            get
+            {
+                return (Iis6WebSiteAccessFlags)virtualDirectory["AccessFlags"];
+            }
+            set
+            {
+                virtualDirectory["AccessFlags"] = (int)value;
+                virtualDirectory.Put();
+            }
+        }
+
         public string AppPoolName {
             get {
                 return (string) virtualDirectory["AppPoolId"];
