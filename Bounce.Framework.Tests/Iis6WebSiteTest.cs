@@ -47,7 +47,42 @@ namespace Bounce.Framework.Tests {
 //            EnumerateWebsites(scope, "ScriptMap");
 //            AddScriptMapToSite(scope, "1180970907");
 
+            AddVirtualDirectory();
+        }
 
+        [Test]
+        public void AddVirtualDirectory()
+        {
+            var siteId = 1574596940;
+//            var siteId = 1;
+            var dir = "iplayer";
+            var name = String.Format(@"W3SVC/{0}/root/{1}", siteId, dir);
+
+            var vDir = new ManagementClass(Scope, new ManagementPath("IIsWebVirtualDirSetting"), null).CreateInstance();
+            vDir["Name"] = name;
+            vDir["Path"] = @"C:\sites\iplayer";
+            vDir.Put();
+
+            var path = string.Format("IIsWebVirtualDir.Name='{0}'", name);
+            var app = new ManagementObject(Scope, new ManagementPath(path), null);
+            app.InvokeMethod("AppCreate2", new object[] { 2 });
+
+            vDir["AppPoolId"] = "GipRegForm.Api";
+            vDir["AppFriendlyName"] = "stuff";
+            vDir.Put();
+        }
+
+        [Test]
+        public void DeleteVirtualDirectory()
+        {
+            var siteId = 1574596940;
+//            var siteId = 1;
+            var dir = "iplayer";
+            var name = String.Format(@"W3SVC/{0}/root/{1}", siteId, dir);
+
+            var path = string.Format("IIsWebVirtualDir.Name='{0}'", name);
+            var app = new ManagementObject(Scope, new ManagementPath(path), null);
+            app.Delete();
         }
 
         [Test]
