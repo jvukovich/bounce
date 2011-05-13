@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 
 namespace Bounce.Framework.Tests {
     [TestFixture]
@@ -30,7 +31,7 @@ namespace Bounce.Framework.Tests {
             Assert.That(command.InfinitiveTense, Is.EqualTo("build"));
 
             bool built = false;
-            command.InvokeCommand(() => built = true, () => Assert.Fail("didn't expect this to be invoked"));
+            command.InvokeCommand(() => built = true, () => Assert.Fail("didn't expect this to be invoked"), () => Assert.Fail("didn't expect this to be invoked"));
             Assert.That(built);
         }
 
@@ -41,8 +42,19 @@ namespace Bounce.Framework.Tests {
             Assert.That(command.InfinitiveTense, Is.EqualTo("clean"));
 
             bool cleaned = false;
-            command.InvokeCommand(() => Assert.Fail("didn't expect this to be invoked"), () => cleaned = true);
+            command.InvokeCommand(() => Assert.Fail("didn't expect this to be invoked"), () => cleaned = true, () => Assert.Fail("didn't expect this to be invoked"));
             Assert.That(cleaned);
+        }
+
+        private void AssertDescribeCommandProperties(IBounceCommand command) {
+            Assert.That(command.CommandLineCommand, Is.EqualTo("describe"));
+            Assert.That(command.PastTense, Is.EqualTo("described"));
+            Assert.That(command.PresentTense, Is.EqualTo("describing"));
+            Assert.That(command.InfinitiveTense, Is.EqualTo("describe"));
+
+            bool described = false;
+            command.InvokeCommand(() => Assert.Fail("didn't expect this to be invoked"), () => Assert.Fail("didn't expect this to be invoked"), () => described = true);
+            Assert.That(described);
         }
 
         [Test]
@@ -52,6 +64,12 @@ namespace Bounce.Framework.Tests {
 
             var cleanAfterBuildCommand = cleanCommand.CleanAfterBuildCommand;
             Assert.That(cleanAfterBuildCommand, Is.Null);
+        }
+
+        [Test]
+        public void DescribeCommandTest() {
+            IBounceCommand describe = new BounceCommandParser().Parse("describe");
+            AssertDescribeCommandProperties(describe);
         }
     }
 }

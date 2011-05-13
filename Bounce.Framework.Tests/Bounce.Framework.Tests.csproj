@@ -74,6 +74,7 @@
     <Compile Include="FakeArtefactTask.cs" />
     <Compile Include="Features\CleanAfterBuildFeature.cs" />
     <Compile Include="Features\CleanExecutedWithCleanDependenciesFeature.cs" />
+    <Compile Include="Features\DescribeFeature.cs" />
     <Compile Include="WhenBuiltTest.cs" />
     <Compile Include="FakeBounce.cs" />
     <Compile Include="FakePrintTask.cs" />

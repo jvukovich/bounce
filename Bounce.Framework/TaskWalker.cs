@@ -27,4 +27,30 @@ namespace Bounce.Framework {
             }
         }
     }
+
+    public class TaskAggregator {
+        Stack<ITaskAggregate> Stack = new Stack<ITaskAggregate>();
+        private Func<TaskDependency, ITaskAggregate> CreateAggregate;
+
+        public TaskAggregator(Func<TaskDependency, ITaskAggregate> createAggregate) {
+            CreateAggregate = createAggregate;
+        }
+
+        public void Before(TaskDependency dep) {
+            if (Stack.Count > 0) {
+                var taskAggregate = Stack.Peek();
+                taskAggregate.Add(dep);
+            }
+            Stack.Push(CreateAggregate(dep));
+        }
+
+        public void After(TaskDependency dep) {
+            Stack.Pop().Finally();
+        }
+    }
+
+    public interface ITaskAggregate {
+        void Add(TaskDependency dep);
+        void Finally();
+    }
 }

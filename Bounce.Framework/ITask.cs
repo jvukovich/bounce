@@ -8,5 +8,6 @@ namespace Bounce.Framework {
         void Invoke(IBounceCommand command, IBounce bounce);
         bool IsLogged { get; }
         void Describe(TextWriter output);
+        string SmallDescription { get; }
     }
 }

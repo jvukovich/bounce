@@ -9,6 +9,7 @@ namespace Bounce.Framework {
         private readonly CleanAfterBuildRegister CleanAfterBuildRegister;
         private readonly OnceOnlyTaskInvoker OnceOnlyCleaner;
         private readonly OnceOnlyTaskInvoker OnceOnlyBuilder;
+        private readonly OnceOnlyTaskInvoker OnceOnlyDescriber;
 
         public TargetInvoker(ITargetBuilderBounce bounce) {
             BuiltTasks = new HashSet<ITask>();
@@ -17,11 +18,20 @@ namespace Bounce.Framework {
             CleanAfterBuildRegister = new CleanAfterBuildRegister();
             OnceOnlyCleaner = new OnceOnlyTaskInvoker((task, command) => InvokeAndLog(task, command));
             OnceOnlyBuilder = new OnceOnlyTaskInvoker((task, command) => InvokeAndLog(task, command));
+            OnceOnlyDescriber = new OnceOnlyTaskInvoker((task, command) => InvokeAndLog(task, command));
         }
 
         public void Invoke(IBounceCommand command, ITask task)
         {
-            command.InvokeCommand(() => Build(task, command), () => Clean(task, command));
+            command.InvokeCommand(() => Build(task, command), () => Clean(task, command), () => Describe(task, command));
+        }
+
+        private void Describe(ITask task, IBounceCommand command) {
+            Walker.Walk(new TaskDependency(task), null, dep => DescribeIfNotDescribed(dep, command));
+        }
+
+        private void DescribeIfNotDescribed(TaskDependency dep, IBounceCommand command) {
+            OnceOnlyDescriber.EnsureInvokedAtLeastOnce(dep.Task, command);
         }
 
         private void Build(ITask task, IBounceCommand command) {

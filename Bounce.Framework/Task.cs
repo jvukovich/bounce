@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 
 namespace Bounce.Framework {
-    public abstract class Task : ITask {
+    public abstract class Task : ITask, ICommandableTask {
         protected Task()
         {
             DependsOn = new ITask[0];
@@ -20,7 +20,7 @@ namespace Bounce.Framework {
 
         public virtual void Invoke(IBounceCommand command, IBounce bounce)
         {
-            command.InvokeCommand(() => Build(bounce), () => Clean(bounce));
+            command.InvokeCommand(() => Build(bounce), () => Clean(bounce), () => Describe(bounce));
         }
 
         public virtual void Build(IBounce bounce) {
@@ -37,16 +37,24 @@ namespace Bounce.Framework {
 
         public virtual bool IsLogged { get { return true; } }
 
+        public virtual void Describe(IBounce bounce) {
+            Describe(bounce.LogOptions.StdOut);
+        }
+
         public virtual void Describe(TextWriter output)
         {
             output.WriteLine("task: {0}", GetType().Name);
 
             foreach(TaskDependency dependency in TaskDependencyFinder.Instance.GetDependenciesFor(this))
             {
-                output.Write("    {0}:", dependency.Name);
+                output.Write("    {0}: ", dependency.Name);
                 dependency.Task.Describe(output);
-                output.WriteLine();
+                output.WriteLine(dependency.Task.SmallDescription);
             }
+        }
+
+        public string SmallDescription {
+            get { return GetType().Name; }
         }
 
         protected virtual IEnumerable<TaskDependency> RegisterAdditionalDependencies() {
@@ -54,5 +62,10 @@ namespace Bounce.Framework {
         }
 
         public IEnumerable<ITask> DependsOn { get; set; }
+    }
+
+    public interface ICommandableTask {
+        void Build(IBounce bounce);
+        void Clean(IBounce bounce);
     }
 }

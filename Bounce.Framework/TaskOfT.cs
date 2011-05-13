@@ -15,5 +15,9 @@ namespace Bounce.Framework {
         public virtual bool IsLogged { get { return false; } }
 
         public virtual void Describe(TextWriter output) { }
+
+        public string SmallDescription {
+            get { return Value.ToString(); }
+        }
     }
 }

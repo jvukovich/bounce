@@ -7,7 +7,7 @@ namespace Bounce.Framework {
             CommandLineCommand = commandLineCommand;
         }
 
-        public void InvokeCommand(Action onBuild, Action onClean) {
+        public void InvokeCommand(Action onBuild, Action onClean, Action onDescribe) {
             onBuild();
         }
 
@@ -26,6 +26,10 @@ namespace Bounce.Framework {
         public IBounceCommand CleanAfterBuildCommand { get; private set; }
 
         public string CommandLineCommand { get; private set; }
+
+        public bool IsLogged {
+            get { return true; }
+        }
     }
 
     internal interface IBounceCommandParser {
@@ -38,6 +42,7 @@ namespace Bounce.Framework {
         private IBounceCommand _build;
         private IBounceCommand _buildAndClean;
         private IBounceCommand _clean;
+        private IBounceCommand _describe;
 
         public IBounceCommand Parse(string command) {
             switch (command) {
@@ -47,6 +52,8 @@ namespace Bounce.Framework {
                     return BuildAndClean;
                 case "clean":
                     return Clean;
+                case "describe":
+                    return Describe;
                 default:
                     return null;
             }
@@ -78,10 +85,19 @@ namespace Bounce.Framework {
                 return _clean;
             }
         }
+
+        public IBounceCommand Describe {
+            get {
+                if (_describe == null) {
+                    _describe = new BounceCommandDescribe();
+                }
+                return _describe;
+            }
+        }
     }
 
     internal class BounceCommandClean : IBounceCommand {
-        public void InvokeCommand(Action onBuild, Action onClean) {
+        public void InvokeCommand(Action onBuild, Action onClean, Action onDescribe) {
             onClean();
         }
 
@@ -103,6 +119,40 @@ namespace Bounce.Framework {
 
         public string CommandLineCommand {
             get { return "clean"; }
+        }
+
+        public bool IsLogged {
+            get { return true; }
+        }
+    }
+
+    internal class BounceCommandDescribe : IBounceCommand {
+        public void InvokeCommand(Action onBuild, Action onClean, Action onDescribe) {
+            onDescribe();
+        }
+
+        public string InfinitiveTense {
+            get { return "describe"; }
+        }
+
+        public string PastTense {
+            get { return "described"; }
+        }
+
+        public string PresentTense {
+            get { return "describing"; }
+        }
+
+        public IBounceCommand CleanAfterBuildCommand {
+            get { return null; }
+        }
+
+        public string CommandLineCommand {
+            get { return "describe"; }
+        }
+
+        public bool IsLogged {
+            get { return false; }
         }
     }
 }

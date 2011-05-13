@@ -13,5 +13,7 @@ namespace Bounce.Framework.Tests {
         public virtual bool IsLogged { get { return true; } }
 
         public virtual void Describe(TextWriter output) {}
+        
+        public string SmallDescription { get { return ""; }}
     }
 }

@@ -13,13 +13,13 @@ namespace Bounce.Framework {
         }
 
         public void BeginTask(ITask task, IBounceCommand command) {
-            if (logOptions.ReportTaskStart && task.IsLogged) {
+            if (logOptions.ReportTaskStart && task.IsLogged && command.IsLogged) {
                 StdOut.WriteLine("{0} task: {1}", command.PresentTense, task);
             }
         }
 
         public void EndTask(ITask task, IBounceCommand command, TaskResult result) {
-            if (logOptions.ReportTaskEnd && task.IsLogged) {
+            if (logOptions.ReportTaskEnd && task.IsLogged && command.IsLogged) {
                 if (result == TaskResult.Success) {
                     StdOut.WriteLine("{0} task: {1}", command.PastTense, task);
                 } else {
@@ -29,13 +29,13 @@ namespace Bounce.Framework {
         }
 
         public void BeginTarget(ITask task, string name, IBounceCommand command) {
-            if (logOptions.ReportTargetStart && task.IsLogged) {
+            if (logOptions.ReportTargetStart) {
                 StdOut.WriteLine("{0} target: {1}", command.PresentTense, name);
             }
         }
 
         public void EndTarget(ITask task, string name, IBounceCommand command, TaskResult result) {
-            if (logOptions.ReportTargetEnd && task.IsLogged) {
+            if (logOptions.ReportTargetEnd) {
                 if (result == TaskResult.Success) {
                     StdOut.WriteLine("{0} target: {1}", command.PastTense, name);
                 } else {
