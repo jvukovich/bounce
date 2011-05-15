@@ -9,5 +9,6 @@ namespace Bounce.Framework {
         bool IsLogged { get; }
         void Describe(TextWriter output);
         string SmallDescription { get; }
+        bool IsPure { get; }
     }
 }

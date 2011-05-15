@@ -19,5 +19,7 @@ namespace Bounce.Framework {
         public string SmallDescription {
             get { return Value.ToString(); }
         }
+
+        public virtual bool IsPure { get { return true; } }
     }
 }

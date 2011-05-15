@@ -27,53 +27,68 @@ namespace Bounce.Framework.Tests.Features {
 
             var all = new All(new PrintTask(), new PrintTask());
 
-            var ta = new TaskAggregator(dep => new TaskAggregate(dep));
+            var ta = new TaskAggregator<TaskCount>(dep => new TaskCount(dep));
             walker.Walk(new TaskDependency(all), ta.Before, ta.After);
+            Assert.That(ta.Aggregate.Count, Is.EqualTo(3));
         }
 
-        class TaskAggregate : ITaskAggregate {
-            private int Count = 0;
+        [Test]
+        public void WalkAggregatesButNoLoopingForever() {
+            var walker = new TaskWalker();
+
+            var all = new All();
+            var allDeps = new List<ITask> {new PrintTask(), new PrintTask(), all};
+            all.Tasks = allDeps;
+
+            var ta = new TaskAggregator<TaskCount>(dep => new TaskCount(dep));
+            walker.Walk(new TaskDependency(all), ta.Before, ta.After);
+            Assert.That(ta.Aggregate.Count, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void PurityAggregateReturnsPureIfAllSubTasksArePure() {
+            var walker = new TaskWalker();
+
+            var all = new All(new PureTask(), new PureTask());
+
+            var ta = new TaskAggregator<TaskPurity>(dep => new TaskPurity(dep));
+            walker.Walk(new TaskDependency(all), ta.Before, ta.After);
+            Assert.That(ta.Aggregate.Purity, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void PurityAggregateReturnsImpureIfAnySubTasksAreImpure() {
+            var walker = new TaskWalker();
+
+            var all = new All(new ImpureTask(), new PureTask());
+
+            var ta = new TaskAggregator<TaskPurity>(dep => new TaskPurity(dep));
+            walker.Walk(new TaskDependency(all), ta.Before, ta.After);
+            Assert.That(ta.Aggregate.Purity, Is.EqualTo(false));
+        }
+
+        public class PureTask : FakeTask {
+            public override bool IsPure { get { return true; } }
+        }
+
+        public class ImpureTask : FakeTask {
+            public override bool IsPure { get { return false; } }
+        }
+
+        class TaskCount : ITaskAggregate<TaskCount> {
+            public int Count = 1;
             private TaskDependency TaskDependency;
 
-            public TaskAggregate(TaskDependency taskDependency) {
+            public TaskCount(TaskDependency taskDependency) {
                 TaskDependency = taskDependency;
             }
 
-            public void Add(TaskDependency dep) {
-                Count++;
+            public void Add(TaskCount agg) {
+                Count += agg.Count;
             }
 
             public void Finally() {
-                Console.WriteLine("task {0} has {1} deps", TaskDependency.Task.SmallDescription, Count);
             }
-        }
-
-        private void WriteStack() {
-            Console.WriteLine("-----");
-            foreach (var box in Stack) {
-                Console.WriteLine(box.Description);
-                Console.WriteLine("  " + String.Join("+", box.Tasks.ToArray()));
-            }
-            Console.WriteLine();
-        }
-
-        private void After(TaskDependency obj) {
-            WriteStack();
-            Stack.Pop();
-        }
-
-        private void Before(TaskDependency obj) {
-            if (Stack.Count > 0) {
-                Stack.Peek().Tasks.Add(obj.Task.SmallDescription);
-            }
-            Stack.Push(new Box() {Description = obj.Task.SmallDescription});
-        }
-
-        private Stack<Box> Stack = new Stack<Box>();
-
-        class Box {
-            public string Description = "";
-            public List<string> Tasks = new List<string>();
         }
 
         private static TextWriter Output;

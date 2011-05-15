@@ -19,5 +19,13 @@ namespace Bounce.Framework {
         }
 
         public override bool IsLogged { get { return false; } }
+
+        public override bool IsPure
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }

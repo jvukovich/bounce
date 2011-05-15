@@ -5,16 +5,26 @@ using System.Linq;
 namespace Bounce.Framework {
     public class TaskWalker {
         public void Walk(TaskDependency task, Action<TaskDependency> beforeDependencies, Action<TaskDependency> afterDependencies) {
-            if (beforeDependencies != null) {
-                beforeDependencies(task);
+            Walk(task, beforeDependencies, afterDependencies, new HashSet<ITask>());
+        }
+
+        public void Walk(TaskDependency dep, Action<TaskDependency> beforeDependencies, Action<TaskDependency> afterDependencies, HashSet<ITask> tasksAlreadyDone) {
+            if (tasksAlreadyDone.Contains(dep.Task)) {
+                return;
             }
 
-            foreach (TaskDependency dependency in GetNonNullDependencies(task.Task)) {
-                Walk(dependency, beforeDependencies, afterDependencies);
+            tasksAlreadyDone.Add(dep.Task);
+
+            if (beforeDependencies != null) {
+                beforeDependencies(dep);
+            }
+
+            foreach (TaskDependency dependency in GetNonNullDependencies(dep.Task)) {
+                Walk(dependency, beforeDependencies, afterDependencies, tasksAlreadyDone);
             }
 
             if (afterDependencies != null) {
-                afterDependencies(task);
+                afterDependencies(dep);
             }
         }
 
@@ -28,29 +38,51 @@ namespace Bounce.Framework {
         }
     }
 
-    public class TaskAggregator {
-        Stack<ITaskAggregate> Stack = new Stack<ITaskAggregate>();
-        private Func<TaskDependency, ITaskAggregate> CreateAggregate;
+    public class TaskAggregator<T> where T : ITaskAggregate<T> {
+        Stack<T> Stack = new Stack<T>();
+        private Func<TaskDependency, T> CreateAggregate;
+        public T Aggregate { get; private set; }
 
-        public TaskAggregator(Func<TaskDependency, ITaskAggregate> createAggregate) {
+        public TaskAggregator(Func<TaskDependency, T> createAggregate) {
             CreateAggregate = createAggregate;
         }
 
         public void Before(TaskDependency dep) {
-            if (Stack.Count > 0) {
-                var taskAggregate = Stack.Peek();
-                taskAggregate.Add(dep);
-            }
             Stack.Push(CreateAggregate(dep));
         }
 
         public void After(TaskDependency dep) {
-            Stack.Pop().Finally();
+            T agg = Stack.Pop();
+
+            agg.Finally();
+
+            if (Stack.Count > 0) {
+                var taskAggregate = Stack.Peek();
+                taskAggregate.Add(agg);
+            } else {
+                Aggregate = agg;
+            }
         }
     }
 
-    public interface ITaskAggregate {
-        void Add(TaskDependency dep);
+    public interface ITaskAggregate<T> {
+        void Add(T agg);
         void Finally();
+    }
+
+    public class TaskPurity : ITaskAggregate<TaskPurity> {
+        public bool Purity { get; private set; }
+
+        public TaskPurity(TaskDependency dep)
+        {
+            Purity = dep.Task.IsPure;
+        }
+
+        public void Add(TaskPurity purity) {
+            Purity &= purity.Purity;
+        }
+
+        public void Finally () {
+        }
     }
 }

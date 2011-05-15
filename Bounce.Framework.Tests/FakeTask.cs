@@ -15,5 +15,7 @@ namespace Bounce.Framework.Tests {
         public virtual void Describe(TextWriter output) {}
         
         public string SmallDescription { get { return ""; }}
+
+        public virtual bool IsPure { get { return false; } }
     }
 }

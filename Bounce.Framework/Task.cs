@@ -37,6 +37,8 @@ namespace Bounce.Framework {
 
         public virtual bool IsLogged { get { return true; } }
 
+        public virtual bool IsPure { get { return false; } }
+
         public virtual void Describe(IBounce bounce) {
             Describe(bounce.LogOptions.StdOut);
         }
