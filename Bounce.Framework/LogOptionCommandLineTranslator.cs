@@ -25,6 +25,7 @@ namespace Bounce.Framework {
             parsedParameters.IfParameterDo(LogFileParameter, logFileName =>
                                                       {
                                                           var textWriter = File.AppendText(logFileName);
+                                                          textWriter.AutoFlush = true;
                                                           bounce.LogOptions.StdOut = textWriter;
                                                           bounce.LogOptions.StdErr = textWriter;
                                                       });
