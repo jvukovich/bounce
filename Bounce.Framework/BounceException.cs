@@ -6,6 +6,9 @@ namespace Bounce.Framework {
         public BounceException(string message) : base(message) {
         }
 
+        public BounceException(string message, Exception innerException) : base(message, innerException) {
+        }
+
         public BounceException() {
         }
 

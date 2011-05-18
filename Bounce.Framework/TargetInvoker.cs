@@ -84,9 +84,15 @@ namespace Bounce.Framework {
         private void InvokeAndLog(ITask task, IBounceCommand command)
         {
             using (var taskScope = Bounce.TaskScope(task, command, null)) {
-                task.Describe(Bounce.DescriptionOutput);
-                task.Invoke(command, Bounce);
-                taskScope.TaskSucceeded();
+                try {
+                    task.Describe(Bounce.DescriptionOutput);
+                    task.Invoke(command, Bounce);
+                    taskScope.TaskSucceeded();
+                } catch (BounceException) {
+                    throw;
+                } catch (Exception e) {
+                    throw new TaskException(task, e);
+                }
             }
         }
     }

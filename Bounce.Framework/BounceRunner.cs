@@ -40,9 +40,18 @@ namespace Bounce.Framework {
                     var bounce = new Bounce();
 
                     InterpretParameters(parameters, parsedParameters, bounce);
-                    EnsureAllRequiredParametersAreSet(parameters, commandAndTargets.Targets);
 
-                    BuildTargets(bounce, commandAndTargets);
+                    try
+                    {
+                        EnsureAllRequiredParametersAreSet(parameters, commandAndTargets.Targets);
+
+                        BuildTargets(bounce, commandAndTargets);
+                    }
+                    catch (BounceException ce)
+                    {
+                        ce.Explain(bounce.LogOptions.StdErr);
+                        Environment.Exit(1);
+                    }
                 }
                 else
                 {
