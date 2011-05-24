@@ -27,7 +27,7 @@ namespace Bounce.Framework {
             processInfo.RedirectStandardError = true;
             processInfo.RedirectStandardOutput = true;
             processInfo.UseShellExecute = false;
-            processInfo.ErrorDialog = true;
+            processInfo.ErrorDialog = false;
             
             var p = new Process { StartInfo = processInfo };
 
