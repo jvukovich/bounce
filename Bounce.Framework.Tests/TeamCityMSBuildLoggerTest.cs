@@ -1,4 +1,5 @@
 using System.IO;
+using Bounce.TestHelpers;
 using NUnit.Framework;
 
 namespace Bounce.Framework.Tests {
@@ -8,7 +9,7 @@ namespace Bounce.Framework.Tests {
         public void ShouldBeWarning() {
             TextWriter output = new StringWriter();
 
-            var logger = new TeamCityMsBuildLogger("SomeSolution.sln", output);
+            var logger = new TeamCityMsBuildLogger("SomeSolution.sln", output, new FakeCommandLog(null, null));
 
             logger.CommandOutput("BounceRunner.cs(103,32): warning CS0168: The variable 'e' is declared but never used");
 

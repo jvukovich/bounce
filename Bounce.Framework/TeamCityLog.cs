@@ -53,13 +53,15 @@ namespace Bounce.Framework {
         public override ICommandLog BeginExecutingCommand(string command, string args) {
             var commandName = Path.GetFileName(command).ToLower();
 
+            ICommandLog log = base.BeginExecutingCommand(command, args);
+
             switch (commandName) {
                 case "msbuild.exe":
-                    return new TeamCityMsBuildLogger(args, Output);
+                    return new TeamCityMsBuildLogger(args, Output, log);
                 case "nunit-console.exe":
-                    return new TeamCityNUnitLogger(args, Output);
+                    return new TeamCityNUnitLogger(args, Output, log);
                 default:
-                    return base.BeginExecutingCommand(command, args);
+                    return log;
             }
         }
     }
