@@ -16,9 +16,21 @@ namespace Bounce.Framework
         /// </summary>
         [Dependency] public Task<string> NUnitConsolePath;
 
+        /// <summary>
+        /// Categories to include in the test run.
+        /// </summary>
+        [Dependency] public Task<IEnumerable<string>> IncludeCategories;
+
+        /// <summary>
+        /// Categories to exclude in the test run.
+        /// </summary>
+        [Dependency] public Task<IEnumerable<string>> ExcludeCategories;
+
         public NUnitTests()
         {
             NUnitConsolePath = @"c:\Program Files (x86)\NUnit\nunit-console.exe";
+            ExcludeCategories = new string[0];
+            IncludeCategories = new string[0];
         }
 
         public override void Build(IBounce bounce)
@@ -27,7 +39,41 @@ namespace Bounce.Framework
             string joinedTestDlls = "\"" + String.Join("\" \"", testDlls.ToArray()) + "\"";
 
             bounce.Log.Info("running unit tests for: " + joinedTestDlls);
-            bounce.ShellCommand.ExecuteAndExpectSuccess(NUnitConsolePath.Value, joinedTestDlls);
+
+            var args = new[]
+            {
+                Excludes,
+                Includes,
+                joinedTestDlls,
+            };
+
+            bounce.ShellCommand.ExecuteAndExpectSuccess(NUnitConsolePath.Value, String.Join(" ", args));
+        }
+
+        string Excludes
+        {
+            get
+            {
+                return GetIncludeExcludeArgument("exclude", ExcludeCategories);
+            }
+        }
+
+        string Includes
+        {
+            get {
+                return GetIncludeExcludeArgument("include", IncludeCategories);
+            }
+        }
+
+        private string GetIncludeExcludeArgument(string argumentName, Task<IEnumerable<string>> categories)
+        {
+            if (categories.Value.Count() > 0)
+            {
+                return "/" + argumentName + "=" + String.Join(",", categories.Value.ToArray());
+            } else
+            {
+                return "";
+            }
         }
     }
 }
