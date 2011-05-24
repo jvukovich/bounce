@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -112,7 +111,6 @@ namespace TestBounceAssembly {
             };
         }
 
-        [Targets]
         public static object RealTargets(IParameters buildParameters) {
             var version = buildParameters.Required<string>("version");
 
@@ -173,117 +171,6 @@ namespace TestBounceAssembly {
             return new {
                            Simple = new SimpleTask {Description = "our simple task"},
                        };
-        }
-    }
-
-    public class MultiStage2 {
-        public static object GetTargets (IParameters parameters) {
-            var archive = new Archive(parameters.Default("archive", false), "archive");
-            var solution = new VisualStudioSolution {
-                SolutionPath = @"C:\Users\Public\Documents\Development\BigSolution\BigSolution.sln",
-            };
-            var service = archive.Begin("service", solution.Projects["BigWindowsService"].ProjectDirectory);
-            var tests = archive.Begin("tests", solution.Projects["BigSolution.Tests"].ProjectDirectory);
-
-            return new {
-                Service = new PrintTask(Console.Out) { Description = service },
-                Tests = new PrintTask(Console.Out) { Description = tests },
-            };
-        }
-    }
-
-    public class MultiStage {
-        public static object GetTargets (IParameters parameters) {
-            var archive = new Archive(
-                parameters.Default("archive", false),
-                "archive"
-            );
-
-            var beforeArchive1 = new PrintTaskWithPath() {
-                Description = "before archive 1",
-                Path = @"fromdir1",
-            };
-            var beforeArchive2 = new PrintTaskWithPath() {
-                Description = "before archive 2",
-                Path = @"fromdir2",
-            };
-
-            var webServiceDirectory1 = archive.Begin(
-                "WebSite",
-                beforeArchive1.Path
-            );
-            var webServiceDirectory2 = archive.Begin(
-                "WebSite",
-                beforeArchive2.Path
-            );
-
-            var webSite = new PrintTaskWithPath {
-                Description = "after archive",
-                Path = webServiceDirectory1,
-            };
-
-            return new {
-                Service = archive.End(webSite),
-            };
-        }
-    }
-
-    public class Archive : Task {
-        public Task<bool> IsArchive;
-        private Task<string> ArchiveDirectory;
-
-        private List<Task<string>> ProjectDirectories;
-
-        public Archive(Task<bool> isArchive, Task<string> archiveDirectory) {
-            IsArchive = isArchive;
-            ArchiveDirectory = archiveDirectory;
-            ProjectDirectories = new List<Task<string>>();
-        }
-
-        public Task<string> Begin(string service, Task<string> projectDirectory) {
-            ArchiveDirectory = "archive";
-            ProjectDirectories.Add(projectDirectory);
-            return new ArchivePath(projectDirectory, IsArchive, ArchiveDirectory);
-        }
-
-        class ArchivePath : TaskWithValue<string> {
-            [Dependency] private readonly Task<string> Directory;
-            [Dependency] private readonly Task<bool> IsArchive;
-            [Dependency] private readonly Task<string> ArchiveDirectory;
-            [Dependency] private readonly ITask ArchivedDirectory;
-
-            public ArchivePath(Task<string> directory, Task<bool> isArchive, Task<string> archiveDirectory) {
-                Directory = directory;
-                IsArchive = isArchive;
-                ArchivedDirectory = IsArchive.IfTrue(new Copy {FromPath = Directory, ToPath = new CleanDirectory {Path = archiveDirectory}.Path});
-                ArchiveDirectory = archiveDirectory;
-            }
-
-            protected override string GetValue() {
-                return Path.Combine(ArchiveDirectory.Value, Path.GetFileName(Directory.Value));
-            }
-        }
-
-        public ITask End(ITask task) {
-            return IsArchive.SelectTask(isArchive => {
-                if (isArchive) {
-                    return new MultiTask<Task<string>>(ProjectDirectories);
-                } else {
-                    return task;
-                }
-            });
-        }
-
-        public class MultiTask<TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
-            private readonly IEnumerable<TOutput> Tasks;
-
-            public MultiTask(IEnumerable<TOutput> tasks) {
-                Tasks = tasks;
-            }
-
-            public override IEnumerable<TOutput> GetTasks(IBounce bounce) {
-                return Tasks;
-            }
         }
     }
 
@@ -370,6 +257,20 @@ namespace TestBounceAssembly {
 
         return targets.Targets;
     }
+    }
+
+    public class LongRunningTask : Task
+    {
+        [Targets]
+        public static object GetTargets()
+        {
+            return new {LongRunning = new LongRunningTask()};
+        }
+
+        public override void Build(IBounce bounce)
+        {
+            bounce.ShellCommand.ExecuteAndExpectSuccess(@"VeryLongRunningConsole\bin\Debug\VeryLongRunningConsole", "");
+        }
     }
 
     public class SubBounce : Task {

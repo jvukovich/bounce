@@ -22,7 +22,59 @@ namespace Bounce.Framework {
         public ProcessOutput Execute(string commandName, string commandArgs) {
             ICommandLog commandLog = GetLog().BeginExecutingCommand(commandName, commandArgs);
 
-            var processInfo = new ProcessStartInfo(commandName, commandLog.CommandArgumentsForLogging);
+            string commandArgumentsForLogging = commandLog.CommandArgumentsForLogging;
+            var output = new CommandOutputReceiver(commandLog);
+
+            Process p = CreateProcess(commandName, commandArgumentsForLogging, output);
+
+
+            try
+            {
+                RunProcess(p);
+            }
+            catch (Win32Exception win32Ex)
+            {
+                if (win32Ex.NativeErrorCode == 2)
+                { // executable file not found
+                    throw new ShellExecutableNotFoundException(commandName);
+                }
+                throw;
+            }
+
+            commandLog.CommandComplete(p.ExitCode);
+
+            return new ProcessOutput
+            {
+                ExitCode = p.ExitCode,
+                Output = output.Output,
+                Error = output.Error,
+                ErrorAndOutput = output.ErrorAndOutput
+            };
+        }
+
+        private void RunProcess(Process p)
+        {
+            ConsoleCancelEventHandler killOnCtrlC = (sender, cancelEvent) => p.Kill();
+
+            p.Start();
+
+            System.Console.CancelKeyPress += killOnCtrlC;
+
+            try
+            {
+                p.BeginErrorReadLine();
+                p.BeginOutputReadLine();
+                p.WaitForExit();
+            }
+            finally
+            {
+                System.Console.CancelKeyPress -= killOnCtrlC;
+            }
+        }
+
+        private Process CreateProcess(string commandName, string commandArgumentsForLogging, CommandOutputReceiver output)
+        {
+            var processInfo = new ProcessStartInfo(commandName, commandArgumentsForLogging);
             processInfo.CreateNoWindow = true;
             processInfo.RedirectStandardError = true;
             processInfo.RedirectStandardOutput = true;
@@ -31,32 +83,15 @@ namespace Bounce.Framework {
             
             var p = new Process { StartInfo = processInfo };
 
-            var output = new CommandOutputReceiver(commandLog);
             
             p.ErrorDataReceived += output.ErrorDataReceived;
             p.OutputDataReceived += output.OutputDataReceived;
+            return p;
+        }
 
-            try {
-                p.Start();
-                
-                p.BeginErrorReadLine();
-                p.BeginOutputReadLine();
-                p.WaitForExit();
-                
-                commandLog.CommandComplete(p.ExitCode);
-
-                return new ProcessOutput {
-                                             ExitCode = p.ExitCode,
-                                             Output = output.Output,
-                                             Error = output.Error,
-                                             ErrorAndOutput = output.ErrorAndOutput
-                                         };
-            } catch (Win32Exception win32Ex) {
-                if (win32Ex.NativeErrorCode == 2) { // executable file not found
-                    throw new ShellExecutableNotFoundException(commandName);
-                }
-                throw;
-            }
+        void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
