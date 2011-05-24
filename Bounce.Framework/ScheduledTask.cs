@@ -63,6 +63,7 @@ namespace Bounce.Framework
                                            GetSetting(Name, "TN"),
                                            GetSetting(BinaryPath, "TR"),
                                            SchTasksArguments.Value,
+                                           GetForceSetting(),
                                        });
         }
 
