@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 
 namespace Bounce.Framework {
     public class ShellCommandExecutor : IShellCommandExecutor {
@@ -26,7 +25,6 @@ namespace Bounce.Framework {
             var output = new CommandOutputReceiver(commandLog);
 
             Process p = CreateProcess(commandName, commandArgumentsForLogging, output);
-
 
             try
             {
@@ -87,11 +85,6 @@ namespace Bounce.Framework {
             p.ErrorDataReceived += output.ErrorDataReceived;
             p.OutputDataReceived += output.OutputDataReceived;
             return p;
-        }
-
-        void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }
