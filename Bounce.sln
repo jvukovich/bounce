@@ -1,6 +1,17 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{99A9728C-CE6A-4657-8E52-DA2302A37EC3}"
+	ProjectSection(SolutionItems) = preProject
+		docs\notes_from_patterns_group_bbc.txt = docs\notes_from_patterns_group_bbc.txt
+		README.markdown = README.markdown
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bounce", "Bounce", "{6B9741C2-D739-4C73-A613-9AA6F72A979A}"
+	ProjectSection(SolutionItems) = preProject
+		Bounce\beforebounce.bat = Bounce\beforebounce.bat
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework", "Bounce.Framework\Bounce.Framework.csproj", "{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console", "Bounce.Console\Bounce.Console.csproj", "{BD123B60-C18A-4446-808E-F4B81D0EE23D}"
@@ -11,18 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console.Tests", "Bou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBounceAssembly", "TestBounceAssembly\TestBounceAssembly.csproj", "{FFDD5742-FB1D-425F-91BA-58B097FFB51B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{99A9728C-CE6A-4657-8E52-DA2302A37EC3}"
-	ProjectSection(SolutionItems) = preProject
-		docs\notes_from_patterns_group_bbc.txt = docs\notes_from_patterns_group_bbc.txt
-		README.markdown = README.markdown
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.TestHelpers", "Bounce.TestHelpers\Bounce.TestHelpers.csproj", "{E7E05DAC-9A59-41F5-9FED-47FDF809A699}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bounce", "Bounce", "{6B9741C2-D739-4C73-A613-9AA6F72A979A}"
-	ProjectSection(SolutionItems) = preProject
-		Bounce\beforebounce.bat = Bounce\beforebounce.bat
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryLongRunningConsole", "VeryLongRunningConsole\VeryLongRunningConsole.csproj", "{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}"
 EndProject
