@@ -18,7 +18,7 @@ namespace Bounce.Framework
 
         protected override void BuildTask(IBounce bounce)
         {
-            if (IsServiceInstalled(bounce))
+            if (IsServiceInstalled(bounce) && !IsServiceStopped(bounce))
             {
                 StopService(bounce);
 
