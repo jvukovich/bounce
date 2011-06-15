@@ -24,7 +24,7 @@ namespace Bounce.Framework {
 
         public void CommandComplete(int exitCode) {
             var resultsPath = Path.GetFullPath("TestResult.xml");
-            Output.WriteLine(TeamCityFormatter.FormatTeamCityMessage("importData", "type", "nunit", "path", resultsPath));
+            Output.WriteLine(TeamCityFormatter.FormatTeamCityMessageWithFields("importData", "type", "nunit", "path", resultsPath));
             Log.CommandComplete(exitCode);
         }
 

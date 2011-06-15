@@ -34,11 +34,11 @@ namespace Bounce.Framework {
         }
 
         private string FormatErrorMessage(object message) {
-            return TeamCityFormatter.FormatTeamCityMessage("message", "text", message.ToString(), "status", "ERROR");
+            return TeamCityFormatter.FormatTeamCityMessageWithFields("message", "text", message.ToString(), "status", "ERROR");
         }
 
         private string FormatException(Exception message) {
-            return TeamCityFormatter.FormatTeamCityMessage("message", "text", message.Message, "errorDetails", message.ToString(), "status", "ERROR");
+            return TeamCityFormatter.FormatTeamCityMessageWithFields("message", "text", message.Message, "errorDetails", message.ToString(), "status", "ERROR");
         }
 
         private void LogErrorMessage(object message) {

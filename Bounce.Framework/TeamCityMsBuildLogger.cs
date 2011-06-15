@@ -32,12 +32,12 @@ namespace Bounce.Framework {
         public void CommandOutput(string output) {
             if (output != null) {
                 if (warningRegex.IsMatch(output)) {
-                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage(
+                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessageWithFields(
                         "message",
                         "text", output,
                         "status", "WARNING"));
                 } else if (errorRegex.IsMatch(output)) {
-                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessage(
+                    stdout.WriteLine(TeamCityFormatter.FormatTeamCityMessageWithFields(
                         "message",
                         "text", output,
                         "status", "ERROR"));

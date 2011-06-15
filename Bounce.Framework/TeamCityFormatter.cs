@@ -8,7 +8,7 @@ namespace Bounce.Framework {
             TextFormatter = new TeamCityTextFormatter();
         }
 
-        public string FormatTeamCityMessage(string name, params string [] fields) {
+        public string FormatTeamCityMessageWithFields(string name, params string [] fields) {
             var output = new StringBuilder();
             output.Append("##teamcity[" + name);
 
@@ -19,6 +19,10 @@ namespace Bounce.Framework {
             output.Append("]");
 
             return output.ToString();
+        }
+
+        public string FormatTeamCityMessage(string name, string message) {
+            return "##teamcity[" + name + " '" + TextFormatter.FormatTeamCityText(message) + "']";
         }
     }
 }
