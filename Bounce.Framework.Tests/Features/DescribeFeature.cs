@@ -13,7 +13,7 @@ namespace Bounce.Framework.Tests.Features {
             Output = new StringWriter();
         }
 
-        [Test, Ignore]
+        [Test, Ignore] // not finished yet!
         public void ShouldBuildMoreThanOneTarget() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
             new BounceRunner().Run(new[] {"describe", "One", "Two", "Three", "/env:test"}, method);
