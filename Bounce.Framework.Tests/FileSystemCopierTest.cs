@@ -56,7 +56,7 @@ namespace Bounce.Framework.Tests {
             IEnumerable<string> includes = new string[0];
             new FileSystemCopier(files.Object, dirs.Object).Copy(from, to, excludes, includes, true);
 
-            dirs.Verify(d => d.DeleteDirectory(to));
+            dirs.Verify(d => d.DeleteDirectory(to), Times.Never());
             dirs.Verify(d => d.CopyDirectory(from, to, excludes, includes));
         }
 
