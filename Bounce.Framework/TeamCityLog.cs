@@ -8,7 +8,7 @@ namespace Bounce.Framework {
         private TeamCityFormatter TeamCityFormatter;
 
         public TeamCityLog(TextWriter output, LogOptions logOptions, ILogMessageFormatter logMessageFormatter) : base(output, output, logOptions, logMessageFormatter) {
-            this.Output = output;
+            Output = output;
             LogOptions = logOptions;
             TeamCityFormatter = new TeamCityFormatter();
         }
@@ -50,19 +50,26 @@ namespace Bounce.Framework {
             Output.WriteLine(FormatException(exception));
         }
 
-        public override ICommandLog BeginExecutingCommand(string command, string args) {
+        public override ICommandLog BeginExecutingCommand(string command, string args)
+        {
             var commandName = Path.GetFileName(command).ToLower();
 
             ICommandLog log = base.BeginExecutingCommand(command, args);
 
-            switch (commandName) {
+            switch (commandName)
+            {
                 case "msbuild.exe":
                     return new TeamCityMsBuildLogger(args, Output, log);
                 case "nunit-console.exe":
-                    return new TeamCityNUnitLogger(args, Output, log);
+                    return NUnitLogger(args, Output, log);
                 default:
                     return log;
             }
         }
+
+        public virtual ICommandLog NUnitLogger(string args, TextWriter output, ICommandLog log) {
+            return new TeamCityNUnitLogger(args, output, log);            
+        }
+
     }
 }
