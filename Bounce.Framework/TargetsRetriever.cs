@@ -17,5 +17,9 @@ namespace Bounce.Framework {
         public IDictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, IParameters parameters) {
             return TargetsParser.ParseTargetsFromObject(TargetsMethodInvoker.InvokeTargetsMethod(getTargetsMethod, parameters));
         }
+
+        public IDictionary<string, ITask> GetTargetsFromObject(object targets) {
+            return TargetsParser.ParseTargetsFromObject(targets);
+        }
     }
 }

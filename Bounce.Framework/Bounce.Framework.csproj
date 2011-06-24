@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bounce.Framework</RootNamespace>
     <AssemblyName>Bounce.Framework</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,8 +87,14 @@
     <Compile Include="BounceCommand.cs" />
     <Compile Include="BounceCommandBuild.cs" />
     <Compile Include="BounceCommandExtensions.cs" />
+    <Compile Include="BounceCommandFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceExceptionPresenter.cs" />
+    <Compile Include="BounceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="BounceRunner.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="BuildResult.cs" />
