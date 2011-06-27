@@ -53,7 +53,14 @@ namespace Bounce.Framework {
 
         public void DeleteDirectory(string dir) {
             if (Directory.Exists(dir)) {
-                Directory.Delete(dir, true);
+                try
+                {
+                    Directory.Delete(dir, true);
+                }
+                catch(Exception ex)
+                {
+                    throw new IOException(string.Format("Failed to delete {0}. {1}", dir, ex.Message), ex);
+                }
             }
         }
 
@@ -64,7 +71,7 @@ namespace Bounce.Framework {
                 }
 
                 foreach(var path in Directory.GetDirectories(dir)) {
-                    Directory.Delete(path, true);
+                    DeleteDirectory(path);
                 }
             }
         }
