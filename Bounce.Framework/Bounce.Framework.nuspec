@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Bounce-CI</id>
+    <version>$version$</version>
+    <authors>Tim MacFarlane and contributors</authors>
+	<language>en-GB</language>
+    <owners>Tim MacFarlane and contributors</owners>
+    <licenseUrl>https://github.com/refractalize/bounce/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/refractalize/bounce</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A new build framework for C# projects.</description>
+    <tags>build</tags>
+  </metadata>
+</package>
