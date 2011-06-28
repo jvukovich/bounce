@@ -90,7 +90,6 @@
     <Compile Include="BounceRunner.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="BuildResult.cs" />
-    <Compile Include="CachedDeploys.cs" />
     <Compile Include="CleanAfterBuildAttribute.cs" />
     <Compile Include="CleanAfterBuildRegister.cs" />
     <Compile Include="CommandAndTargetParser.cs" />

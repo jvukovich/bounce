@@ -6,19 +6,17 @@ namespace Bounce.Framework
     {
         public IDictionary<string, ITask> Targets { get; private set; }
         private Parameter<string> Stage;
-        private CachedDeploys CachedDeploys;
 
         public StagedDeployTargetBuilder(Parameter<string> stage, IDictionary<string, ITask> targets) {
             Targets = targets;
             Stage = stage;
-            CachedDeploys = new CachedDeploys();
         }
 
         public StagedDeployTargetBuilder(Parameter<string> stage) : this(stage, new Dictionary<string, ITask>()) {
         }
 
         public StagedDeployTarget CreateTarget(string name) {
-            var target = new StagedDeployTarget(name, Stage, CachedDeploys);
+            var target = new StagedDeployTarget(name, Stage);
             Targets[name] = target;
             return target;
         }
