@@ -86,8 +86,10 @@
     <Compile Include="BounceCommand.cs" />
     <Compile Include="BounceCommandBuild.cs" />
     <Compile Include="BounceCommandExtensions.cs" />
+    <Compile Include="BounceCommandFactory.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceExceptionPresenter.cs" />
+    <Compile Include="BounceFactory.cs" />
     <Compile Include="BounceRunner.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="BuildResult.cs" />
@@ -103,6 +105,8 @@
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="CompilationLog.cs" />
     <Compile Include="ConditionParseException.cs" />
+    <Compile Include="ITargetsBuilder.cs" />
+    <Compile Include="TargetsBuilder.cs" />
     <Compile Include="TeamCity5NUnitLogger.cs" />
     <Compile Include="Delete.cs" />
     <Compile Include="DependencyAttribute.cs" />

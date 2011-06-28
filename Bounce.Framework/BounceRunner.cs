@@ -9,16 +9,18 @@ namespace Bounce.Framework {
         private readonly ITargetsRetriever TargetsRetriever;
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
         private readonly IParameterFinder ParameterFinder;
+        private ITargetsBuilder TargetsBuilder;
         private CommandAndTargetParser CommandAndTargetParser;
 
         public static string TargetsPath { get; private set; }
 
-        public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator(), new ParameterFinder()) {}
+        public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator(), new ParameterFinder(), new TargetsBuilder()) {}
 
-        public BounceRunner (ITargetsRetriever targetsRetriever, ILogOptionCommandLineTranslator logOptionCommandLineTranslator, IParameterFinder parameterFinder) {
+        public BounceRunner (ITargetsRetriever targetsRetriever, ILogOptionCommandLineTranslator logOptionCommandLineTranslator, IParameterFinder parameterFinder, ITargetsBuilder targetsBuilder) {
             TargetsRetriever = targetsRetriever;
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
             ParameterFinder = parameterFinder;
+            TargetsBuilder = targetsBuilder;
             CommandAndTargetParser = new CommandAndTargetParser(new BounceCommandParser());
         }
 
@@ -74,17 +76,8 @@ namespace Bounce.Framework {
         }
 
         private void BuildTargets(Bounce bounce, CommandAndTargets commandAndTargets) {
-            foreach(var target in commandAndTargets.Targets) {
-                BuildTarget(bounce, target, commandAndTargets.Command);
-            }
+            TargetsBuilder.BuildTargets(bounce, commandAndTargets.Targets, commandAndTargets.Command);
             bounce.CleanAfterBuild(commandAndTargets.Command);
-        }
-
-        private void BuildTarget(Bounce bounce, Target target, IBounceCommand command) {
-            using (ITaskScope targetScope = bounce.TaskScope(target.Task, command, target.Name)) {
-                bounce.Invoke(command, target.Task);
-                targetScope.TaskSucceeded();
-            }
         }
 
         private IDictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
