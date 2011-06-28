@@ -6,6 +6,12 @@ A new build framework for C# projects.
 ## Install
 Get the latest release from the [downloads](http://github.com/refractalize/bounce/downloads) page, extract, place `bounce.exe` in your `%PATH%`, and place the DLLs in your project references. Too easy?
 
+You also install the latest build  using [NuGet](http://nuget.org/Packages/Search?packageType=Packages&searchCategory=All+Categories&searchTerm=bounce):
+<pre>
+  PM> Install-Package Bounce-CI
+</pre>
+Though, please note that this is still a work in progress.
+
 ## Why use Bounce?
 
 For clean, beautiful build scripts! Bounce is a build framework based on functional
@@ -118,3 +124,8 @@ And, `bounce` will tell you what arguments you have available too:
 	  WebSite
 	    /port default: 5001
 	  Tests
+
+## Housekeeping
+
+Bounce is built using [CodeBetter's TeamCity Server](http://teamcity.codebetter.com/project.html?projectId=project132).
+
