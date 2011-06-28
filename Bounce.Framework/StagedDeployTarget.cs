@@ -14,16 +14,14 @@ namespace Bounce.Framework {
         public const string DeployStage = "deploy";
 
         public Parameter<string> Stage { get; private set; }
-        private readonly CachedDeploys CachedDeploys;
 
         [Dependency]
         private readonly Switch<string> Switch;
 
-        public StagedDeployTarget(string name, Parameter<string> stage, CachedDeploys cachedDeploys)
+        public StagedDeployTarget(string name, Parameter<string> stage)
         {
             Name = name;
             Stage = stage;
-            CachedDeploys = cachedDeploys;
             Switch = new Switch<string>(stage);
             PrepareDeploy = package => package;
             InvokeRemoteDeploy = package => package;
@@ -44,7 +42,7 @@ namespace Bounce.Framework {
         }
 
         private Task<string> GetPreparedDeployPackage(Task<string> package) {
-            return package.WithDependencyOn(CachedDeploys.Deploy(package, PrepareDeploy));
+            return package.WithDependencyOn(PrepareDeploy(package));
         }
 
         private ITask GetInvokeRemoteDeploy(Task<string> package)
