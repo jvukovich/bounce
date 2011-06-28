@@ -11,5 +11,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A new build framework for C# projects.</description>
     <tags>build</tags>
+    <dependencies>
+      <dependency id="SharpZipLib" version="0.86.0" />
+    </dependencies>
   </metadata>
 </package>
