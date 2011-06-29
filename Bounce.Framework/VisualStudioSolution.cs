@@ -13,7 +13,7 @@ namespace Bounce.Framework {
         public Task<string> MsBuildExe;
 
         public VisualStudioSolution() {
-            MsBuildExe = @"C:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe";
+            MsBuildExe = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe");
         }
 
         public VisualStudioSolutionProjects Projects {
@@ -25,7 +25,32 @@ namespace Bounce.Framework {
         public override void Build(IBounce bounce) {
             bounce.Log.Info("building solution at: " + SolutionPath.Value);
 
-            bounce.ShellCommand.ExecuteAndExpectSuccess(MsBuildExe.Value, String.Format(@"""{0}""", SolutionPath.Value));
+            var arguments = Arguments(
+                "\"" + SolutionPath.Value + "\"",
+                ConfigIfSpecified
+            );
+
+            bounce.ShellCommand.ExecuteAndExpectSuccess(MsBuildExe.Value, arguments);
+        }
+
+        private static string Arguments(params string [] args)
+        {
+            return String.Join(" ", args.Where(a => a != null).ToArray());
+        }
+
+        protected string ConfigIfSpecified
+        {
+            get
+            {
+                if (Configuration == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return "/p:Configuration=" + Configuration.Value;
+                }
+            }
         }
 
         internal VisualStudioSolutionDetails SolutionDetails {
