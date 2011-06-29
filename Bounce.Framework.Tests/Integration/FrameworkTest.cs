@@ -15,12 +15,12 @@ namespace Bounce.Framework.Tests.Integration {
 
         [SetUp]
         public void Setup() {
-            if (Directory.Exists(FrameworkTestFolder)) {
+            if (Directory.Exists(GitCheckoutDirectory)) {
                 Directory.Delete(GitCheckoutDirectory, true);
             }
         }
 
-        [Test]
+        [Test, Ignore]
         public void AbleToUseBounceFromOutside() {
 
             // arrange
@@ -40,13 +40,12 @@ namespace Bounce.Framework.Tests.Integration {
         }
 
         public static object GetTargets(IParameters parameters) {
-            var git = new GitCheckout {
-                Repository = "git@github.com:alexanderbeletsky/bounce.git",
-                Directory = GitCheckoutDirectory
+            var dir = new CleanDirectory {
+                Path = GitCheckoutDirectory
             };
 
             return new {
-                Checkout = git
+                Directory = dir
             };
         }
     }
