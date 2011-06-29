@@ -20,7 +20,7 @@ namespace Bounce.Framework.Tests.Integration {
             }
         }
 
-        [Test, Ignore]
+        [Test]
         public void AbleToUseBounceFromOutside() {
 
             // arrange
