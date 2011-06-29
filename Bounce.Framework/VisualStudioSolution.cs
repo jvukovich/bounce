@@ -16,8 +16,16 @@ namespace Bounce.Framework {
             MsBuildExe = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe");
         }
 
-        public VisualStudioSolutionProjects Projects {
+        [Obsolete("Use Projects")]
+        public VisualStudioSolutionProjectsObsolete ProjectsObsolete {
             get {
+                return new VisualStudioSolutionProjectsObsolete(this);
+            }
+        }
+
+        public VisualStudioSolutionProjects Projects {
+            get
+            {
                 return new VisualStudioSolutionProjects(this);
             }
         }

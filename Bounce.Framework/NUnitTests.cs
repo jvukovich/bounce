@@ -9,7 +9,7 @@ namespace Bounce.Framework
         /// <summary>
         /// List of paths to test DLLs
         /// </summary>
-        [Dependency] public IEnumerable<Task<string>> DllPaths;
+        [Dependency] public Task<IEnumerable<string>> DllPaths;
 
         /// <summary>
         /// Full path to nunit-console.exe
@@ -35,8 +35,7 @@ namespace Bounce.Framework
 
         public override void Build(IBounce bounce)
         {
-            IEnumerable<string> testDlls = DllPaths.Select(dll => dll.Value);
-            string joinedTestDlls = "\"" + String.Join("\" \"", testDlls.ToArray()) + "\"";
+            string joinedTestDlls = "\"" + String.Join("\" \"", DllPaths.Value.ToArray()) + "\"";
 
             bounce.Log.Info("running unit tests for: " + joinedTestDlls);
 

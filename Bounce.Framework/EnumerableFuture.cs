@@ -57,6 +57,16 @@ namespace Bounce.Framework
             return new DependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }
 
+        public static Task<IEnumerable<TOutput>> Select<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, TOutput> getResult)
+        {
+            return tasks.WhenBuilt(t => t.Select(getResult));
+        }
+
+        public static Task<IEnumerable<TInput>> Where<TInput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, bool> getResult)
+        {
+            return tasks.WhenBuilt(t => t.Where(getResult));
+        }
+
         public static Task<IEnumerable<TOutput>> SelectManyTasks<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, IEnumerable<TOutput>> getResult) where TOutput : ITask {
             return new ManyDependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }

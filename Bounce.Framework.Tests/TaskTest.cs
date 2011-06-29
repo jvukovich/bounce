@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -19,10 +20,10 @@ namespace Bounce.Framework.Tests {
 
         [Test]
         public void NUnitTestShouldDependOnDlls() {
-            var paths = new Task<string> [] {"one", "two"};
+            Task<IEnumerable<string>> paths = new string [] {"one", "two"};
             var tests = new NUnitTests {DllPaths = paths};
-            
-            Assert.That(tests.Dependencies.Select(d => d.Task), Has.Member(paths[0]).And.Member(paths[1]));
+
+            Assert.That(tests.Dependencies.Select(d => d.Task), Has.Member(paths));
         }
 
         [Test]

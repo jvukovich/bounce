@@ -270,7 +270,7 @@
     <Compile Include="VisualStudioSolutionFileLoader.cs" />
     <Compile Include="VisualStudioSolutionFileReader.cs" />
     <Compile Include="VisualStudioSolutionProjectReference.cs" />
-    <Compile Include="VisualStudioSolutionProjects.cs" />
+    <Compile Include="VisualStudioSolutionProjectsObsolete.cs" />
     <Compile Include="WindowsService.cs" />
     <Compile Include="WindowsServiceBaseTask.cs" />
     <Compile Include="WindowsServiceStartupType.cs" />

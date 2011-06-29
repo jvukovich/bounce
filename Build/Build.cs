@@ -13,6 +13,7 @@ namespace Build
         {
             var v4 = new VisualStudioSolution {SolutionPath = @"Bounce.sln", Configuration = "Debug"};
             var v35 = new VisualStudioSolution {SolutionPath = @"Bounce.sln", Configuration = "Debug_3_5"};
+            var tests = new NUnitTests {DllPaths = v4.Projects.Where(p => p.Name.EndsWith("Tests")).Select(p => p.OutputFile)};
 
             return new
             {

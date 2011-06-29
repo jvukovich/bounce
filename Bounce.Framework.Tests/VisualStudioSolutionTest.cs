@@ -16,7 +16,7 @@ namespace Bounce.Framework.Tests {
 
             solution.Build();
 
-            Assert.That(File.Exists(solution.Projects["TestSolution"].OutputFile.Value));
+            Assert.That(File.Exists(solution.ProjectsObsolete["TestSolution"].OutputFile.Value));
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace Bounce.Framework.Tests {
 
             var solution = new VisualStudioSolution {SolutionPath = new ImmediateValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln"))};
 
-            var outputFiles = solution.Projects.Select(p => p.OutputFile);
+            var outputFiles = solution.ProjectsObsolete.Select(p => p.OutputFile);
 
             UnzipTestSolution();
 

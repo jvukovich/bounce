@@ -103,7 +103,7 @@ namespace Bounce.Framework.Tests.Features {
                 var sol = new VisualStudioSolution {SolutionPath = "stuff.sln"};
 
                 var env = parameters.Required<string>("env").Switch(
-                    "test", Print(sol.Projects["cats"].OutputFile),
+                    "test", Print(sol.ProjectsObsolete["cats"].OutputFile),
                     "stage", Print("this is test"),
                     "live", Print("this is test"));
 

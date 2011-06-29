@@ -15,9 +15,9 @@ namespace TestBounceAssembly {
             var solution = new VisualStudioSolution {
                 SolutionPath = git.Files["BigSolution.sln"]
             };
-            var webProject = solution.Projects[parameters.Default("proj", "BigSolution")];
+            var webProject = solution.ProjectsObsolete[parameters.Default("proj", "BigSolution")];
             var serviceName = parameters.Default("svc", "BigWindowsService");
-            var service = solution.Projects[serviceName];
+            var service = solution.ProjectsObsolete[serviceName];
 
             return new {
                 WebSite = new Iis7WebSite {
@@ -45,7 +45,7 @@ namespace TestBounceAssembly {
             var solution = new VisualStudioSolution {
                 SolutionPath = "WebSolution.sln",
             };
-            var webProject = solution.Projects["WebSite"];
+            var webProject = solution.ProjectsObsolete["WebSite"];
 
             return new {
                 WebSite = new Iis7WebSite {
@@ -129,7 +129,7 @@ namespace TestBounceAssembly {
                 DependsOn = new [] {asmInfoWithVersion}
             };
 
-            var frameworkProject = solution.Projects["Bounce.Framework"];
+            var frameworkProject = solution.ProjectsObsolete["Bounce.Framework"];
 
             var downloadsDir = new CleanDirectory {
                 Path = "Downloads",
@@ -241,7 +241,7 @@ namespace TestBounceAssembly {
         var website = targets.CreateTarget("WebSite");
 
         website.Package = new Copy {
-            FromPath = solution.Projects["WebSite"].ProjectDirectory,
+            FromPath = solution.ProjectsObsolete["WebSite"].ProjectDirectory,
             ToPath = new CleanDirectory {Path = "package"}.Path.SubPath("WebSite")
         }.ToPath;
 
