@@ -15,12 +15,24 @@ namespace Build
             var v35 = new VisualStudioSolution {SolutionPath = @"Bounce.sln", Configuration = "Debug_3_5"};
             var tests = new NUnitTests {DllPaths = v4.Projects.Where(p => p.Name.EndsWith("Tests")).Select(p => p.OutputFile)};
 
+            var nugetExe = @"References\NuGet\NuGet.exe";
+            var nugetPackage = new NuGetPackage
+            {
+                NuGetExePath = nugetExe,
+                Spec = @"Bounce.Framework\Bounce.Framework.csproj",
+            };
+            var nugetPush = new NuGetPush
+            {
+                ApiKey = @"8890f3e6-8806-45ba-8fb5-f78e1e0f0381",
+                NuGetExePath = nugetExe,
+                Package = nugetPackage.Package,
+            };
+
             return new
             {
-                Binaries4 = v4,
-                Binaries35 = v35,
                 Binaries = new All(v4, v35),
                 Tests = tests,
+                NuGet = nugetPush,
             };
         }
     }

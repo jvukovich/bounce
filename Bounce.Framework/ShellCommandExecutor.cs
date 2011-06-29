@@ -11,11 +11,13 @@ namespace Bounce.Framework {
             GetLog = getLog;
         }
 
-        public void ExecuteAndExpectSuccess(string commandName, string commandArgs) {
+        public ProcessOutput ExecuteAndExpectSuccess(string commandName, string commandArgs)
+        {
             var output = Execute(commandName, commandArgs);
             if (output.ExitCode != 0) {
                 throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
             }
+            return output;
         }
 
         public ProcessOutput Execute(string commandName, string commandArgs) {
