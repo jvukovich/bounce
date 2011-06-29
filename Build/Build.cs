@@ -13,13 +13,17 @@ namespace Build
         {
             var v4 = new VisualStudioSolution {SolutionPath = @"Bounce.sln", Configuration = "Debug"};
             var v35 = new VisualStudioSolution {SolutionPath = @"Bounce.sln", Configuration = "Debug_3_5"};
-            var tests = new NUnitTests {DllPaths = v4.Projects.Where(p => p.Name.EndsWith("Tests")).Select(p => p.OutputFile)};
+            var tests = new NUnitTests
+            {
+                DllPaths = v4.Projects.Where(p => p.Name.EndsWith("Tests")).Select(p => p.OutputFile),
+                NUnitConsolePath = @"nunit-console.exe"
+            };
 
             var nugetExe = @"References\NuGet\NuGet.exe";
             var nugetPackage = new NuGetPackage
             {
                 NuGetExePath = nugetExe,
-                Spec = @"Bounce.Framework\Bounce.Framework.csproj",
+                Spec = v4.Projects["Bounce.Framework"].ProjectFile.WithDependencyOn(tests),
             };
             var nugetPush = new NuGetPush
             {
