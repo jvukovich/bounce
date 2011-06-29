@@ -10,9 +10,13 @@
     <projectUrl>https://github.com/refractalize/bounce</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A new build framework for C# projects.</description>
-    <tags>build</tags>
+    <tags>build CI deploy configuration</tags>
     <dependencies>
       <dependency id="SharpZipLib" version="0.86.0" />
     </dependencies>
   </metadata>
+  <files>
+	<file src="bin\Debug\Bounce.Framework.dll" target="lib\net40" />
+	<file src="bin\Debug_3_5\Bounce.Framework.dll" target="lib\net35" />
+  </files>
 </package>
