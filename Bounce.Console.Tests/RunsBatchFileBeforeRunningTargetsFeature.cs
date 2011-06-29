@@ -12,22 +12,23 @@ namespace Bounce.Console.Tests {
     public class RunsBatchFileBeforeRunningTargetsFeature {
         private void UnzipSolution() {
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature");
-            new FastZip().ExtractZip("BeforeBounceFeature.zip", "BeforeBounceFeature", null);
+            new DirectoryUtils().CopyDirectory(@"..\..\BeforeBounceFeature", @"BeforeBounceFeature", new string [0], new string [0]);
+//            new FastZip().ExtractZip("BeforeBounceFeature.zip", "BeforeBounceFeature", null);
         }
 
         [Test]
         public void ShouldRunBatchFileBeforeRunningTargets() {
             UnzipSolution();
 
-            FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature\BeforeBounceFeature\bounce");
-            File.WriteAllText(@"BeforeBounceFeature\BeforeBounceFeature\bounce\beforebounce.bat", @"c:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe BeforeBounceFeature.sln");
+            FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature\bounce");
+            File.WriteAllText(@"BeforeBounceFeature\bounce\beforebounce.bat", @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe BeforeBounceFeature.sln");
 
             var shell = new ShellCommandExecutor(() => new FakeLog());
 
             ProcessOutput output = null;
 
-            Pushd(@"BeforeBounceFeature\BeforeBounceFeature", () => {
-                output = shell.Execute(@"..\..\bounce.exe", "BeforeBounceFeature");
+            Pushd(@"BeforeBounceFeature", () => {
+                output = shell.Execute(@"..\bounce.exe", "BeforeBounceFeature");
                 System.Console.WriteLine(output.ErrorAndOutput);
             });
 

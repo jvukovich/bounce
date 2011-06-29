@@ -9,7 +9,7 @@ namespace BeforeBounceFeature
         [Targets]
         public static object GetTargets() {
             return new {
-                OldBeforeBounceFeature = new PrintTask {Description = "building before bounce feature"},
+                BeforeBounceFeature = new PrintTask {Description = "building before bounce feature"},
             };
         }
     }

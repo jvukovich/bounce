@@ -20,6 +20,7 @@ namespace Build
                 Binaries4 = v4,
                 Binaries35 = v35,
                 Binaries = new All(v4, v35),
+                Tests = tests,
             };
         }
     }

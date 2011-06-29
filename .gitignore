@@ -1,6 +1,6 @@
 bin/
 obj/
-/_ReSharper.*
+_ReSharper.*
 *.ReSharper.*
 *.sln.cache
 *.suo

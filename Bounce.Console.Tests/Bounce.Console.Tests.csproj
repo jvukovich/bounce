@@ -80,6 +80,10 @@
       <Project>{BD123B60-C18A-4446-808E-F4B81D0EE23D}</Project>
       <Name>Bounce.Console</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Bounce.Framework.Tests\Bounce.Framework.Tests.csproj">
+      <Project>{0F0BBC36-D999-47EB-BA24-6A926C2B8641}</Project>
+      <Name>Bounce.Framework.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">
       <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
       <Name>Bounce.Framework</Name>
