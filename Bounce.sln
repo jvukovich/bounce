@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.TestHelpers", "Bounc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryLongRunningConsole", "VeryLongRunningConsole\VeryLongRunningConsole.csproj", "{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "Build\Build.csproj", "{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_3_5|Any CPU = Debug_3_5|Any CPU
@@ -75,6 +77,12 @@ Global
 		{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug_3_5|Any CPU.ActiveCfg = Debug_3_5|Any CPU
+		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug_3_5|Any CPU.Build.0 = Debug_3_5|Any CPU
+		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
