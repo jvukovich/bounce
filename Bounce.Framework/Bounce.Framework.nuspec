@@ -15,4 +15,8 @@
       <dependency id="SharpZipLib" version="0.86.0" />
     </dependencies>
   </metadata>
+  <files>
+	<file src="bin\Debug\Bounce.Framework.dll" target="lib\net40" />
+	<file src="bin\Debug_3_5\Bounce.Framework.dll" target="lib\net35" />
+  </files>
 </package>
