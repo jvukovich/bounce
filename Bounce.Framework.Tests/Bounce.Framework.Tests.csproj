@@ -94,6 +94,7 @@
     <Compile Include="Features\CleanExecutedWithCleanDependenciesFeature.cs" />
     <Compile Include="Features\DescribeFeature.cs" />
     <Compile Include="Integration\FrameworkTest.cs" />
+    <Compile Include="NUnitTestsWithPartCoverTests.cs" />
     <Compile Include="TeamCity5NUnitLoggerTests.cs" />
     <Compile Include="TeamCityFactoryTests.cs" />
     <Compile Include="WhenBuiltTest.cs" />

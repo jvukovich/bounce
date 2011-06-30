@@ -35,7 +35,7 @@ namespace Bounce.Framework
 
         public override void Build(IBounce bounce)
         {
-            string joinedTestDlls = "\"" + String.Join("\" \"", DllPaths.Value.ToArray()) + "\"";
+            var joinedTestDlls = "\"" + String.Join("\" \"", DllPaths.Value.ToArray()) + "\"";
 
             bounce.Log.Info("running unit tests for: " + joinedTestDlls);
 
@@ -43,13 +43,13 @@ namespace Bounce.Framework
             {
                 Excludes,
                 Includes,
-                joinedTestDlls,
+                joinedTestDlls
             };
 
             bounce.ShellCommand.ExecuteAndExpectSuccess(NUnitConsolePath.Value, String.Join(" ", args));
         }
 
-        string Excludes
+        protected string Excludes
         {
             get
             {
@@ -57,22 +57,20 @@ namespace Bounce.Framework
             }
         }
 
-        string Includes
+        protected string Includes
         {
             get {
                 return GetIncludeExcludeArgument("include", IncludeCategories);
             }
         }
 
-        private string GetIncludeExcludeArgument(string argumentName, Task<IEnumerable<string>> categories)
+        private static string GetIncludeExcludeArgument(string argumentName, Task<IEnumerable<string>> categories)
         {
             if (categories.Value.Count() > 0)
             {
                 return "/" + argumentName + "=" + String.Join(",", categories.Value.ToArray());
-            } else
-            {
-                return "";
             }
+            return "";
         }
     }
 }
