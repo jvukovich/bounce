@@ -19,11 +19,14 @@ namespace Build
                 NUnitConsolePath = @"References\NUnit\nunit-console.exe"
             };
 
+            Task<IEnumerable<string>> dests = new [] {"sdf"};
+            dests.SelectTasks(dest => new Copy {ToPath = dest});
+
             var nugetExe = @"References\NuGet\NuGet.exe";
             var nugetPackage = new NuGetPackage
             {
                 NuGetExePath = nugetExe,
-                Spec = v4.Projects["Bounce.Framework"].ProjectFile.WithDependencyOn(tests),
+                Spec = v4.Projects["Bounce.Framework"].ProjectFile.WithDependencyOn(tests, v35),
             };
 
             var nugetPush = new NuGetPush
@@ -38,6 +41,7 @@ namespace Build
                 Binaries = new All(v4, v35),
                 Tests = tests,
                 NuGet = nugetPush,
+                NuGetPackage = nugetPackage,
             };
         }
     }
