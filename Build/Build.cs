@@ -16,7 +16,7 @@ namespace Build
             var tests = new NUnitTests
             {
                 DllPaths = v4.Projects.Where(p => p.Name.EndsWith("Tests")).Select(p => p.OutputFile),
-                NUnitConsolePath = @"nunit-console.exe"
+                NUnitConsolePath = @"References\NUnit\nunit-console.exe"
             };
 
             var nugetExe = @"References\NuGet\NuGet.exe";
@@ -25,9 +25,10 @@ namespace Build
                 NuGetExePath = nugetExe,
                 Spec = v4.Projects["Bounce.Framework"].ProjectFile.WithDependencyOn(tests),
             };
+
             var nugetPush = new NuGetPush
             {
-                ApiKey = @"8890f3e6-8806-45ba-8fb5-f78e1e0f0381",
+                ApiKey = parameters.Required<string>("nugetApiKey"),
                 NuGetExePath = nugetExe,
                 Package = nugetPackage.Package,
             };
