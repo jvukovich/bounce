@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Bounce.Framework;
 using Bounce.TestHelpers;
-using ICSharpCode.SharpZipLib.Zip;
-using Moq;
 using NUnit.Framework;
 
 namespace Bounce.Console.Tests {
@@ -13,7 +10,6 @@ namespace Bounce.Console.Tests {
         private void UnzipSolution() {
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature");
             new DirectoryUtils().CopyDirectory(@"..\..\BeforeBounceFeature", @"BeforeBounceFeature", new string [0], new string [0]);
-//            new FastZip().ExtractZip("BeforeBounceFeature.zip", "BeforeBounceFeature", null);
         }
 
         [Test]
@@ -21,7 +17,14 @@ namespace Bounce.Console.Tests {
             UnzipSolution();
 
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature\bounce");
+
+            //as there is a circular dependancy between BeforeBounceFeature.sln and the main bounce dll's
+            //this needs to be run and built under the same framework version
+#if (FRAMEWORKV35)
+            File.WriteAllText(@"BeforeBounceFeature\bounce\beforebounce.bat", @"%SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe BeforeBounceFeature.sln /p:Configuration=Debug_3_5");
+#else
             File.WriteAllText(@"BeforeBounceFeature\bounce\beforebounce.bat", @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe BeforeBounceFeature.sln");
+#endif
 
             var shell = new ShellCommandExecutor(() => new FakeLog());
 

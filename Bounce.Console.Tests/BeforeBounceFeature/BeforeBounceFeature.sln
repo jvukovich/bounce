@@ -5,10 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeforeBounceFeature", "Befo
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_3_5|Any CPU = Debug_3_5|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B42D94A-9B54-4F19-A290-1461C4A17FF5}.Debug_3_5|Any CPU.ActiveCfg = Debug_3_5|Any CPU
+		{0B42D94A-9B54-4F19-A290-1461C4A17FF5}.Debug_3_5|Any CPU.Build.0 = Debug_3_5|Any CPU
 		{0B42D94A-9B54-4F19-A290-1461C4A17FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B42D94A-9B54-4F19-A290-1461C4A17FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B42D94A-9B54-4F19-A290-1461C4A17FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
