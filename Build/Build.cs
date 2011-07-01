@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,6 +54,13 @@ namespace Build
                 Tests = new All(v4Tests, v35Tests),
                 NuGet = nugetPush,
                 NuGetPackage = nugetPackage,
+                PrintEnv = On.Build(() =>
+                {
+                    foreach (DictionaryEntry envVar in Environment.GetEnvironmentVariables())
+                    {
+                        Console.WriteLine("{0}: {1}", envVar.Key, envVar.Value);
+                    }
+                })
             };
         }
     }

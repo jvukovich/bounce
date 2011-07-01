@@ -118,6 +118,7 @@
     <Compile Include="NuGetPush.cs" />
     <Compile Include="NuGetTask.cs" />
     <Compile Include="NUnitTestsWithPartCover.cs" />
+    <Compile Include="On.cs" />
     <Compile Include="TargetsBuilder.cs" />
     <Compile Include="TeamCity5NUnitLogger.cs" />
     <Compile Include="Delete.cs" />
