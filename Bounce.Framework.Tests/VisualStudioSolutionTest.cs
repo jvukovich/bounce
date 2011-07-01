@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace Bounce.Framework.Tests {
 
             solution.Build();
 
-            Assert.That(File.Exists(solution.ProjectsObsolete["TestSolution"].OutputFile.Value));
+            Assert.That(File.Exists(solution.Projects["TestSolution"].OutputFile.Value));
         }
 
         [Test]
@@ -25,11 +26,11 @@ namespace Bounce.Framework.Tests {
 
             var solution = new VisualStudioSolution {SolutionPath = new ImmediateValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln"))};
 
-            var outputFiles = solution.ProjectsObsolete.Select(p => p.OutputFile);
+            Task<IEnumerable<string>> outputFiles = solution.Projects.Select(p => p.OutputFile);
 
             UnzipTestSolution();
 
-            Assert.That(outputFiles.Select(o => o.Value).ToArray(), Is.EquivalentTo(new [] {@"TestSolution\TestSolution\TestSolution\bin\Debug\TestSolution.dll"}));
+            Assert.That(outputFiles.Value.ToArray(), Is.EquivalentTo(new [] {@"TestSolution\TestSolution\TestSolution\bin\Debug\TestSolution.dll"}));
         }
         
         private void UnzipTestSolution() {

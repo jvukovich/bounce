@@ -15,9 +15,9 @@ namespace TestBounceAssembly {
             var solution = new VisualStudioSolution {
                 SolutionPath = git.Files["BigSolution.sln"]
             };
-            var webProject = solution.ProjectsObsolete[parameters.Default("proj", "BigSolution")];
+            var webProject = solution.Projects[parameters.Default("proj", "BigSolution")];
             var serviceName = parameters.Default("svc", "BigWindowsService");
-            var service = solution.ProjectsObsolete[serviceName];
+            var service = solution.Projects[serviceName];
 
             return new {
                 WebSite = new Iis7WebSite {
@@ -45,7 +45,7 @@ namespace TestBounceAssembly {
             var solution = new VisualStudioSolution {
                 SolutionPath = "WebSolution.sln",
             };
-            var webProject = solution.ProjectsObsolete["WebSite"];
+            var webProject = solution.Projects["WebSite"];
 
             return new {
                 WebSite = new Iis7WebSite {
@@ -82,22 +82,22 @@ namespace TestBounceAssembly {
 
         public static object WebSiteDoco() {
             var website = new Iis6WebSite {Name = "MyWebSite", Directory = @"c:\websites\mywebsite"};
-    website.Bindings = new[] {
-                                 new Iis6WebSiteBinding {Hostname = "mywebsite.com"},
-                                 new Iis6WebSiteBinding {IPAddress = IPAddress.Loopback, Port = 7010}
-                             };
-    website.ScriptMapsToAdd = new[] {new Iis6ScriptMap {
-                                                           AllVerbs = false, 
-                                                           Executable = @"c:\website\scriptmaps\myscriptmap.dll", 
-                                                           Extension = ".dat", 
-                                                           IncludedVerbs = "GET,POST,DELETE", 
-                                                           ScriptEngine = true, 
-                                                           VerifyThatFileExists = false
-                                                       }};
-    website.ScriptMapsToAdd = Iis6WebSite.MvcScriptMaps;
-    website.AppPool = new Iis6AppPool {Name = "MyAppPool"};
-    website.Authentication = new[] {Iis6Authentication.NTLM, Iis6Authentication.Anonymous};
-    website.Started = false;
+            website.Bindings = new[] {
+                                         new Iis6WebSiteBinding {Hostname = "mywebsite.com"},
+                                         new Iis6WebSiteBinding {IPAddress = IPAddress.Loopback, Port = 7010}
+                                     };
+            website.ScriptMapsToAdd = new[] {new Iis6ScriptMap {
+                                                                   AllVerbs = false, 
+                                                                   Executable = @"c:\website\scriptmaps\myscriptmap.dll", 
+                                                                   Extension = ".dat", 
+                                                                   IncludedVerbs = "GET,POST,DELETE", 
+                                                                   ScriptEngine = true, 
+                                                                   VerifyThatFileExists = false
+                                                               }};
+            website.ScriptMapsToAdd = Iis6WebSite.MvcScriptMaps;
+            website.AppPool = new Iis6AppPool {Name = "MyAppPool"};
+            website.Authentication = new[] {Iis6Authentication.NTLM, Iis6Authentication.Anonymous};
+            website.Started = false;
 
             return null;
         }
@@ -129,7 +129,7 @@ namespace TestBounceAssembly {
                 DependsOn = new [] {asmInfoWithVersion}
             };
 
-            var frameworkProject = solution.ProjectsObsolete["Bounce.Framework"];
+            var frameworkProject = solution.Projects["Bounce.Framework"];
 
             var downloadsDir = new CleanDirectory {
                 Path = "Downloads",
@@ -174,39 +174,6 @@ namespace TestBounceAssembly {
         }
     }
 
-    class PrintTask : Task {
-        [Dependency]
-        public Task<string> Description;
-
-        protected readonly TextWriter Output;
-
-        public PrintTask(TextWriter output) {
-            Output = output;
-        }
-
-        public PrintTask() {
-            Output = Console.Out;
-        }
-
-        public override void Build() {
-            Output.WriteLine(Description.Value);
-        }
-    }
-
-    class PrintTaskWithPath : PrintTask {
-        [Dependency] private Task<string> _path;
-
-        public Task<string> Path {
-            get { return this.WhenBuilt(() => _path.Value); }
-            set { _path = value; }
-        }
-
-        public override void Build() {
-            Output.WriteLine(Description.Value);
-            Output.WriteLine(_path.Value);
-        }
-    }
-
     class SubBounceFactory : IRemoteBounceFactory {
         public ITask CreateRemoteBounce(Task<string> bounceArguments, Task<string> workingDirectory, Task<string> machine) {
             return new SubBounce {
@@ -241,7 +208,7 @@ namespace TestBounceAssembly {
         var website = targets.CreateTarget("WebSite");
 
         website.Package = new Copy {
-            FromPath = solution.ProjectsObsolete["WebSite"].ProjectDirectory,
+            FromPath = solution.Projects["WebSite"].ProjectDirectory,
             ToPath = new CleanDirectory {Path = "package"}.Path.SubPath("WebSite")
         }.ToPath;
 
