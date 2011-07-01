@@ -89,6 +89,7 @@
     <Compile Include="CommandLineParametersTest.cs" />
     <Compile Include="CommandLineTasksParametersGeneratorTest.cs" />
     <Compile Include="DirectoryFilesTest.cs" />
+    <Compile Include="EnvironmentVariablesTest.cs" />
     <Compile Include="FakeArtefactTask.cs" />
     <Compile Include="Features\CleanAfterBuildFeature.cs" />
     <Compile Include="Features\CleanExecutedWithCleanDependenciesFeature.cs" />

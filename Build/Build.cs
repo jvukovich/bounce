@@ -39,7 +39,7 @@ namespace Build
 
             var nugetPush = new NuGetPush
             {
-                ApiKey = parameters.Required<string>("nugetApiKey"),
+                ApiKey = EnvironmentVariables.Required<string>("NUGET_API_KEY"),
                 NuGetExePath = nugetExe,
                 Package = nugetPackage.Package,
             };
@@ -54,13 +54,6 @@ namespace Build
                 Tests = new All(v4Tests, v35Tests),
                 NuGet = nugetPush,
                 NuGetPackage = nugetPackage,
-                PrintEnv = On.Build(() =>
-                {
-                    foreach (DictionaryEntry envVar in Environment.GetEnvironmentVariables())
-                    {
-                        Console.WriteLine("{0}: {1}", envVar.Key, envVar.Value);
-                    }
-                })
             };
         }
     }
