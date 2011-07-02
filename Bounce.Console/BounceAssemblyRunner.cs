@@ -38,8 +38,15 @@ namespace Bounce.Console {
             var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = true.ToString() };
             var appDomain = AppDomain.CreateDomain("Bounce", null, appDomainSetup);
 
-            //call back to transfer control to other app domain
-            appDomain.DoCallBack(AppDomainLoaderCallBack);
+            try
+            {
+                //call back to transfer control to other app domain
+                appDomain.DoCallBack(AppDomainLoaderCallBack);
+            }
+            finally
+            {
+                AppDomain.Unload(appDomain);
+            }
         }
 
         private void AppDomainLoaderCallBack()
