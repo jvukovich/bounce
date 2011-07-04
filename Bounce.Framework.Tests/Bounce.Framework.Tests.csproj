@@ -98,6 +98,7 @@
     <Compile Include="NUnitTestsWithPartCoverTests.cs" />
     <Compile Include="TeamCity5NUnitLoggerTests.cs" />
     <Compile Include="TeamCityFactoryTests.cs" />
+    <Compile Include="TeamCityLogTests.cs" />
     <Compile Include="WhenBuiltTest.cs" />
     <Compile Include="FakeBounce.cs" />
     <Compile Include="FakePrintTask.cs" />
