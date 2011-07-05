@@ -96,9 +96,10 @@
     <Compile Include="Features\DescribeFeature.cs" />
     <Compile Include="Integration\FrameworkTest.cs" />
     <Compile Include="NUnitTestsWithPartCoverTests.cs" />
-    <Compile Include="TeamCity5NUnitLoggerTests.cs" />
-    <Compile Include="TeamCityFactoryTests.cs" />
-    <Compile Include="TeamCityLogTests.cs" />
+    <Compile Include="TeamCity\TeamCity5NUnitLoggerTests.cs" />
+    <Compile Include="TeamCity\TeamCityFactoryTests.cs" />
+    <Compile Include="TeamCity\TeamCityLogTests.cs" />
+    <Compile Include="TeamCity\TeamCityArtifactPublisherTests.cs" />
     <Compile Include="WhenBuiltTest.cs" />
     <Compile Include="FakeBounce.cs" />
     <Compile Include="FakePrintTask.cs" />
@@ -138,8 +139,8 @@
     <Compile Include="TaskTest.cs" />
     <Compile Include="CopyTest.cs" />
     <Compile Include="TaskTestExtensions.cs" />
-    <Compile Include="TeamCityMSBuildLoggerTest.cs" />
-    <Compile Include="TeamCityTextFormatterTest.cs" />
+    <Compile Include="TeamCity\TeamCityMSBuildLoggerTest.cs" />
+    <Compile Include="TeamCity\TeamCityTextFormatterTest.cs" />
     <Compile Include="TypeParsersTest.cs" />
     <Compile Include="VisualStudioCSharpProjectFileLoaderTest.cs" />
     <Compile Include="VisualStudioSolutionFileLoaderTest.cs" />

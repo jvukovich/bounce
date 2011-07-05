@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.IO;
 
-namespace Bounce.Framework {
+namespace Bounce.Framework.TeamCity {
     public class TeamCityNUnitLogger : ICommandLog {
         private readonly TextWriter Output;
         private readonly ICommandLog Log;

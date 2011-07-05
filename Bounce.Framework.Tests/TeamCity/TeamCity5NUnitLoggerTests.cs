@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using Bounce.Framework.TeamCity;
 using Bounce.TestHelpers;
 using NUnit.Framework;
 
-namespace Bounce.Framework.Tests
+namespace Bounce.Framework.Tests.TeamCity
 {
     [TestFixture]
     public class TeamCity5NUnitLoggerTests {

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Bounce.Framework {
+namespace Bounce.Framework.TeamCity {
     class TeamCityLog : Log {
         private TextWriter Output;
         private readonly LogOptions LogOptions;

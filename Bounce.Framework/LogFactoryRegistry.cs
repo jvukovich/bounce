@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bounce.Framework.TeamCity;
 
 namespace Bounce.Framework {
     public class LogFactoryRegistry {

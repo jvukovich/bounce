@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using Bounce.Framework.TeamCity;
+using NUnit.Framework;
 
-namespace Bounce.Framework.Tests
+namespace Bounce.Framework.Tests.TeamCity
 {
     [TestFixture]
     public class TeamCityLogTests
