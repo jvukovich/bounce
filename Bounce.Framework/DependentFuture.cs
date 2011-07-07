@@ -2,17 +2,17 @@ using System;
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class DependentFuture<TP> : TaskWithValue<TP> {
+    public class DependentFuture<T> : TaskWithValue<T> {
         [Dependency]
         private readonly ITask DependencyTask;
-        private readonly Func<TP> getValue;
+        private readonly Func<T> getValue;
 
-        public DependentFuture(ITask dependencyTask, Func<TP> getValue) {
+        public DependentFuture(ITask dependencyTask, Func<T> getValue) {
             this.DependencyTask = dependencyTask;
             this.getValue = getValue;
         }
 
-        protected override TP GetValue() {
+        protected override T GetValue() {
             return getValue();
         }
     }

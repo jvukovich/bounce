@@ -17,7 +17,17 @@ namespace Bounce.Framework {
         public virtual void Describe(TextWriter output) { }
 
         public string SmallDescription {
-            get { return Value.ToString(); }
+            get
+            {
+                var value = (object) Value;
+                if (value != null)
+                {
+                    return Value.ToString();
+                } else
+                {
+                    return "(null)";
+                }
+            }
         }
 
         public virtual bool IsPure { get { return true; } }
