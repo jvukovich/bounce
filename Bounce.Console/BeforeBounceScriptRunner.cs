@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 
 namespace Bounce.Console {
+    [Serializable]
     class BeforeBounceScriptRunner {
         public void RunBeforeBounceScript(OptionsAndArguments optionsAndArguments) {
             if (optionsAndArguments.TargetsAssembly.ExecutableType == BounceDirectoryExecutableType.BeforeBounce) {

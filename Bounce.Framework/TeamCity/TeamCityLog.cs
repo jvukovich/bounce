@@ -1,7 +1,8 @@
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
-namespace Bounce.Framework {
+namespace Bounce.Framework.TeamCity {
     class TeamCityLog : Log {
         private TextWriter Output;
         private readonly LogOptions LogOptions;
@@ -52,24 +53,39 @@ namespace Bounce.Framework {
 
         public override ICommandLog BeginExecutingCommand(string command, string args)
         {
-            var commandName = Path.GetFileName(command).ToLower();
+            var commandName = Path.GetFileName(command);
 
             ICommandLog log = base.BeginExecutingCommand(command, args);
 
-            switch (commandName)
+            return GetLoggerForExecutable(args, log, commandName);
+        }
+
+        private ICommandLog GetLoggerForExecutable(string args, ICommandLog log, string commandName)
+        {
+            switch (commandName.ToLower())
             {
                 case "msbuild.exe":
                     return new TeamCityMsBuildLogger(args, Output, log);
                 case "nunit-console.exe":
+                case "nunit-console-x86.exe":
                     return NUnitLogger(args, Output, log);
+                case "partcover.exe":
+                    return GetLoggerForExecutable(args, log, GetPartCoverTarget(args));
                 default:
                     return log;
             }
         }
 
+        private static string GetPartCoverTarget(string args)
+        {
+            var regex = new Regex("\\-\\-target \"(.*?)\"");
+            var match = regex.Match(args);
+
+            return match.Success ? Path.GetFileName(match.Groups[1].Value) : null;
+        }
+
         public virtual ICommandLog NUnitLogger(string args, TextWriter output, ICommandLog log) {
             return new TeamCityNUnitLogger(args, output, log);            
         }
-
     }
 }

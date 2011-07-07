@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Bounce.Framework {
+namespace Bounce.Framework.TeamCity {
     public class TeamCity5NUnitLogger : TeamCityNUnitLogger {
         private readonly TextWriter Output;
         private readonly TeamCityFormatter TeamCityFormatter;

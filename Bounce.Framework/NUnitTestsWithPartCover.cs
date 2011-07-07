@@ -30,18 +30,32 @@ namespace Bounce.Framework
         /// </summary>
         [Dependency] public Task<string> OutputPath;
 
+        /// <summary>
+        /// Whether to pass "--register" to partcover (which means "the COM components are temporarily registered to the current user for profiling,
+        /// removing the need to install with elevated privilege.")
+        /// </summary>
+        [Dependency] public Task<bool> RegisterPartCoverDlls;
+
+        /// <summary>
+        /// If false pass "/noshadow" to nunit (which disables shadow copying of dlls). 
+        /// </summary>
+        [Dependency] public Task<bool> ShadowCopyNUnitFiles;
+
         public NUnitTestsWithPartCover()
         {
             OutputPath = "partcover.xml";
             PartCoverPath = @"C:\Program Files (x86)\PartCover\PartCover .NET 4.0\PartCover.exe";
             ExcludeRules = new string[0];
             IncludeRules = new string[0];
+            RegisterPartCoverDlls = true;
+            ShadowCopyNUnitFiles = false;
         }
 
         public override void Build(IBounce bounce)
         {
             var args = new[]
             {
+                Register,
                 Output,
                 Target,
                 TargetArgs,
@@ -52,14 +66,19 @@ namespace Bounce.Framework
             bounce.ShellCommand.ExecuteAndExpectSuccess(PartCoverPath.Value, String.Join(" ", args));
         }
 
+        private string Register
+        {
+            get { return RegisterPartCoverDlls.Value ? "--register" : string.Empty; }
+        }
+
         private string Output
         {
-            get { return "--output " + "\"" + OutputPath.Value + "\""; }
+            get { return string.Format("--output " + "\"{0}\"", OutputPath.Value); }
         }
 
         private string Target
         {
-            get { return "--target " + "\"" + NUnitConsolePath.Value + "\""; }
+            get { return string.Format("--target " + "\"{0}\"", NUnitConsolePath.Value); }
         }
 
         private string TargetArgs
@@ -77,11 +96,16 @@ namespace Bounce.Framework
                     joinedTestDlls,
                     Includes,
                     Excludes,
-                    "/noshadow"
+                    Noshadow
                 }.Where(arg => arg != "").ToArray();
 
                 return String.Join(" ", args).Trim();
             }
+        }
+
+        private string Noshadow
+        {
+            get { return ShadowCopyNUnitFiles.Value ? string.Empty : "/noshadow"; }
         }
 
         private string IncludedRules

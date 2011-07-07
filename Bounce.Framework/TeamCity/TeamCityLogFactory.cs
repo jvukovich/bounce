@@ -2,7 +2,7 @@ using System.IO;
 using System;
 using System.Text.RegularExpressions;
 
-namespace Bounce.Framework {
+namespace Bounce.Framework.TeamCity {
     internal class TeamCityLogFactory : ITaskLogFactory {
         public ILog CreateLogForTask(ITask task, TextWriter stdout, TextWriter stderr, LogOptions logOptions) {
             if (TeamCityVersion < 6)

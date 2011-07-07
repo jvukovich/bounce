@@ -1,14 +1,17 @@
 using System;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 
 namespace Bounce.Console {
+    
+    [Serializable]
     class BounceAssemblyRunner {
-        private readonly BounceDirectoryCopier BounceDirectoryCopier;
         private readonly BeforeBounceScriptRunner BeforeBounceScriptRunner;
+        private string assemblyFileName;
+        private string[] arguments;
 
         public BounceAssemblyRunner() {
-            BounceDirectoryCopier = new BounceDirectoryCopier();
             BeforeBounceScriptRunner = new BeforeBounceScriptRunner();
         }
 
@@ -25,24 +28,43 @@ namespace Bounce.Console {
         }
 
         private void FindTargetsAssemblyAndRunBounce(string[] args) {
-            OptionsAndArguments optionsAndArguments = GetAssemblyFileName(args);
+            var optionsAndArguments = GetAssemblyFileName(args);
 
             BeforeBounceScriptRunner.RunBeforeBounceScript(optionsAndArguments);
 
-            string assemblyFileName = BounceDirectoryCopier.CopyBounceDirectory(optionsAndArguments);
-            args = optionsAndArguments.RemainingArguments;
+            assemblyFileName = optionsAndArguments.TargetsAssembly.Executable;
+            arguments = optionsAndArguments.RemainingArguments;
 
-            Assembly a = Assembly.LoadFrom(assemblyFileName);
-            BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty = GetTargetsMemberFromAssembly(a);
+            var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = true.ToString() };
+            var appDomain = AppDomain.CreateDomain("Bounce", null, appDomainSetup);
 
-            RunAssembly(bounceAssemblyAndTargetsProperty, args);
+            try
+            {
+                //call back to transfer control to other app domain
+                appDomain.DoCallBack(AppDomainLoaderCallBack);
+            }
+            finally
+            {
+                AppDomain.Unload(appDomain);
+            }
+        }
+
+        private void AppDomainLoaderCallBack()
+        {
+            System.Console.WriteLine("- Loading bounce targets assembly (with shadow-copy enabled) from '" + assemblyFileName + "'.");
+            var assembly = Assembly.LoadFrom(assemblyFileName);
+            System.Console.WriteLine("- Targets assembly loaded from '" + assembly.Location + "'.");
+            var bounceAssemblyAndTargetsProperty = GetTargetsMemberFromAssembly(assembly);
+
+            RunAssembly(bounceAssemblyAndTargetsProperty, arguments);
         }
 
         private OptionsAndArguments GetAssemblyFileName(string[] args) {
             return new TargetsAssemblyArgumentsParser().GetTargetsAssembly(args);
         }
 
-        private void RunAssembly(BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty, string[] args) {
+        private void RunAssembly(BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty, IEnumerable args) {
+            if (args == null) throw new ArgumentNullException("args");
             Assembly bounceAssembly = bounceAssemblyAndTargetsProperty.BounceAssembly;
             Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
