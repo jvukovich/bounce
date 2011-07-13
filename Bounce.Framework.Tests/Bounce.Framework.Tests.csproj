@@ -96,6 +96,8 @@
     <Compile Include="Features\DescribeFeature.cs" />
     <Compile Include="Integration\FrameworkTest.cs" />
     <Compile Include="NUnitTestsWithPartCoverTests.cs" />
+    <Compile Include="RenameFileTests.cs" />
+    <Compile Include="RenameDirectoryTests.cs" />
     <Compile Include="TeamCity\TeamCity5NUnitLoggerTests.cs" />
     <Compile Include="TeamCity\TeamCityFactoryTests.cs" />
     <Compile Include="TeamCity\TeamCityLogTests.cs" />

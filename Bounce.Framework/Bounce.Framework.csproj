@@ -121,6 +121,8 @@
     <Compile Include="NuGetTask.cs" />
     <Compile Include="NUnitTestsWithPartCover.cs" />
     <Compile Include="On.cs" />
+    <Compile Include="RenameDirectory.cs" />
+    <Compile Include="RenameFile.cs" />
     <Compile Include="TargetsBuilder.cs" />
     <Compile Include="TeamCity\TeamCity5NUnitLogger.cs" />
     <Compile Include="Delete.cs" />
