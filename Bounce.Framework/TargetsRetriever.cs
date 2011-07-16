@@ -23,11 +23,4 @@ namespace Bounce.Framework {
             return TargetsParser.ParseTargetsFromObject(targets);
         }
     }
-
-    // TODO: find better place for this class
-    public static class TargetsRetrieverExtensions {
-        public static IEnumerable<Target> ToTargets(this IDictionary<string, ITask> targetsDictionary) {
-            return targetsDictionary.Select(t => new Target { Name = t.Key, Task = t.Value });
-        }
-    }
 }
