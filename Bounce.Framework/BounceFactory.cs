@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 
 namespace Bounce.Framework {
-    public class BounceFactory {
-        public static ITargetBuilderBounce GetBounce() {
+    public class BounceFactory : IBounceFactory {
+        public ITargetBuilderBounce GetBounce() {
             return new Bounce();
+        }
+
+        public ITargetBuilderBounce GetBounce(ITaskLogFactory taskLogFactory, LogOptions logOptions) {
+            return new Bounce(taskLogFactory, logOptions);
         }
     }
 }

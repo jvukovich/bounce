@@ -19,6 +19,13 @@ namespace Bounce.Framework {
             TargetInvoker = new TargetInvoker(this);
         }
 
+        public Bounce(ITaskLogFactory taskLogFactory, LogOptions logOptions) {
+            LogFactory = taskLogFactory;
+            LogOptions = logOptions;
+            ShellCommand = new ShellCommandExecutor(() => Log);
+            TargetInvoker = new TargetInvoker(this);
+        }
+
         public ITaskScope TaskScope(ITask task, IBounceCommand command, string targetName) {
             return CreateTaskScope(task, command, targetName);
         }
