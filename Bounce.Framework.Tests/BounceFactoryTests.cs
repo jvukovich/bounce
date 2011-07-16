@@ -39,11 +39,11 @@ namespace Bounce.Framework.Tests {
             var factory = new BounceFactory();
 
             // act
-            var bounce = factory.GetBounce(logFactoryMock.Object, new LogOptions());
+            var logOptions = new LogOptions();
+            var bounce = factory.GetBounce(logOptions);
 
             // assert
-            Assert.That(bounce.LogFactory, Is.Not.Null);
-            Assert.That(bounce.LogFactory, Is.TypeOf(logFactoryMock.Object.GetType()));
+            Assert.That(bounce.LogOptions, Is.SameAs(logOptions));
         }
     }
 }

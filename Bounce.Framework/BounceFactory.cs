@@ -9,8 +9,8 @@ namespace Bounce.Framework {
             return new Bounce();
         }
 
-        public ITargetBuilderBounce GetBounce(ITaskLogFactory taskLogFactory, LogOptions logOptions) {
-            return new Bounce(taskLogFactory, logOptions);
+        public ITargetBuilderBounce GetBounce(LogOptions logOptions) {
+            return new Bounce(logOptions);
         }
     }
 }

@@ -2,6 +2,6 @@
 namespace Bounce.Framework {
     interface IBounceFactory {
         ITargetBuilderBounce GetBounce();
-        ITargetBuilderBounce GetBounce(ITaskLogFactory taskLogFactory, LogOptions logOptions);
+        ITargetBuilderBounce GetBounce(LogOptions logOptions);
     }
 }
