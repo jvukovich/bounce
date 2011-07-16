@@ -14,7 +14,6 @@ namespace Bounce.Framework.Tests {
             var bounceMock = new Mock<ITargetBuilderBounce>();
             var commandMock = new Mock<IBounceCommand>();
 
-
             bounceMock.Setup(_ => _.TaskScope(It.IsAny<ITask>(), commandMock.Object, It.IsAny<string>())).Returns(new Mock<ITaskScope>().Object);
             bounceMock.Setup(_ => _.Invoke(commandMock.Object, It.IsAny<ITask>())).Callback((IBounceCommand c, ITask t) => {
                 if (t == null) {
