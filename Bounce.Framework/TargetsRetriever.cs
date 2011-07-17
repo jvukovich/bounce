@@ -8,12 +8,13 @@ namespace Bounce.Framework {
         private readonly ITargetsMethodInvoker TargetsMethodInvoker;
         private readonly ITargetsParser TargetsParser;
 
+        public TargetsRetriever() : this(new TargetsMethodInvoker(), new TargetsParser()) { }
+
         public TargetsRetriever(ITargetsMethodInvoker targetsMethodInvoker, ITargetsParser targetsParser) {
             TargetsMethodInvoker = targetsMethodInvoker;
             TargetsParser = targetsParser;
         }
 
-        public TargetsRetriever() : this (new TargetsMethodInvoker(), new TargetsParser()) {}
 
         public IDictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, IParameters parameters) {
             return TargetsParser.ParseTargetsFromObject(TargetsMethodInvoker.InvokeTargetsMethod(getTargetsMethod, parameters));
