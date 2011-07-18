@@ -82,6 +82,7 @@
     <Compile Include="Attributes\IntegrationAttribute.cs" />
     <Compile Include="BounceCommandTest.cs" />
     <Compile Include="BounceCommandExtensionsTest.cs" />
+    <Compile Include="BounceFactoryTests.cs" />
     <Compile Include="BounceTest.cs" />
     <Compile Include="BuilderTest.cs" />
     <Compile Include="CommandAndTargetNameParserTest.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="NUnitTestsWithPartCoverTests.cs" />
     <Compile Include="RenameFileTests.cs" />
     <Compile Include="RenameDirectoryTests.cs" />
+    <Compile Include="TargetsBuilderTests.cs" />
     <Compile Include="TeamCity\TeamCity5NUnitLoggerTests.cs" />
     <Compile Include="TeamCity\TeamCityFactoryTests.cs" />
     <Compile Include="TeamCity\TeamCityLogTests.cs" />

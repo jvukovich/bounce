@@ -8,10 +8,16 @@ namespace Bounce.Framework {
 
         public void BuildTargets(ITargetBuilderBounce bounce, IEnumerable<Target> targets, IBounceCommand command) {
             foreach (var target in targets) {
-                using (var targetScope = bounce.TaskScope(target.Task, command, target.Name)) {
-                    bounce.Invoke(command, target.Task);
-                    targetScope.TaskSucceeded();
+                if (target.Task != null) {
+                    InvokeTask(bounce, command, target.Name, target.Task);
                 }
+            }
+        }
+
+        private static void InvokeTask(ITargetBuilderBounce bounce, IBounceCommand command, string name, ITask task) {
+            using (var targetScope = bounce.TaskScope(task, command, name)) {
+                bounce.Invoke(command, task);
+                targetScope.TaskSucceeded();
             }
         }
     }

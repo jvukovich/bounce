@@ -115,6 +115,7 @@
     <Compile Include="ConditionParseException.cs" />
     <Compile Include="EnvironmentVariable.cs" />
     <Compile Include="EnvironmentVariables.cs" />
+    <Compile Include="IBounceFactory.cs" />
     <Compile Include="ITargetsBuilder.cs" />
     <Compile Include="NuGetPackage.cs" />
     <Compile Include="NuGetPush.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="RenameDirectory.cs" />
     <Compile Include="RenameFile.cs" />
     <Compile Include="TargetsBuilder.cs" />
+    <Compile Include="TargetsRetrieverExtensions.cs" />
     <Compile Include="TeamCity\TeamCity5NUnitLogger.cs" />
     <Compile Include="Delete.cs" />
     <Compile Include="DependencyAttribute.cs" />
