@@ -27,5 +27,23 @@ namespace Bounce.Framework.Tests {
             Assert.That(targetsDictionary["A"], Is.SameAs(a));
             Assert.That(targetsDictionary["B"], Is.SameAs(b));
         }
+
+        [Test]
+        public void ShouldCheckForNullIfPropertyAbsent() {
+            // arrange
+
+            var targets = new DummyTarget {
+                A = new Mock<ITask>().Object,
+                B = null
+            };
+
+            // act / assert (no exceptions)
+            var targetsDictionary = new TargetsParser().ParseTargetsFromObject(targets);
+        }
+
+        private class DummyTarget {
+            public ITask A { get; set; }
+            public ITask B { get; set; }
+        }
     }
 }

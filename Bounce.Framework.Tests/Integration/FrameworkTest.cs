@@ -24,7 +24,7 @@ namespace Bounce.Framework.Tests.Integration {
         public void AbleToUseBounceFromOutside() {
 
             // arrange
-            var bounce = BounceFactory.GetBounce();
+            var bounce = new BounceFactory().GetBounce();
             var targetsRetriever = new TargetsRetriever();
             var parameters = new CommandLineParameters();
 
