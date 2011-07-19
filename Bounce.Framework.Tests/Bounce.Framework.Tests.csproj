@@ -95,7 +95,9 @@
     <Compile Include="Features\CleanAfterBuildFeature.cs" />
     <Compile Include="Features\CleanExecutedWithCleanDependenciesFeature.cs" />
     <Compile Include="Features\DescribeFeature.cs" />
+    <Compile Include="GitCommandTests.cs" />
     <Compile Include="Integration\FrameworkTest.cs" />
+    <Compile Include="Integration\GitCommandTests.cs" />
     <Compile Include="NUnitTestsWithPartCoverTests.cs" />
     <Compile Include="RenameFileTests.cs" />
     <Compile Include="RenameDirectoryTests.cs" />

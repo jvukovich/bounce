@@ -15,7 +15,6 @@ namespace Bounce.Framework.Tests {
             Bounce.Setup(b => b.Log).Returns(Log);
         }
 
-
         [Test]
         public void IfDirectoryAlreadyExtantShouldUsePull() {
             var git = new Mock<IGitCommand>();
