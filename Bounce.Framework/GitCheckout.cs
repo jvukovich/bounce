@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class GitCheckout : Task {
@@ -7,6 +9,8 @@ namespace Bounce.Framework {
         public Task<string> Repository;
         [Dependency]
         public Task<string> Directory;
+        [Dependency]
+        public Task<string> Branch;
 
         private IGitRepoParser GitRepoParser;
         private IDirectoryUtils DirectoryUtils;
@@ -23,11 +27,21 @@ namespace Bounce.Framework {
         public override void Build(IBounce bounce) {
             bounce.Log.Debug("pwd");
             bounce.Log.Debug(System.IO.Directory.GetCurrentDirectory());
+
             if (DirectoryUtils.DirectoryExists(WorkingDirectory)) {
                 GitCommand.Pull(WorkingDirectory, bounce.Log, bounce);
             } else {
-                GitCommand.Clone(Repository.Value, WorkingDirectory, bounce.Log, bounce);
+                var options = GetCommandOptions();
+                GitCommand.Clone(Repository.Value, WorkingDirectory, options, bounce.Log, bounce);
             }
+        }
+
+        private IDictionary<string, string> GetCommandOptions() {
+            if (Branch != null && Branch.Value != null) {
+                return new Dictionary<string, string> { { "--branch", Branch.Value } };
+            }
+
+            return null;
         }
 
         private string WorkingDirectory {
