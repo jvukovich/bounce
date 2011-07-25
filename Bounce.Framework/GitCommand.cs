@@ -53,8 +53,8 @@ namespace Bounce.Framework {
     }
 
     static class GitOptionsExtentions {
-        public static string ToOptionsString(this IDictionary<string, string> options) {
-            return string.Join("", options.Select(o => string.Format("{0} {1} ", o.Key, o.Value))).Trim();
+        public static string ToOptionsString(this IEnumerable<KeyValuePair<string, string>> options) {
+            return string.Join("", options.Select(o => string.Format("{0} {1} ", o.Key, o.Value)).ToArray()).Trim();
         }
     }
 }
