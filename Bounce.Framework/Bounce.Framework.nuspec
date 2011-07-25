@@ -18,5 +18,13 @@
   <files>
 	<file src="bin\Debug\Bounce.Framework.dll" target="lib\net40" />
 	<file src="bin\Debug_3_5\Bounce.Framework.dll" target="lib\net35" />
+	
+	<file src="..\Bounce.Console\bin\Debug\Bounce.exe" target="tools\net40" />
+	<file src="..\Bounce.Console\bin\Debug\Bounce.exe.config" target="tools\net40" />
+	<file src="..\Bounce.Console\bin\Debug\Bounce.Framework.dll" target="tools\net40" />
+
+	<file src="..\Bounce.Console\bin\Debug_3_5\Bounce.exe" target="tools\net35" />
+	<file src="..\Bounce.Console\bin\Debug_3_5\Bounce.exe.config" target="tools\net35" />
+	<file src="..\Bounce.Console\bin\Debug_3_5\Bounce.Framework.dll" target="tools\net35" />
   </files>
 </package>
