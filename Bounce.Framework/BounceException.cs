@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace Bounce.Framework {
     [Serializable]
-    public class BounceException : Exception {
+    public class BounceException : Exception
+    {
         public BounceException(string message) : base(message) {
         }
 
@@ -11,6 +13,10 @@ namespace Bounce.Framework {
         }
 
         public BounceException() {
+        }
+
+        public BounceException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext) {
+            
         }
 
         public virtual void Explain(TextWriter stderr) {
