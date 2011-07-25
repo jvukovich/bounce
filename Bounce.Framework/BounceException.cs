@@ -2,6 +2,7 @@
 using System.IO;
 
 namespace Bounce.Framework {
+    [Serializable]
     public class BounceException : Exception {
         public BounceException(string message) : base(message) {
         }
