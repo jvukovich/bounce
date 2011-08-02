@@ -10,6 +10,8 @@ namespace Bounce.Framework {
         [Dependency]
         public Task<string> Configuration;
         [Dependency]
+        public Task<string> OutputDir;
+        [Dependency]
         public Task<string> MsBuildExe;
 
         public VisualStudioSolution() {
@@ -24,8 +26,7 @@ namespace Bounce.Framework {
         }
 
         public VisualStudioSolutionProjects Projects {
-            get
-            {
+            get {
                 return new VisualStudioSolutionProjects(this);
             }
         }
@@ -35,29 +36,31 @@ namespace Bounce.Framework {
 
             var arguments = Arguments(
                 "\"" + SolutionPath.Value + "\"",
-                ConfigIfSpecified
+                ConfigIfSpecified,
+                OutputDirIfSpecified
             );
 
             bounce.ShellCommand.ExecuteAndExpectSuccess(MsBuildExe.Value, arguments);
         }
 
-        private static string Arguments(params string [] args)
-        {
+        private static string Arguments(params string[] args) {
             return String.Join(" ", args.Where(a => a != null).ToArray());
         }
 
-        protected string ConfigIfSpecified
-        {
-            get
-            {
-                if (Configuration == null)
-                {
+        protected string ConfigIfSpecified {
+            get {
+                if (Configuration == null || Configuration.Value == null) {
                     return null;
                 }
-                else
-                {
+                else {
                     return "/p:Configuration=" + Configuration.Value;
                 }
+            }
+        }
+
+        protected string OutputDirIfSpecified {
+            get {
+                return "/p:Outdir=" + OutputDir.Value;
             }
         }
 
@@ -67,7 +70,8 @@ namespace Bounce.Framework {
 
                 if (details != null) {
                     return details;
-                } else {
+                }
+                else {
                     throw new DependencyBuildFailureException(this,
                                                               String.Format("VisualStudio solution file `{0}' does not exist",
                                                                             SolutionPath.Value));
@@ -78,7 +82,8 @@ namespace Bounce.Framework {
         internal VisualStudioSolutionDetails TryGetSolutionDetails() {
             if (SolutionExists) {
                 return new VisualStudioSolutionFileReader().ReadSolution(SolutionPath.Value, Config);
-            } else {
+            }
+            else {
                 return null;
             }
         }
@@ -100,7 +105,8 @@ namespace Bounce.Framework {
             get {
                 if (Configuration == null) {
                     return "";
-                } else {
+                }
+                else {
                     return Configuration.Value;
                 }
             }
