@@ -64,6 +64,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SharpTestsEx">
+      <HintPath>..\References\SharpTestsEx.1.1.1\SharpTestsEx.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

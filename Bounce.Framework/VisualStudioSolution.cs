@@ -60,8 +60,16 @@ namespace Bounce.Framework {
 
         protected string OutputDirIfSpecified {
             get {
-                return "/p:Outdir=" + OutputDir.Value;
+                if (OutputDir == null || OutputDir.Value == null) {
+                    return null;
+                }
+
+                return "/p:Outdir=" + EnsureTrailingSlashIsSet(OutputDir.Value);
             }
+        }
+
+        private string EnsureTrailingSlashIsSet(string outputDir) {
+            return outputDir.Last<char>() == Path.DirectorySeparatorChar ? outputDir : outputDir + Path.DirectorySeparatorChar;
         }
 
         internal VisualStudioSolutionDetails SolutionDetails {

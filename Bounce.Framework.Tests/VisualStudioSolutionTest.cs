@@ -4,6 +4,7 @@ using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 using NUnit.Framework;
 using Moq;
+using SharpTestsEx;
 
 namespace Bounce.Framework.Tests {
     [TestFixture]
@@ -24,7 +25,7 @@ namespace Bounce.Framework.Tests {
             solution.Build(bounceMock.Object);
 
             // assert
-            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), "\"TestSolution.sln\""));
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\""))));
         }
 
         [Test]
@@ -53,7 +54,7 @@ namespace Bounce.Framework.Tests {
             solution.Build(bounceMock.Object);
 
             // assert
-            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), "\"TestSolution.sln\" /p:Configuration=Release"));
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\" /p:Configuration=Release"))));
         }
 
         [Test]
@@ -70,7 +71,7 @@ namespace Bounce.Framework.Tests {
             solution.Build(bounceMock.Object);
 
             // assert
-            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), "\"TestSolution.sln\""));
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\""))));
         }
 
         [Test]
@@ -87,7 +88,7 @@ namespace Bounce.Framework.Tests {
             solution.Build(bounceMock.Object);
 
             // assert
-            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), "\"TestSolution.sln\""));
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\""))));
         }
 
         [Test]
@@ -104,7 +105,58 @@ namespace Bounce.Framework.Tests {
             solution.Build(bounceMock.Object);
 
             // assert
-            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), "\"TestSolution.sln\" /p:Outdir=..\\Build\\"));
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\" /p:Outdir=..\\Build\\"))));
+        }
+
+        [Test]
+        public void BuildIfOutdirOptionIsNull() {
+            // arrange
+            var bounceMock = new Mock<IBounce>() { DefaultValue = Moq.DefaultValue.Mock };
+            var shellMock = new Mock<IShellCommandExecutor>();
+            var solution = new VisualStudioSolution { SolutionPath = new ImmediateValue<string>(@"TestSolution.sln"), OutputDir = null };
+
+            bounceMock.SetupAllProperties();
+            bounceMock.SetupGet(_ => _.ShellCommand).Returns(shellMock.Object);
+
+            // act
+            solution.Build(bounceMock.Object);
+
+            // assert
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\""))));
+        }
+
+        [Test]
+        public void BuildIfOutdirOptionValueIsNull() {
+            // arrange
+            var bounceMock = new Mock<IBounce>() { DefaultValue = Moq.DefaultValue.Mock };
+            var shellMock = new Mock<IShellCommandExecutor>();
+            var solution = new VisualStudioSolution { SolutionPath = new ImmediateValue<string>(@"TestSolution.sln"), OutputDir = new ImmediateValue<string>(null) };
+
+            bounceMock.SetupAllProperties();
+            bounceMock.SetupGet(_ => _.ShellCommand).Returns(shellMock.Object);
+
+            // act
+            solution.Build(bounceMock.Object);
+
+            // assert
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\""))));
+        }
+
+        [Test]
+        public void BuildWithOutdirOptionEnsureThatLastSlashIsSet() {
+            // arrange
+            var bounceMock = new Mock<IBounce>() { DefaultValue = Moq.DefaultValue.Mock };
+            var shellMock = new Mock<IShellCommandExecutor>();
+            var solution = new VisualStudioSolution { SolutionPath = new ImmediateValue<string>(@"TestSolution.sln"), OutputDir = "..\\Build" };
+
+            bounceMock.SetupAllProperties();
+            bounceMock.SetupGet(_ => _.ShellCommand).Returns(shellMock.Object);
+
+            // act
+            solution.Build(bounceMock.Object);
+
+            // assert
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\" /p:Outdir=..\\Build\\"))));
         }
 
     }
