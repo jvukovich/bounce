@@ -28,16 +28,38 @@ namespace Bounce.Framework.Tests {
             shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\""))));
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            DeleteTestSolution();
+        }
+
         [Test]
         public void CanAccessProjectsBeforeSolutionExists() {
             // arrange 
-            var solution = new VisualStudioSolution {SolutionPath = new ImmediateValue<string>(Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln"))};
+            var solution = new VisualStudioSolution {SolutionPath = Path.Combine(SolutionUnzipDirectory, @"TestSolution\TestSolution.sln")};
 
             // act 
             Task<IEnumerable<string>> outputFiles = solution.Projects.Select(p => p.OutputFile);
 
+            UnzipTestSolution();
+
             // assert
             Assert.That(outputFiles.Value.ToArray(), Is.EquivalentTo(new [] {@"TestSolution\TestSolution\TestSolution\bin\Debug\TestSolution.dll"}));
+        }
+
+        private void UnzipTestSolution()
+        {
+            DeleteTestSolution();
+            new FastZip().ExtractZip("TestSolution.zip", SolutionUnzipDirectory, null);
+        }
+
+        private void DeleteTestSolution()
+        {
+            if (Directory.Exists(SolutionUnzipDirectory))
+            {
+                Directory.Delete(SolutionUnzipDirectory, true);
+            }
         }
 
         [Test]
