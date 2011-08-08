@@ -99,6 +99,7 @@ namespace Bounce.Framework {
             {
                 FromPath = Path.GetDirectoryName(BounceRunner.TargetsPath),
                 ToPath = package.SubPath("Bounce"),
+                Excludes = Copy.SvnDirectories,
             }.ToPath;
 
             var deletedBeforeBounce = new Delete {Path = copiedBounceDirectory.SubPath("beforebounce.*")};

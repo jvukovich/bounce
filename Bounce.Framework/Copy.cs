@@ -4,6 +4,8 @@ using System.IO;
 
 namespace Bounce.Framework {
     public class Copy : Task {
+        public static readonly List<string> SvnDirectories = new List<string> { @"**\_svn\", @"**\.svn\" };
+
         private readonly IFileSystemCopier FileSystemCopier;
 
         public Copy() : this(new FileSystemCopier()) {}
