@@ -64,6 +64,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SharpTestsEx">
+      <HintPath>..\References\SharpTestsEx.1.1.1\SharpTestsEx.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -82,6 +85,7 @@
     <Compile Include="Attributes\IntegrationAttribute.cs" />
     <Compile Include="BounceCommandTest.cs" />
     <Compile Include="BounceCommandExtensionsTest.cs" />
+    <Compile Include="BounceFactoryTests.cs" />
     <Compile Include="BounceTest.cs" />
     <Compile Include="BuilderTest.cs" />
     <Compile Include="CommandAndTargetNameParserTest.cs" />
@@ -94,8 +98,12 @@
     <Compile Include="Features\CleanAfterBuildFeature.cs" />
     <Compile Include="Features\CleanExecutedWithCleanDependenciesFeature.cs" />
     <Compile Include="Features\DescribeFeature.cs" />
+    <Compile Include="GitCommandTests.cs" />
     <Compile Include="Integration\FrameworkTest.cs" />
     <Compile Include="NUnitTestsWithPartCoverTests.cs" />
+    <Compile Include="RenameFileTests.cs" />
+    <Compile Include="RenameDirectoryTests.cs" />
+    <Compile Include="TargetsBuilderTests.cs" />
     <Compile Include="TeamCity\TeamCity5NUnitLoggerTests.cs" />
     <Compile Include="TeamCity\TeamCityFactoryTests.cs" />
     <Compile Include="TeamCity\TeamCityLogTests.cs" />

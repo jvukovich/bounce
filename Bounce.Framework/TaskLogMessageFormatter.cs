@@ -1,7 +1,7 @@
 using System;
 
 namespace Bounce.Framework {
-    internal class TaskLogMessageFormatter : ILogMessageFormatter {
+    public class TaskLogMessageFormatter : ILogMessageFormatter {
         private readonly ITask task;
 
         public TaskLogMessageFormatter(ITask task) {

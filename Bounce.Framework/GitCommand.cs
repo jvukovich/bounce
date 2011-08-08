@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Bounce.Framework {
     class GitCommand : IGitCommand {
@@ -11,10 +13,16 @@ namespace Bounce.Framework {
             }
         }
 
-        public void Clone(string repo, string directory, ILog log, IBounce bounce)
+        public void Clone(string repo, string directory, IDictionary<string, string> options,  ILog log, IBounce bounce)
         {
             log.Info("cloning git repo: {0}, into: {1}", repo, directory);
-            Git(bounce, @"clone {0} ""{1}""", repo, directory);
+
+            if (options == null) {
+                Git(bounce, @"clone {0} ""{1}""", repo, directory);
+            }
+            else {
+                Git(bounce, @"clone {0} {1} ""{2}""", options.ToOptionsString(), repo, directory);
+            }
         }
 
         public void Tag(string tag, bool force, IBounce bounce)
@@ -41,6 +49,12 @@ namespace Bounce.Framework {
             public void Dispose() {
                 Directory.SetCurrentDirectory(OldDirectory);
             }
+        }
+    }
+
+    static class GitOptionsExtentions {
+        public static string ToOptionsString(this IEnumerable<KeyValuePair<string, string>> options) {
+            return string.Join("", options.Select(o => string.Format("{0} {1} ", o.Key, o.Value)).ToArray()).Trim();
         }
     }
 }
