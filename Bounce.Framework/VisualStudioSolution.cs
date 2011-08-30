@@ -12,6 +12,8 @@ namespace Bounce.Framework {
         [Dependency]
         public Task<string> OutputDir;
         [Dependency]
+        public Task<string> Target;
+        [Dependency]
         public Task<string> MsBuildExe;
 
         public VisualStudioSolution() {
@@ -37,7 +39,8 @@ namespace Bounce.Framework {
             var arguments = Arguments(
                 "\"" + SolutionPath.Value + "\"",
                 ConfigIfSpecified,
-                OutputDirIfSpecified
+                OutputDirIfSpecified,
+                TargetIfSpecified
             );
 
             bounce.ShellCommand.ExecuteAndExpectSuccess(MsBuildExe.Value, arguments);
@@ -65,6 +68,16 @@ namespace Bounce.Framework {
                 }
 
                 return "/p:Outdir=" + EnsureTrailingSlashIsSet(OutputDir.Value);
+            }
+        }
+
+        protected string TargetIfSpecified {
+            get {
+                if (Target == null || Target.Value == null) {
+                    return null;
+                }
+
+                return "/t:" + Target.Value;
             }
         }
 
