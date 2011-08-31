@@ -181,5 +181,38 @@ namespace Bounce.Framework.Tests {
             shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\" /p:Outdir=..\\Build\\"))));
         }
 
+        [Test]
+        public void BuildWithTargetOption() {
+            // arrange
+            var bounceMock = new Mock<IBounce>() { DefaultValue = Moq.DefaultValue.Mock };
+            var shellMock = new Mock<IShellCommandExecutor>();
+            var solution = new VisualStudioSolution { SolutionPath = new ImmediateValue<string>(@"TestSolution.sln"), Target = "Release" };
+
+            bounceMock.SetupAllProperties();
+            bounceMock.SetupGet(_ => _.ShellCommand).Returns(shellMock.Object);
+
+            // act
+            solution.Build(bounceMock.Object);
+
+            // assert
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\" /t:Release"))));
+        }
+
+        [Test]
+        public void BuildWithTargetOptionIfAbsent() {
+            // arrange
+            var bounceMock = new Mock<IBounce>() { DefaultValue = Moq.DefaultValue.Mock };
+            var shellMock = new Mock<IShellCommandExecutor>();
+            var solution = new VisualStudioSolution { SolutionPath = new ImmediateValue<string>(@"TestSolution.sln") };
+
+            bounceMock.SetupAllProperties();
+            bounceMock.SetupGet(_ => _.ShellCommand).Returns(shellMock.Object);
+
+            // act
+            solution.Build(bounceMock.Object);
+
+            // assert
+            shellMock.Verify(_ => _.ExecuteAndExpectSuccess(It.IsAny<string>(), It.Is<string>(s => s.Satisfy(v => v == "\"TestSolution.sln\""))));
+        }
     }
 }

@@ -22,6 +22,12 @@ namespace Bounce.Framework
         [Dependency] public Task<IEnumerable<string>> IncludeCategories;
 
         /// <summary>
+        /// Framework version to be used for tests
+        /// </summary>
+        [Dependency]
+        public Task<string> FrameworkVersion;
+
+        /// <summary>
         /// Categories to exclude in the test run.
         /// </summary>
         [Dependency] public Task<IEnumerable<string>> ExcludeCategories;
@@ -43,6 +49,7 @@ namespace Bounce.Framework
             {
                 Excludes,
                 Includes,
+                Framework,
                 joinedTestDlls
             };
 
@@ -61,6 +68,16 @@ namespace Bounce.Framework
         {
             get {
                 return GetIncludeExcludeArgument("include", IncludeCategories);
+            }
+        }
+
+        protected string Framework {
+            get {
+                if (!string.IsNullOrEmpty(FrameworkVersion.Value)) {
+                    return "/framework=" + FrameworkVersion.Value;
+                }
+
+                return "";
             }
         }
 
