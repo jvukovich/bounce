@@ -15,10 +15,20 @@ namespace Bounce.Framework
 
             try
             {
-                bounce.ShellCommand.ExecuteAndExpectSuccess(Exe.Value, Arguments.Value);
+                bounce.ShellCommand.ExecuteAndExpectSuccess(Exe.Value, ArgumentsIfExists);
             } finally
             {
                 Directory.SetCurrentDirectory(oldDirectory);
+            }
+        }
+
+        private string ArgumentsIfExists {
+            get {
+                if (Arguments == null || Arguments.Value == null) {
+                    return null;
+                }
+
+                return Arguments.Value;
             }
         }
     }
