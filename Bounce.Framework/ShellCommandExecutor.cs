@@ -80,10 +80,10 @@ namespace Bounce.Framework {
             processInfo.RedirectStandardOutput = true;
             processInfo.UseShellExecute = false;
             processInfo.ErrorDialog = false;
-            
+            processInfo.EnvironmentVariables["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
             var p = new Process { StartInfo = processInfo };
 
-            
             p.ErrorDataReceived += output.ErrorDataReceived;
             p.OutputDataReceived += output.OutputDataReceived;
             return p;
