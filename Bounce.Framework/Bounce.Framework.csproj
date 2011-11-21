@@ -116,6 +116,7 @@
     <Compile Include="EnvironmentVariable.cs" />
     <Compile Include="EnvironmentVariables.cs" />
     <Compile Include="IBounceFactory.cs" />
+    <Compile Include="Iis7WebSiteBinding.cs" />
     <Compile Include="ITargetsBuilder.cs" />
     <Compile Include="NuGetPackage.cs" />
     <Compile Include="NuGetPush.cs" />

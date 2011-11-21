@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Web.Administration;
 
 namespace Bounce.Framework {
+
     public class Iis7WebSite : Task {
         [Dependency]
         public Task<string> Directory;
@@ -11,6 +12,8 @@ namespace Bounce.Framework {
         public Task<int> Port;
         [Dependency]
         public Task<string> Name;
+        [Dependency]
+        public Task<IEnumerable<Iis7WebSiteBinding>> Bindings;
 
         public override void Build(IBounce bounce) {
             var iisServer = new ServerManager();
@@ -19,7 +22,15 @@ namespace Bounce.Framework {
             if (!SiteUpToDate(existingSite)) {
                 bounce.Log.Info("installing IIS website at: " + Directory.Value);
                 RemoveWebSiteIfExtant(iisServer);
-                iisServer.Sites.Add(Name.Value, Directory.Value, Port.Value);
+                var site = iisServer.Sites.Add(Name.Value, Directory.Value, Port.Value);
+
+                if (Bindings != null && Bindings.Value != null) {
+                    site.Bindings.Clear();                    
+                    foreach (var binding in Bindings.Value) {
+                        site.Bindings.Add(binding.Information.Value, binding.Protocol.Value);
+                    }
+                }
+
                 iisServer.CommitChanges();
             } else {
                 bounce.Log.Info("IIS website already installed");
@@ -32,9 +43,18 @@ namespace Bounce.Framework {
                     return false;
                 }
 
-                var expectedBindingInformation = String.Format("*:{0}:", Port.Value);
-                if (site.Bindings.All(b => b.BindingInformation != expectedBindingInformation)) {
-                    return false;
+                if (Bindings == null) {
+                    var expectedBindingInformation = String.Format("*:{0}:", Port.Value);
+                    if (site.Bindings.Any(b => b.BindingInformation != expectedBindingInformation)) {
+                        return false;
+                    }
+                }
+                else {
+                    if (site.Bindings.Any(b => {
+                        return Bindings.Value.Any(e => e.Information.Value != b.BindingInformation || e.Protocol.Value != b.Protocol);
+                    })) {
+                        return false;
+                    }
                 }
 
                 return true;
