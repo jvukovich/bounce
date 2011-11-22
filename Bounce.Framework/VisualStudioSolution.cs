@@ -33,6 +33,16 @@ namespace Bounce.Framework {
             }
         }
 
+        public string SolutionDirectory {
+            get {
+                if (SolutionPath == null || SolutionPath.Value == null) {
+                    return null;
+                }
+
+                return Path.GetDirectoryName(SolutionPath.Value);
+            }
+        }
+
         public override void Build(IBounce bounce) {
             bounce.Log.Info("building solution at: " + SolutionPath.Value);
 
