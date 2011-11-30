@@ -14,6 +14,8 @@ namespace Bounce.Framework {
         public Task<string> Name;
         [Dependency]
         public Task<IEnumerable<Iis7WebSiteBinding>> Bindings;
+        [Dependency]
+        public Task<string> ApplicationPoolName;
 
         public override void Build(IBounce bounce) {
             var iisServer = new ServerManager();
@@ -31,6 +33,10 @@ namespace Bounce.Framework {
                     }
                 }
 
+                if (ApplicationPoolNameIfSet != null) {
+                    site.ApplicationDefaults.ApplicationPoolName = ApplicationPoolNameIfSet;
+                }
+
                 iisServer.CommitChanges();
             } else {
                 bounce.Log.Info("IIS website already installed");
@@ -40,6 +46,10 @@ namespace Bounce.Framework {
         private bool SiteUpToDate(Site site) {
             if (site != null) {
                 if (site.Applications[0].VirtualDirectories[0].PhysicalPath != Directory.Value) {
+                    return false;
+                }
+
+                if (site.ApplicationDefaults.ApplicationPoolName != ApplicationPoolNameIfSet) {
                     return false;
                 }
 
@@ -74,6 +84,15 @@ namespace Bounce.Framework {
             var iisServer = new ServerManager();
             RemoveWebSiteIfExtant(iisServer);
             iisServer.CommitChanges();
+        }
+
+        public string ApplicationPoolNameIfSet {
+            get {
+                if (ApplicationPoolName != null && !string.IsNullOrEmpty(ApplicationPoolName.Value))
+                    return ApplicationPoolName.Value;
+
+                return null;
+            }
         }
     }
 }
