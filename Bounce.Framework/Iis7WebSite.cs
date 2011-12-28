@@ -43,7 +43,8 @@ namespace Bounce.Framework {
             }
         }
 
-        private bool SiteUpToDate(Site site) {
+        private bool SiteUpToDate(Site site)
+        {
             if (site != null) {
                 if (site.Applications[0].VirtualDirectories[0].PhysicalPath != Directory.Value) {
                     return false;
@@ -60,17 +61,15 @@ namespace Bounce.Framework {
                     }
                 }
                 else {
-                    if (site.Bindings.Any(b => {
-                        return Bindings.Value.Any(e => e.Information.Value != b.BindingInformation || e.Protocol.Value != b.Protocol);
-                    })) {
+                    if (site.Bindings.Any(b => Bindings.Value.Any(e => e.Information.Value != b.BindingInformation || e.Protocol.Value != b.Protocol))) {
                         return false;
                     }
                 }
 
                 return true;
-            } else {
-                return false;
             }
+
+            return false;
         }
 
         private void RemoveWebSiteIfExtant(ServerManager server) {
