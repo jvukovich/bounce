@@ -73,7 +73,7 @@ namespace Bounce.Framework
 
         protected string Framework {
             get {
-                if (!string.IsNullOrEmpty(FrameworkVersion.Value)) {
+                if (FrameworkVersion != null && !string.IsNullOrEmpty(FrameworkVersion.Value)) {
                     return "/framework=" + FrameworkVersion.Value;
                 }
 
