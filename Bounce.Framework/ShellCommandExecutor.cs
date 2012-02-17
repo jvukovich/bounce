@@ -81,7 +81,7 @@ namespace Bounce.Framework {
             processInfo.UseShellExecute = false;
             processInfo.ErrorDialog = false;
             if (string.IsNullOrEmpty(processInfo.EnvironmentVariables["HOME"])) {
-                processInfo.EnvironmentVariables["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                processInfo.EnvironmentVariables["HOME"] = Environment.GetEnvironmentVariable("UserProfile");
             }
 
             var p = new Process { StartInfo = processInfo };
