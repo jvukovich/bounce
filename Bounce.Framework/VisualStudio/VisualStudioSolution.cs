@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 
 namespace Bounce.Framework.VisualStudio {
-    public class VisualStudioSolution {
+    public class VisualStudioSolution : IVisualStudioSolution {
         public string MsBuildExe { get; set; }
         public string SolutionPath { get; set; }
         public string Configuration { get; set; }

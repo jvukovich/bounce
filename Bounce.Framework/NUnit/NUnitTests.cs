@@ -4,8 +4,7 @@ using System.Linq;
 
 namespace Bounce.Framework.NUnit
 {
-    public class NUnit
-    {
+    public class NUnit : INUnit {
         /// <summary>
         /// Full path to nunit-console.exe
         /// </summary>

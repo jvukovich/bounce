@@ -1,8 +1,7 @@
 ﻿namespace Bounce.Framework.VisualStudio
 {
-    public class VisualStudio
-    {
-        public VisualStudioSolution Solution(string path) {
+    public class VisualStudio : IVisualStudio {
+        public IVisualStudioSolution Solution(string path) {
             return new VisualStudioSolution(path);
         }
     }
