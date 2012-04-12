@@ -2,9 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using Bounce.Framework;
 using System.Text.RegularExpressions;
-using Bounce.Framework.Obsolete;
+using LegacyBounce.Framework;
 
 namespace TestBounceAssembly {
     public class BuildTargets {

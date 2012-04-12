@@ -1,13 +1,11 @@
 using System.Collections.Generic;
-using System.Reflection;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
     public class AmbiguousTaskNameException : BounceException {
         private readonly string _taskName;
-        private readonly IEnumerable<IObsoleteTask> _tasks;
+        private readonly IEnumerable<ITask> _tasks;
 
-        public AmbiguousTaskNameException(string taskName, IEnumerable<IObsoleteTask> tasks) {
+        public AmbiguousTaskNameException(string taskName, IEnumerable<ITask> tasks) {
             _taskName = taskName;
             _tasks = tasks;
         }

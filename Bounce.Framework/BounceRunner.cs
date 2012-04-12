@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
     public class BounceRunner {
@@ -32,7 +31,7 @@ namespace Bounce.Framework {
             var matchingTasks = tasks.Where(t => t.AllNames.Contains(taskName));
 
             if (matchingTasks.Count() > 1) {
-                throw new AmbiguousTaskNameException(taskName, matchingTasks.OfType<IObsoleteTask>());
+                throw new AmbiguousTaskNameException(taskName, matchingTasks.OfType<ITask>());
             }
             else if (!matchingTasks.Any())
             {

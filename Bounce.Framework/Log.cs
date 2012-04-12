@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
     class Log : ILog {
@@ -9,14 +8,11 @@ namespace Bounce.Framework {
         private readonly LogOptions LogOptions;
         private readonly ILogMessageFormatter LogMessageFormatter;
 
-        public ITaskLog TaskLog { get; private set; }
-
         public Log(TextWriter stdout, TextWriter stderr, LogOptions logOptions, ILogMessageFormatter logMessageFormatter) {
             Stdout = stdout;
             Stderr = stderr;
             LogOptions = logOptions;
             LogMessageFormatter = logMessageFormatter;
-            TaskLog = new TaskLog(stdout, stderr, logOptions);
         }
 
         public virtual void Debug(string format, params object[] args)

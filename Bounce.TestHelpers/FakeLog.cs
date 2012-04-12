@@ -1,6 +1,5 @@
 ﻿using System;
 using Bounce.Framework;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.TestHelpers {
     public class FakeLog : ILog {
@@ -42,24 +41,6 @@ namespace Bounce.TestHelpers {
 
         public virtual ICommandLog BeginExecutingCommand(string command, string args) {
             return new FakeCommandLog(command, args);
-        }
-
-        public virtual ITaskLog TaskLog {
-            get { return new FakeTaskLog(); }
-        }
-    }
-
-    public class FakeTaskLog : ITaskLog {
-        public void BeginTask(IObsoleteTask task, IBounceCommand command) {
-        }
-
-        public void EndTask(IObsoleteTask task, IBounceCommand command, TaskResult result) {
-        }
-
-        public void BeginTarget(IObsoleteTask task, string name, IBounceCommand command) {
-        }
-
-        public void EndTarget(IObsoleteTask task, string name, IBounceCommand command, TaskResult result) {
         }
     }
 

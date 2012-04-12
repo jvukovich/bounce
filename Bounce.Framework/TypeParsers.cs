@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
     class TypeParsers : Dictionary<Type, ITypeParser>, ITypeParsers {

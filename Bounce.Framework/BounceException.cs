@@ -19,7 +19,7 @@ namespace Bounce.Framework {
         }
 
         public virtual void Explain(TextWriter stderr) {
-            stderr.WriteLine(this);
+            stderr.WriteLine(Message);
         }
     }
 }

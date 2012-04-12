@@ -1,5 +1,4 @@
 using System;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
     public class DefaultLogFormatter : ILogMessageFormatter {

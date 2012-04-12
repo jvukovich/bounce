@@ -1,5 +1,3 @@
-using Bounce.Framework.Obsolete;
-
 namespace Bounce.Framework {
     public class NonNamedArgumentException : BounceException {
         private readonly string _arg;

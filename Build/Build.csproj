@@ -57,6 +57,10 @@
       <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
       <Name>Bounce.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LegacyBounce.Framework\LegacyBounce.Framework.csproj">
+      <Project>{198788B4-CB73-4C5A-8E83-191ED52C4BD9}</Project>
+      <Name>LegacyBounce.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

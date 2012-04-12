@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
-using Bounce.Framework;
-using Bounce.Framework.Obsolete;
 using Bounce.TestHelpers;
+using LegacyBounce.Framework;
 using NUnit.Framework;
+using ProcessOutput = Bounce.Framework.ProcessOutput;
+using ShellCommandExecutor = Bounce.Framework.ShellCommandExecutor;
 
 namespace Bounce.Console.Tests {
     [TestFixture]

@@ -83,78 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TaskMethodTest.cs" />
-    <Compile Include="Obsolete\Attributes\IntegrationAttribute.cs" />
-    <Compile Include="Obsolete\BounceCommandExtensionsTest.cs" />
-    <Compile Include="Obsolete\BounceCommandTest.cs" />
-    <Compile Include="Obsolete\BounceFactoryTests.cs" />
-    <Compile Include="Obsolete\BounceTest.cs" />
-    <Compile Include="Obsolete\BuilderTest.cs" />
-    <Compile Include="Obsolete\CommandAndTargetNameParserTest.cs" />
-    <Compile Include="Obsolete\CommandLineParameterParserTest.cs" />
-    <Compile Include="Obsolete\CommandLineParametersTest.cs" />
-    <Compile Include="Obsolete\CommandLineTasksParametersGeneratorTest.cs" />
-    <Compile Include="Obsolete\CopyTest.cs" />
-    <Compile Include="Obsolete\DirectoryFilesTest.cs" />
-    <Compile Include="Obsolete\DirectoryUtilsTest.cs" />
-    <Compile Include="Obsolete\EnvironmentVariablesTest.cs" />
-    <Compile Include="Obsolete\FakeArtefactTask.cs" />
-    <Compile Include="Obsolete\FakeBounce.cs" />
-    <Compile Include="Obsolete\FakePrintTask.cs" />
-    <Compile Include="Obsolete\FakeTask.cs" />
-    <Compile Include="Obsolete\Features\BuildingATargetFeature.cs" />
-    <Compile Include="Obsolete\Features\CleanAfterBuildFeature.cs" />
-    <Compile Include="Obsolete\Features\CleanExecutedWithCleanDependenciesFeature.cs" />
-    <Compile Include="Obsolete\Features\DescribeFeature.cs" />
-    <Compile Include="Obsolete\Features\PrintTask.cs" />
-    <Compile Include="Obsolete\Features\RemoteBounceFeature.cs" />
-    <Compile Include="Obsolete\Features\ShowingAvailableTargetsAndParametersFeature.cs" />
-    <Compile Include="Obsolete\FileNameFilterTest.cs" />
-    <Compile Include="Obsolete\FileSystemCopierTest.cs" />
-    <Compile Include="Obsolete\FileUtilsTest.cs" />
-    <Compile Include="Obsolete\GitCheckoutTest.cs" />
-    <Compile Include="Obsolete\GitCommandTests.cs" />
-    <Compile Include="Obsolete\GitRepoParserTest.cs" />
-    <Compile Include="Obsolete\GlobToRegexConverterTest.cs" />
-    <Compile Include="Obsolete\Iis6WebSiteTest.cs" />
-    <Compile Include="Obsolete\Iis7Admin.cs" />
-    <Compile Include="Obsolete\Integration\FrameworkTest.cs" />
-    <Compile Include="Obsolete\LazyDirectoryUtilsTest.cs" />
-    <Compile Include="Obsolete\LazyFileUtilsTest.cs" />
-    <Compile Include="Obsolete\LogFactoryRegistryTest.cs" />
-    <Compile Include="Obsolete\LogOptionCommandLineTranslatorTest.cs" />
-    <Compile Include="Obsolete\NUnitTestsWithPartCoverTests.cs" />
-    <Compile Include="Obsolete\OptionalTaskTest.cs" />
-    <Compile Include="Obsolete\ParameterFinderTest.cs" />
-    <Compile Include="Obsolete\ParameterTest.cs" />
-    <Compile Include="Obsolete\ProjectFilePropertyExpressionParserTest.cs" />
-    <Compile Include="Obsolete\RemoteBounceArgumentsTest.cs" />
-    <Compile Include="Obsolete\RemoteBounceTest.cs" />
-    <Compile Include="Obsolete\RenameDirectoryTests.cs" />
-    <Compile Include="Obsolete\RenameFileTests.cs" />
-    <Compile Include="Obsolete\SelectTasksTest.cs" />
-    <Compile Include="Obsolete\SelectTaskTest.cs" />
-    <Compile Include="Obsolete\TargetInvokerTest.cs" />
-    <Compile Include="Obsolete\TargetsBuilderTests.cs" />
-    <Compile Include="Obsolete\TargetsMethodInvokerTest.cs" />
-    <Compile Include="Obsolete\TargetsParserTest.cs" />
-    <Compile Include="Obsolete\TargetsRetrieverTest.cs" />
-    <Compile Include="Obsolete\TaskDependencyFinderTest.cs" />
-    <Compile Include="Obsolete\TaskOfTTest.cs" />
-    <Compile Include="Obsolete\TaskTest.cs" />
-    <Compile Include="Obsolete\TaskTestExtensions.cs" />
-    <Compile Include="Obsolete\TeamCity\TeamCity5NUnitLoggerTests.cs" />
-    <Compile Include="Obsolete\TeamCity\TeamCityArtifactPublisherTests.cs" />
-    <Compile Include="Obsolete\TeamCity\TeamCityFactoryTests.cs" />
-    <Compile Include="Obsolete\TeamCity\TeamCityLogTests.cs" />
-    <Compile Include="Obsolete\TeamCity\TeamCityMSBuildLoggerTest.cs" />
-    <Compile Include="Obsolete\TeamCity\TeamCityTextFormatterTest.cs" />
-    <Compile Include="Obsolete\TypeParsersTest.cs" />
-    <Compile Include="Obsolete\VisualStudioCSharpProjectFileLoaderTest.cs" />
-    <Compile Include="Obsolete\VisualStudioSolutionFileLoaderTest.cs" />
-    <Compile Include="Obsolete\VisualStudioSolutionFileReaderTest.cs" />
-    <Compile Include="Obsolete\VisualStudioSolutionTest.cs" />
-    <Compile Include="Obsolete\WhenBuiltTest.cs" />
-    <Compile Include="Obsolete\ZipFileTest.cs" />
     <Compile Include="ParameterParserTest.cs" />
     <Compile Include="ParametersTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -170,22 +98,7 @@
       <Name>Bounce.TestHelpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Obsolete\TestFiles\Bounce.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Obsolete\TestFiles\Bounce.sln">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Obsolete\TestFiles\Bouncer.Console.csproj">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Obsolete\TestSolution.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

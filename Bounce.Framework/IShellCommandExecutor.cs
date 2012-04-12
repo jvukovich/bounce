@@ -1,5 +1,3 @@
-using Bounce.Framework.Obsolete;
-
 namespace Bounce.Framework {
     public interface IShellCommandExecutor {
         ProcessOutput ExecuteAndExpectSuccess(string commandName, string commandArgs);

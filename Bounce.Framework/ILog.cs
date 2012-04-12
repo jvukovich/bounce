@@ -1,5 +1,4 @@
 using System;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
     public interface ILog {
@@ -20,6 +19,5 @@ namespace Bounce.Framework {
         void Error(Exception exception, object message);
 
         ICommandLog BeginExecutingCommand(string command, string args);
-        ITaskLog TaskLog { get; }
     }
 }

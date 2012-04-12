@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Bounce.Framework;
-using Bounce.Framework.Obsolete;
+using LegacyBounce.Framework;
 
 namespace Build
 {
