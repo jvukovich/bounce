@@ -8,6 +8,7 @@ namespace Bounce.Framework {
     public class BounceRunner {
         public void Run(string bounceDirectory, string [] rawArguments) {
             try {
+                Directory.SetCurrentDirectory(Path.GetDirectoryName(bounceDirectory));
                 var arguments = ParsedArguments(rawArguments);
 
                 Bounce.SetUp(arguments);
