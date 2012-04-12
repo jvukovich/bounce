@@ -9,12 +9,12 @@ namespace Bounce.Framework {
             _parameters = parameters;
         }
 
-        public object Parameter(Type type, string name, object defaultValue) {
-            return Parameter(new TaskParameter {Name = name, Type = type, DefaultValue = defaultValue});
-        }
-
         public T Parameter<T>(string name, T defaultValue) {
             return (T) Parameter(typeof (T), name, defaultValue);
+        }
+
+        public object Parameter(Type type, string name, object defaultValue) {
+            return Parameter(new TaskParameter {Name = name, Type = type, DefaultValue = defaultValue});
         }
 
         public object Parameter(Type type, string name) {
@@ -35,11 +35,7 @@ namespace Bounce.Framework {
 
         private object ParseParameter(ITaskParameter parameter) {
             var parser = TypeParsers.Default.TypeParser(parameter.Type);
-            if (parser != null) {
-                return parser.Parse(_parameters[parameter.Name]);
-            } else {
-                throw new TypeParserNotFoundException(_parameters[parameter.Name], parameter.Type);
-            }
+            return parser.Parse(_parameters[parameter.Name]);
         }
 
         public T Parameter<T>(string name) {

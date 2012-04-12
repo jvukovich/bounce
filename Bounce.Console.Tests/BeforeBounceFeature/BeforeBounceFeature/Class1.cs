@@ -1,16 +1,14 @@
 ﻿using System;
-using Bounce.Framework.Obsolete;
-using Bounce.Framework.Tests.Obsolete.Features;
+using Bounce.Framework;
 
 namespace BeforeBounceFeature
 {
     public class Build
     {
-        [Targets]
-        public static object GetTargets() {
-            return new {
-                BeforeBounceFeature = new PrintTask {Description = "building before bounce feature"},
-            };
+        [Task]
+        public void BeforeBounceFeature()
+        {
+            Console.WriteLine("building before bounce feature");
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Bounce.Framework {
             } else if (ContainsKey(type)) {
                 return this[type];
             } else {
-                return null;
+                return new NullTypeParser(type);
             }
         }
 
@@ -55,6 +55,26 @@ namespace Bounce.Framework {
             } else {
                 throw new TypeParserNotFoundException(parameterValue, type);
             }
+        }
+    }
+
+    internal class NullTypeParser : ITypeParser {
+        private readonly Type _type;
+
+        public NullTypeParser(Type type) {
+            _type = type;
+        }
+
+        public object Parse(string s) {
+            throw new TypeParserNotFoundException(s, _type);
+        }
+
+        public string Generate(object o) {
+            throw new NotImplementedException();
+        }
+
+        public string Description {
+            get { return _type.Name; }
         }
     }
 
