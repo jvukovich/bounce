@@ -8,7 +8,7 @@ namespace Bounce.Console {
     class BeforeBounceScriptRunner {
         public void RunBeforeBounceScript(OptionsAndArguments optionsAndArguments) {
             string script = BeforeBounceScript(optionsAndArguments.BounceDirectory);
-            if (File.Exists(script)) {
+            if (script != null) {
                 LogRunningBeforeBounceScript(script);
 
                 var processInfo = new ProcessStartInfo(script);
@@ -30,7 +30,7 @@ namespace Bounce.Console {
         }
 
         private string BeforeBounceScript(string bounceDir) {
-            return Directory.GetFiles(bounceDir, "beforebounce.*").First();
+            return Directory.GetFiles(bounceDir, "beforebounce.*").FirstOrDefault();
         }
 
         private static void LogRunningBeforeBounceScript(string executable) {
