@@ -88,10 +88,16 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AmbiguousTaskNameException.cs" />
+    <Compile Include="Bounce.cs" />
     <Compile Include="BounceException.cs" />
     <Compile Include="BounceRunner.cs" />
+    <Compile Include="DefaultLogFormatter.cs" />
+    <Compile Include="Iis\Iis7.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="IShellCommandExecutor.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="ITaskParameter.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="NonNamedArgumentException.cs" />
     <Compile Include="NoMatchingTaskException.cs" />
     <Compile Include="Obsolete\All.cs" />
@@ -180,7 +186,6 @@
     <Compile Include="Obsolete\IisWebSite.cs" />
     <Compile Include="Obsolete\IisWebSiteBindingDetails.cs" />
     <Compile Include="Obsolete\IisWebSiteState.cs" />
-    <Compile Include="Obsolete\ILog.cs" />
     <Compile Include="Obsolete\ILogMessageFormatter.cs" />
     <Compile Include="Obsolete\ILogOptionCommandLineTranslator.cs" />
     <Compile Include="Obsolete\ImmediateValue.cs" />
@@ -189,7 +194,6 @@
     <Compile Include="Obsolete\IParameters.cs" />
     <Compile Include="Obsolete\IPropertyValues.cs" />
     <Compile Include="Obsolete\IRemoteBounceFactory.cs" />
-    <Compile Include="Obsolete\IShellCommandExecutor.cs" />
     <Compile Include="Obsolete\ITargetBuilderBounce.cs" />
     <Compile Include="Obsolete\ITargetsBuilder.cs" />
     <Compile Include="Obsolete\ITargetsMethodInvoker.cs" />
@@ -205,7 +209,6 @@
     <Compile Include="Obsolete\IZipFileCreator.cs" />
     <Compile Include="Obsolete\LazyDirectoryUtils.cs" />
     <Compile Include="Obsolete\LazyFileUtils.cs" />
-    <Compile Include="Obsolete\Log.cs" />
     <Compile Include="Obsolete\LogFactoryRegistry.cs" />
     <Compile Include="Obsolete\LogLevel.cs" />
     <Compile Include="Obsolete\LogOptionCommandLineTranslator.cs" />
@@ -240,7 +243,6 @@
     <Compile Include="Obsolete\ScheduledTask.cs" />
     <Compile Include="Obsolete\SelectTask.cs" />
     <Compile Include="Obsolete\ShellCommand.cs" />
-    <Compile Include="Obsolete\ShellCommandExecutor.cs" />
     <Compile Include="Obsolete\ShellExecutableNotFoundException.cs" />
     <Compile Include="Obsolete\StagedDeployTarget.cs" />
     <Compile Include="Obsolete\StagedDeployTargetBuilder.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequiredParameterNotGivenException.cs" />
+    <Compile Include="ShellCommandExecutor.cs" />
     <Compile Include="TaskAttribute.cs" />
     <Compile Include="MethodInfoExtensions.cs" />
     <Compile Include="TaskMethod.cs" />
@@ -308,6 +311,8 @@
     <Compile Include="TaskRequiredParameterException.cs" />
     <Compile Include="TypeParsers.cs" />
     <Compile Include="UsageHelp.cs" />
+    <Compile Include="VisualStudio\VisualStudio.cs" />
+    <Compile Include="VisualStudio\VisualStudioSolution.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

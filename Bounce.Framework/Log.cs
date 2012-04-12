@@ -1,7 +1,8 @@
 using System;
 using System.IO;
+using Bounce.Framework.Obsolete;
 
-namespace Bounce.Framework.Obsolete {
+namespace Bounce.Framework {
     class Log : ILog {
         private readonly TextWriter Stdout;
         private readonly TextWriter Stderr;

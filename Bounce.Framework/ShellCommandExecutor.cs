@@ -2,8 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using Bounce.Framework.Obsolete;
 
-namespace Bounce.Framework.Obsolete {
+namespace Bounce.Framework {
     public class ShellCommandExecutor : IShellCommandExecutor {
         private Func<ILog> GetLog;
 

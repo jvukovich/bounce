@@ -9,6 +9,8 @@ namespace Bounce.Framework {
     public class BounceRunner {
         public void Run(string bounceDirectory, string [] arguments) {
             try {
+                Bounce.SetUp();
+
                 var tasks = Tasks(bounceDirectory);
                 if (arguments.Length > 0) {
                     RunTask(tasks, arguments);
