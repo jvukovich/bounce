@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Bounce.Framework {
-    public class ParameterParser {
+    public class ArgumentsParser {
         public IDictionary<string, string> ParseParameters(IEnumerable<string> parameters) {
             return ParseCommandLineParameters(parameters.ToArray());
         }

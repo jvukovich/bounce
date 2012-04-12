@@ -22,6 +22,8 @@ namespace Bounce.Framework.VisualStudio {
                 TargetIfSpecified
             );
 
+            Bounce.Log.Error("stuff");
+
             Bounce.Shell.ExecuteAndExpectSuccess(MsBuildExe, arguments);
         }
 

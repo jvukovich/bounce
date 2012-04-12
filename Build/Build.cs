@@ -1,32 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bounce.Framework;
 using LegacyBounce.Framework;
+using VisualStudioSolution = LegacyBounce.Framework.VisualStudioSolution;
 
 namespace Build
 {
     public class Build
     {
-        [Task]
-        public void DoSomething(int someNumber) {
-            Console.WriteLine("doing something!" + someNumber);
-        }
-
-        [Task]
-        public void TakesAString(string something = null) {
-            Console.WriteLine(something);
-        }
-
-        public enum Lake {
-            Constance,
-            Coniston
-        };
-
-        [Task]
-        public void ShowLake(Lake lake = Lake.Coniston) {
-            Console.WriteLine(lake);
-        }
-
         [Targets]
         public static object Targets(IParameters parameters)
         {

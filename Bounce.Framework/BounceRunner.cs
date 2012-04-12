@@ -6,13 +6,16 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        public void Run(string bounceDirectory, string [] arguments) {
+        public void Run(string bounceDirectory, string [] rawArguments) {
             try {
-                Bounce.SetUp();
+                var arguments = ParsedArguments(rawArguments);
+
+                Bounce.SetUp(arguments);
 
                 var tasks = Tasks(bounceDirectory);
-                if (arguments.Length > 0) {
-                    RunTask(tasks, arguments);
+
+                if (rawArguments.Length > 0) {
+                    RunTask(TaskName(rawArguments), arguments, tasks);
                 } else {
                     UsageHelp.WriteUsage(Console.Out, tasks);
                 }
@@ -23,11 +26,17 @@ namespace Bounce.Framework {
             }
         }
 
-        private void RunTask(IEnumerable<ITask> tasks, string[] arguments) {
-            string taskName = arguments[0];
-            var parsedArguments = new ParameterParser().ParseParameters(arguments.Skip(1));
-            var parameters = new Parameters(parsedArguments);
+        private static string TaskName(string[] arguments) {
+            return arguments[0];
+        }
 
+        private static Arguments ParsedArguments(string[] arguments) {
+            var parsedArguments = new ArgumentsParser().ParseParameters(arguments.Skip(1));
+            var parameters = new Arguments(parsedArguments);
+            return parameters;
+        }
+
+        private void RunTask(string taskName, Arguments arguments, IEnumerable<ITask> tasks) {
             var matchingTasks = tasks.Where(t => t.AllNames.Contains(taskName));
 
             if (matchingTasks.Count() > 1) {
@@ -37,7 +46,7 @@ namespace Bounce.Framework {
             {
                 throw new NoMatchingTaskException(taskName, tasks);
             } else {
-                matchingTasks.Single().Invoke(parameters);
+                matchingTasks.Single().Invoke(arguments);
             }
         }
 

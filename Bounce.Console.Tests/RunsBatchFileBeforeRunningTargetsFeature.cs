@@ -28,7 +28,7 @@ namespace Bounce.Console.Tests {
             File.WriteAllText(@"BeforeBounceFeature\bounce\beforebounce.bat", @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe BeforeBounceFeature.sln");
 #endif
 
-            var shell = new ShellCommandExecutor(() => new FakeLog());
+            var shell = new ShellCommandExecutor(new FakeLog());
 
             ProcessOutput output = null;
 
@@ -50,7 +50,7 @@ namespace Bounce.Console.Tests {
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature\BeforeBounceFeature\bounce");
             File.WriteAllText(@"BeforeBounceFeature\BeforeBounceFeature\bounce\beforebounce.bat", @"c:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe NonExtantSolution.sln");
 
-            var shell = new ShellCommandExecutor(() => new FakeLog());
+            var shell = new ShellCommandExecutor(new FakeLog());
 
             ProcessOutput output = null;
 

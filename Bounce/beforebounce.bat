@@ -1,1 +1,1 @@
-%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe Bounce.sln
+rem %SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe Bounce.sln

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class Parameters {
+    public class Arguments {
         private readonly IDictionary<string, string> _parameters;
 
-        public Parameters(IDictionary<string, string> parameters) {
+        public Arguments(IDictionary<string, string> parameters) {
             _parameters = parameters;
         }
 

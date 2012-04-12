@@ -7,6 +7,6 @@ namespace Bounce.Framework {
         string FullName { get; }
         IEnumerable<string> AllNames { get; }
         IEnumerable<ITaskParameter> Parameters { get; }
-        void Invoke(Parameters parameters);
+        void Invoke(Arguments arguments);
     }
 }

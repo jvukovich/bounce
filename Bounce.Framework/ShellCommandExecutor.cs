@@ -5,10 +5,10 @@ using System.IO;
 
 namespace Bounce.Framework {
     public class ShellCommandExecutor : IShellCommandExecutor {
-        private Func<ILog> GetLog;
+        private ILog Log;
 
-        public ShellCommandExecutor(Func<ILog> getLog) {
-            GetLog = getLog;
+        public ShellCommandExecutor(ILog log) {
+            Log = log;
         }
 
         public ProcessOutput ExecuteAndExpectSuccess(string commandName, string commandArgs)
@@ -21,7 +21,7 @@ namespace Bounce.Framework {
         }
 
         public ProcessOutput Execute(string commandName, string commandArgs) {
-            ICommandLog commandLog = GetLog().BeginExecutingCommand(commandName, commandArgs);
+            ICommandLog commandLog = Log.BeginExecutingCommand(commandName, commandArgs);
 
             string commandArgumentsForLogging = commandLog.CommandArgumentsForLogging;
             var output = new CommandOutputReceiver(commandLog);
