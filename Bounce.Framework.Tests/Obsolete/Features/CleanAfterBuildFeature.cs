@@ -16,7 +16,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test]
         public void ShouldCleanTasksAfterBuildAndCleanIfTheyreMarkedCleanAfterBuild() {
             MethodInfo method = typeof (Targets).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"buildandclean", "C"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "buildandclean", "C" }, method);
 
             Assert.That(BuiltArtefacts, Has.Member("a"));
             Assert.That(BuiltArtefacts, Has.No.Member("b"));
@@ -26,7 +26,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test]
         public void ShouldNotCleanIfBuild() {
             MethodInfo method = typeof (Targets).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "C"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "build", "C" }, method);
 
             Assert.That(BuiltArtefacts, Has.Member("a"));
             Assert.That(BuiltArtefacts, Has.Member("b"));
@@ -36,7 +36,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test]
         public void ShouldNotCleanTaskIfRequiredForDifferentTarget() {
             MethodInfo method = typeof (Targets).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "C", "DependsOnTaskToBeCleaned"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "build", "C", "DependsOnTaskToBeCleaned" }, method);
 
             Assert.That(BuiltArtefacts, Has.Member("a"));
             Assert.That(BuiltArtefacts, Has.Member("b"));
@@ -63,8 +63,8 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         }
 
         class TaskWithDeps : FakeArtefactTask {
-            [Dependency] public ITask NotToBeCleaned;
-            [Dependency, CleanAfterBuild] public ITask ToBeCleaned;
+            [Dependency] public IObsoleteTask NotToBeCleaned;
+            [Dependency, CleanAfterBuild] public IObsoleteTask ToBeCleaned;
 
             public TaskWithDeps(HashSet<string> builtArtefacts, string artefactName) : base(builtArtefacts, artefactName) {}
         }

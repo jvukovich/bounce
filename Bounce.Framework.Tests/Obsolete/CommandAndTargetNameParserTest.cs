@@ -32,7 +32,7 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldReturnNoTargetsIfNoneSpecified() {
             var parser = new CommandAndTargetParser(BounceCommandParser);
-            var targets = new Dictionary<string, ITask>();
+            var targets = new Dictionary<string, IObsoleteTask>();
             
             var commandAndTargetNames = parser.ParseCommandAndTargetNames(new [] {"build"}, targets);
             Assert.That(commandAndTargetNames.Command, Is.EqualTo(BounceCommandParser.Build));
@@ -42,7 +42,7 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldExpectTargetIfBuildIsUpperCase() {
             var parser = new CommandAndTargetParser(BounceCommandParser);
-            var targets = new Dictionary<string, ITask>();
+            var targets = new Dictionary<string, IObsoleteTask>();
 
             Assert.That(() => parser.ParseCommandAndTargetNames(new[] {"Build"}, targets),
                         Throws.InstanceOf(typeof (NoSuchTargetException)));
@@ -51,7 +51,7 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldThrowIfNoTargetFound() {
             var parser = new CommandAndTargetParser(BounceCommandParser);
-            var targets = new Dictionary<string, ITask>();
+            var targets = new Dictionary<string, IObsoleteTask>();
 
             Assert.That(() => parser.ParseCommandAndTargetNames(new[] {"build", "NoTarget"}, targets),
                         Throws.InstanceOf(typeof (NoSuchTargetException)));
@@ -60,7 +60,7 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldReturnNoTargetsIfNoneSpecifiedAndNoCommandSpecified() {
             var parser = new CommandAndTargetParser(BounceCommandParser);
-            var targets = new Dictionary<string, ITask>();
+            var targets = new Dictionary<string, IObsoleteTask>();
             
             var commandAndTargetNames = parser.ParseCommandAndTargetNames(new string [0], targets);
             Assert.That(commandAndTargetNames.Command, Is.EqualTo(BounceCommandParser.Build));
@@ -69,10 +69,10 @@ namespace Bounce.Framework.Tests.Obsolete {
 
         private void AssertCommandAndTargetsParsed(IBounceCommand bounceCommand, string[] buildArguments) {
             var parser = new CommandAndTargetParser(BounceCommandParser);
-            var targets = new Dictionary<string, ITask>();
-            var target1 = new Mock<ITask>().Object;
+            var targets = new Dictionary<string, IObsoleteTask>();
+            var target1 = new Mock<IObsoleteTask>().Object;
             targets.Add("Target1", target1);
-            var target2 = new Mock<ITask>().Object;
+            var target2 = new Mock<IObsoleteTask>().Object;
             targets.Add("Target2", target2);
 
             var commandAndTargetNames = parser.ParseCommandAndTargetNames(buildArguments, targets);

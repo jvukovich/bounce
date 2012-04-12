@@ -14,7 +14,7 @@ namespace Bounce.Framework.Tests.Obsolete {
 
         public IEnumerable<IParameter> ParametersGiven { get; set; }
 
-        public virtual void Invoke(IBounceCommand command, ITask task)
+        public virtual void Invoke(IBounceCommand command, IObsoleteTask task)
         {
             task.Invoke(command, this);
         }

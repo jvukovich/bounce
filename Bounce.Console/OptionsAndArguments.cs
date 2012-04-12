@@ -1,7 +1,7 @@
 ﻿namespace Bounce.Console {
     public class OptionsAndArguments {
         public string[] RemainingArguments;
-        public BounceDirectoryExecutable TargetsAssembly;
+        public string BounceDirectory;
         public bool Recurse;
     }
 }

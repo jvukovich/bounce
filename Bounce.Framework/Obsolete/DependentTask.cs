@@ -2,11 +2,11 @@ namespace Bounce.Framework.Obsolete
 {
     class DependentTask<T> : TaskWithValue<T> {
         [Dependency]
-        private readonly ITask DependencyTask;
+        private readonly IObsoleteTask DependencyTask;
         private readonly Task<T> Task;
         private T TaskValue;
 
-        public DependentTask(ITask dependencyTask, Task<T> task)
+        public DependentTask(IObsoleteTask dependencyTask, Task<T> task)
         {
             DependencyTask = dependencyTask;
             Task = task;
@@ -27,11 +27,11 @@ namespace Bounce.Framework.Obsolete
     class DependentTask : Task
     {
         [Dependency]
-        private readonly ITask DependencyTask;
+        private readonly IObsoleteTask DependencyTask;
 
-        private readonly ITask Task;
+        private readonly IObsoleteTask Task;
 
-        public DependentTask(ITask dependencyTask, ITask task)
+        public DependentTask(IObsoleteTask dependencyTask, IObsoleteTask task)
         {
             DependencyTask = dependencyTask;
             Task = task;

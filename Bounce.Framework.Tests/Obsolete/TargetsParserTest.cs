@@ -8,15 +8,15 @@ namespace Bounce.Framework.Tests.Obsolete {
     public class TargetsParserTest {
         [Test]
         public void ShouldParseTargetsDictionaryFromDictionary() {
-            IDictionary<string, ITask> dictionary = new Mock<IDictionary<string, ITask>>().Object;
+            IDictionary<string, IObsoleteTask> dictionary = new Mock<IDictionary<string, IObsoleteTask>>().Object;
 
             Assert.That(new TargetsParser().ParseTargetsFromObject(dictionary), Is.SameAs(dictionary));
         }
 
         [Test]
         public void ShouldParseTargetsFromObject() {
-            var a = new Mock<ITask>().Object;
-            var b = new Mock<ITask>().Object;
+            var a = new Mock<IObsoleteTask>().Object;
+            var b = new Mock<IObsoleteTask>().Object;
 
             var targets = new {
                 A = a,
@@ -34,7 +34,7 @@ namespace Bounce.Framework.Tests.Obsolete {
             // arrange
 
             var targets = new DummyTarget {
-                A = new Mock<ITask>().Object,
+                A = new Mock<IObsoleteTask>().Object,
                 B = null
             };
 
@@ -43,8 +43,8 @@ namespace Bounce.Framework.Tests.Obsolete {
         }
 
         private class DummyTarget {
-            public ITask A { get; set; }
-            public ITask B { get; set; }
+            public IObsoleteTask A { get; set; }
+            public IObsoleteTask B { get; set; }
         }
     }
 }

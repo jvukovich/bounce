@@ -53,6 +53,10 @@ namespace Bounce.Framework.Tests.Obsolete {
             public string Generate(object o) {
                 return ((int) o).ToString("x");
             }
+
+            public string Description {
+                get { return "hex"; }
+            }
         }
     }
 }

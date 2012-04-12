@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework.Obsolete {
     public static class StagedDeployTargetExtensions {
-        public static Func<Task<string>, ITask> CopyToAndInvokeOnMachines(this StagedDeployTarget target,
+        public static Func<Task<string>, IObsoleteTask> CopyToAndInvokeOnMachines(this StagedDeployTarget target,
                                                                           Task<IEnumerable<DeployMachine>> machineConfigurations,
                                                                           IRemoteBounceFactory remoteBounceFactory) {
             return package => machineConfigurations.SelectTasks(machConf => {
@@ -29,7 +29,7 @@ namespace Bounce.Framework.Obsolete {
             });
         }
 
-        public static Func<Task<string>, ITask> CopyToAndInvokeOnMachines<T>(this StagedDeployTarget target,
+        public static Func<Task<string>, IObsoleteTask> CopyToAndInvokeOnMachines<T>(this StagedDeployTarget target,
                                                                           Task<IEnumerable<T>> machineConfigurations,
                                                                           IRemoteBounceFactory<T> remoteBounceFactory) where T : IDeployMachine {
             return package => machineConfigurations.SelectTasks(machConf =>

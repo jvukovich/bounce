@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
@@ -33,18 +34,50 @@ namespace Bounce.Framework {
             Add(typeof(T), parser);
         }
 
+        public ITypeParser TypeParser(Type type) {
+            if (type.IsEnum) {
+                return new EnumParser(type);
+            } else if (ContainsKey(type)) {
+                return this[type];
+            } else {
+                return null;
+            }
+        }
+
         public T Parse<T>(string parameterValue) {
-            ITypeParser parser = this[typeof(T)];
-            return (T) parser.Parse(parameterValue);
+            return (T) Parse(typeof (T), parameterValue);
         }
 
         public object Parse(Type type, string parameterValue) {
-            if (!ContainsKey(type)) {
+            ITypeParser parser = TypeParser(type);
+            if (parser != null) {
+                return parser.Parse(parameterValue);
+            } else {
                 throw new TypeParserNotFoundException(parameterValue, type);
             }
+        }
+    }
 
-            ITypeParser parser = this[type];
-            return parser.Parse(parameterValue);
+    public class EnumParser : ITypeParser {
+        private readonly Type _enumType;
+
+        public EnumParser(Type enumType) {
+            _enumType = enumType;
+        }
+
+        public object Parse(string s) {
+            return Enum.Parse(_enumType, s, true);
+        }
+
+        public string Generate(object o) {
+            throw new NotImplementedException();
+        }
+
+        public string Description {
+            get {
+                var values = Enum.GetValues(_enumType).Cast<object>();
+                return "{" + String.Join(",", values.Select(v => v.ToString()).ToArray()) + "}";
+            }
         }
     }
 
@@ -55,6 +88,7 @@ namespace Bounce.Framework {
     public interface ITypeParser {
         object Parse(string s);
         string Generate(object o);
+        string Description { get; }
     }
 
     class IntParser : ITypeParser {
@@ -64,6 +98,10 @@ namespace Bounce.Framework {
 
         public string Generate(object o) {
             return ((int) o).ToString();
+        }
+
+        public string Description {
+            get { return "int"; }
         }
     }
 
@@ -75,6 +113,10 @@ namespace Bounce.Framework {
         public string Generate(object o) {
             return ((bool) o).ToString().ToLower();
         }
+
+        public string Description {
+            get { return "bool"; }
+        }
     }
 
     class StringParser : ITypeParser {
@@ -85,6 +127,10 @@ namespace Bounce.Framework {
         public string Generate(object s) {
             return s.ToString();
         }
+
+        public string Description {
+            get { return "string"; }
+        }
     }
 
     class DateTimeParser : ITypeParser {
@@ -94,6 +140,10 @@ namespace Bounce.Framework {
 
         public string Generate(object s) {
             return ((DateTime) s).ToString("yyyy-MM-dd H:mm:ss");
+        }
+
+        public string Description {
+            get { return "datetime"; }
         }
     }
 }

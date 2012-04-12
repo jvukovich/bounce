@@ -3,12 +3,12 @@ using System.Linq;
 
 namespace Bounce.Framework.Obsolete {
     class CleanAfterBuildRegister {
-        private HashSet<ITask> NotToBeCleaned;
-        private HashSet<ITask> MaybeToBeCleaned;
+        private HashSet<IObsoleteTask> NotToBeCleaned;
+        private HashSet<IObsoleteTask> MaybeToBeCleaned;
 
         public CleanAfterBuildRegister() {
-            NotToBeCleaned = new HashSet<ITask>();
-            MaybeToBeCleaned = new HashSet<ITask>();
+            NotToBeCleaned = new HashSet<IObsoleteTask>();
+            MaybeToBeCleaned = new HashSet<IObsoleteTask>();
         }
 
         public void RegisterDependency(TaskDependency dep) {
@@ -19,7 +19,7 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        public IEnumerable<ITask> TasksToBeCleaned {
+        public IEnumerable<IObsoleteTask> TasksToBeCleaned {
             get { return MaybeToBeCleaned.Except(NotToBeCleaned); }
         }
     }

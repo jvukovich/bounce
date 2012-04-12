@@ -3,7 +3,7 @@ using System.IO;
 using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework.Tests.Obsolete {
-    public class FakeTask : ITask {
+    public class FakeTask : IObsoleteTask {
         public IEnumerable<TaskDependency> Dependencies { get; set; }
 
         public virtual void Build(IBounce bounce) { }

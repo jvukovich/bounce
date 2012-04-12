@@ -11,7 +11,7 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        private static void InvokeTask(ITargetBuilderBounce bounce, IBounceCommand command, string name, ITask task) {
+        private static void InvokeTask(ITargetBuilderBounce bounce, IBounceCommand command, string name, IObsoleteTask task) {
             using (var targetScope = bounce.TaskScope(task, command, name)) {
                 bounce.Invoke(command, task);
                 targetScope.TaskSucceeded();

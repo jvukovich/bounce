@@ -11,13 +11,13 @@ namespace Bounce.Framework.Obsolete {
             this.logOptions = logOptions;
         }
 
-        public void BeginTask(ITask task, IBounceCommand command) {
+        public void BeginTask(IObsoleteTask task, IBounceCommand command) {
             if (logOptions.ReportTaskStart && task.IsLogged && command.IsLogged) {
                 StdOut.WriteLine("{0} task: {1}", command.PresentTense, task);
             }
         }
 
-        public void EndTask(ITask task, IBounceCommand command, TaskResult result) {
+        public void EndTask(IObsoleteTask task, IBounceCommand command, TaskResult result) {
             if (logOptions.ReportTaskEnd && task.IsLogged && command.IsLogged) {
                 if (result == TaskResult.Success) {
                     StdOut.WriteLine("{0} task: {1}", command.PastTense, task);
@@ -27,13 +27,13 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        public void BeginTarget(ITask task, string name, IBounceCommand command) {
+        public void BeginTarget(IObsoleteTask task, string name, IBounceCommand command) {
             if (logOptions.ReportTargetStart) {
                 StdOut.WriteLine("{0} target: {1}", command.PresentTense, name);
             }
         }
 
-        public void EndTarget(ITask task, string name, IBounceCommand command, TaskResult result) {
+        public void EndTarget(IObsoleteTask task, string name, IBounceCommand command, TaskResult result) {
             if (logOptions.ReportTargetEnd) {
                 if (result == TaskResult.Success) {
                     StdOut.WriteLine("{0} target: {1}", command.PastTense, name);

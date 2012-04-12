@@ -47,16 +47,16 @@ namespace Bounce.Framework.Tests.Obsolete {
         }
 
         class TaskWithCleanAfterBuildDependencies : Task {
-            [Dependency, CleanAfterBuild] public ITask A = new Mock<ITask>().Object;
-            [Dependency] public ITask B = new Mock<ITask>().Object;
-            [CleanAfterBuild] public ITask C = new Mock<ITask>().Object;
+            [Dependency, CleanAfterBuild] public IObsoleteTask A = new Mock<IObsoleteTask>().Object;
+            [Dependency] public IObsoleteTask B = new Mock<IObsoleteTask>().Object;
+            [CleanAfterBuild] public IObsoleteTask C = new Mock<IObsoleteTask>().Object;
         }
 
-        private void AssertThatCreatedObjectReturnsDependencies(Func<ITask,ITask,SomeTask, ITask> createObject, bool areEnumerations) {
+        private void AssertThatCreatedObjectReturnsDependencies(Func<IObsoleteTask,IObsoleteTask,SomeTask, IObsoleteTask> createObject, bool areEnumerations) {
             var finder = new TaskDependencyFinder();
 
-            var a = new Mock<ITask>().Object;
-            var b = new Mock<ITask>().Object;
+            var a = new Mock<IObsoleteTask>().Object;
+            var b = new Mock<IObsoleteTask>().Object;
             var c = new SomeTask();
 
             var task = createObject(a, b, c);
@@ -79,13 +79,13 @@ namespace Bounce.Framework.Tests.Obsolete {
 
         class TaskWithFields : SomeTask {
             [Dependency]
-            public ITask A;
+            public IObsoleteTask A;
             [Dependency]
-            private ITask B;
+            private IObsoleteTask B;
             [Dependency]
             protected SomeTask C;
 
-            public TaskWithFields(ITask a, ITask b, SomeTask c) {
+            public TaskWithFields(IObsoleteTask a, IObsoleteTask b, SomeTask c) {
                 A = a;
                 B = b;
                 C = c;
@@ -93,21 +93,21 @@ namespace Bounce.Framework.Tests.Obsolete {
         }
 
         class TaskWithProperties : SomeTask {
-            private Func<ITask> getA;
+            private Func<IObsoleteTask> getA;
 
             [Dependency]
-            public ITask A {
+            public IObsoleteTask A {
                 get {
                     return getA();
                 }
             }
 
             [Dependency]
-            private ITask B { get; set; }
+            private IObsoleteTask B { get; set; }
             [Dependency]
             protected SomeTask C { get; set; }
 
-            public TaskWithProperties(Func<ITask> a, ITask b, SomeTask c) {
+            public TaskWithProperties(Func<IObsoleteTask> a, IObsoleteTask b, SomeTask c) {
                 getA = a;
                 B = b;
                 C = c;
@@ -115,21 +115,21 @@ namespace Bounce.Framework.Tests.Obsolete {
         }
 
         class TaskWithEnumerationsInProperties : SomeTask {
-            private Func<ITask> getA;
+            private Func<IObsoleteTask> getA;
 
             [Dependency]
-            public IEnumerable<ITask> A {
+            public IEnumerable<IObsoleteTask> A {
                 get {
                     return new[] {getA()};
                 }
             }
 
             [Dependency]
-            private ITask[] B { get; set; }
+            private IObsoleteTask[] B { get; set; }
             [Dependency]
             protected List<SomeTask> C { get; set; }
 
-            public TaskWithEnumerationsInProperties(Func<ITask> a, ITask b, SomeTask c) {
+            public TaskWithEnumerationsInProperties(Func<IObsoleteTask> a, IObsoleteTask b, SomeTask c) {
                 getA = a;
                 B = new[] {b};
                 C = new List<SomeTask> {c};
@@ -137,11 +137,11 @@ namespace Bounce.Framework.Tests.Obsolete {
         }
 
         class TaskWithEnumerationsInFields : SomeTask {
-            [Dependency] public IEnumerable<ITask> A;
-            [Dependency] private ITask[] B;
+            [Dependency] public IEnumerable<IObsoleteTask> A;
+            [Dependency] private IObsoleteTask[] B;
             [Dependency] protected List<SomeTask> C;
 
-            public TaskWithEnumerationsInFields(ITask a, ITask b, SomeTask c) {
+            public TaskWithEnumerationsInFields(IObsoleteTask a, IObsoleteTask b, SomeTask c) {
                 A = new [] {a};
                 B = new[] {b};
                 C = new List<SomeTask> {c};

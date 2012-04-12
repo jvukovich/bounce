@@ -26,7 +26,7 @@ namespace Bounce.Framework.Tests.Obsolete {
 
         class TaskWithParameters : Task {
             [Dependency] public Task<string> Param;
-            [Dependency] public ITask Task;
+            [Dependency] public IObsoleteTask Task;
         }
     }
 }

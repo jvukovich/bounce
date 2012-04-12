@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Bounce.Framework.Obsolete {
     public static class TaskExtensions {
-        public static Task<TP> WhenBuilt<TP>(this ITask task, Func<TP> getValue) {
+        public static Task<TP> WhenBuilt<TP>(this IObsoleteTask task, Func<TP> getValue) {
             return new DependentFuture<TP>(task, getValue);
         }
 
@@ -11,11 +11,11 @@ namespace Bounce.Framework.Obsolete {
             return task.WhenBuilt(() => getValue(task.Value));
         }
 
-        public static Task<T> WithDependencyOn<T>(this Task<T> task, params ITask [] dependencies) {
+        public static Task<T> WithDependencyOn<T>(this Task<T> task, params IObsoleteTask [] dependencies) {
             return new DependentTask<T>(new All(dependencies), task);
         }
 
-        public static ITask WithDependencyOn(this ITask task, params ITask [] dependencies) {
+        public static IObsoleteTask WithDependencyOn(this IObsoleteTask task, params IObsoleteTask [] dependencies) {
             return new DependentTask(new All(dependencies), task);
         }
 
@@ -27,19 +27,19 @@ namespace Bounce.Framework.Obsolete {
             return new Switch<T>(condition);
         }
 
-        public static Switch<T> Switch<T>(this Task<T> condition, T case1, ITask task1) {
+        public static Switch<T> Switch<T>(this Task<T> condition, T case1, IObsoleteTask task1) {
             var s = condition.Switch();
             s[case1] = task1;
             return s;
         }
 
-        public static Switch<T> Switch<T>(this Task<T> condition, T case1, ITask task1, T case2, ITask task2) {
+        public static Switch<T> Switch<T>(this Task<T> condition, T case1, IObsoleteTask task1, T case2, IObsoleteTask task2) {
             var s = condition.Switch(case1, task1);
             s[case2] = task2;
             return s;
         }
 
-        public static Switch<T> Switch<T>(this Task<T> condition, T case1, ITask task1, T case2, ITask task2, T case3, ITask task3) {
+        public static Switch<T> Switch<T>(this Task<T> condition, T case1, IObsoleteTask task1, T case2, IObsoleteTask task2, T case3, IObsoleteTask task3) {
             var s = condition.Switch(case1, task1, case2, task2);
             s[case3] = task3;
             return s;

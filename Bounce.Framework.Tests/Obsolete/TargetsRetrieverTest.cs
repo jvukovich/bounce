@@ -8,8 +8,8 @@ namespace Bounce.Framework.Tests.Obsolete {
     public class TargetsRetrieverTest {
         [Test]
         public void ShouldReturnTargetsFromTargetsMethod() {
-            var a = new Mock<ITask>().Object;
-            var b = new Mock<ITask>().Object;
+            var a = new Mock<IObsoleteTask>().Object;
+            var b = new Mock<IObsoleteTask>().Object;
             TargetsProvider.Targets = new {A = a, B = b};
 
             var targetsRetriever = new TargetsRetriever();

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace Bounce.Framework.Obsolete {
-    public class BounceRunner {
+    public class ObsoleteBounceRunner {
         private readonly ITargetsRetriever TargetsRetriever;
         private ILogOptionCommandLineTranslator LogOptionCommandLineTranslator;
         private readonly IParameterFinder ParameterFinder;
@@ -13,9 +13,9 @@ namespace Bounce.Framework.Obsolete {
 
         public static string TargetsPath { get; private set; }
 
-        public BounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator(), new ParameterFinder(), new TargetsBuilder()) {}
+        public ObsoleteBounceRunner() : this(new TargetsRetriever(), new LogOptionCommandLineTranslator(), new ParameterFinder(), new TargetsBuilder()) {}
 
-        public BounceRunner (ITargetsRetriever targetsRetriever, ILogOptionCommandLineTranslator logOptionCommandLineTranslator, IParameterFinder parameterFinder, ITargetsBuilder targetsBuilder) {
+        public ObsoleteBounceRunner (ITargetsRetriever targetsRetriever, ILogOptionCommandLineTranslator logOptionCommandLineTranslator, IParameterFinder parameterFinder, ITargetsBuilder targetsBuilder) {
             TargetsRetriever = targetsRetriever;
             LogOptionCommandLineTranslator = logOptionCommandLineTranslator;
             ParameterFinder = parameterFinder;
@@ -29,7 +29,7 @@ namespace Bounce.Framework.Obsolete {
             var parameters = new CommandLineParameters();
 
             try {
-                IDictionary<string, ITask> targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
+                IDictionary<string, IObsoleteTask> targets = GetTargetsFromAssembly(getTargetsMethod, parameters);
 
                 ParsedCommandLineParameters parsedParameters = ParseCommandLineArguments(args);
 
@@ -68,7 +68,7 @@ namespace Bounce.Framework.Obsolete {
 
         private void EnsureAllRequiredParametersAreSet(CommandLineParameters parameters, IEnumerable<Target> targetsToBuild) {
             var tasks = targetsToBuild.Select(t => t.Task);
-            foreach (ITask task in tasks) {
+            foreach (IObsoleteTask task in tasks) {
                 IEnumerable<IParameter> parametersForTask = ParameterFinder.FindParametersInTask(task);
                 parameters.EnsureAllRequiredParametersHaveValues(parametersForTask);
             }
@@ -79,7 +79,7 @@ namespace Bounce.Framework.Obsolete {
             bounce.CleanAfterBuild(commandAndTargets.Command);
         }
 
-        private IDictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
+        private IDictionary<string, IObsoleteTask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, CommandLineParameters parameters) {
             return TargetsRetriever.GetTargetsFromAssembly(getTargetsMethod, parameters);
         }
 
@@ -93,7 +93,7 @@ namespace Bounce.Framework.Obsolete {
             return parser.ParseCommandLineParameters(args);
         }
 
-        private void PrintAvailableTargets(IDictionary<string, ITask> targets) {
+        private void PrintAvailableTargets(IDictionary<string, IObsoleteTask> targets) {
             System.Console.WriteLine();
             System.Console.WriteLine("targets:");
             foreach (var target in targets) {

@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TaskMethodTest.cs" />
     <Compile Include="Obsolete\Attributes\IntegrationAttribute.cs" />
     <Compile Include="Obsolete\BounceCommandExtensionsTest.cs" />
     <Compile Include="Obsolete\BounceCommandTest.cs" />
@@ -157,7 +158,7 @@
     <Compile Include="ParameterParserTest.cs" />
     <Compile Include="ParametersTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskInvokerTest.cs" />
+    <Compile Include="TasksForTaskNames.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">

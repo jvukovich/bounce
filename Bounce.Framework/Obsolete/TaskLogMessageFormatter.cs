@@ -2,9 +2,9 @@ using System;
 
 namespace Bounce.Framework.Obsolete {
     public class TaskLogMessageFormatter : ILogMessageFormatter {
-        private readonly ITask task;
+        private readonly IObsoleteTask task;
 
-        public TaskLogMessageFormatter(ITask task) {
+        public TaskLogMessageFormatter(IObsoleteTask task) {
             this.task = task;
         }
 

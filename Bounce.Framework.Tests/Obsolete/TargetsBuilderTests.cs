@@ -13,14 +13,14 @@ namespace Bounce.Framework.Tests.Obsolete {
             var bounceMock = new Mock<ITargetBuilderBounce>();
             var commandMock = new Mock<IBounceCommand>();
 
-            bounceMock.Setup(_ => _.TaskScope(It.IsAny<ITask>(), commandMock.Object, It.IsAny<string>())).Returns(new Mock<ITaskScope>().Object);
-            bounceMock.Setup(_ => _.Invoke(commandMock.Object, It.IsAny<ITask>())).Callback((IBounceCommand c, ITask t) => {
+            bounceMock.Setup(_ => _.TaskScope(It.IsAny<IObsoleteTask>(), commandMock.Object, It.IsAny<string>())).Returns(new Mock<ITaskScope>().Object);
+            bounceMock.Setup(_ => _.Invoke(commandMock.Object, It.IsAny<IObsoleteTask>())).Callback((IBounceCommand c, IObsoleteTask t) => {
                 if (t == null) {
                     throw new NullReferenceException();
                 }
             });
 
-            var targets = new List<Target> { new Target { Name = "OK", Task = new Mock<ITask>().Object }, new Target { Name = "Fail", Task = null } };
+            var targets = new List<Target> { new Target { Name = "OK", Task = new Mock<IObsoleteTask>().Object }, new Target { Name = "Fail", Task = null } };
             var targetsBuilder = new TargetsBuilder();
 
             // act / assert (no exception)

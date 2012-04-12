@@ -1,7 +1,7 @@
 using System;
 
 namespace Bounce.Framework.Obsolete {
-    public class SelectTask<TInput, TTaskOutput> : TaskWithValue<TTaskOutput> where TTaskOutput : ITask {
+    public class SelectTask<TInput, TTaskOutput> : TaskWithValue<TTaskOutput> where TTaskOutput : IObsoleteTask {
         [Dependency]
         private readonly Task<TInput> Input;
         private readonly Func<TInput, TTaskOutput> GetTask;

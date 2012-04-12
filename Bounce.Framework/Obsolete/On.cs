@@ -4,7 +4,7 @@ namespace Bounce.Framework.Obsolete
 {
     public class On : Task
     {
-        public static ITask Build(Action onBuild)
+        public static IObsoleteTask Build(Action onBuild)
         {
             return new On(onBuild);
         }

@@ -26,12 +26,12 @@ namespace Bounce.Framework.Tests.Obsolete {
             TestOptional(false, true, (task, printTask) => task.IfFalse(printTask));
         }
 
-        private void TestOptional(bool conditionValue, bool shouldRun, Func<Task<bool>, ITask, ITask> getTask) {
+        private void TestOptional(bool conditionValue, bool shouldRun, Func<Task<bool>, IObsoleteTask, IObsoleteTask> getTask) {
             var output = new StringWriter();
             Task<bool> condition = conditionValue;
 
             var text = "shouldn't see this";
-            ITask optionalTask = getTask(condition, new FakePrintTask(output, text));
+            IObsoleteTask optionalTask = getTask(condition, new FakePrintTask(output, text));
 
             optionalTask.TestBuild();
 

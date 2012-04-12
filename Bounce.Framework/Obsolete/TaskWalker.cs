@@ -5,10 +5,10 @@ using System.Linq;
 namespace Bounce.Framework.Obsolete {
     public class TaskWalker {
         public void Walk(TaskDependency task, Action<TaskDependency> beforeDependencies, Action<TaskDependency> afterDependencies) {
-            Walk(task, beforeDependencies, afterDependencies, new HashSet<ITask>());
+            Walk(task, beforeDependencies, afterDependencies, new HashSet<IObsoleteTask>());
         }
 
-        public void Walk(TaskDependency dep, Action<TaskDependency> beforeDependencies, Action<TaskDependency> afterDependencies, HashSet<ITask> tasksAlreadyDone) {
+        public void Walk(TaskDependency dep, Action<TaskDependency> beforeDependencies, Action<TaskDependency> afterDependencies, HashSet<IObsoleteTask> tasksAlreadyDone) {
             if (tasksAlreadyDone.Contains(dep.Task)) {
                 return;
             }
@@ -28,7 +28,7 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        private static IEnumerable<TaskDependency> GetNonNullDependencies(ITask task) {
+        private static IEnumerable<TaskDependency> GetNonNullDependencies(IObsoleteTask task) {
             var deps = task.Dependencies;
             if (deps == null) {
                 return new TaskDependency[0];

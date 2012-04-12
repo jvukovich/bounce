@@ -67,8 +67,9 @@
     <Compile Include="BeforeBounceScriptRunner.cs" />
     <Compile Include="BounceAssemblyRunner.cs" />
     <Compile Include="BounceConsoleException.cs" />
-    <Compile Include="BounceDirectoryCopier.cs" />
+    <Compile Include="BounceDirectoryFinder.cs" />
     <Compile Include="FirstNonNullIEnumerableExtension.cs" />
+    <Compile Include="IBounceDirectoryFinder.cs" />
     <Compile Include="ITargetsAssemblyFinder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,15 +78,10 @@
     <Compile Include="TargetsAssemblyFinder.cs" />
     <Compile Include="TargetsAssemblyNotFoundException.cs" />
     <Compile Include="TargetsAttributeNotFoundException.cs" />
+    <Compile Include="TasksNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">
-      <Project>{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}</Project>
-      <Name>Bounce.Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--Import Project="..\References\MSBuild.ExtensionPack\MSBuild.ExtensionPack.VersionNumber.targets"/-->

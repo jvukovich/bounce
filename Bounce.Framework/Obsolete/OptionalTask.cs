@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace Bounce.Framework.Obsolete {
-    public class OptionalTask<T> : EnumerableFuture<T> where T : ITask {
+    public class OptionalTask<T> : EnumerableFuture<T> where T : IObsoleteTask {
         [Dependency]
         private readonly Task<bool> Condition;
         private readonly Func<T> GetResult;

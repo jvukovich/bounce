@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -8,7 +8,7 @@ namespace Bounce.Console {
     [Serializable]
     class BounceAssemblyRunner {
         private readonly BeforeBounceScriptRunner BeforeBounceScriptRunner;
-        private string assemblyFileName;
+        private string bounceDirectory;
         private string[] arguments;
 
         public BounceAssemblyRunner() {
@@ -32,16 +32,16 @@ namespace Bounce.Console {
 
             BeforeBounceScriptRunner.RunBeforeBounceScript(optionsAndArguments);
 
-            assemblyFileName = optionsAndArguments.TargetsAssembly.Executable;
+            bounceDirectory = optionsAndArguments.BounceDirectory;
             arguments = optionsAndArguments.RemainingArguments;
 
-            var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = true.ToString() };
+            var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = "true" };
             var appDomain = AppDomain.CreateDomain("Bounce", null, appDomainSetup);
 
             try
             {
                 //call back to transfer control to other app domain
-                appDomain.DoCallBack(AppDomainLoaderCallBack);
+                appDomain.DoCallBack(RunTask);
             }
             finally
             {
@@ -49,47 +49,69 @@ namespace Bounce.Console {
             }
         }
 
-        private void AppDomainLoaderCallBack()
-        {
-            System.Console.WriteLine("- Loading bounce targets assembly (with shadow-copy enabled) from '" + assemblyFileName + "'.");
-            var assembly = Assembly.LoadFrom(assemblyFileName);
-            System.Console.WriteLine("- Targets assembly loaded from '" + assembly.Location + "'.");
-            var bounceAssemblyAndTargetsProperty = GetTargetsMemberFromAssembly(assembly);
+        private void RunTask() {
+            var bounceAssembly = ReferencedBounceAssembly();
 
-            RunAssembly(bounceAssemblyAndTargetsProperty, arguments);
+            RunBounce(bounceAssembly);
         }
 
-        private OptionsAndArguments GetAssemblyFileName(string[] args) {
-            return new TargetsAssemblyArgumentsParser().GetTargetsAssembly(args);
-        }
-
-        private void RunAssembly(BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty, IEnumerable args) {
-            if (args == null) throw new ArgumentNullException("args");
-            Assembly bounceAssembly = bounceAssemblyAndTargetsProperty.BounceAssembly;
-            Type runnerType = bounceAssembly.GetType("Bounce.Framework.Obsolete.BounceRunner");
+        private void RunBounce(Assembly bounceAssembly) {
+            Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
-
-            runnerType.GetMethod("Run").Invoke(runner, new object[] { args, bounceAssemblyAndTargetsProperty.GetTargetsMethod });
+            runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, arguments});
         }
 
-        BounceAssemblyAndTargetsProperty GetTargetsMemberFromAssembly(Assembly assembly) {
-            var allProperties = assembly.GetTypes().SelectMany(t => t.GetMethods(BindingFlags.Static | BindingFlags.Public));
+        private Assembly ReferencedBounceAssembly() {
+            var bounceAssembly = FindBounceAssembly();
+            if (bounceAssembly != null) {
+                return bounceAssembly;
+            }
 
-            foreach (var prop in allProperties) {
-                foreach (var attr in prop.GetCustomAttributes(false)) {
-                    var attrType = attr.GetType();
-                    if (attrType.FullName == "Bounce.Framework.Obsolete.TargetsAttribute") {
-                        return new BounceAssemblyAndTargetsProperty { BounceAssembly = attrType.Assembly, GetTargetsMethod = prop };
+            bounceAssembly = FindBounceAssemblyReferencedFromBounceDirectory();
+            if (bounceAssembly != null) {
+                return bounceAssembly;
+            }
+
+            throw new TasksNotFoundException();
+        }
+
+        private Assembly FindBounceAssemblyReferencedFromBounceDirectory() {
+            foreach (var file in Directory.GetFiles(bounceDirectory)) {
+                if (IsExecutable(file)) {
+                    var assembly = Assembly.LoadFrom(file);
+                    var allMethods =
+                        assembly.GetTypes().SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance));
+
+                    foreach (var method in allMethods) {
+                        foreach (var attr in method.GetCustomAttributes(false)) {
+                            var attrType = attr.GetType();
+                            if (attrType.FullName == "Bounce.Framework.TaskAttribute") {
+                                return attrType.Assembly;
+                            }
+                        }
                     }
                 }
             }
 
-            throw new TargetsAttributeNotFoundException();
+            return null;
         }
 
-        class BounceAssemblyAndTargetsProperty {
-            public MethodInfo GetTargetsMethod;
-            public Assembly BounceAssembly;
+        private Assembly FindBounceAssembly() {
+            var path = Path.Combine(bounceDirectory, "Bounce.Framework.dll");
+            if (File.Exists(path)) {
+                return Assembly.LoadFrom(path);
+            } else {
+                return null;
+            }
+        }
+
+        private static bool IsExecutable(string file) {
+            return file.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)
+                || file.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private OptionsAndArguments GetAssemblyFileName(string[] args) {
+            return new TargetsAssemblyArgumentsParser().GetTargetsAssembly(args);
         }
     }
 }

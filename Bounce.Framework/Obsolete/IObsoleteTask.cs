@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace Bounce.Framework.Obsolete {
-    public interface ITask {
+    public interface IObsoleteTask {
         IEnumerable<TaskDependency> Dependencies { get; }
         void Invoke(IBounceCommand command, IBounce bounce);
         bool IsLogged { get; }

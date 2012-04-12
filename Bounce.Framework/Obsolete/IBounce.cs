@@ -7,6 +7,6 @@ namespace Bounce.Framework.Obsolete {
         LogOptions LogOptions { get; }
         ITaskLogFactory LogFactory { get; set; }
         IEnumerable<IParameter> ParametersGiven { get; }
-        void Invoke(IBounceCommand command, ITask task);
+        void Invoke(IBounceCommand command, IObsoleteTask task);
     }
 }

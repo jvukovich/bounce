@@ -9,12 +9,12 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldReturnRemoteTargetsAsWellAsLocalTargets() {
             var remote = new RemoteBounce();
-            var remoteOne = new Mock<ITask>().Object;
-            var localOne = new Mock<ITask>().Object;
+            var remoteOne = new Mock<IObsoleteTask>().Object;
+            var localOne = new Mock<IObsoleteTask>().Object;
 
             remote.ArgumentsForTargets(new { RemoteOne = remoteOne });
 
-            var withRemoteTargets = (IDictionary<string, ITask>) remote.WithRemoteTargets(new {LocalOne = localOne});
+            var withRemoteTargets = (IDictionary<string, IObsoleteTask>) remote.WithRemoteTargets(new {LocalOne = localOne});
 
             Assert.That(withRemoteTargets["LocalOne"], Is.SameAs(localOne));
             Assert.That(withRemoteTargets["RemoteOne"], Is.SameAs(remoteOne));

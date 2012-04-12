@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Bounce.Console {
     [Serializable]
     class BeforeBounceScriptRunner {
         public void RunBeforeBounceScript(OptionsAndArguments optionsAndArguments) {
-            if (optionsAndArguments.TargetsAssembly.ExecutableType == BounceDirectoryExecutableType.BeforeBounce) {
-                LogRunningBeforeBounceScript(optionsAndArguments.TargetsAssembly.Executable);
+            string script = BeforeBounceScript(optionsAndArguments.BounceDirectory);
+            if (File.Exists(script)) {
+                LogRunningBeforeBounceScript(script);
 
-                var processInfo = new ProcessStartInfo(optionsAndArguments.TargetsAssembly.Executable);
+                var processInfo = new ProcessStartInfo(script);
                 processInfo.CreateNoWindow = true;
                 processInfo.RedirectStandardError = true;
                 processInfo.RedirectStandardOutput = true;
@@ -22,13 +24,13 @@ namespace Bounce.Console {
                 p.WaitForExit();
 
                 if (p.ExitCode != 0) {
-                    throw new BeforeBounceScriptException(optionsAndArguments.TargetsAssembly.Executable,
-                                                          capturer.CapturedOutput, p.ExitCode);
+                    throw new BeforeBounceScriptException(script, capturer.CapturedOutput, p.ExitCode);
                 }
-
-                optionsAndArguments.TargetsAssembly.Executable = @"Bounce\Targets.dll";
-                optionsAndArguments.TargetsAssembly.ExecutableType = BounceDirectoryExecutableType.Targets;
             }
+        }
+
+        private string BeforeBounceScript(string bounceDir) {
+            return Directory.GetFiles(bounceDir, "beforebounce.*").First();
         }
 
         private static void LogRunningBeforeBounceScript(string executable) {
@@ -39,7 +41,6 @@ namespace Bounce.Console {
             } else {
                 relativeExecutablePath = executable;
             }
-            System.Console.WriteLine("running {0}", relativeExecutablePath);
         }
     }
 

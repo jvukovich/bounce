@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace Bounce.Console {
     public class TargetsAssemblyArgumentsParser {
-        private readonly ITargetsAssemblyFinder TargetsAssemblyFinder;
+        private readonly IBounceDirectoryFinder _bounceDirectoryFinder;
+        private string _bounceDir;
 
-        public TargetsAssemblyArgumentsParser() : this(new TargetsAssemblyFinder()) {}
+        public TargetsAssemblyArgumentsParser() : this(new BounceDirectoryFinder()) {}
 
-        public TargetsAssemblyArgumentsParser(ITargetsAssemblyFinder targetsAssemblyFinder) {
-            TargetsAssemblyFinder = targetsAssemblyFinder;
+        public TargetsAssemblyArgumentsParser(IBounceDirectoryFinder bounceDirectoryFinder) {
+            _bounceDirectoryFinder = bounceDirectoryFinder;
         }
 
         private void TryGetTargetsFromArguments(OptionsAndArguments optionsAndArguments)
@@ -17,24 +18,19 @@ namespace Bounce.Console {
             if (args.Length > 0)
             {
                 var firstArg = args[0];
-                if (firstArg.StartsWith("/targets:"))
+                _bounceDir = "bounceDir";
+                if (firstArg.StartsWith("/" + _bounceDir + ":"))
                 {
                     var remainingArgs = new string[args.Length - 1];
                     Array.Copy(args, 1, remainingArgs, 0, remainingArgs.Length);
-                    optionsAndArguments.TargetsAssembly = new BounceDirectoryExecutable {
-                        Executable = firstArg.Substring("/targets:".Length),
-                        ExecutableType = BounceDirectoryExecutableType.Targets
-                    };
+                    optionsAndArguments.BounceDirectory = firstArg.Substring(("/" + _bounceDir + ":").Length);
                     optionsAndArguments.RemainingArguments = remainingArgs;
                 }
-                else if (firstArg == "/targets")
+                else if (firstArg == "/" + _bounceDir)
                 {
                     var remainingArgs = new string[args.Length - 2];
                     Array.Copy(args, 2, remainingArgs, 0, remainingArgs.Length);
-                    optionsAndArguments.TargetsAssembly = new BounceDirectoryExecutable {
-                        Executable = args[1],
-                        ExecutableType = BounceDirectoryExecutableType.Targets
-                    };
+                    optionsAndArguments.BounceDirectory = args[1];
                     optionsAndArguments.RemainingArguments = remainingArgs;
                 }
             }
@@ -63,14 +59,14 @@ namespace Bounce.Console {
 
             TryGetRecurseFromArguments(optionsAndArguments);
 
-            if (optionsAndArguments.TargetsAssembly != null)
+            if (optionsAndArguments.BounceDirectory != null)
             {
                 return optionsAndArguments;
             }
 
-            var targets = TargetsAssemblyFinder.FindTargetsAssembly();
+            var targets = _bounceDirectoryFinder.FindBounceDirectory();
             if (targets != null) {
-                optionsAndArguments.TargetsAssembly = targets;
+                optionsAndArguments.BounceDirectory = targets;
                 return optionsAndArguments;
             } else {
                 throw new TargetsAssemblyNotFoundException();

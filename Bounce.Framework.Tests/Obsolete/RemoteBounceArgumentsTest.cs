@@ -45,8 +45,8 @@ namespace Bounce.Framework.Tests.Obsolete {
             var bounce = new FakeBounce();
             bounce.ParametersGiven = new[] {new Parameter<string>("name", "value")};
 
-            var a = new Mock<ITask>().Object;
-            var b = new Mock<ITask>().Object;
+            var a = new Mock<IObsoleteTask>().Object;
+            var b = new Mock<IObsoleteTask>().Object;
             var overridingParameters = new[] {new Mock<IParameter>().Object};
 
             var logOptionTranslator = new Mock<ILogOptionCommandLineTranslator>();

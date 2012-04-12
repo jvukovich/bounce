@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework.Obsolete {
     class ParameterFinder : IParameterFinder {
-        public IEnumerable<IParameter> FindParametersInTask(ITask task) {
+        public IEnumerable<IParameter> FindParametersInTask(IObsoleteTask task) {
             var walker = new TaskWalker();
 
             var parameters = new HashSet<IParameter>();

@@ -45,7 +45,7 @@ namespace Bounce.Framework.Obsolete {
             return package.WithDependencyOn(PrepareDeploy(package));
         }
 
-        private ITask GetInvokeRemoteDeploy(Task<string> package)
+        private IObsoleteTask GetInvokeRemoteDeploy(Task<string> package)
         {
             Task<string> packageAfterDeploy = GetPreparedDeployPackage(package);
 
@@ -56,8 +56,8 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        private Func<Task<string>, ITask> _deploy;
-        public Func<Task<string>, ITask> Deploy {
+        private Func<Task<string>, IObsoleteTask> _deploy;
+        public Func<Task<string>, IObsoleteTask> Deploy {
             get { return _deploy; }
             set {
                 _deploy = value;
@@ -65,8 +65,8 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        private Func<Task<string>, ITask> _invokeRemoteDeploy;
-        public Func<Task<string>, ITask> InvokeRemoteDeploy {
+        private Func<Task<string>, IObsoleteTask> _invokeRemoteDeploy;
+        public Func<Task<string>, IObsoleteTask> InvokeRemoteDeploy {
             get { return _invokeRemoteDeploy; }
             set {
                 _invokeRemoteDeploy = value;
@@ -83,9 +83,9 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        private Func<Task<string>, ITask> _prepareDeploy;
+        private Func<Task<string>, IObsoleteTask> _prepareDeploy;
 
-        public Func<Task<string>, ITask> PrepareDeploy {
+        public Func<Task<string>, IObsoleteTask> PrepareDeploy {
             get { return _prepareDeploy; }
             set {
                 _prepareDeploy = value;
@@ -97,7 +97,7 @@ namespace Bounce.Framework.Obsolete {
         {
             Task<string> copiedBounceDirectory = new Copy
             {
-                FromPath = Path.GetDirectoryName(BounceRunner.TargetsPath),
+                FromPath = Path.GetDirectoryName(ObsoleteBounceRunner.TargetsPath),
                 ToPath = package.SubPath("Bounce"),
                 Excludes = Copy.SvnDirectories,
             }.ToPath;

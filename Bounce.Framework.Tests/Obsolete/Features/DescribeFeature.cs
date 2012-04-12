@@ -15,7 +15,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test, Ignore] // not finished yet!
         public void ShouldBuildMoreThanOneTarget() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"describe", "One", "Two", "Three", "/env:test"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "describe", "One", "Two", "Three", "/env:test" }, method);
 
             Assert.That(Output.ToString(), Is.EqualTo("one\r\ntwo\r\n"));
         }
@@ -36,7 +36,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
             var walker = new TaskWalker();
 
             var all = new All();
-            var allDeps = new List<ITask> {new PrintTask(), new PrintTask(), all};
+            var allDeps = new List<IObsoleteTask> {new PrintTask(), new PrintTask(), all};
             all.Tasks = allDeps;
 
             var ta = new TaskAggregator<TaskCount>(dep => new TaskCount(dep));

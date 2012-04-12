@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace Bounce.Framework.Obsolete {
+namespace Bounce.Framework {
     [Serializable]
     public class BounceException : Exception
     {
@@ -16,7 +16,6 @@ namespace Bounce.Framework.Obsolete {
         }
 
         public BounceException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext) {
-            
         }
 
         public virtual void Explain(TextWriter stderr) {

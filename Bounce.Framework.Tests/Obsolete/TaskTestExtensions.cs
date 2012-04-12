@@ -6,15 +6,15 @@ using Moq;
 
 namespace Bounce.Framework.Tests.Obsolete {
     public static class TaskTestExtensions {
-        public static void TestBuild(this ITask task) {
+        public static void TestBuild(this IObsoleteTask task) {
             TestInvoke(task, new BounceCommandParser().Build);
         }
 
-        public static void TestClean(this ITask task) {
+        public static void TestClean(this IObsoleteTask task) {
             TestInvoke(task, new BounceCommandParser().Clean);
         }
 
-        public static void TestInvoke(this ITask task, IBounceCommand command) {
+        public static void TestInvoke(this IObsoleteTask task, IBounceCommand command) {
             new FakeTargetBuilderBounce().Invoke(command, task);
         }
 
@@ -42,18 +42,18 @@ namespace Bounce.Framework.Tests.Obsolete {
 
             public IEnumerable<IParameter> ParametersGiven { get; set; }
 
-            public void Invoke(IBounceCommand command, ITask task) {
+            public void Invoke(IBounceCommand command, IObsoleteTask task) {
                 TargetInvoker.Invoke(command, task);
             }
 
-            public ITaskScope TaskScope(ITask task, IBounceCommand command, string targetName) {
+            public ITaskScope TaskScope(IObsoleteTask task, IBounceCommand command, string targetName) {
                 return new Mock<ITaskScope>().Object;
             }
 
             public TextWriter DescriptionOutput { get; private set; }
         }
 
-        public static bool IsDependentOn(this ITask task, ITask dependency) {
+        public static bool IsDependentOn(this IObsoleteTask task, IObsoleteTask dependency) {
             if (task == dependency) {
                 return true;
             } else {

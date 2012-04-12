@@ -11,7 +11,7 @@ namespace Bounce.Framework.Tests
         [Test]
         public void ShouldParseNoParameters() {
             var parser = new ParameterParser();
-            var paramDict = parser.ParseParameters(Params(""));
+            var paramDict = parser.ParseParameters(new string[0]);
 
             Assert.That(paramDict, Is.Empty);
         }

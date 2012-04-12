@@ -50,16 +50,16 @@ namespace Bounce.TestHelpers {
     }
 
     public class FakeTaskLog : ITaskLog {
-        public void BeginTask(ITask task, IBounceCommand command) {
+        public void BeginTask(IObsoleteTask task, IBounceCommand command) {
         }
 
-        public void EndTask(ITask task, IBounceCommand command, TaskResult result) {
+        public void EndTask(IObsoleteTask task, IBounceCommand command, TaskResult result) {
         }
 
-        public void BeginTarget(ITask task, string name, IBounceCommand command) {
+        public void BeginTarget(IObsoleteTask task, string name, IBounceCommand command) {
         }
 
-        public void EndTarget(ITask task, string name, IBounceCommand command, TaskResult result) {
+        public void EndTarget(IObsoleteTask task, string name, IBounceCommand command, TaskResult result) {
         }
     }
 

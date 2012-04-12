@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Bounce.Framework.Obsolete
 {
-    public abstract class EnumerableFuture<T> : TaskWithValue<IEnumerable<T>> where T : ITask {
+    public abstract class EnumerableFuture<T> : TaskWithValue<IEnumerable<T>> where T : IObsoleteTask {
         private IEnumerable<T> _value;
 
         public override void InvokeTask(IBounceCommand command, IBounce bounce) {
@@ -24,7 +24,7 @@ namespace Bounce.Framework.Obsolete
         }
     }
 
-    public class DependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
+    public class DependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : IObsoleteTask {
         [Dependency] private Task<IEnumerable<TInput>> InputValues;
         private Func<TInput, TOutput> GetTask;
 
@@ -38,7 +38,7 @@ namespace Bounce.Framework.Obsolete
         }
     }
 
-    public class ManyDependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : ITask {
+    public class ManyDependentEnumerableFuture<TInput, TOutput> : EnumerableFuture<TOutput> where TOutput : IObsoleteTask {
         [Dependency] private Task<IEnumerable<TInput>> InputValues;
         private Func<TInput, IEnumerable<TOutput>> GetManyTasks;
 
@@ -53,7 +53,7 @@ namespace Bounce.Framework.Obsolete
     }
 
     public static class DependentEnumerableFutureExtensions {
-        public static Task<IEnumerable<TOutput>> SelectTasks<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, TOutput> getResult) where TOutput : ITask {
+        public static Task<IEnumerable<TOutput>> SelectTasks<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, TOutput> getResult) where TOutput : IObsoleteTask {
             return new DependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }
 
@@ -67,30 +67,30 @@ namespace Bounce.Framework.Obsolete
             return tasks.WhenBuilt(t => t.Where(getResult));
         }
 
-        public static Task<IEnumerable<TOutput>> SelectManyTasks<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, IEnumerable<TOutput>> getResult) where TOutput : ITask {
+        public static Task<IEnumerable<TOutput>> SelectManyTasks<TInput, TOutput>(this Task<IEnumerable<TInput>> tasks, Func<TInput, IEnumerable<TOutput>> getResult) where TOutput : IObsoleteTask {
             return new ManyDependentEnumerableFuture<TInput, TOutput>(tasks, getResult);
         }
 
-        public static ITask IfTrue<T>(this Task<bool> condition, T optionalTask) where T : ITask {
+        public static IObsoleteTask IfTrue<T>(this Task<bool> condition, T optionalTask) where T : IObsoleteTask {
             return new OptionalTask<T>(condition, () => optionalTask, false);
         }
 
-        public static ITask IfTrue<T>(this Task<bool> condition, T ifTrueTask, T ifFalseTask) where T : ITask {
+        public static IObsoleteTask IfTrue<T>(this Task<bool> condition, T ifTrueTask, T ifFalseTask) where T : IObsoleteTask {
             return new All(
                 new OptionalTask<T>(condition, () => ifTrueTask, false),
                 new OptionalTask<T>(condition, () => ifFalseTask, true)
             );
         }
 
-        public static ITask IfFalse<T>(this Task<bool> condition, T optionalTask) where T : ITask {
+        public static IObsoleteTask IfFalse<T>(this Task<bool> condition, T optionalTask) where T : IObsoleteTask {
             return new OptionalTask<T>(condition, () => optionalTask, true);
         }
 
-        public static ITask IfFalse<T>(this Task<bool> condition, T ifFalseTask, T ifTrueTask) where T : ITask {
+        public static IObsoleteTask IfFalse<T>(this Task<bool> condition, T ifFalseTask, T ifTrueTask) where T : IObsoleteTask {
             return condition.IfTrue(ifTrueTask, ifFalseTask);
         }
 
-        public static ITask SelectTask<TInput, TTaskOutput>(this Task<TInput> input, Func<TInput, TTaskOutput> getTask) where TTaskOutput : ITask {
+        public static IObsoleteTask SelectTask<TInput, TTaskOutput>(this Task<TInput> input, Func<TInput, TTaskOutput> getTask) where TTaskOutput : IObsoleteTask {
             return new SelectTask<TInput, TTaskOutput>(input, getTask);
         }
     }

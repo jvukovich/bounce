@@ -16,7 +16,7 @@ namespace Bounce.Framework.Obsolete {
         public void CommandError(string output) {
         }
 
-        public void TaskException(ITask task, string message) {
+        public void TaskException(IObsoleteTask task, string message) {
         }
 
         public void GeneralException(BounceException bounceException) {

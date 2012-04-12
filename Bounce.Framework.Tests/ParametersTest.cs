@@ -53,5 +53,17 @@ namespace Bounce.Framework.Tests {
             var p = new Parameters(new Dictionary<string, string>());
             Assert.That(() => p.Parameter<string>("file"), Throws.InstanceOf<RequiredParameterNotGivenException>());
         }
+
+        [Test]
+        public void CanParseEnumeration() {
+            var p = new Parameters(new Dictionary<string, string> { { "lake", "constance" } });
+            Assert.That(p.Parameter<Lakes>("lake"), Is.EqualTo(Lakes.Constance));
+        }
+
+        enum Lakes {
+            Constance,
+            Coniston,
+            Consequence
+        }
     }
 }

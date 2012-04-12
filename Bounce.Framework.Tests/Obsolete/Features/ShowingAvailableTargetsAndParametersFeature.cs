@@ -8,7 +8,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test, Ignore("does an Application.Exit(1), so fails. Probably remove that so we can test this")]
         public void ShouldBuildMoreThanOneTarget() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new string[0], method);
+            new ObsoleteBounceRunner().Run(new string[0], method);
         }
 
         class TargetsProvider {

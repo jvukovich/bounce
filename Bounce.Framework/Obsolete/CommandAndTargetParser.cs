@@ -13,7 +13,7 @@ namespace Bounce.Framework.Obsolete {
             BounceCommandParser = bounceCommandParser;
         }
 
-        public CommandAndTargets ParseCommandAndTargetNames(string[] buildArguments, IDictionary<string, ITask> allTargets) {
+        public CommandAndTargets ParseCommandAndTargetNames(string[] buildArguments, IDictionary<string, IObsoleteTask> allTargets) {
             IBounceCommand command = BounceCommandParser.Build;
             int targetNamesIndex;
             if (buildArguments.Length > 0 && TryParseCommand(buildArguments[0], ref command)) {
@@ -46,11 +46,11 @@ namespace Bounce.Framework.Obsolete {
             return targets;
         }
 
-        private IEnumerable<Target> TargetsToBuild(IDictionary<string, ITask> targets, IEnumerable<string> targetNames) {
+        private IEnumerable<Target> TargetsToBuild(IDictionary<string, IObsoleteTask> targets, IEnumerable<string> targetNames) {
             return targetNames.Select(name => FindTarget(targets, name)).ToArray();
         }
 
-        private Target FindTarget(IDictionary<string, ITask> targets, string targetName) {
+        private Target FindTarget(IDictionary<string, IObsoleteTask> targets, string targetName) {
             try {
                 return new Target {Name = targetName, Task = targets[targetName]};
             } catch (KeyNotFoundException) {

@@ -87,6 +87,13 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AmbiguousTaskNameException.cs" />
+    <Compile Include="BounceException.cs" />
+    <Compile Include="BounceRunner.cs" />
+    <Compile Include="ITask.cs" />
+    <Compile Include="ITaskParameter.cs" />
+    <Compile Include="NonNamedArgumentException.cs" />
+    <Compile Include="NoTasksException.cs" />
     <Compile Include="Obsolete\All.cs" />
     <Compile Include="Obsolete\AspNetWebSiteDirectory.cs" />
     <Compile Include="Obsolete\Bounce.cs" />
@@ -96,7 +103,6 @@
     <Compile Include="Obsolete\BounceCommandBuild.cs" />
     <Compile Include="Obsolete\BounceCommandExtensions.cs" />
     <Compile Include="Obsolete\BounceCommandFactory.cs" />
-    <Compile Include="Obsolete\BounceException.cs" />
     <Compile Include="Obsolete\BounceExceptionPresenter.cs" />
     <Compile Include="Obsolete\BounceFactory.cs" />
     <Compile Include="Obsolete\BounceRunner.cs" />
@@ -189,7 +195,7 @@
     <Compile Include="Obsolete\ITargetsMethodInvoker.cs" />
     <Compile Include="Obsolete\ITargetsParser.cs" />
     <Compile Include="Obsolete\ITargetsRetriever.cs" />
-    <Compile Include="Obsolete\ITask.cs" />
+    <Compile Include="Obsolete\IObsoleteTask.cs" />
     <Compile Include="Obsolete\ITaskLog.cs" />
     <Compile Include="Obsolete\ITaskLogFactory.cs" />
     <Compile Include="Obsolete\ITypeParsers.cs" />
@@ -294,7 +300,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequiredParameterNotGivenException.cs" />
     <Compile Include="TaskAttribute.cs" />
-    <Compile Include="TaskInvoker.cs" />
+    <Compile Include="MethodInfoExtensions.cs" />
+    <Compile Include="TaskMethod.cs" />
+    <Compile Include="TaskMethodParameter.cs" />
+    <Compile Include="TaskParameterException.cs" />
+    <Compile Include="TaskRequiredParameterException.cs" />
     <Compile Include="TypeParsers.cs" />
   </ItemGroup>
   <ItemGroup>

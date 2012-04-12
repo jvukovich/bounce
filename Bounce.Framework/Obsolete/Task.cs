@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 
 namespace Bounce.Framework.Obsolete {
-    public abstract class Task : ITask, ICommandableTask {
+    public abstract class Task : IObsoleteTask, ICommandableTask {
         protected Task()
         {
-            DependsOn = new ITask[0];
+            DependsOn = new IObsoleteTask[0];
         }
 
         public virtual IEnumerable<TaskDependency> Dependencies {
@@ -62,7 +62,7 @@ namespace Bounce.Framework.Obsolete {
             return new TaskDependency[0];
         }
 
-        public IEnumerable<ITask> DependsOn { get; set; }
+        public IEnumerable<IObsoleteTask> DependsOn { get; set; }
     }
 
     public interface ICommandableTask {

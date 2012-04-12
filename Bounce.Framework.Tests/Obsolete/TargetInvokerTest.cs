@@ -9,8 +9,8 @@ namespace Bounce.Framework.Tests.Obsolete {
     public class TargetInvokerTest {
         [Test]
         public void ShouldBuildDependenciesBeforeDependencts() {
-            var dependent = new Mock<ITask>();
-            var dependency = new Mock<ITask>();
+            var dependent = new Mock<IObsoleteTask>();
+            var dependency = new Mock<IObsoleteTask>();
             ITargetBuilderBounce bounce = GetBounce();
 
             var buildActions = new StringWriter();
@@ -55,7 +55,7 @@ namespace Bounce.Framework.Tests.Obsolete {
         private ITargetBuilderBounce GetBounce() {
             var bounceMock = new Mock<ITargetBuilderBounce>();
             bounceMock
-                .Setup(b => b.TaskScope(It.IsAny<ITask>(), It.IsAny<IBounceCommand>(), It.IsAny<string>()))
+                .Setup(b => b.TaskScope(It.IsAny<IObsoleteTask>(), It.IsAny<IBounceCommand>(), It.IsAny<string>()))
                 .Returns(new Mock<ITaskScope>().Object);
             var descriptionOutput = new StringWriter();
             bounceMock
@@ -65,8 +65,8 @@ namespace Bounce.Framework.Tests.Obsolete {
 
         [Test]
         public void ShouldCleanDependentsBeforeDependencies() {
-            var dependent = new Mock<ITask>();
-            var dependency = new Mock<ITask>();
+            var dependent = new Mock<IObsoleteTask>();
+            var dependency = new Mock<IObsoleteTask>();
             ITargetBuilderBounce bounce = GetBounce();
 
             var cleanActions = new StringWriter();
@@ -86,10 +86,10 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldOnlyBuildTasksOnceEvenIfTheyAreDependedUponTwice()
         {
-            var all = new Mock<ITask>();
-            var dependent1 = new Mock<ITask>();
-            var dependent2 = new Mock<ITask>();
-            var twiceADependency = new Mock<ITask>();
+            var all = new Mock<IObsoleteTask>();
+            var dependent1 = new Mock<IObsoleteTask>();
+            var dependent2 = new Mock<IObsoleteTask>();
+            var twiceADependency = new Mock<IObsoleteTask>();
             ITargetBuilderBounce bounce = GetBounce();
 
             all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency(dependent1.Object), new TaskDependency(dependent2.Object) });
@@ -106,10 +106,10 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldOnlyCleanTasksOnceEvenIfTheyAreDependedUponTwice()
         {
-            var all = new Mock<ITask>();
-            var dependent1 = new Mock<ITask>();
-            var dependent2 = new Mock<ITask>();
-            var twiceADependency = new Mock<ITask>();
+            var all = new Mock<IObsoleteTask>();
+            var dependent1 = new Mock<IObsoleteTask>();
+            var dependent2 = new Mock<IObsoleteTask>();
+            var twiceADependency = new Mock<IObsoleteTask>();
             ITargetBuilderBounce bounce = GetBounce();
 
             all.Setup(d => d.Dependencies).Returns(new[] {new TaskDependency(dependent1.Object), new TaskDependency (dependent2.Object) });

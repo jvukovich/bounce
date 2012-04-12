@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Bounce.Framework.Obsolete {
     public class TargetInvoker {
         public TaskWalker Walker;
-        public HashSet<ITask> BuiltTasks;
+        public HashSet<IObsoleteTask> BuiltTasks;
         private readonly ITargetBuilderBounce Bounce;
         private readonly CleanAfterBuildRegister CleanAfterBuildRegister;
         private readonly OnceOnlyTaskInvoker OnceOnlyCleaner;
@@ -12,7 +12,7 @@ namespace Bounce.Framework.Obsolete {
         private readonly OnceOnlyTaskInvoker OnceOnlyDescriber;
 
         public TargetInvoker(ITargetBuilderBounce bounce) {
-            BuiltTasks = new HashSet<ITask>();
+            BuiltTasks = new HashSet<IObsoleteTask>();
             Bounce = bounce;
             Walker = new TaskWalker();
             CleanAfterBuildRegister = new CleanAfterBuildRegister();
@@ -21,12 +21,12 @@ namespace Bounce.Framework.Obsolete {
             OnceOnlyDescriber = new OnceOnlyTaskInvoker((task, command) => InvokeAndLog(task, command));
         }
 
-        public void Invoke(IBounceCommand command, ITask task)
+        public void Invoke(IBounceCommand command, IObsoleteTask task)
         {
             command.InvokeCommand(() => Build(task, command), () => Clean(task, command), () => Describe(task, command));
         }
 
-        private void Describe(ITask task, IBounceCommand command) {
+        private void Describe(IObsoleteTask task, IBounceCommand command) {
             Walker.Walk(new TaskDependency(task), null, dep => DescribeIfNotDescribed(dep, command));
         }
 
@@ -34,12 +34,12 @@ namespace Bounce.Framework.Obsolete {
             OnceOnlyDescriber.EnsureInvokedAtLeastOnce(dep.Task, command);
         }
 
-        private void Build(ITask task, IBounceCommand command) {
+        private void Build(IObsoleteTask task, IBounceCommand command) {
             Walker.Walk(new TaskDependency(task), null, dep => BuildIfNotAlreadyBuilt(dep, command));
             RegisterCleanupAfterBuild(task);
         }
 
-        private void RegisterCleanupAfterBuild(ITask task) {
+        private void RegisterCleanupAfterBuild(IObsoleteTask task) {
             Walker.Walk(new TaskDependency(task), CleanAfterBuildRegister.RegisterDependency, null);
         }
 
@@ -56,7 +56,7 @@ namespace Bounce.Framework.Obsolete {
             OnceOnlyBuilder.EnsureInvokedAtLeastOnce(dep.Task, command);
         }
 
-        private void Clean(ITask task, IBounceCommand command) {
+        private void Clean(IObsoleteTask task, IBounceCommand command) {
             Walker.Walk(new TaskDependency(task), dep => CleanIfNotAlreadyCleaned(dep, command), null);
         }
 
@@ -65,15 +65,15 @@ namespace Bounce.Framework.Obsolete {
         }
 
         class OnceOnlyTaskInvoker {
-            private readonly Action<ITask, IBounceCommand> Invoke;
-            private HashSet<ITask> InvokedTasks;
+            private readonly Action<IObsoleteTask, IBounceCommand> Invoke;
+            private HashSet<IObsoleteTask> InvokedTasks;
 
-            public OnceOnlyTaskInvoker(Action<ITask, IBounceCommand> invoke) {
+            public OnceOnlyTaskInvoker(Action<IObsoleteTask, IBounceCommand> invoke) {
                 Invoke = invoke;
-                InvokedTasks = new HashSet<ITask>();
+                InvokedTasks = new HashSet<IObsoleteTask>();
             }
 
-            public void EnsureInvokedAtLeastOnce(ITask task, IBounceCommand command) {
+            public void EnsureInvokedAtLeastOnce(IObsoleteTask task, IBounceCommand command) {
                 if (!InvokedTasks.Contains(task)) {
                     Invoke(task, command);
                     InvokedTasks.Add(task);
@@ -81,7 +81,7 @@ namespace Bounce.Framework.Obsolete {
             }
         }
 
-        private void InvokeAndLog(ITask task, IBounceCommand command)
+        private void InvokeAndLog(IObsoleteTask task, IBounceCommand command)
         {
             using (var taskScope = Bounce.TaskScope(task, command, null)) {
                 try {

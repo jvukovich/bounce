@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Bounce.Framework.Obsolete;
 
 namespace Bounce.Framework {
     public class ParameterParser {
@@ -24,7 +23,7 @@ namespace Bounce.Framework {
                 }
                 else
                 {
-                    throw new NonNamedArgumentException();
+                    throw new NonNamedArgumentException(arg);
                 }
             }
 
@@ -62,9 +61,5 @@ namespace Bounce.Framework {
                 }
             }
         }
-    }
-
-    public class NonNamedArgumentException : BounceException {
-        
     }
 }

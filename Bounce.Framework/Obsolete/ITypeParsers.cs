@@ -7,5 +7,6 @@ namespace Bounce.Framework.Obsolete {
         string Generate<T>(T parameterValue);
 
         void RegisterTypeParser<T>(ITypeParser parser);
+        ITypeParser TypeParser(Type type);
     }
 }

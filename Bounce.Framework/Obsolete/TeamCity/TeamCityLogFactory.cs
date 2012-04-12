@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Bounce.Framework.Obsolete.TeamCity {
     internal class TeamCityLogFactory : ITaskLogFactory {
-        public ILog CreateLogForTask(ITask task, TextWriter stdout, TextWriter stderr, LogOptions logOptions) {
+        public ILog CreateLogForTask(IObsoleteTask task, TextWriter stdout, TextWriter stderr, LogOptions logOptions) {
             if (TeamCityVersion < 6)
                 return new TeamCity5Log(stdout, logOptions, new TaskLogMessageFormatter(task));
             return new TeamCityLog(stdout, logOptions, new TaskLogMessageFormatter(task));

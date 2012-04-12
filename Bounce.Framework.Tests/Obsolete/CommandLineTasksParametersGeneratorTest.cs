@@ -9,8 +9,8 @@ namespace Bounce.Framework.Tests.Obsolete {
         [Test]
         public void ShouldGenerateCommandLineParametersFromTasks() {
             var finder = new Mock<IParameterFinder>();
-            var task1 = new Mock<ITask>().Object;
-            var task2 = new Mock<ITask>().Object;
+            var task1 = new Mock<IObsoleteTask>().Object;
+            var task2 = new Mock<IObsoleteTask>().Object;
             var typeParsers = new Mock<ITypeParsers>().Object;
 
             var param1 = new FakeParameter {Name = "name1", GeneratedValue = "/name1:value1"};

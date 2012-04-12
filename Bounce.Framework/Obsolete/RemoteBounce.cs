@@ -16,7 +16,7 @@ namespace Bounce.Framework.Obsolete {
             var targets = TargetsParser.ParseTargetsFromObject(targetsObject);
 
             foreach (var remoteTarget in RemoteTargets) {
-                foreach (KeyValuePair<string, ITask> target in TargetsParser.ParseTargetsFromObject(remoteTarget)) {
+                foreach (KeyValuePair<string, IObsoleteTask> target in TargetsParser.ParseTargetsFromObject(remoteTarget)) {
                     targets.Add(target.Key, target.Value);
                 }
             }

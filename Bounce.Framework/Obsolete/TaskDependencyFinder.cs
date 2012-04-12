@@ -63,11 +63,11 @@ namespace Bounce.Framework.Obsolete {
                     }
                 }
 
-                public TaskDependency CreateTaskDependency(ITask task, int i) {
+                public TaskDependency CreateTaskDependency(IObsoleteTask task, int i) {
                     return CreateTaskDependency(task, Member.Name + "[" + i + "]");
                 }
 
-                private TaskDependency CreateTaskDependency(ITask task, string name) {
+                private TaskDependency CreateTaskDependency(IObsoleteTask task, string name) {
                     return new TaskDependency(task) {
                                                   Name = name,
                                                   CleanAfterBuild = Member.CleanAfterBuild
@@ -75,7 +75,7 @@ namespace Bounce.Framework.Obsolete {
                 }
 
                 public TaskDependency CreateTaskDependency() {
-                    return CreateTaskDependency((ITask) Value, Member.Name);
+                    return CreateTaskDependency((IObsoleteTask) Value, Member.Name);
                 }
             }
 
@@ -103,7 +103,7 @@ namespace Bounce.Framework.Obsolete {
 
                 foreach (DependencyNameValue edep in edeps) {
                     int n = 0;
-                    foreach (ITask d in (IEnumerable) edep.Value) {
+                    foreach (IObsoleteTask d in (IEnumerable) edep.Value) {
                         allDependencies.Add(edep.CreateTaskDependency(d, n));
                         n++;
                     }
@@ -112,7 +112,7 @@ namespace Bounce.Framework.Obsolete {
 
             private static void AddDependenciesToSet(ICollection<TaskDependency> allDependencies, IEnumerable<DependencyNameValue> depObjects) {
                 IEnumerable<DependencyNameValue> deps = depObjects.ToArray()
-                    .Where(p => p.Value is ITask);
+                    .Where(p => p.Value is IObsoleteTask);
 
                 foreach (DependencyNameValue dep in deps) {
                     allDependencies.Add(dep.CreateTaskDependency());

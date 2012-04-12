@@ -7,17 +7,17 @@ using NUnit.Framework;
 namespace Bounce.Framework.Tests.Obsolete.Features {
     [TestFixture]
     public class CleanExecutedWithCleanDependenciesFeature {
-        private static HashSet<ITask> BuiltTasks;
+        private static HashSet<IObsoleteTask> BuiltTasks;
 
         [SetUp]
         public void SetUp() {
-            BuiltTasks = new HashSet<ITask>();
+            BuiltTasks = new HashSet<IObsoleteTask>();
         }
 
         [Test]
         public void Stuff() {
             MethodInfo method = typeof(Targets).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "A", "D"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "build", "A", "D" }, method);
         }
 
         class Targets {
@@ -67,8 +67,8 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         }
 
         class ABTask : AssertsDependenciesBuiltForClean {
-            [Dependency] public ITask A;
-            [Dependency, CleanAfterBuild] public ITask B;
+            [Dependency] public IObsoleteTask A;
+            [Dependency, CleanAfterBuild] public IObsoleteTask B;
 
             public ABTask(string name) : base(name) {}
         }

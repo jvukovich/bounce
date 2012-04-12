@@ -10,6 +10,21 @@ namespace Build
 {
     public class Build
     {
+        [Task]
+        public void DoSomething(int someNumber) {
+            Console.WriteLine("doing something!" + someNumber);
+        }
+
+        public enum Lake {
+            Constance,
+            Coniston
+        };
+
+        [Task]
+        public void ShowLake(Lake lake) {
+            Console.WriteLine(lake);
+        }
+
         [Targets]
         public static object Targets(IParameters parameters)
         {

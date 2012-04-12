@@ -9,14 +9,14 @@ namespace Bounce.Framework.Tests.Obsolete {
     public class TaskTest {
         [Test]
         public void ShouldReturnDependenciesMarkedWithAttribute() {
-            ITask dep = new Mock<ITask>().Object;
+            IObsoleteTask dep = new Mock<IObsoleteTask>().Object;
             var task = new ATask {A = dep};
 
             Assert.That(task.Dependencies.Select(d => d.Task), Is.EquivalentTo(new[] {dep}));
         }
 
         class ATask : Task {
-            [Dependency] public ITask A;
+            [Dependency] public IObsoleteTask A;
         }
 
         [Test]

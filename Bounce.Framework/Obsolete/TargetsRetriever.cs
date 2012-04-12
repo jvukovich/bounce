@@ -14,11 +14,11 @@ namespace Bounce.Framework.Obsolete {
         }
 
 
-        public IDictionary<string, ITask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, IParameters parameters) {
+        public IDictionary<string, IObsoleteTask> GetTargetsFromAssembly(MethodInfo getTargetsMethod, IParameters parameters) {
             return TargetsParser.ParseTargetsFromObject(TargetsMethodInvoker.InvokeTargetsMethod(getTargetsMethod, parameters));
         }
 
-        public IDictionary<string, ITask> GetTargetsFromObject(object targets) {
+        public IDictionary<string, IObsoleteTask> GetTargetsFromObject(object targets) {
             return TargetsParser.ParseTargetsFromObject(targets);
         }
     }

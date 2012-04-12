@@ -15,7 +15,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test]
         public void ShouldGenerateCommandLineForRemoteBounceWithParametersUsedInRemoteTarget() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "One", "/hack:refactor", "/two:three", "/machine:live"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "build", "One", "/hack:refactor", "/two:three", "/machine:live" }, method);
 
             string rexecCommands = "rexec -h live bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /hack:refactor /machine:live /two:three\r\n";
 
@@ -25,7 +25,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test]
         public void ShouldIncludeRemoteTargetsSoTheyCanBeInvokedRemotely() {
             MethodInfo method = typeof (TargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "RemoteOne", "/hack:refactor"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "build", "RemoteOne", "/hack:refactor" }, method);
 
             Assert.That(Output.ToString(), Is.EqualTo("refactor\r\n"));
         }
@@ -33,7 +33,7 @@ namespace Bounce.Framework.Tests.Obsolete.Features {
         [Test]
         public void ShouldExecuteMultipleRemoteTasksEachWithDifferentParameters() {
             MethodInfo method = typeof(MultipleRemoteTargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "One"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "build", "One" }, method);
 
             string rexecCommands =
 @"rexec -h machine1 bounce.exe /describe-tasks:false /loglevel:warning /command-output:false build RemoteOne /machineName:machine1
@@ -46,7 +46,7 @@ rexec -h machine2 bounce.exe /describe-tasks:false /loglevel:warning /command-ou
         [Test]
         public void ShouldInvokeRemoteTargetWithArguments() {
             MethodInfo method = typeof(MultipleRemoteTargetsProvider).GetMethod("GetTargets");
-            new BounceRunner().Run(new[] {"build", "RemoteOne", "/machineName:machine1"}, method);
+            new ObsoleteBounceRunner().Run(new[] { "build", "RemoteOne", "/machineName:machine1" }, method);
 
             string rexecCommands = "machine1\r\n";
 

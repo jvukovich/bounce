@@ -1,10 +1,10 @@
 namespace Bounce.Framework.Obsolete {
     public class TaskDependency {
-        public ITask Task;
+        public IObsoleteTask Task;
         public string Name;
         public bool CleanAfterBuild;
 
-        public TaskDependency(ITask task)
+        public TaskDependency(IObsoleteTask task)
         {
             Task = task;
         }

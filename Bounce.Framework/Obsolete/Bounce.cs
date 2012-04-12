@@ -26,11 +26,11 @@ namespace Bounce.Framework.Obsolete {
             TargetInvoker = new TargetInvoker(this);
         }
 
-        public ITaskScope TaskScope(ITask task, IBounceCommand command, string targetName) {
+        public ITaskScope TaskScope(IObsoleteTask task, IBounceCommand command, string targetName) {
             return CreateTaskScope(task, command, targetName);
         }
 
-        private ITaskScope CreateTaskScope(ITask task, IBounceCommand command, string targetName) {
+        private ITaskScope CreateTaskScope(IObsoleteTask task, IBounceCommand command, string targetName) {
             ILog previousLogger = Log;
             Log = LogFactory.CreateLogForTask(task, LogOptions.StdOut, LogOptions.StdErr, LogOptions);
             if (targetName != null) {
@@ -44,7 +44,7 @@ namespace Bounce.Framework.Obsolete {
                 previousLogger);
         }
 
-        private void EndTaskLog(ITask task, IBounceCommand command, TaskResult result, string targetName, ILog outerLogger) {
+        private void EndTaskLog(IObsoleteTask task, IBounceCommand command, TaskResult result, string targetName, ILog outerLogger) {
             if (targetName != null) {
                 Log.TaskLog.EndTarget(task, targetName, command, result);
             } else {
@@ -68,7 +68,7 @@ namespace Bounce.Framework.Obsolete {
 
         public IEnumerable<IParameter> ParametersGiven { get; set; }
 
-        public void Invoke(IBounceCommand command, ITask task) {
+        public void Invoke(IBounceCommand command, IObsoleteTask task) {
             TargetInvoker.Invoke(command, task);
         }
 
