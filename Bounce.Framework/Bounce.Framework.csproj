@@ -104,6 +104,7 @@
     <Compile Include="ITask.cs" />
     <Compile Include="ITaskParameter.cs" />
     <Compile Include="ITypeParsers.cs" />
+    <Compile Include="NUnit\NUnitTests.cs" />
     <Compile Include="VisualStudio\ConditionParseException.cs" />
     <Compile Include="VisualStudio\IPropertyValues.cs" />
     <Compile Include="VisualStudio\ParseResult.cs" />

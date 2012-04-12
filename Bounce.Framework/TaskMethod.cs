@@ -22,9 +22,13 @@ namespace Bounce.Framework {
         }
 
         public void Invoke(Arguments arguments) {
-            var taskObject = _method.DeclaringType.GetConstructor(new Type[0]).Invoke(new object[0]);
-            var methodArguments = MethodArgumentsFromCommandLineParameters(arguments);
-            _method.Invoke(taskObject, methodArguments);
+            try {
+                var taskObject = _method.DeclaringType.GetConstructor(new Type[0]).Invoke(new object[0]);
+                var methodArguments = MethodArgumentsFromCommandLineParameters(arguments);
+                _method.Invoke(taskObject, methodArguments);
+            } catch (TargetInvocationException e) {
+                throw e.InnerException;
+            }
         }
 
         private object[] MethodArgumentsFromCommandLineParameters(Arguments arguments)

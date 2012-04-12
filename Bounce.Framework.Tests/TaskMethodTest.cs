@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -89,6 +90,11 @@ namespace Bounce.Framework.Tests {
             Assert.That(task.Parameters.ElementAt(0).IsRequired, Is.False);
         }
 
+        [Test]
+        public void SameExceptionIsThrownWhenTaskThrows() {
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Throws"));
+            Assert.That(() => task.Invoke(new Arguments(new Dictionary<string, string>())), Throws.InstanceOf<BadException>());
+        }
 
         public class FakeTaskClass
         {
@@ -124,7 +130,14 @@ namespace Bounce.Framework.Tests {
             public void Nullable(int? port) {
                 Output.WriteLine("port: " + (port.HasValue? port.Value.ToString(): "<nothing>"));
             }
+
+            [Task]
+            public void Throws() {
+                throw new BadException();
+            }
         }
+
+        public class BadException : Exception {}
 
         public class CustomType
         {

@@ -1,16 +1,20 @@
 using System;
 using Bounce.Framework;
+using Bounce.Framework.NUnit;
 using Bounce.Framework.VisualStudio;
 
 namespace Build {
     public class NewBuild {
         [Task]
-        public void Compile()
+        public void CompileAndTest()
         {
             var vs = new VisualStudio();
             var sln = vs.Solution("Bounce.sln");
+            sln.Build();
 
-            Console.WriteLine(sln.Projects["Bounce.Framework"].OutputFile);
+            var nUnit = new NUnit();
+            nUnit.NUnitConsolePath = @".\References\NUnit\nunit-console.exe";
+            nUnit.Test(sln.Projects["Bounce.Framework.Tests"].OutputFile);
         }
     }
 }
