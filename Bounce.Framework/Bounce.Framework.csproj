@@ -96,7 +96,10 @@
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="DefaultLogFormatter.cs" />
     <Compile Include="ICommandLog.cs" />
+    <Compile Include="Iis\BindingParser.cs" />
+    <Compile Include="Iis\IIis.cs" />
     <Compile Include="Iis\Iis7.cs" />
+    <Compile Include="Iis\IisBinding.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="ILogMessageFormatter.cs" />
     <Compile Include="ILogOptionCommandLineParser.cs" />
