@@ -17,11 +17,15 @@ namespace Build {
         }
 
         [Task]
-        public void CompileAndTest()
-        {
+        public IVisualStudioSolution Compile() {
             var sln = Vs.Solution("Bounce.sln");
             sln.Build();
+            return sln;
+        }
 
+        [Task]
+        public void Test() {
+            var sln = Compile();
             NUnit.NUnitConsolePath = @".\References\NUnit\nunit-console.exe";
             NUnit.Test(sln.Projects["Bounce.Framework.Tests"].OutputFile);
         }
