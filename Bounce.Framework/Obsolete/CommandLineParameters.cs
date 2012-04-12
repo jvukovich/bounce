@@ -13,7 +13,7 @@ namespace Bounce.Framework.Obsolete {
             RegisteredParameters = new Dictionary<string, IParameter>();
         }
 
-        public CommandLineParameters() : this(Obsolete.TypeParsers.Default) {
+        public CommandLineParameters() : this(Framework.TypeParsers.Default) {
         }
 
         public IEnumerable<IParameter> Parameters {

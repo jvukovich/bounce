@@ -12,7 +12,7 @@ namespace Bounce.Framework.Obsolete {
             TypeParsers = typeParsers;
         }
 
-        public CommandLineTasksParametersGenerator() : this(new ParameterFinder(), Obsolete.TypeParsers.Default) {
+        public CommandLineTasksParametersGenerator() : this(new ParameterFinder(), Framework.TypeParsers.Default) {
         }
 
         public string GenerateCommandLineParametersForTasks(IEnumerable<IParameter> parameters, IEnumerable<IParameter> overridingParameters) {

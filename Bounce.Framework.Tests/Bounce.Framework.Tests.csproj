@@ -154,7 +154,10 @@
     <Compile Include="Obsolete\VisualStudioSolutionTest.cs" />
     <Compile Include="Obsolete\WhenBuiltTest.cs" />
     <Compile Include="Obsolete\ZipFileTest.cs" />
+    <Compile Include="ParameterParserTest.cs" />
+    <Compile Include="ParametersTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskInvokerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">

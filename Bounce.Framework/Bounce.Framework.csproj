@@ -273,7 +273,6 @@
     <Compile Include="Obsolete\TeamCity\TeamCityNUnitLogger.cs" />
     <Compile Include="Obsolete\TeamCity\TeamCityTaskLog.cs" />
     <Compile Include="Obsolete\TeamCity\TeamCityTextFormatter.cs" />
-    <Compile Include="Obsolete\TypeParsers.cs" />
     <Compile Include="Obsolete\VisualStudioCSharpProjectFileLoader.cs" />
     <Compile Include="Obsolete\VisualStudioProject.cs" />
     <Compile Include="Obsolete\VisualStudioProjectDetails.cs" />
@@ -290,7 +289,13 @@
     <Compile Include="Obsolete\WindowsServiceStartupType.cs" />
     <Compile Include="Obsolete\ZipFile.cs" />
     <Compile Include="Obsolete\ZipFileCreator.cs" />
+    <Compile Include="ParameterParser.cs" />
+    <Compile Include="Parameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequiredParameterNotGivenException.cs" />
+    <Compile Include="TaskAttribute.cs" />
+    <Compile Include="TaskInvoker.cs" />
+    <Compile Include="TypeParsers.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

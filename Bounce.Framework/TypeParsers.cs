@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Bounce.Framework.Obsolete;
 
-namespace Bounce.Framework.Obsolete {
+namespace Bounce.Framework {
     class TypeParsers : Dictionary<Type, ITypeParser>, ITypeParsers {
         private static TypeParsers _default;
 
@@ -36,6 +37,19 @@ namespace Bounce.Framework.Obsolete {
             ITypeParser parser = this[typeof(T)];
             return (T) parser.Parse(parameterValue);
         }
+
+        public object Parse(Type type, string parameterValue) {
+            if (!ContainsKey(type)) {
+                throw new TypeParserNotFoundException(parameterValue, type);
+            }
+
+            ITypeParser parser = this[type];
+            return parser.Parse(parameterValue);
+        }
+    }
+
+    public class TypeParserNotFoundException : Exception {
+        public TypeParserNotFoundException(string value, Type type) : base(string.Format("could not parse `{0}' for type `{1}'", value, type)) {}
     }
 
     public interface ITypeParser {

@@ -9,7 +9,7 @@ namespace Bounce.Framework.Obsolete
         private T _defaultValue;
         private bool _hasDefaultValue;
 
-        public EnvironmentVariable(string name) : this(name, Obsolete.TypeParsers.Default)
+        public EnvironmentVariable(string name) : this(name, Framework.TypeParsers.Default)
         {
         }
 
