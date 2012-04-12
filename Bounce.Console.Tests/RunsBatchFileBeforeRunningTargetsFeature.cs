@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Bounce.Framework;
+using Bounce.Framework.Obsolete;
 using Bounce.TestHelpers;
 using NUnit.Framework;
 

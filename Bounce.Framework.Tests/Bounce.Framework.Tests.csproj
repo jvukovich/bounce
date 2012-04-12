@@ -82,79 +82,79 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\IntegrationAttribute.cs" />
-    <Compile Include="BounceCommandTest.cs" />
-    <Compile Include="BounceCommandExtensionsTest.cs" />
-    <Compile Include="BounceFactoryTests.cs" />
-    <Compile Include="BounceTest.cs" />
-    <Compile Include="BuilderTest.cs" />
-    <Compile Include="CommandAndTargetNameParserTest.cs" />
-    <Compile Include="CommandLineParameterParserTest.cs" />
-    <Compile Include="CommandLineParametersTest.cs" />
-    <Compile Include="CommandLineTasksParametersGeneratorTest.cs" />
-    <Compile Include="DirectoryFilesTest.cs" />
-    <Compile Include="EnvironmentVariablesTest.cs" />
-    <Compile Include="FakeArtefactTask.cs" />
-    <Compile Include="Features\CleanAfterBuildFeature.cs" />
-    <Compile Include="Features\CleanExecutedWithCleanDependenciesFeature.cs" />
-    <Compile Include="Features\DescribeFeature.cs" />
-    <Compile Include="GitCommandTests.cs" />
-    <Compile Include="Integration\FrameworkTest.cs" />
-    <Compile Include="NUnitTestsWithPartCoverTests.cs" />
-    <Compile Include="RenameFileTests.cs" />
-    <Compile Include="RenameDirectoryTests.cs" />
-    <Compile Include="TargetsBuilderTests.cs" />
-    <Compile Include="TeamCity\TeamCity5NUnitLoggerTests.cs" />
-    <Compile Include="TeamCity\TeamCityFactoryTests.cs" />
-    <Compile Include="TeamCity\TeamCityLogTests.cs" />
-    <Compile Include="TeamCity\TeamCityArtifactPublisherTests.cs" />
-    <Compile Include="WhenBuiltTest.cs" />
-    <Compile Include="FakeBounce.cs" />
-    <Compile Include="FakePrintTask.cs" />
-    <Compile Include="Features\PrintTask.cs" />
-    <Compile Include="Features\RemoteBounceFeature.cs" />
-    <Compile Include="Features\ShowingAvailableTargetsAndParametersFeature.cs" />
-    <Compile Include="FileNameFilterTest.cs" />
-    <Compile Include="FileSystemCopierTest.cs" />
-    <Compile Include="FileUtilsTest.cs" />
-    <Compile Include="TaskOfTTest.cs" />
-    <Compile Include="GitRepoParserTest.cs" />
-    <Compile Include="GitCheckoutTest.cs" />
-    <Compile Include="GlobToRegexConverterTest.cs" />
-    <Compile Include="Iis6WebSiteTest.cs" />
-    <Compile Include="LazyDirectoryUtilsTest.cs" />
-    <Compile Include="LazyFileUtilsTest.cs" />
-    <Compile Include="LogFactoryRegistryTest.cs" />
-    <Compile Include="LogOptionCommandLineTranslatorTest.cs" />
-    <Compile Include="SelectTasksTest.cs" />
-    <Compile Include="OptionalTaskTest.cs" />
-    <Compile Include="ParameterFinderTest.cs" />
-    <Compile Include="ParameterTest.cs" />
-    <Compile Include="ProjectFilePropertyExpressionParserTest.cs" />
-    <Compile Include="Features\BuildingATargetFeature.cs" />
-    <Compile Include="RemoteBounceArgumentsTest.cs" />
-    <Compile Include="RemoteBounceTest.cs" />
-    <Compile Include="SelectTaskTest.cs" />
-    <Compile Include="TargetInvokerTest.cs" />
-    <Compile Include="DirectoryUtilsTest.cs" />
-    <Compile Include="FakeTask.cs" />
-    <Compile Include="Iis7Admin.cs" />
+    <Compile Include="Obsolete\Attributes\IntegrationAttribute.cs" />
+    <Compile Include="Obsolete\BounceCommandExtensionsTest.cs" />
+    <Compile Include="Obsolete\BounceCommandTest.cs" />
+    <Compile Include="Obsolete\BounceFactoryTests.cs" />
+    <Compile Include="Obsolete\BounceTest.cs" />
+    <Compile Include="Obsolete\BuilderTest.cs" />
+    <Compile Include="Obsolete\CommandAndTargetNameParserTest.cs" />
+    <Compile Include="Obsolete\CommandLineParameterParserTest.cs" />
+    <Compile Include="Obsolete\CommandLineParametersTest.cs" />
+    <Compile Include="Obsolete\CommandLineTasksParametersGeneratorTest.cs" />
+    <Compile Include="Obsolete\CopyTest.cs" />
+    <Compile Include="Obsolete\DirectoryFilesTest.cs" />
+    <Compile Include="Obsolete\DirectoryUtilsTest.cs" />
+    <Compile Include="Obsolete\EnvironmentVariablesTest.cs" />
+    <Compile Include="Obsolete\FakeArtefactTask.cs" />
+    <Compile Include="Obsolete\FakeBounce.cs" />
+    <Compile Include="Obsolete\FakePrintTask.cs" />
+    <Compile Include="Obsolete\FakeTask.cs" />
+    <Compile Include="Obsolete\Features\BuildingATargetFeature.cs" />
+    <Compile Include="Obsolete\Features\CleanAfterBuildFeature.cs" />
+    <Compile Include="Obsolete\Features\CleanExecutedWithCleanDependenciesFeature.cs" />
+    <Compile Include="Obsolete\Features\DescribeFeature.cs" />
+    <Compile Include="Obsolete\Features\PrintTask.cs" />
+    <Compile Include="Obsolete\Features\RemoteBounceFeature.cs" />
+    <Compile Include="Obsolete\Features\ShowingAvailableTargetsAndParametersFeature.cs" />
+    <Compile Include="Obsolete\FileNameFilterTest.cs" />
+    <Compile Include="Obsolete\FileSystemCopierTest.cs" />
+    <Compile Include="Obsolete\FileUtilsTest.cs" />
+    <Compile Include="Obsolete\GitCheckoutTest.cs" />
+    <Compile Include="Obsolete\GitCommandTests.cs" />
+    <Compile Include="Obsolete\GitRepoParserTest.cs" />
+    <Compile Include="Obsolete\GlobToRegexConverterTest.cs" />
+    <Compile Include="Obsolete\Iis6WebSiteTest.cs" />
+    <Compile Include="Obsolete\Iis7Admin.cs" />
+    <Compile Include="Obsolete\Integration\FrameworkTest.cs" />
+    <Compile Include="Obsolete\LazyDirectoryUtilsTest.cs" />
+    <Compile Include="Obsolete\LazyFileUtilsTest.cs" />
+    <Compile Include="Obsolete\LogFactoryRegistryTest.cs" />
+    <Compile Include="Obsolete\LogOptionCommandLineTranslatorTest.cs" />
+    <Compile Include="Obsolete\NUnitTestsWithPartCoverTests.cs" />
+    <Compile Include="Obsolete\OptionalTaskTest.cs" />
+    <Compile Include="Obsolete\ParameterFinderTest.cs" />
+    <Compile Include="Obsolete\ParameterTest.cs" />
+    <Compile Include="Obsolete\ProjectFilePropertyExpressionParserTest.cs" />
+    <Compile Include="Obsolete\RemoteBounceArgumentsTest.cs" />
+    <Compile Include="Obsolete\RemoteBounceTest.cs" />
+    <Compile Include="Obsolete\RenameDirectoryTests.cs" />
+    <Compile Include="Obsolete\RenameFileTests.cs" />
+    <Compile Include="Obsolete\SelectTasksTest.cs" />
+    <Compile Include="Obsolete\SelectTaskTest.cs" />
+    <Compile Include="Obsolete\TargetInvokerTest.cs" />
+    <Compile Include="Obsolete\TargetsBuilderTests.cs" />
+    <Compile Include="Obsolete\TargetsMethodInvokerTest.cs" />
+    <Compile Include="Obsolete\TargetsParserTest.cs" />
+    <Compile Include="Obsolete\TargetsRetrieverTest.cs" />
+    <Compile Include="Obsolete\TaskDependencyFinderTest.cs" />
+    <Compile Include="Obsolete\TaskOfTTest.cs" />
+    <Compile Include="Obsolete\TaskTest.cs" />
+    <Compile Include="Obsolete\TaskTestExtensions.cs" />
+    <Compile Include="Obsolete\TeamCity\TeamCity5NUnitLoggerTests.cs" />
+    <Compile Include="Obsolete\TeamCity\TeamCityArtifactPublisherTests.cs" />
+    <Compile Include="Obsolete\TeamCity\TeamCityFactoryTests.cs" />
+    <Compile Include="Obsolete\TeamCity\TeamCityLogTests.cs" />
+    <Compile Include="Obsolete\TeamCity\TeamCityMSBuildLoggerTest.cs" />
+    <Compile Include="Obsolete\TeamCity\TeamCityTextFormatterTest.cs" />
+    <Compile Include="Obsolete\TypeParsersTest.cs" />
+    <Compile Include="Obsolete\VisualStudioCSharpProjectFileLoaderTest.cs" />
+    <Compile Include="Obsolete\VisualStudioSolutionFileLoaderTest.cs" />
+    <Compile Include="Obsolete\VisualStudioSolutionFileReaderTest.cs" />
+    <Compile Include="Obsolete\VisualStudioSolutionTest.cs" />
+    <Compile Include="Obsolete\WhenBuiltTest.cs" />
+    <Compile Include="Obsolete\ZipFileTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TargetsMethodInvokerTest.cs" />
-    <Compile Include="TargetsParserTest.cs" />
-    <Compile Include="TargetsRetrieverTest.cs" />
-    <Compile Include="TaskDependencyFinderTest.cs" />
-    <Compile Include="TaskTest.cs" />
-    <Compile Include="CopyTest.cs" />
-    <Compile Include="TaskTestExtensions.cs" />
-    <Compile Include="TeamCity\TeamCityMSBuildLoggerTest.cs" />
-    <Compile Include="TeamCity\TeamCityTextFormatterTest.cs" />
-    <Compile Include="TypeParsersTest.cs" />
-    <Compile Include="VisualStudioCSharpProjectFileLoaderTest.cs" />
-    <Compile Include="VisualStudioSolutionFileLoaderTest.cs" />
-    <Compile Include="VisualStudioSolutionFileReaderTest.cs" />
-    <Compile Include="VisualStudioSolutionTest.cs" />
-    <Compile Include="ZipFileTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">
@@ -167,18 +167,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestFiles\Bounce.csproj">
+    <Content Include="Obsolete\TestFiles\Bounce.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestFiles\Bounce.sln">
+    <Content Include="Obsolete\TestFiles\Bounce.sln">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestFiles\Bouncer.Console.csproj">
+    <Content Include="Obsolete\TestFiles\Bouncer.Console.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="TestSolution.zip">
+    <None Include="Obsolete\TestSolution.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

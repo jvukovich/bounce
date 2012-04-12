@@ -7,7 +7,7 @@ namespace Bounce.Console {
             writer.WriteLine();
             writer.WriteLine(
                 @"public class BuildTargets {
-    [Bounce.Framework.Targets]
+    [Bounce.Framework.Obsolete.Targets]
     public static object Targets (IParameters parameters) {
         return new {
             MyTarget = ...

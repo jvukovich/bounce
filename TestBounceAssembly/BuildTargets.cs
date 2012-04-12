@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Bounce.Framework;
 using System.Text.RegularExpressions;
+using Bounce.Framework.Obsolete;
 
 namespace TestBounceAssembly {
     public class BuildTargets {
@@ -41,11 +42,39 @@ namespace TestBounceAssembly {
             };
         }
 
+        public static void NewTargets(IParameters parameters) {
+            Task<string> assets = "assets";
+            Task<string> compile = Taskk.OnBuild(new {Assets = assets}, args => {
+
+                return args.Assets.Value;
+            });
+        }
+
+        class Taskk {
+            public static Task<TR> OnBuild<T, TR>(T t, Func<T, TR> a) {
+                return new Work<T, TR>(t, a);
+            }
+        }
+
+        class Work<T1, T2> : TaskWithValue<T2> {
+            private readonly T1 _t;
+            private readonly Func<T1, T2> _a;
+
+            public Work(T1 t, Func<T1, T2> a) {
+                _t = t;
+                _a = a;
+            }
+
+            protected override T2 GetValue() {
+                return _a(_t);
+            }
+        }
+
         public static object Targets(IParameters parameters) {
             var solution = new VisualStudioSolution {
                 SolutionPath = "WebSolution.sln",
             };
-            var webProject = solution.Projects["WebSite"];
+            var webProject = solution.Projects["CreateWebSite"];
 
             return new {
                 WebSite = new Iis7WebSite {
@@ -205,21 +234,21 @@ namespace TestBounceAssembly {
         };
 
         var targets = new StagedDeployTargetBuilder(stage);
-        var website = targets.CreateTarget("WebSite");
+        var website = targets.CreateTarget("CreateWebSite");
 
         website.Package = new Copy {
-            FromPath = solution.Projects["WebSite"].ProjectDirectory,
-            ToPath = new CleanDirectory {Path = "package"}.Path.SubPath("WebSite")
+            FromPath = solution.Projects["CreateWebSite"].ProjectDirectory,
+            ToPath = new CleanDirectory {Path = "package"}.Path.SubPath("CreateWebSite")
         }.ToPath;
 
         website.InvokeRemoteDeploy = website.CopyToAndInvokeOnMachines(machines, new SubBounceFactory());
 
         website.Deploy = package => new Iis7WebSite {
             Directory = new Copy {
-                FromPath = package.SubPath("WebSite"),
-                ToPath = @"C:\Sites\WebSite"
+                FromPath = package.SubPath("CreateWebSite"),
+                ToPath = @"C:\Sites\CreateWebSite"
             }.ToPath,
-            Name = "WebSite"
+            Name = "CreateWebSite"
         };
 
         return targets.Targets;

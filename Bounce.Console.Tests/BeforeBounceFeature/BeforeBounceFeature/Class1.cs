@@ -1,6 +1,6 @@
 ﻿using System;
-using Bounce.Framework;
-using Bounce.Framework.Tests.Features;
+using Bounce.Framework.Obsolete;
+using Bounce.Framework.Tests.Obsolete.Features;
 
 namespace BeforeBounceFeature
 {

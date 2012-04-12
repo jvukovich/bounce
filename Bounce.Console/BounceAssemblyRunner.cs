@@ -66,7 +66,7 @@ namespace Bounce.Console {
         private void RunAssembly(BounceAssemblyAndTargetsProperty bounceAssemblyAndTargetsProperty, IEnumerable args) {
             if (args == null) throw new ArgumentNullException("args");
             Assembly bounceAssembly = bounceAssemblyAndTargetsProperty.BounceAssembly;
-            Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
+            Type runnerType = bounceAssembly.GetType("Bounce.Framework.Obsolete.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
 
             runnerType.GetMethod("Run").Invoke(runner, new object[] { args, bounceAssemblyAndTargetsProperty.GetTargetsMethod });
@@ -78,7 +78,7 @@ namespace Bounce.Console {
             foreach (var prop in allProperties) {
                 foreach (var attr in prop.GetCustomAttributes(false)) {
                     var attrType = attr.GetType();
-                    if (attrType.FullName == "Bounce.Framework.TargetsAttribute") {
+                    if (attrType.FullName == "Bounce.Framework.Obsolete.TargetsAttribute") {
                         return new BounceAssemblyAndTargetsProperty { BounceAssembly = attrType.Assembly, GetTargetsMethod = prop };
                     }
                 }

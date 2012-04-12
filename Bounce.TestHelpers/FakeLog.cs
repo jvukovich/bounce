@@ -1,5 +1,6 @@
 ﻿using System;
 using Bounce.Framework;
+using Bounce.Framework.Obsolete;
 
 namespace Bounce.TestHelpers {
     public class FakeLog : ILog {
