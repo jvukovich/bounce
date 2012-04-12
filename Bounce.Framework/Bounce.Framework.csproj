@@ -93,7 +93,7 @@
     <Compile Include="ITask.cs" />
     <Compile Include="ITaskParameter.cs" />
     <Compile Include="NonNamedArgumentException.cs" />
-    <Compile Include="NoTasksException.cs" />
+    <Compile Include="NoMatchingTaskException.cs" />
     <Compile Include="Obsolete\All.cs" />
     <Compile Include="Obsolete\AspNetWebSiteDirectory.cs" />
     <Compile Include="Obsolete\Bounce.cs" />
@@ -303,9 +303,11 @@
     <Compile Include="MethodInfoExtensions.cs" />
     <Compile Include="TaskMethod.cs" />
     <Compile Include="TaskMethodParameter.cs" />
+    <Compile Include="TaskParameter.cs" />
     <Compile Include="TaskParameterException.cs" />
     <Compile Include="TaskRequiredParameterException.cs" />
     <Compile Include="TypeParsers.cs" />
+    <Compile Include="UsageHelp.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

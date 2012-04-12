@@ -24,26 +24,24 @@ namespace Bounce.Framework {
         public void Invoke(Parameters parameters) {
             var taskObject = _method.DeclaringType.GetConstructor(new Type[0]).Invoke(new object[0]);
 
-            var methodParameters = _method.GetParameters();
-            var arguments = ArgumentsFromCommandLineParameters(parameters, methodParameters);
+            var arguments = ArgumentsFromCommandLineParameters(parameters);
 
             _method.Invoke(taskObject, arguments);
         }
 
-        private object[] ArgumentsFromCommandLineParameters(Parameters parameters, IEnumerable<ParameterInfo> methodParameters)
+        private object[] ArgumentsFromCommandLineParameters(Parameters parameters)
         {
-            return methodParameters.Select(p => (object)ParseParameter(parameters, p)).ToArray();
+            return Parameters.Select(p => (object)ParseParameter(parameters, p)).ToArray();
         }
 
-        private object ParseParameter(Parameters parameters, ParameterInfo p)
+        private object ParseParameter(Parameters parameters, ITaskParameter p)
         {
-            try
-            {
-                return parameters.Parameter(p.ParameterType, p.Name);
+            try {
+                return parameters.Parameter(p);
             } catch(RequiredParameterNotGivenException e) {
-                throw new TaskRequiredParameterException(p.Name, this);
+                throw new TaskRequiredParameterException(p, this);
             } catch (TypeParserNotFoundException e) {
-                throw new TaskParameterException(p.ParameterType, p.Name, this);
+                throw new TaskParameterException(p, this);
             }
         }
 
@@ -64,6 +62,6 @@ namespace Bounce.Framework {
 
         public IEnumerable<ITaskParameter> Parameters {
             get { return _method.GetParameters().Select(p => (ITaskParameter) new TaskMethodParameter(p)); }
-        } 
+        }
     }
 }

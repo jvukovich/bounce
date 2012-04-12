@@ -15,13 +15,18 @@ namespace Build
             Console.WriteLine("doing something!" + someNumber);
         }
 
+        [Task]
+        public void TakesAString(string something = null) {
+            Console.WriteLine(something);
+        }
+
         public enum Lake {
             Constance,
             Coniston
         };
 
         [Task]
-        public void ShowLake(Lake lake) {
+        public void ShowLake(Lake lake = Lake.Coniston) {
             Console.WriteLine(lake);
         }
 

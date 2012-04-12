@@ -10,11 +10,7 @@ namespace Bounce.Framework {
         }
 
         public object Parameter(Type type, string name, object defaultValue) {
-            if (_parameters.ContainsKey(name)) {
-                return TypeParsers.Default.Parse(type, _parameters[name]);
-            } else {
-                return defaultValue;
-            }
+            return Parameter(new TaskParameter {Name = name, Type = type, DefaultValue = defaultValue});
         }
 
         public T Parameter<T>(string name, T defaultValue) {
@@ -22,10 +18,27 @@ namespace Bounce.Framework {
         }
 
         public object Parameter(Type type, string name) {
-            if (_parameters.ContainsKey(name)) {
-                return TypeParsers.Default.Parse(type, _parameters[name]);
+            return Parameter(new TaskParameter {Name = name, Type = type});
+        }
+
+        public object Parameter(ITaskParameter parameter) {
+            if (_parameters.ContainsKey(parameter.Name)) {
+                return ParseParameter(parameter);
             } else {
-                throw new RequiredParameterNotGivenException(name);
+                if (parameter.IsRequired) {
+                    throw new RequiredParameterNotGivenException(parameter.Name);
+                } else {
+                    return parameter.DefaultValue;
+                }
+            }
+        }
+
+        private object ParseParameter(ITaskParameter parameter) {
+            var parser = TypeParsers.Default.TypeParser(parameter.Type);
+            if (parser != null) {
+                return parser.Parse(_parameters[parameter.Name]);
+            } else {
+                throw new TypeParserNotFoundException(_parameters[parameter.Name], parameter.Type);
             }
         }
 

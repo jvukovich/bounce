@@ -42,6 +42,33 @@ namespace Bounce.Framework.Tests {
         }
 
         [Test]
+        public void InvokesTaskMethodWithOptionalStringParameterNotGiven()
+        {
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Optional"));
+            task.Invoke(new Parameters(new Dictionary<string, string>()));
+
+            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"optional fileName: stuff.txt"));
+        }
+
+        [Test]
+        public void InvokesTaskMethodWithOptionalStringParameterGiven()
+        {
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Optional"));
+            task.Invoke(new Parameters(new Dictionary<string, string>{{"fileName", "thefile.txt"}}));
+
+            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"optional fileName: thefile.txt"));
+        }
+
+        [Test]
+        public void InvokesTaskMethodWithNullableIntParameterGiven()
+        {
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Nullable"));
+            task.Invoke(new Parameters(new Dictionary<string, string>{{"port", "80"}}));
+
+            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"port: 80"));
+        }
+
+        [Test]
         public void ThrowsExceptionWhenTaskRequiredParameterNotProvided()
         {
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Test"));
@@ -55,6 +82,13 @@ namespace Bounce.Framework.Tests {
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Bad"));
             Assert.That(() => task.Invoke(new Parameters(new Dictionary<string, string> { { "x", @"something" } })), Throws.InstanceOf<TaskParameterException>());
         }
+
+        [Test]
+        public void NullableParameterIsNotRequired() {
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Nullable"));
+            Assert.That(task.Parameters.ElementAt(0).IsRequired, Is.False);
+        }
+
 
         public class FakeTaskClass
         {
@@ -79,6 +113,16 @@ namespace Bounce.Framework.Tests {
             [Task]
             public void Bad(CustomType x)
             {
+            }
+
+            [Task]
+            public void Optional(string fileName = "stuff.txt") {
+                Output.WriteLine("optional fileName: " + fileName);
+            }
+
+            [Task]
+            public void Nullable(int? port) {
+                Output.WriteLine("port: " + (port.HasValue? port.Value.ToString(): "<nothing>"));
             }
         }
 

@@ -13,23 +13,12 @@ namespace Bounce.Framework {
                 if (arguments.Length > 0) {
                     RunTask(tasks, arguments);
                 } else {
-                    PrintUsage(tasks);
+                    UsageHelp.WriteUsage(Console.Out, tasks);
                 }
             } catch (BounceException e) {
                 e.Explain(Console.Error);
             } catch (Exception e) {
                 Console.Error.WriteLine(e);
-            }
-        }
-
-        private static void PrintUsage(IEnumerable<ITask> tasks) {
-            foreach (var task in tasks) {
-
-                Console.WriteLine("    " + task.FullName);
-
-                foreach (var parameter in task.Parameters) {
-                    Console.WriteLine("        /{0}:{1}", parameter.Name, parameter.Type);
-                }
             }
         }
 
@@ -45,7 +34,7 @@ namespace Bounce.Framework {
             }
             else if (!matchingTasks.Any())
             {
-                throw new NoTasksException();
+                throw new NoMatchingTaskException(taskName, tasks);
             } else {
                 matchingTasks.Single().Invoke(parameters);
             }
