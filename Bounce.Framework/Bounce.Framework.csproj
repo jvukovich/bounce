@@ -104,6 +104,13 @@
     <Compile Include="ITask.cs" />
     <Compile Include="ITaskParameter.cs" />
     <Compile Include="ITypeParsers.cs" />
+    <Compile Include="VisualStudio\ConditionParseException.cs" />
+    <Compile Include="VisualStudio\IPropertyValues.cs" />
+    <Compile Include="VisualStudio\ParseResult.cs" />
+    <Compile Include="VisualStudio\ProjectFilePropertyExpressionParser.cs" />
+    <Compile Include="VisualStudio\PropertyValues.cs" />
+    <Compile Include="VisualStudio\IVisualStudioProjectFileLoader.cs" />
+    <Compile Include="VisualStudio\IVisualStudioSolutionFileLoader.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogOptionCommandLineParser.cs" />
@@ -128,7 +135,15 @@
     <Compile Include="TypeParsers.cs" />
     <Compile Include="UsageHelp.cs" />
     <Compile Include="VisualStudio\VisualStudio.cs" />
+    <Compile Include="VisualStudio\VisualStudioCSharpProjectFileLoader.cs" />
+    <Compile Include="VisualStudio\VisualStudioProjectFileDetails.cs" />
+    <Compile Include="VisualStudio\VisualStudioProjects.cs" />
     <Compile Include="VisualStudio\VisualStudioSolution.cs" />
+    <Compile Include="VisualStudio\VisualStudioSolutionDetails.cs" />
+    <Compile Include="VisualStudio\VisualStudioSolutionFileDetails.cs" />
+    <Compile Include="VisualStudio\VisualStudioSolutionFileLoader.cs" />
+    <Compile Include="VisualStudio\VisualStudioSolutionFileReader.cs" />
+    <Compile Include="VisualStudio\VisualStudioSolutionProjectReference.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

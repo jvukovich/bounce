@@ -9,9 +9,13 @@ namespace Bounce.Framework.VisualStudio {
         public string OutputDir { get; set; }
         public string Target { get; set; }
 
+        private VisualStudioSolutionFileReader SolutionReader;
+
         public VisualStudioSolution(string path) {
             SolutionPath = path;
             MsBuildExe = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe");
+            SolutionReader = new VisualStudioSolutionFileReader();
+            Configuration = "Debug";
         }
 
         public void Build() {
@@ -22,9 +26,13 @@ namespace Bounce.Framework.VisualStudio {
                 TargetIfSpecified
             );
 
-            Bounce.Log.Error("stuff");
-
             Bounce.Shell.ExecuteAndExpectSuccess(MsBuildExe, arguments);
+        }
+
+        public VisualStudioProjects Projects {
+            get {
+                return new VisualStudioProjects(SolutionReader.ReadSolution(SolutionPath, Configuration));
+            }
         }
 
         private static string Arguments(params string[] args)

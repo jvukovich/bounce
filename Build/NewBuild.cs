@@ -1,3 +1,4 @@
+using System;
 using Bounce.Framework;
 using Bounce.Framework.VisualStudio;
 
@@ -8,7 +9,8 @@ namespace Build {
         {
             var vs = new VisualStudio();
             var sln = vs.Solution("Bounce.sln");
-            sln.Build();
+
+            Console.WriteLine(sln.Projects["Bounce.Framework"].OutputFile);
         }
     }
 }
