@@ -8,7 +8,7 @@ namespace Bounce.Framework.NUnit
         /// <summary>
         /// Full path to nunit-console.exe
         /// </summary>
-        public string NUnitConsolePath;
+        public string NUnitConsolePath { get; set; }
 
         /// <summary>
         /// Framework version to be used for tests

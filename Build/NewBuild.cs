@@ -5,16 +5,25 @@ using Bounce.Framework.VisualStudio;
 
 namespace Build {
     public class NewBuild {
+        private readonly IVisualStudio Vs;
+        private readonly INUnit NUnit;
+
+        public NewBuild() : this(new VisualStudio(), new NUnit()) {
+        }
+
+        public NewBuild(IVisualStudio vs, INUnit nunit) {
+            Vs = vs;
+            NUnit = nunit;
+        }
+
         [Task]
         public void CompileAndTest()
         {
-            var vs = new VisualStudio();
-            var sln = vs.Solution("Bounce.sln");
+            var sln = Vs.Solution("Bounce.sln");
             sln.Build();
 
-            var nUnit = new NUnit();
-            nUnit.NUnitConsolePath = @".\References\NUnit\nunit-console.exe";
-            nUnit.Test(sln.Projects["Bounce.Framework.Tests"].OutputFile);
+            NUnit.NUnitConsolePath = @".\References\NUnit\nunit-console.exe";
+            NUnit.Test(sln.Projects["Bounce.Framework.Tests"].OutputFile);
         }
     }
 }
