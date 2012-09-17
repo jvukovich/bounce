@@ -1,20 +1,30 @@
+using System.Net;
 using System.Text.RegularExpressions;
 
-namespace Bounce.Framework.Iis {
-    public class BindingParser {
-        private static Regex UrlRegex = new Regex(@"(?<protocol>http|https)://(?<host>[^:]*)(:(?<port>\d+))?/(?<path>.*)");
+namespace Bounce.Framework.Web {
+    public class WebSiteBindingParser {
+        private static Regex UrlRegex = new Regex(@"(?<protocol>http|https)://((?<ipaddress>\d+\.\d+\.\d+\.\d+)|(?<host>[^:]*))(:(?<port>\d+))?/(?<path>.*)");
 
-        public IisBinding Parse(string httpHost) {
+        public WebSiteBinding Parse(string httpHost) {
             var match = UrlRegex.Match(httpHost);
             if (match.Success) {
-                return new IisBinding {
+                return new WebSiteBinding {
                     Port = ParsePort(match),
                     Path = ParsePath(match),
                     Host = ParseHost(match),
-                    Protocol = ParseProtocol(match)
+                    Protocol = ParseProtocol(match),
+                    IpAddress = ParseIpAddress(match)
                 };
             }
             return null;
+        }
+
+        private IPAddress ParseIpAddress(Match match) {
+            if (match.Groups["ipaddress"].Success) {
+                return IPAddress.Parse(match.Groups["ipaddress"].Value);
+            } else {
+                return null;
+            }
         }
 
         private string ParsePath(Match match) {
@@ -43,7 +53,7 @@ namespace Bounce.Framework.Iis {
 
         private static string ParseHost(Match match) {
             var host = match.Groups["host"].Value;
-            return host == "*"? null: host;
+            return (host == "*" || host == "")? null: host;
         }
     }
 }

@@ -82,12 +82,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Iis\Class1.cs" />
     <Compile Include="TaskMethodTest.cs" />
     <Compile Include="ParameterParserTest.cs" />
     <Compile Include="ParametersTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TasksForTaskNames.cs" />
+    <Compile Include="Web\WebSiteBindingParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj">

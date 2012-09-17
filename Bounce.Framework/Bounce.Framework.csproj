@@ -96,10 +96,15 @@
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="DefaultLogFormatter.cs" />
     <Compile Include="ICommandLog.cs" />
-    <Compile Include="Iis\BindingParser.cs" />
-    <Compile Include="Iis\IIis.cs" />
-    <Compile Include="Iis\Iis7.cs" />
-    <Compile Include="Iis\IisBinding.cs" />
+    <Compile Include="Web\IAppPool.cs" />
+    <Compile Include="Web\Iis7WebApplication.cs" />
+    <Compile Include="Web\Iis7WebSite.cs" />
+    <Compile Include="Web\IWebApplication.cs" />
+    <Compile Include="Web\WebSiteBindingParser.cs" />
+    <Compile Include="Web\IWebServer.cs" />
+    <Compile Include="Web\IWebSite.cs" />
+    <Compile Include="Web\Iis7.cs" />
+    <Compile Include="Web\WebSiteBinding.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="ILogMessageFormatter.cs" />
     <Compile Include="ILogOptionCommandLineParser.cs" />
@@ -151,6 +156,7 @@
     <Compile Include="VisualStudio\VisualStudioSolutionFileLoader.cs" />
     <Compile Include="VisualStudio\VisualStudioSolutionFileReader.cs" />
     <Compile Include="VisualStudio\VisualStudioSolutionProjectReference.cs" />
+    <Compile Include="Web\WebSiteNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
