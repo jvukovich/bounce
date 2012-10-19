@@ -14,23 +14,25 @@ namespace Bounce.Framework.VisualStudio {
             ProjectLoader = projectLoader;
         }
 
-        public VisualStudioSolutionDetails ReadSolution(string solutionPath, string configuration) {
+        public VisualStudioSolution ReadSolution(string solutionPath, string configuration) {
             VisualStudioSolutionFileDetails solutionDetails = SolutionLoader.LoadVisualStudioSolution(solutionPath);
 
-            var projects = new List<VisualStudioProjectFileDetails>();
+            var projects = new List<VisualStudioProject>();
+            var sln = new VisualStudioSolution(solutionPath) { VisualStudioProjects = projects };
 
             foreach (var project in solutionDetails.VisualStudioProjects) {
                 if (Path.GetExtension(project.Path) == ".csproj") {
                     string projectFileName = Path.Combine(Path.GetDirectoryName(solutionPath), project.Path);
-                    VisualStudioProjectFileDetails projectDetails = ProjectLoader.LoadProject(projectFileName,
-                                                                                                    project.Name,
-                                                                                                    configuration);
+                    VisualStudioProject projectDetails = ProjectLoader.LoadProject(projectFileName,
+                                                                                   project.Name,
+                                                                                   configuration);
 
+                    projectDetails.Solution = sln;
                     projects.Add(projectDetails);
                 }
             }
 
-            return new VisualStudioSolutionDetails {Projects = projects};
+            return sln;
         }
     }
 }

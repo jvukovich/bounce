@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Bounce.Framework {
     public class BounceRunner {
-        public void Run(string bounceDirectory, string [] rawArguments) {
+        public int Run(string bounceDirectory, string [] rawArguments) {
             try {
                 Directory.SetCurrentDirectory(Path.GetDirectoryName(bounceDirectory));
                 var arguments = ParsedArguments(rawArguments);
@@ -20,10 +20,20 @@ namespace Bounce.Framework {
                 } else {
                     UsageHelp.WriteUsage(Console.Out, tasks);
                 }
+                return 0;
             } catch (BounceException e) {
                 e.Explain(Console.Error);
-            } catch (Exception e) {
+                return 1;
+            } catch (ReflectionTypeLoadException e) {
+                foreach (var loaderException in e.LoaderExceptions) {
+                    Console.Error.WriteLine(loaderException);
+                }
+                return 1;
+            }
+            catch (Exception e)
+            {
                 Console.Error.WriteLine(e);
+                return 1;
             }
         }
 
