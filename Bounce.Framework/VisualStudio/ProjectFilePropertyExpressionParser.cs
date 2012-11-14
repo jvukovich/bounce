@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Bounce.Framework.VisualStudio {
     public class ProjectFilePropertyExpressionParser {
@@ -34,9 +36,48 @@ namespace Bounce.Framework.VisualStudio {
             return new ParseResult<object> {Index = index};
         }
 
+        private ParseResult<object> ParseKeyword(char [] source, int index, string keyword) {
+            if (new string(source, index, keyword.Length) == keyword) {
+                return new ParseResult<object> {Index = index + keyword.Length};
+            } else {
+                return null;
+            }
+        }
+
+        private ParseResult<bool> ParseOrExpression(char [] source, int index) {
+            var left = ParseEqualityExpression(source, index);
+
+            if (left == null) {
+                return null;
+            }
+
+            var op = ParseKeyword(source, index, "Or");
+
+            if (op == null) {
+                return null;
+            }
+
+            var right = ParseExpression(source, index);
+            if (right == null) {
+                return null;
+            }
+
+            return new ParseResult<bool> {Index = right.Index, Value = left.Value || right.Value};
+        }
+
+        private ParseResult<bool> ParseExpression(char [] source, int index) {
+            var expressionParsers = new Func<char[], int, ParseResult<bool>>[] { ParseOrExpression, ParseEqualityExpression };
+            return expressionParsers.Select(parser => parser(source, index)).FirstOrDefault(result => result != null);
+        }
+
+        private ParseResult<string> ParseTerminal(char [] source, int index) {
+            var expressionParsers = new Func<char[], int, ParseResult<string>>[] { ParseVariable, ParseString };
+            return expressionParsers.Select(parser => parser(source, index)).FirstOrDefault(result => result != null);
+        }
+
         public ParseResult<bool> ParseEqualityExpression(char [] source, int index) {
             var whitespace = ParseWhitespace(source, index);
-            var firstString = ParseString(source, whitespace.Index);
+            var firstString = ParseTerminal(source, whitespace.Index);
             if (firstString == null) {
                 return null;
             }
@@ -46,7 +87,7 @@ namespace Bounce.Framework.VisualStudio {
                 return null;
             }
             whitespace = ParseWhitespace(source, equalityOperator.Index);
-            var secondString = ParseString(source, whitespace.Index);
+            var secondString = ParseTerminal(source, whitespace.Index);
             if (secondString == null) {
                 return null;
             }
@@ -129,6 +170,8 @@ namespace Bounce.Framework.VisualStudio {
                 index++;
             }
 
+            index++;
+
             if (index < source.Length) {
                 return new ParseResult<string> {Value = Props[variable.ToString()], Index = index};
             } else {
@@ -137,7 +180,7 @@ namespace Bounce.Framework.VisualStudio {
         }
 
         public bool ParseCondition(string value) {
-            return Parse<bool>(value, ParseEqualityExpression);
+            return Parse(value, ParseExpression);
         }
     }
 }

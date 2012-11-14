@@ -7,7 +7,7 @@ namespace Bounce.Framework.VisualStudio {
     public class VisualStudioCSharpProjectFileLoader : IVisualStudioProjectFileLoader {
         private XNamespace msbuild = "http://schemas.microsoft.com/developer/msbuild/2003";
 
-        public VisualStudioProjectFileDetails LoadProject(string path, string projectName, string configuration) {
+        public VisualStudioProject LoadProject(string path, string projectName, string configuration) {
             XDocument proj = XDocument.Load(path);
 
             var props = new PropertyValues();
@@ -20,7 +20,7 @@ namespace Bounce.Framework.VisualStudio {
             var outputDirectory = Path.Combine(projectDirectory, props["OutputPath"]);
             var outputFile = Path.Combine(outputDirectory, props["AssemblyName"] + "." + GetExtensionForOutputType(props["OutputType"]));
 
-            return new VisualStudioProjectFileDetails {
+            return new VisualStudioProject {
                 OutputFile = outputFile.TrimEnd('\\'),
                 OutputDirectory = outputDirectory.TrimEnd('\\'),
                 Name = projectName,
@@ -56,8 +56,12 @@ namespace Bounce.Framework.VisualStudio {
         private bool Condition(XElement element, PropertyValues props) {
             XAttribute condition = element.Attribute("Condition");
             if (condition != null) {
-                var parser = new ProjectFilePropertyExpressionParser(props);
-                return parser.ParseCondition(condition.Value);
+                try {
+                    var parser = new ProjectFilePropertyExpressionParser(props);
+                    return parser.ParseCondition(condition.Value);
+                } catch (ConditionParseException) {
+                    return false;
+                }
             } else {
                 return true;
             }

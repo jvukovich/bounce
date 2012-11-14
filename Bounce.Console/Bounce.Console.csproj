@@ -63,6 +63,7 @@
     <Compile Include="..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BadExitException.cs" />
     <Compile Include="BeforeBounceScriptException.cs" />
     <Compile Include="BeforeBounceScriptRunner.cs" />
     <Compile Include="BounceAssemblyRunner.cs" />

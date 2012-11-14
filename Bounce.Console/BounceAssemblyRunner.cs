@@ -10,24 +10,25 @@ namespace Bounce.Console {
         private readonly BeforeBounceScriptRunner BeforeBounceScriptRunner;
         private string bounceDirectory;
         private string[] arguments;
+        private int ExitCode = 1;
 
         public BounceAssemblyRunner() {
             BeforeBounceScriptRunner = new BeforeBounceScriptRunner();
         }
 
-        public void Run(string[] args) {
+        public int Run(string[] args) {
             try {
-                FindTargetsAssemblyAndRunBounce(args);
+                return FindTargetsAssemblyAndRunBounce(args);
             } catch (BounceConsoleException bce) {
                 bce.Explain(System.Console.Error);
-                Environment.Exit(1);
+                return 1;
             } catch (Exception e) {
                 System.Console.Error.WriteLine(e);
-                Environment.Exit(1);
+                return 1;
             }
         }
 
-        private void FindTargetsAssemblyAndRunBounce(string[] args) {
+        private int FindTargetsAssemblyAndRunBounce(string[] args) {
             var optionsAndArguments = GetAssemblyFileName(args);
 
             BeforeBounceScriptRunner.RunBeforeBounceScript(optionsAndArguments);
@@ -38,12 +39,13 @@ namespace Bounce.Console {
             var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = "true" };
             var appDomain = AppDomain.CreateDomain("Bounce", null, appDomainSetup);
 
-            try
-            {
+            try {
                 //call back to transfer control to other app domain
                 appDomain.DoCallBack(RunTask);
-            }
-            finally
+                return 0;
+            } catch (BadExitException badStuff) {
+                return 1;
+            } finally
             {
                 AppDomain.Unload(appDomain);
             }
@@ -58,7 +60,10 @@ namespace Bounce.Console {
         private void RunBounce(Assembly bounceAssembly) {
             Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
-            runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, arguments});
+            var exitCode = (int) runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, arguments});
+            if (exitCode != 0) {
+                throw new BadExitException();
+            }
         }
 
         private Assembly ReferencedBounceAssembly() {

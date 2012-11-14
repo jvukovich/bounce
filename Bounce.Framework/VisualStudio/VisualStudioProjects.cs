@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Bounce.Framework.VisualStudio {
-    public class VisualStudioProjects : IEnumerable<VisualStudioProjectFileDetails> {
-        private readonly VisualStudioSolutionDetails Solution;
+    public class VisualStudioProjects : IEnumerable<VisualStudioProject> {
+        private readonly IEnumerable<VisualStudioProject> Projects;
 
-        public VisualStudioProjects(VisualStudioSolutionDetails solution) {
-            Solution = solution;
+        public VisualStudioProjects(IEnumerable<VisualStudioProject> projects) {
+            Projects = projects;
         }
 
-        public VisualStudioProjectFileDetails this[string projectName] {
-            get { return Solution.Projects.SingleOrDefault(p => p.Name == projectName); }
+        public VisualStudioProject this[string projectName] {
+            get { return Projects.SingleOrDefault(p => p.Name == projectName); }
         }
 
-        public IEnumerator<VisualStudioProjectFileDetails> GetEnumerator() {
-            return Solution.Projects.GetEnumerator();
+        public IEnumerator<VisualStudioProject> GetEnumerator() {
+            return Projects.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
