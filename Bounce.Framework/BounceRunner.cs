@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
     public class BounceRunner {
@@ -52,7 +53,7 @@ namespace Bounce.Framework {
         }
 
         private IEnumerable<ITask> Tasks(string bounceDirectory) {
-            return Directory.GetFiles(bounceDirectory).Where(IsExecutable).SelectMany(file => {
+            return Directory.GetFiles(bounceDirectory).Where(IsBounceExecutable).SelectMany(file => {
                 var assembly = Assembly.LoadFrom(file);
                 var allMethods =
                     assembly.GetTypes().SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance));
@@ -62,9 +63,10 @@ namespace Bounce.Framework {
             });
         }
 
-        private bool IsExecutable(string s) {
-            return s.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase)
-                   || s.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase);
+        private bool IsBounceExecutable(string path) {
+            string fileName = Path.GetFileName(path);
+            bool match = new Regex(@"\bbounce\b.*\.(dll|exe)", RegexOptions.IgnoreCase).IsMatch(fileName);
+            return match;
         }
     }
 }
