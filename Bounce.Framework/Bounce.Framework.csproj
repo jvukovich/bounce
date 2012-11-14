@@ -96,6 +96,7 @@
     <Compile Include="CommandOutputReceiver.cs" />
     <Compile Include="DefaultLogFormatter.cs" />
     <Compile Include="ICommandLog.cs" />
+    <Compile Include="TaskException.cs" />
     <Compile Include="VisualStudio\IMsBuild.cs" />
     <Compile Include="VisualStudio\IMsBuildFile.cs" />
     <Compile Include="VisualStudio\IVisualStudioProject.cs" />

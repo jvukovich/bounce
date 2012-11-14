@@ -43,7 +43,7 @@ namespace Bounce.Console {
                 //call back to transfer control to other app domain
                 appDomain.DoCallBack(RunTask);
                 return 0;
-            } catch (BadExitException badStuff) {
+            } catch (Exception) {
                 return 1;
             } finally
             {

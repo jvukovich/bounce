@@ -27,7 +27,7 @@ namespace Bounce.Framework {
                 var methodArguments = MethodArgumentsFromCommandLineParameters(arguments);
                 _method.Invoke(taskObject, methodArguments);
             } catch (TargetInvocationException e) {
-                Rethrow(e.InnerException);
+                throw new TaskException(this, e.InnerException);
             }
         }
 
