@@ -27,8 +27,15 @@ namespace Bounce.Framework {
                 var methodArguments = MethodArgumentsFromCommandLineParameters(arguments);
                 _method.Invoke(taskObject, methodArguments);
             } catch (TargetInvocationException e) {
-                throw e.InnerException;
+                Rethrow(e.InnerException);
             }
+        }
+
+        public static void Rethrow(Exception ex) {
+            typeof(Exception).GetMethod("PrepForRemoting",
+                BindingFlags.NonPublic | BindingFlags.Instance)
+                .Invoke(ex, new object[0]);
+            throw ex;
         }
 
         private object[] MethodArgumentsFromCommandLineParameters(Arguments arguments)
