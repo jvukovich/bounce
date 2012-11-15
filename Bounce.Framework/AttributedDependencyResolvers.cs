@@ -13,7 +13,12 @@ namespace Bounce.Framework {
 
         public object Resolve(Type t) {
             object instance = Resolvers.Select(r => r.Invoke(null, new object[] {t})).FirstOrDefault(i => i != null);
-            return instance;
+
+            if (instance != null) {
+                return instance;
+            } else {
+                return t.GetConstructor(new Type[0]).Invoke(new object[0]);
+            }
         }
     }
 }
