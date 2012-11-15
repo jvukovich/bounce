@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 
 namespace Bounce.Framework {
-    public class ShellCommandExecutor : IShellCommandExecutor {
+    public class Shell : IShell {
         private ILog Log;
 
-        public ShellCommandExecutor(ILog log) {
+        public Shell(ILog log) {
             Log = log;
         }
 

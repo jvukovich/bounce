@@ -14,7 +14,8 @@ namespace Bounce.Framework {
 
                 Bounce.SetUp(arguments);
 
-                var tasks = Tasks(bounceDirectory);
+                var dependencyResolver = new AttributedDependencyResolvers();
+                var tasks = Tasks(bounceDirectory, dependencyResolver);
 
                 if (rawArguments.Length > 0) {
                     RunTask(TaskName(rawArguments), arguments, tasks);
@@ -62,15 +63,22 @@ namespace Bounce.Framework {
             }
         }
 
-        private IEnumerable<ITask> Tasks(string bounceDirectory) {
-            return Directory.GetFiles(bounceDirectory).Where(IsBounceExecutable).SelectMany(file => {
+        private IEnumerable<ITask> Tasks(string bounceDirectory, AttributedDependencyResolvers dependencyResolvers) {
+            IEnumerable<Type> allTypes = Directory.GetFiles(bounceDirectory).Where(IsBounceExecutable).SelectMany(file => {
                 var assembly = Assembly.LoadFrom(file);
-                var allMethods =
-                    assembly.GetTypes().SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance));
-                return allMethods
-                    .Where(method => method.GetCustomAttributes(typeof (TaskAttribute), false).Length > 0)
-                    .Select(method => (ITask) new TaskMethod(method));
+                return assembly.GetTypes();
             });
+
+            IEnumerable<MethodInfo> resolverMethods = allTypes.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Static));
+            IEnumerable<MethodInfo> resolvers = resolverMethods.Where(method => method.GetCustomAttributes(typeof(DependencyResolverAttribute), false).Length > 0);
+
+            foreach (var resolver in resolvers) {
+                dependencyResolvers.AddDependencyResolver(resolver);
+            }
+
+            IEnumerable<MethodInfo> taskMethods = allTypes.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance));
+            IEnumerable<ITask> tasks = taskMethods.Where(method => method.GetCustomAttributes(typeof(TaskAttribute), false).Length > 0).Select(method => (ITask)new TaskMethod(method, dependencyResolvers));
+            return tasks;
         }
 
         private bool IsBounceExecutable(string path) {

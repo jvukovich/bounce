@@ -3,12 +3,12 @@ using System;
 namespace Bounce.Framework {
     public class Bounce {
         public static ILog Log { get; private set; }
-        public static IShellCommandExecutor Shell { get; internal set; }
+        public static IShell Shell { get; internal set; }
 
         public static void SetUp(Arguments arguments) {
             var commandLine = new LogOptionCommandLineParser().ParseCommandLine(arguments);
             Log = new Log(Console.Out, Console.Error, commandLine, new DefaultLogFormatter());
-            Shell = new ShellCommandExecutor(Log);
+            Shell = new Shell(Log);
         }
     }
 }

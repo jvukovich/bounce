@@ -7,35 +7,30 @@ using System.Text;
 
 namespace Bounce.Framework {
     public class TaskMethod : ITask {
-        private readonly MethodInfo _method;
+        private readonly MethodInfo Method;
+        private readonly IDependencyResolver Resolver;
 
-        public TaskMethod(MethodInfo method) {
-            _method = method;
+        public TaskMethod(MethodInfo method, IDependencyResolver resolver) {
+            Method = method;
+            Resolver = resolver;
         }
 
         public string Name {
-            get { return _method.Name; }
+            get { return Method.Name; }
         }
 
         public string FullName {
-            get { return _method.DeclaringType.FullName + "." + _method.Name; }
+            get { return Method.DeclaringType.FullName + "." + Method.Name; }
         }
 
         public void Invoke(Arguments arguments) {
             try {
-                var taskObject = _method.DeclaringType.GetConstructor(new Type[0]).Invoke(new object[0]);
+                var taskObject = Resolver.Resolve(Method.DeclaringType);
                 var methodArguments = MethodArgumentsFromCommandLineParameters(arguments);
-                _method.Invoke(taskObject, methodArguments);
+                Method.Invoke(taskObject, methodArguments);
             } catch (TargetInvocationException e) {
                 throw new TaskException(this, e.InnerException);
             }
-        }
-
-        public static void Rethrow(Exception ex) {
-            typeof(Exception).GetMethod("PrepForRemoting",
-                BindingFlags.NonPublic | BindingFlags.Instance)
-                .Invoke(ex, new object[0]);
-            throw ex;
         }
 
         private object[] MethodArgumentsFromCommandLineParameters(Arguments arguments)
@@ -70,7 +65,7 @@ namespace Bounce.Framework {
         }
 
         public IEnumerable<ITaskParameter> Parameters {
-            get { return _method.GetParameters().Select(p => (ITaskParameter) new TaskMethodParameter(p)); }
+            get { return Method.GetParameters().Select(p => (ITaskParameter) new TaskMethodParameter(p)); }
         }
     }
 }
