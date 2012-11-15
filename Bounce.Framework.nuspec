@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Bounce</id>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <authors>Tim MacFarlane and contributors</authors>
 	<language>en-GB</language>
     <owners>Tim MacFarlane and contributors</owners>
@@ -16,9 +16,9 @@
     </dependencies>
   </metadata>
   <files>
-	<file src="bin\Debug\Bounce.Framework.dll" target="lib\net40" />
+	<file src="Bounce.Framework\bin\Debug\Bounce.Framework.dll" target="lib\net40" />
 	
-	<file src="..\Bounce.Console\bin\Debug\Bounce.exe" target="tools\net40" />
-	<file src="..\Bounce.Console\bin\Debug\Bounce.exe.config" target="tools\net40" />
+	<file src="Bounce.Console\bin\Debug\Bounce.exe" target="tools\net40" />
+	<file src="Bounce.Console\bin\Debug\Bounce.exe.config" target="tools\net40" />
   </files>
 </package>
