@@ -1,131 +1,79 @@
 # Bounce
+
 A new build framework for C# projects.
 
 (theme track: [Bounce, Rock, Skate, Roll - Vaughan Mason & Crew](http://www.youtube.com/watch?v=dGMD0O7GGP8&feature=related))
 
 ## Install
-Get the latest release from the [downloads](http://github.com/refractalize/bounce/downloads) page, extract, place `bounce.exe` in your `%PATH%`, and place the DLLs in your project references. Too easy?
 
-You also install the latest build  using [NuGet](http://nuget.org/List/Packages/Bounce-CI):
+Bounce can be found on [NuGet](http://nuget.org/List/Packages/Bounce), simply:
 
-    PM> Install-Package Bounce-CI
+    PM> Install-Package Bounce
 
-Though, please note that this is still a work in progress.
+## What is it good for?
 
-## Why use Bounce?
+Put simply, it's a way to create a project toolbox that can be operated from the command line, not unlike [Rake](http://rake.rubyforge.org/).
 
-For clean, beautiful build scripts! Bounce is a build framework based on functional
-programming semantics: In Bounce, each build task is seen as a function that accepts arguments
-(in the form of other tasks) and returns a built artefact that can be passed to yet other tasks. For example,
-from git checkout to IIS deploy:
+Imagine you have this in your project:
 
-    var checkout = new GitCheckout {
-        Repository = "git@github.com:refractalize/website.git"
-    };
-    
-    var solution = new VisualStudioSolution {
-        SolutionPath = checkout.Files["MySolution.sln"]
-    };
-    
-    var website = new Iis7WebSite {
-        Directory = solution.Projects["WebSite"].ProjectDirectory,
-        Name = "Some Website",
-        Port = 5001,
+    using System;
+
+    namespace MyProject {
+        public class Stuff {
+            [Task]
+            public void HelloWorld() {
+                Console.WriteLine("hello, world!");
+            }
+        }
     }
 
-Naturally, downstream tasks can use properties of built upstream tasks to perform their own builds, affording a refreshingly declarative style.
+You could easily call it from the command line like this:
 
-## Why C#?
+    > bounce HelloWorld
+    hello, world!
 
-Because we hack our production code in C#, it makes a whole lot of sense to hack our build in the same language and development environment.
-That way we can reuse code, configuration and know-how between production and build - no language barriers!
+Of course, you can pass arguments too:
 
-## Getting Started
+    using System;
 
-Lets say we've got a VisualStudio solution containing a website and you want it installed on IIS 7.0.
-We'd write a C# file containing our targets like this:
+    namespace MyProject {
+        public class Stuff {
+            [Task]
+            public void Hello(string name) {
+                Console.WriteLine("hello, {0}!", name);
+            }
+        }
+    }
 
-	public class BuildTargets {
-		[Targets]
-		public static object Targets (IParameters parameters) {
-			var solution = new VisualStudioSolution {
-				SolutionPath = "WebSolution.sln",
-			};
-			var webProject = solution.Projects["WebSite"];
+    > bounce Hello /name Bob
+    hello, Bob!
 
-			return new {
-				WebSite = new Iis7WebSite {
-					Directory = webProject.ProjectDirectory,
-					Name = "My Website",
-					Port = 5001,
-				},
-				Tests = new NUnitTests {
-					DllPaths = solution.Projects.Select(p => p.OutputFile),
-				},
-			};
-		}
-	}
+And those arguments can even have useful defaults:
 
-The above code should be compiled into an assembly called `Targets.dll`, and into an output directory called `Bounce`.
-This is how the `bounce` command will find our build configuration - it looks for `Bounce\Targets.dll` in the current
-and all parent directories.
+    using System;
 
-Then you can build your website:
+    namespace MyProject {
+        public class Stuff {
+            [Task]
+            public void Hello(string name = "all") {
+                Console.WriteLine("hello, {0}!", name);
+            }
+        }
+    }
 
-    > bounce build WebSite
+    > bounce Hello
+    hello, all!
 
-Or, just:
-
-    > bounce WebSite
-
-`build` is the default.
-
-This code has a `Tests` target too, returned in the anonymous object returned from the `Targets` method. We can watch our tests pass (or not) with this command:
-
-    > bounce Tests
-
-If we're not sure what our build allows us, just run `bounce` alone and it will print our available targets:
+And, if you've forgotten what you can do, just run bounce and it will tell you:
 
     > bounce
-	usage: bounce build|clean target-name
+    usage: bounce task [options]
 
-	targets:
-	  WebSite
-	  Tests
+    tasks:
 
-### Command-line Arguments
+        MyProject.Stuff.HelloWorld
 
-We can also change our build configuration from the command line, by passing in named arguments. Lets say we
-want to specify the website port from the command line, but default it to 5001. We'll use the `IParameters` object
-passed in to our `Targets` method:
+        MyProject.Stuff.Hello
+            /name:string = all
 
-    public static object Targets(IParameters parameters) {
-    ...
-        return new {
-            WebSite = new Iis7WebSite {
-                Directory = webProject.Directory,
-                Name = "My Website",
-                Port = parameters.Default("port", 5001),
-            },
-			...
-		}
-	}
-
-Now we can build the website and override the port it will be deployed on:
-
-	> bounce WebSite /port 80
-
-And, `bounce` will tell you what arguments you have available too:
-
-	> bounce
-	usage: bounce build|clean target-name
-
-	targets:
-	  WebSite
-	    /port default: 5001
-	  Tests
-
-## Housekeeping
-
-Bounce is built using [CodeBetter's TeamCity Server](http://teamcity.codebetter.com/project.html?projectId=project132).
-
+Bounce has a bunch of utilities that make it easy to build VisualStudio projects, as well as deploy to IIS sites. More documentation to come.
