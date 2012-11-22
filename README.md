@@ -1,6 +1,6 @@
 # Bounce
 
-A new build framework for C# projects.
+A task runner for .Net.
 
 (theme track: [Bounce, Rock, Skate, Roll - Vaughan Mason & Crew](http://www.youtube.com/watch?v=dGMD0O7GGP8&feature=related))
 
@@ -19,6 +19,7 @@ Put simply, it's a way to create a project toolbox that can be operated from the
 Imagine you have this in your project:
 
     using System;
+    using Bounce.Framework;
 
     namespace MyProject {
         public class Stuff {
@@ -37,6 +38,7 @@ You could easily call it from the command line like this:
 Of course, you can pass arguments too:
 
     using System;
+    using Bounce.Framework;
 
     namespace MyProject {
         public class Stuff {
@@ -53,6 +55,7 @@ Of course, you can pass arguments too:
 And those arguments can even have useful defaults:
 
     using System;
+    using Bounce.Framework;
 
     namespace MyProject {
         public class Stuff {
