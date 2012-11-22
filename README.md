@@ -10,6 +10,8 @@ Bounce can be found on [NuGet](http://nuget.org/List/Packages/Bounce), simply:
 
     PM> Install-Package Bounce
 
+Then, make sure that your bounce project's output directory is the `Bounce` folder, in the root of your solution. `bounce.exe` looks for this folder in the current and all parent directories. For example, go to your project settings, go to the **Build** tab, then enter `..\Bounce` into the **Output path** box.
+
 ## What is it good for?
 
 Put simply, it's a way to create a project toolbox that can be operated from the command line, not unlike [Rake](http://rake.rubyforge.org/).
