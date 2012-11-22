@@ -49,6 +49,8 @@ Of course, you can pass arguments too:
         }
     }
 
+Then:
+
     > bounce Hello /name Bob
     hello, Bob!
 
@@ -65,6 +67,8 @@ And those arguments can even have useful defaults:
             }
         }
     }
+
+Then:
 
     > bounce Hello
     hello, all!
