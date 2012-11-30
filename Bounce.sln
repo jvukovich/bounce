@@ -4,7 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{99A9728C-CE6A-4657-8E52-DA2302A37EC3}"
 	ProjectSection(SolutionItems) = preProject
 		docs\notes_from_patterns_group_bbc.txt = docs\notes_from_patterns_group_bbc.txt
-		README.markdown = README.markdown
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bounce", "Bounce", "{6B9741C2-D739-4C73-A613-9AA6F72A979A}"

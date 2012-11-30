@@ -37,7 +37,7 @@ namespace Bounce.Framework.VisualStudio {
         }
 
         private ParseResult<object> ParseKeyword(char [] source, int index, string keyword) {
-            if (new string(source, index, keyword.Length) == keyword) {
+            if (index < source.Length && new string(source, index, keyword.Length) == keyword) {
                 return new ParseResult<object> {Index = index + keyword.Length};
             } else {
                 return null;
@@ -51,13 +51,15 @@ namespace Bounce.Framework.VisualStudio {
                 return null;
             }
 
-            var op = ParseKeyword(source, index, "Or");
+            var whitespace = ParseWhitespace(source, left.Index);
+            var op = ParseKeyword(source, whitespace.Index, "Or");
 
             if (op == null) {
                 return null;
             }
 
-            var right = ParseExpression(source, index);
+            whitespace = ParseWhitespace(source, op.Index);
+            var right = ParseExpression(source, whitespace.Index);
             if (right == null) {
                 return null;
             }
@@ -135,8 +137,8 @@ namespace Bounce.Framework.VisualStudio {
                         index = variable.Index;
                     } else {
                         value.Append(source[index]);
+                        index++;
                     }
-                    index++;
                 }
 
                 if (index < source.Length) {

@@ -88,6 +88,7 @@
     <Compile Include="ParametersTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TasksForTaskNames.cs" />
+    <Compile Include="VisualStudio\ProjectFilePropertyExpressionParserTest.cs" />
     <Compile Include="Web\WebSiteBindingParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
