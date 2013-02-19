@@ -12,7 +12,7 @@ namespace Bounce.Framework {
         public LogOptions ParseCommandLine(Arguments arguments) {
             var logOptions = new LogOptions {
                 LogLevel = arguments.Parameter(LogLevelParameter, LogLevel.Warning),
-                CommandOutput = arguments.Parameter(CommandOutputParameter, false),
+                CommandOutput = arguments.Parameter(CommandOutputParameter, true),
             };
 
             SetLogOutput(arguments, logOptions);
