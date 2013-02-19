@@ -93,9 +93,9 @@ namespace Bounce.Framework.Tests {
         }
 
         [Test]
-        public void SameExceptionIsThrownWhenTaskThrows() {
+        public void TaskExceptionIsThrownWhenTaskThrows() {
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Throws"), Resolver);
-            Assert.That(() => task.Invoke(new Arguments(new Dictionary<string, string>())), Throws.InstanceOf<BadException>());
+            Assert.That(() => task.Invoke(new Arguments(new Dictionary<string, string>())), Throws.InstanceOf<TaskException>());
         }
 
         public class FakeTaskClass

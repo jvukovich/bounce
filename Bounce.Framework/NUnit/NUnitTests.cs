@@ -17,7 +17,7 @@ namespace Bounce.Framework.NUnit
 
         public NUnit()
         {
-            NUnitConsolePath = @"c:\Program Files (x86)\NUnit\nunit-console.exe";
+            NUnitConsolePath = @"nunit-console.exe";
         }
 
         public void Test(string dllPath, IEnumerable<string> excludeCategories = null, IEnumerable<string> includeCategories = null) {
