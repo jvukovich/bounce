@@ -19,7 +19,7 @@ namespace Bounce.Framework.VisualStudio {
                 TargetIfSpecified(target)
                 );
 
-            Bounce.Shell.ExecuteAndExpectSuccess(MsBuildExe, arguments);
+            Bounce.Shell.Exec(MsBuildExe, arguments);
         }
 
         private string Arguments(params string[] args)

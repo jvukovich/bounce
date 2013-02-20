@@ -38,7 +38,7 @@ namespace Bounce.Framework.NUnit
                 joinedTestDlls
             };
 
-            Bounce.Shell.ExecuteAndExpectSuccess(NUnitConsolePath, String.Join(" ", args));
+            Bounce.Shell.Exec(NUnitConsolePath, String.Join(" ", args));
         }
 
         protected string Framework {

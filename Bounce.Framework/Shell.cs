@@ -11,16 +11,19 @@ namespace Bounce.Framework {
             Log = log;
         }
 
-        public ProcessOutput ExecuteAndExpectSuccess(string commandName, string commandArgs)
-        {
+        public ProcessOutput Exec(string command, bool allowFailure = false) {
+            return Exec("cmd", "/c " + command, allowFailure);
+        }
+
+        public ProcessOutput Exec(string commandName, string commandArgs, bool allowFailure = false) {
             var output = Execute(commandName, commandArgs);
-            if (output.ExitCode != 0) {
+            if (output.ExitCode != 0 && !allowFailure) {
                 throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
             }
             return output;
         }
 
-        public ProcessOutput Execute(string commandName, string commandArgs) {
+        private ProcessOutput Execute(string commandName, string commandArgs) {
             ICommandLog commandLog = Log.BeginExecutingCommand(commandName, commandArgs);
 
             string commandArgumentsForLogging = commandLog.CommandArgumentsForLogging;

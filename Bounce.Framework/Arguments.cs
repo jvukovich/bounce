@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Bounce.Framework {
     public class Arguments {
-        private readonly IDictionary<string, string> _parameters;
+        private readonly IDictionary<string, string> Parameters;
 
         public Arguments(IDictionary<string, string> parameters) {
-            _parameters = parameters;
+            Parameters = parameters;
         }
 
         public T Parameter<T>(string name, T defaultValue) {
@@ -22,7 +22,7 @@ namespace Bounce.Framework {
         }
 
         public object Parameter(ITaskParameter parameter) {
-            if (_parameters.ContainsKey(parameter.Name)) {
+            if (Parameters.ContainsKey(parameter.Name)) {
                 return ParseParameter(parameter);
             } else {
                 if (parameter.IsRequired) {
@@ -35,7 +35,7 @@ namespace Bounce.Framework {
 
         private object ParseParameter(ITaskParameter parameter) {
             var parser = TypeParsers.Default.TypeParser(parameter.Type);
-            return parser.Parse(_parameters[parameter.Name]);
+            return parser.Parse(Parameters[parameter.Name]);
         }
 
         public T Parameter<T>(string name) {
