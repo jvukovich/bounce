@@ -131,7 +131,7 @@
     <Compile Include="ITaskParameter.cs" />
     <Compile Include="ITypeParsers.cs" />
     <Compile Include="NUnit\INUnit.cs" />
-    <Compile Include="NUnit\NUnitTests.cs" />
+    <Compile Include="NUnit\NUnit.cs" />
     <Compile Include="VisualStudio\ConditionParseException.cs" />
     <Compile Include="VisualStudio\IPropertyValues.cs" />
     <Compile Include="VisualStudio\IVisualStudio.cs" />

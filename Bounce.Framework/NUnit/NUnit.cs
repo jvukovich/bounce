@@ -19,16 +19,16 @@ namespace Bounce.Framework.NUnit
         /// Framework version to be used for tests
         /// </summary>
         public string FrameworkVersion { get; set; }
-        public string NUnitVersion { get; set; }
-        public string Platform { get; set; }
+        public string TeamCityNUnitVersion { get; set; }
+        public string TeamCityPlatform { get; set; }
 
         public NUnit(IShell shell, ILog log) {
             Shell = shell;
             Log = log;
             NUnitConsolePath = @"nunit-console.exe";
             FrameworkVersion = Environment.Version.ToString(2);
-            Platform = "MSIL";
-            NUnitVersion = "2.5.0";
+            TeamCityPlatform = "MSIL";
+            TeamCityNUnitVersion = "NUnit-2.6.2";
         }
 
         public void Test(string dllPath, IEnumerable<string> excludeCategories = null, IEnumerable<string> includeCategories = null) {
@@ -51,9 +51,9 @@ namespace Bounce.Framework.NUnit
 
         private void RunNUnitWithTeamCity(string joinedTestDlls, IEnumerable<string> excludeCategories, IEnumerable<string> includeCategories) {
             var args = new[] {
-                FrameworkVersion,
-                Platform,
-                NUnitVersion,
+                TeamCityFrameworkVersion,
+                TeamCityPlatform,
+                TeamCityNUnitVersion,
                 GetTeamCityIncludeExcludeArgument("category-exclude", excludeCategories),
                 GetTeamCityIncludeExcludeArgument("category-include", includeCategories),
                 joinedTestDlls
@@ -74,6 +74,9 @@ namespace Bounce.Framework.NUnit
             Shell.Exec(NUnitConsolePath, string.Join(" ", args));
         }
 
+        protected string TeamCityFrameworkVersion {
+            get { return "v" + FrameworkVersion; }
+        }
 
         protected string Framework {
             get {
