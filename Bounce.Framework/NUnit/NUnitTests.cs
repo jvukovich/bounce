@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Bounce.Framework.TeamCity;
 
 namespace Bounce.Framework.NUnit
 {
     public class NUnit : INUnit {
+        private readonly IShell Shell;
+        private readonly ILog Log;
+
         /// <summary>
         /// Full path to nunit-console.exe
         /// </summary>
@@ -13,11 +18,17 @@ namespace Bounce.Framework.NUnit
         /// <summary>
         /// Framework version to be used for tests
         /// </summary>
-        public string FrameworkVersion;
+        public string FrameworkVersion { get; set; }
+        public string NUnitVersion { get; set; }
+        public string Platform { get; set; }
 
-        public NUnit()
-        {
+        public NUnit(IShell shell, ILog log) {
+            Shell = shell;
+            Log = log;
             NUnitConsolePath = @"nunit-console.exe";
+            FrameworkVersion = Environment.Version.ToString(2);
+            Platform = "MSIL";
+            NUnitVersion = "2.5.0";
         }
 
         public void Test(string dllPath, IEnumerable<string> excludeCategories = null, IEnumerable<string> includeCategories = null) {
@@ -28,18 +39,41 @@ namespace Bounce.Framework.NUnit
         {
             var joinedTestDlls = "\"" + String.Join("\" \"", dllPaths.ToArray()) + "\"";
 
-            Bounce.Log.Info("running unit tests for: " + joinedTestDlls);
+            Log.Info("running unit tests for: " + joinedTestDlls);
 
-            var args = new[]
-            {
+
+            if (TeamCityFormatter.IsActive) {
+                RunNUnitWithTeamCity(joinedTestDlls, excludeCategories, includeCategories);
+            } else {
+                RunNUnit(joinedTestDlls, excludeCategories, includeCategories);
+            }
+        }
+
+        private void RunNUnitWithTeamCity(string joinedTestDlls, IEnumerable<string> excludeCategories, IEnumerable<string> includeCategories) {
+            var args = new[] {
+                FrameworkVersion,
+                Platform,
+                NUnitVersion,
+                GetTeamCityIncludeExcludeArgument("category-exclude", excludeCategories),
+                GetTeamCityIncludeExcludeArgument("category-include", includeCategories),
+                joinedTestDlls
+            };
+
+            var nunitLauncher = Environment.GetEnvironmentVariable("teamcity.dotnet.nunitlauncher");
+            Shell.Exec(nunitLauncher, String.Join(" ", args));
+        }
+
+        private void RunNUnit(string joinedTestDlls, IEnumerable<string> excludeCategories, IEnumerable<string> includeCategories) {
+            var args = new[] {
                 GetIncludeExcludeArgument("exclude", excludeCategories),
                 GetIncludeExcludeArgument("include", includeCategories),
                 Framework,
                 joinedTestDlls
             };
 
-            Bounce.Shell.Exec(NUnitConsolePath, String.Join(" ", args));
+            Shell.Exec(NUnitConsolePath, string.Join(" ", args));
         }
+
 
         protected string Framework {
             get {
@@ -56,6 +90,15 @@ namespace Bounce.Framework.NUnit
             if (categories != null && categories.Any())
             {
                 return "/" + argumentName + "=" + String.Join(",", categories.ToArray());
+            }
+            return "";
+        }
+
+        private static string GetTeamCityIncludeExcludeArgument(string argumentName, IEnumerable<string> categories)
+        {
+            if (categories != null && categories.Any())
+            {
+                return "/" + argumentName + ":" + String.Join(";", categories.ToArray());
             }
             return "";
         }

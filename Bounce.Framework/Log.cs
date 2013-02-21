@@ -1,17 +1,23 @@
 using System;
 using System.IO;
+using Bounce.Framework.TeamCity;
 
 namespace Bounce.Framework {
-    class Log : ILog {
+    public class Log : ILog {
         private readonly TextWriter Stdout;
         private readonly TextWriter Stderr;
-        private readonly LogOptions LogOptions;
+        private readonly LogLevel LogLevel;
         private readonly ILogMessageFormatter LogMessageFormatter;
 
-        public Log(TextWriter stdout, TextWriter stderr, LogOptions logOptions, ILogMessageFormatter logMessageFormatter) {
-            Stdout = stdout;
-            Stderr = stderr;
-            LogOptions = logOptions;
+        public Log(LogLevel logLevel)
+            : this(logLevel, new DefaultLogFormatter())
+        {}
+
+        public Log(LogLevel logLevel, ILogMessageFormatter logMessageFormatter)
+        {
+            Stdout = Console.Out;
+            Stderr = Console.Error;
+            LogLevel = logLevel;
             LogMessageFormatter = logMessageFormatter;
         }
 
@@ -23,15 +29,6 @@ namespace Bounce.Framework {
         public virtual void Debug(object message)
         {
             WriteLogMessage(Stdout, LogLevel.Debug, message);
-        }
-
-        public virtual ICommandLog BeginExecutingCommand(string command, string args)
-        {
-            if (LogOptions.CommandOutput) {
-                return new CommandLog(command, args, Stdout, Stderr);
-            } else {
-                return new NullCommandLog(args);
-            }
         }
 
         public virtual void Info(string format, params object[] args)
@@ -84,7 +81,7 @@ namespace Bounce.Framework {
         }
 
         private void WriteLogMessage(TextWriter output, LogLevel logLevel, object message) {
-            if (logLevel <= LogOptions.LogLevel) {
+            if (logLevel <= LogLevel) {
                 output.WriteLine(LogMessageFormatter.FormatLogMessage(DateTime.Now, logLevel, message));
             }
         }
@@ -92,6 +89,20 @@ namespace Bounce.Framework {
         private void LogException(TextWriter output, LogLevel logLevel, object message, Exception exception) {
             WriteLogMessage(output, logLevel, message);
             WriteLogMessage(output, logLevel, exception);
+        }
+
+        public static ILog Default {
+            get {
+                if (TeamCityFormatter.IsActive) {
+                    return new TeamCityLog(DefaultLogLevel);
+                } else {
+                    return new Log(DefaultLogLevel);
+                }
+            }
+        }
+
+        public static LogLevel DefaultLogLevel {
+            get { return (LogLevel)Enum.Parse(typeof(LogLevel), Parameters.Main.Parameter("loglevel", "info"), true); }
         }
     }
 }

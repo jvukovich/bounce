@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 
 namespace Bounce.Framework {
-    public class Arguments {
-        private readonly IDictionary<string, string> Parameters;
+    public class TaskParameters {
+        private readonly IDictionary<string, string> Params;
 
-        public Arguments(IDictionary<string, string> parameters) {
-            Parameters = parameters;
+        public TaskParameters(IDictionary<string, string> parameters) {
+            Params = parameters;
         }
 
         public T Parameter<T>(string name, T defaultValue) {
@@ -22,7 +22,7 @@ namespace Bounce.Framework {
         }
 
         public object Parameter(ITaskParameter parameter) {
-            if (Parameters.ContainsKey(parameter.Name)) {
+            if (Params.ContainsKey(parameter.Name)) {
                 return ParseParameter(parameter);
             } else {
                 if (parameter.IsRequired) {
@@ -35,7 +35,7 @@ namespace Bounce.Framework {
 
         private object ParseParameter(ITaskParameter parameter) {
             var parser = TypeParsers.Default.TypeParser(parameter.Type);
-            return parser.Parse(Parameters[parameter.Name]);
+            return parser.Parse(Params[parameter.Name]);
         }
 
         public T Parameter<T>(string name) {

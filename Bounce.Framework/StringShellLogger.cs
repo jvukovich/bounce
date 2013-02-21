@@ -2,8 +2,7 @@ using System.Diagnostics;
 using System.IO;
 
 namespace Bounce.Framework {
-    class CommandOutputReceiver {
-        private readonly ICommandLog CommandLog;
+    class StringShellLogger : IShellLogger {
         private readonly TextWriter SynchronizedOutputWriter;
         private readonly TextWriter SynchronizedErrorWriter;
         private readonly TextWriter SynchronizedCombinedWriter;
@@ -11,8 +10,7 @@ namespace Bounce.Framework {
         private readonly StringWriter ErrorWriter;
         private readonly StringWriter CombinedWriter;
 
-        public CommandOutputReceiver(ICommandLog commandLog) {
-            CommandLog = commandLog;
+        public StringShellLogger() {
             OutputWriter = new StringWriter();
             SynchronizedOutputWriter = TextWriter.Synchronized(OutputWriter);
             ErrorWriter = new StringWriter();
@@ -24,13 +22,11 @@ namespace Bounce.Framework {
         public void OutputDataReceived(object sender, DataReceivedEventArgs e) {
             SynchronizedOutputWriter.WriteLine(e.Data);
             SynchronizedCombinedWriter.WriteLine(e.Data);
-            CommandLog.CommandOutput(e.Data);
         }
 
         public void ErrorDataReceived(object sender, DataReceivedEventArgs e) {
             SynchronizedErrorWriter.WriteLine(e.Data);
             SynchronizedCombinedWriter.WriteLine(e.Data);
-            CommandLog.CommandError(e.Data);
         }
 
         public string Output {

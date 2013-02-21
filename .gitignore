@@ -11,7 +11,7 @@ docs/README.html
 .*.swp
 Bounce.tmp/
 Downloads/
-Bounce.sln.DotSettings.user
+*.DotSettings.user
 /TestResult.xml
 _ReShaper.*/
 *.nupkg

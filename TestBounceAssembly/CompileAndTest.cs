@@ -11,7 +11,7 @@ namespace TestBounceAssembly
     {
         [Task]
         public void Compile() {
-            var vs = new VisualStudio();
+            var vs = new VisualStudio(new Shell(Log.Default));
             var sln = vs.Solution("Bounce.sln");
             sln.Build();
         }

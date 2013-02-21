@@ -4,25 +4,27 @@ using System.Linq;
 
 namespace Bounce.Framework.VisualStudio {
     class MsBuild : IMsBuild {
+        private readonly IShell Shell;
         public string MsBuildExe { get; set; }
 
-        public MsBuild() {
+        public MsBuild(IShell shell) {
+            Shell = shell;
             MsBuildExe = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe");
         }
 
         public void Build(string projSln, string config, string outputDir, string target)
         {
-            var arguments = Arguments(
+            var arguments = NormaliseArguments(
                 "\"" + projSln + "\"",
                 ConfigIfSpecified(config),
                 OutputDirIfSpecified(outputDir),
                 TargetIfSpecified(target)
                 );
 
-            Bounce.Shell.Exec(MsBuildExe, arguments);
+            Shell.Exec(MsBuildExe, arguments);
         }
 
-        private string Arguments(params string[] args)
+        private string NormaliseArguments(params string[] args)
         {
             return String.Join(" ", args.Where(a => a != null).ToArray());
         }
@@ -44,7 +46,7 @@ namespace Bounce.Framework.VisualStudio {
 
         private string EnsureTrailingSlashIsSet(string outputDir)
         {
-            return outputDir.Last<char>() == Path.DirectorySeparatorChar ? outputDir : outputDir + Path.DirectorySeparatorChar;
+            return outputDir.Last() == Path.DirectorySeparatorChar ? outputDir : outputDir + Path.DirectorySeparatorChar;
         }
     }
 }

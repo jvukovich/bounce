@@ -51,11 +51,6 @@ namespace LegacyBounce.Framework.TeamCity {
             Log.CommandError(error);
         }
 
-        public void CommandComplete(int exitCode)
-        {
-            Log.CommandComplete(exitCode);
-        }
-
         public string CommandArgumentsForLogging { get; private set; }
     }
 }

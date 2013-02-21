@@ -11,25 +11,33 @@ namespace Bounce.Framework {
             Log = log;
         }
 
-        public ProcessOutput Exec(string command, bool allowFailure = false) {
-            return Exec("cmd", "/c " + command, allowFailure);
+        public ProcessOutput Exec(string command, IShellLogger logger = null) {
+            return Exec("cmd", "/c " + command);
         }
 
-        public ProcessOutput Exec(string commandName, string commandArgs, bool allowFailure = false) {
-            var output = Execute(commandName, commandArgs);
-            if (output.ExitCode != 0 && !allowFailure) {
-                throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), output.ExitCode), output.ErrorAndOutput);
+        public ProcessOutput Exec(string commandName, string commandArgs, IShellLogger overridingShellLogger = null) {
+            var stringLogger = new StringShellLogger();
+            var logger = new MultiShellLogger(overridingShellLogger ?? new ConsoleShellLogger(), stringLogger);
+
+            var exitCode = Execute(commandName, commandArgs, logger);
+
+            if (exitCode != 0) {
+                throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), exitCode), stringLogger.ErrorAndOutput);
             }
-            return output;
+
+            return new ProcessOutput {
+                ExitCode = exitCode,
+                Error = stringLogger.Error,
+                Output = stringLogger.Output,
+                ErrorAndOutput = stringLogger.ErrorAndOutput
+            };
         }
 
-        private ProcessOutput Execute(string commandName, string commandArgs) {
-            ICommandLog commandLog = Log.BeginExecutingCommand(commandName, commandArgs);
+        public int Execute(string commandName, string commandArgs, IShellLogger logger) {
+            Log.Info("in: {0}", Directory.GetCurrentDirectory());
+            Log.Info("exec: {0} {1}", commandName, commandArgs);
 
-            string commandArgumentsForLogging = commandLog.CommandArgumentsForLogging;
-            var output = new CommandOutputReceiver(commandLog);
-
-            Process p = CreateProcess(commandName, commandArgumentsForLogging, output);
+            Process p = CreateProcess(commandName, commandArgs, logger);
 
             try
             {
@@ -44,15 +52,9 @@ namespace Bounce.Framework {
                 throw;
             }
 
-            commandLog.CommandComplete(p.ExitCode);
+            Log.Info("command: {0}, complete with: {1}", commandName, p.ExitCode);
 
-            return new ProcessOutput
-            {
-                ExitCode = p.ExitCode,
-                Output = output.Output,
-                Error = output.Error,
-                ErrorAndOutput = output.ErrorAndOutput
-            };
+            return p.ExitCode;
         }
 
         private void RunProcess(Process p)
@@ -61,7 +63,7 @@ namespace Bounce.Framework {
 
             p.Start();
 
-            System.Console.CancelKeyPress += killOnCtrlC;
+            Console.CancelKeyPress += killOnCtrlC;
 
             try
             {
@@ -71,11 +73,11 @@ namespace Bounce.Framework {
             }
             finally
             {
-                System.Console.CancelKeyPress -= killOnCtrlC;
+                Console.CancelKeyPress -= killOnCtrlC;
             }
         }
 
-        private Process CreateProcess(string commandName, string commandArgumentsForLogging, CommandOutputReceiver output)
+        private Process CreateProcess(string commandName, string commandArgumentsForLogging, IShellLogger output)
         {
             var processInfo = new ProcessStartInfo(commandName, commandArgumentsForLogging);
             processInfo.CreateNoWindow = true;

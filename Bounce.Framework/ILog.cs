@@ -17,7 +17,5 @@ namespace Bounce.Framework {
         void Error(Exception exception, string format, params object[] args);
         void Error(object message);
         void Error(Exception exception, object message);
-
-        ICommandLog BeginExecutingCommand(string command, string args);
     }
 }

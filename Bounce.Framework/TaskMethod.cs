@@ -23,25 +23,25 @@ namespace Bounce.Framework {
             get { return Method.DeclaringType.FullName + "." + Method.Name; }
         }
 
-        public void Invoke(Arguments arguments) {
+        public void Invoke(TaskParameters taskParameters) {
             try {
                 var taskObject = Resolver.Resolve(Method.DeclaringType);
-                var methodArguments = MethodArgumentsFromCommandLineParameters(arguments);
+                var methodArguments = MethodArgumentsFromCommandLineParameters(taskParameters);
                 Method.Invoke(taskObject, methodArguments);
             } catch (TargetInvocationException e) {
                 throw new TaskException(this, e.InnerException);
             }
         }
 
-        private object[] MethodArgumentsFromCommandLineParameters(Arguments arguments)
+        private object[] MethodArgumentsFromCommandLineParameters(TaskParameters taskParameters)
         {
-            return Parameters.Select(p => (object)ParseParameter(arguments, p)).ToArray();
+            return Parameters.Select(p => (object)ParseParameter(taskParameters, p)).ToArray();
         }
 
-        private object ParseParameter(Arguments arguments, ITaskParameter p)
+        private object ParseParameter(TaskParameters taskParameters, ITaskParameter p)
         {
             try {
-                return arguments.Parameter(p);
+                return taskParameters.Parameter(p);
             } catch(RequiredParameterNotGivenException e) {
                 throw new TaskRequiredParameterException(p, this);
             } catch (TypeParserNotFoundException e) {

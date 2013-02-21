@@ -11,7 +11,13 @@ namespace Build {
         private readonly INUnit NUnit;
         private readonly IWebServer WebServer;
 
-        public NewBuild() : this(new VisualStudio(), new NUnit(), new Iis7()) {
+        public NewBuild(IShell shell, ILog log)
+            : this(new VisualStudio(shell), new NUnit(shell, log), new Iis7()) {}
+
+        public NewBuild()
+            : this(new Log(LogLevel.Info)) {}
+
+        public NewBuild(ILog log) : this(new Shell(log), log) {
         }
 
         public NewBuild(IVisualStudio vs, INUnit nunit, IWebServer webServer) {

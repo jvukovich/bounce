@@ -32,10 +32,7 @@ namespace Bounce.Console.Tests {
 
             ProcessOutput output = null;
 
-            Pushd(@"BeforeBounceFeature", () => {
-                output = shell.Exec(@"..\bounce.exe", "BeforeBounceFeature", allowFailure: true);
-                System.Console.WriteLine(output.ErrorAndOutput);
-            });
+            Pushd(@"BeforeBounceFeature", () => shell.Exec(@"..\bounce.exe", "BeforeBounceFeature"));
 
             Assert.That(output, Is.Not.Null);
             Assert.That(output.ExitCode, Is.EqualTo(0));
@@ -54,10 +51,7 @@ namespace Bounce.Console.Tests {
 
             ProcessOutput output = null;
 
-            Pushd(@"BeforeBounceFeature\BeforeBounceFeature", () => {
-                output = shell.Exec(@"..\..\bounce.exe", "BeforeBounceFeature", allowFailure: true);
-                System.Console.WriteLine(output.ErrorAndOutput);
-            });
+            Pushd(@"BeforeBounceFeature\BeforeBounceFeature", () => shell.Exec(@"..\..\bounce.exe", "BeforeBounceFeature"));
 
             Assert.That(output, Is.Not.Null);
             Assert.That(output.ExitCode, Is.EqualTo(1));

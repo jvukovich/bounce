@@ -3,8 +3,8 @@
     public class VisualStudio : IVisualStudio {
         public IMsBuild MsBuild { get; private set; }
 
-        public VisualStudio() {
-            MsBuild = new MsBuild();
+        public VisualStudio(IShell shell) {
+            MsBuild = new MsBuild(shell);
         }
 
         public IVisualStudioSolution Solution(string path) {

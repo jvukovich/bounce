@@ -10,15 +10,14 @@ namespace Bounce.Framework {
         public int Run(string bounceDirectory, string [] rawArguments) {
             try {
                 Directory.SetCurrentDirectory(Path.GetDirectoryName(bounceDirectory));
-                var arguments = ParsedArguments(rawArguments);
-
-                Bounce.SetUp(arguments);
+                var parameters = ParsedArguments(rawArguments);
+                Parameters.Main = new Parameters(parameters);
 
                 var dependencyResolver = new AttributedDependencyResolvers();
                 var tasks = Tasks(bounceDirectory, dependencyResolver);
 
                 if (rawArguments.Length > 0) {
-                    RunTask(TaskName(rawArguments), arguments, tasks);
+                    RunTask(TaskName(rawArguments), parameters, tasks);
                 } else {
                     UsageHelp.WriteUsage(Console.Out, tasks);
                 }
@@ -43,13 +42,11 @@ namespace Bounce.Framework {
             return arguments[0];
         }
 
-        private static Arguments ParsedArguments(string[] arguments) {
-            var parsedArguments = new ArgumentsParser().ParseParameters(arguments.Skip(1));
-            var parameters = new Arguments(parsedArguments);
-            return parameters;
+        private static TaskParameters ParsedArguments(string[] arguments) {
+            return new TaskParameters(new ArgumentsParser().ParseParameters(arguments.Skip(1)));
         }
 
-        private void RunTask(string taskName, Arguments arguments, IEnumerable<ITask> tasks) {
+        private void RunTask(string taskName, TaskParameters taskParameters, IEnumerable<ITask> tasks) {
             var matchingTasks = tasks.Where(t => t.AllNames.Contains(taskName));
 
             if (matchingTasks.Count() > 1) {
@@ -59,7 +56,7 @@ namespace Bounce.Framework {
             {
                 throw new NoMatchingTaskException(taskName, tasks);
             } else {
-                matchingTasks.Single().Invoke(arguments);
+                matchingTasks.Single().Invoke(taskParameters);
             }
         }
 
