@@ -13,15 +13,15 @@ namespace Bounce.Framework.VisualStudio {
             var projects = new List<VisualStudioSolutionProjectReference>();
 
             while (match.Success) {
-                projects.Add(GetProject(match));
+                projects.Add(GetProject(match, path));
                 match = match.NextMatch();
             }
 
             return new VisualStudioSolutionFileDetails { VisualStudioProjects = projects };
         }
 
-        private VisualStudioSolutionProjectReference GetProject(Match match) {
-            return new VisualStudioSolutionProjectReference {Name = match.Groups["projname"].Value, Path = match.Groups["projpath"].Value};
+        private VisualStudioSolutionProjectReference GetProject(Match match, string solutionPath) {
+            return new VisualStudioSolutionProjectReference {Name = match.Groups["projname"].Value, Path = Path.Combine(Path.GetDirectoryName(solutionPath), match.Groups["projpath"].Value)};
         }
     }
 }
