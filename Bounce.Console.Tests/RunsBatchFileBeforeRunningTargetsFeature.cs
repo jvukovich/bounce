@@ -2,7 +2,6 @@
 using System.IO;
 using Bounce.Framework;
 using Bounce.TestHelpers;
-using LegacyBounce.Framework;
 using NUnit.Framework;
 using ProcessOutput = Bounce.Framework.ProcessOutput;
 
@@ -11,7 +10,7 @@ namespace Bounce.Console.Tests {
     public class RunsBatchFileBeforeRunningTargetsFeature {
         private void UnzipSolution() {
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature");
-            new DirectoryUtils().CopyDirectory(@"..\..\BeforeBounceFeature", @"BeforeBounceFeature", new string [0], new string [0]);
+            new FS.FileSystem().Copy(@"..\..\BeforeBounceFeature", @"BeforeBounceFeature");
         }
 
         [Test]

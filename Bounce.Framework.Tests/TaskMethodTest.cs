@@ -144,16 +144,5 @@ namespace Bounce.Framework.Tests {
         public class CustomType
         {
         }
-
-        [Test]
-        public void EnumeratesTaskNamesForMethodInfo() {
-            var taskNames = new TaskMethod(typeof(TasksForTaskNames).GetMethod("DoStuff"), Resolver).AllNames.ToArray();
-
-            Assert.That(taskNames, Has.Member("DoStuff"));
-            Assert.That(taskNames, Has.Member("TasksForTaskNames.DoStuff"));
-            Assert.That(taskNames, Has.Member("Tests.TasksForTaskNames.DoStuff"));
-            Assert.That(taskNames, Has.Member("Framework.Tests.TasksForTaskNames.DoStuff"));
-            Assert.That(taskNames, Has.Member("Bounce.Framework.Tests.TasksForTaskNames.DoStuff"));
-        }
     }
 }

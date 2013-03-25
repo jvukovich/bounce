@@ -7,6 +7,15 @@ using System.Text.RegularExpressions;
 
 namespace Bounce.Framework {
     public class BounceRunner {
+        private readonly ITaskRunner TaskRunner;
+
+        public BounceRunner() : this(new TaskRunner()) {
+        }
+
+        public BounceRunner(ITaskRunner taskRunner) {
+            TaskRunner = taskRunner;
+        }
+
         public int Run(string bounceDirectory, string [] rawArguments) {
             try {
                 Directory.SetCurrentDirectory(Path.GetDirectoryName(bounceDirectory));
@@ -17,7 +26,7 @@ namespace Bounce.Framework {
                 var tasks = Tasks(bounceDirectory, dependencyResolver);
 
                 if (rawArguments.Length > 0) {
-                    RunTask(TaskName(rawArguments), parameters, tasks);
+                    TaskRunner.RunTask(TaskName(rawArguments), parameters, tasks);
                 } else {
                     UsageHelp.WriteUsage(Console.Out, tasks);
                 }
@@ -44,20 +53,6 @@ namespace Bounce.Framework {
 
         private static TaskParameters ParsedArguments(string[] arguments) {
             return new TaskParameters(new ArgumentsParser().ParseParameters(arguments.Skip(1)));
-        }
-
-        private void RunTask(string taskName, TaskParameters taskParameters, IEnumerable<ITask> tasks) {
-            var matchingTasks = tasks.Where(t => t.AllNames.Contains(taskName));
-
-            if (matchingTasks.Count() > 1) {
-                throw new AmbiguousTaskNameException(taskName, matchingTasks.OfType<ITask>());
-            }
-            else if (!matchingTasks.Any())
-            {
-                throw new NoMatchingTaskException(taskName, tasks);
-            } else {
-                matchingTasks.Single().Invoke(taskParameters);
-            }
         }
 
         private IEnumerable<ITask> Tasks(string bounceDirectory, AttributedDependencyResolvers dependencyResolvers) {

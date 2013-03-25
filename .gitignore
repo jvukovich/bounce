@@ -15,3 +15,5 @@ Downloads/
 /TestResult.xml
 _ReShaper.*/
 *.nupkg
+_TeamCity.*/
+packages/

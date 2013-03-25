@@ -93,6 +93,7 @@
     <Compile Include="CommandExecutionException.cs" />
     <Compile Include="ConsoleShellLogger.cs" />
     <Compile Include="IShellLogger.cs" />
+    <Compile Include="ITaskRunner.cs" />
     <Compile Include="MultiShellLogger.cs" />
     <Compile Include="StringShellLogger.cs" />
     <Compile Include="DefaultLogFormatter.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="IDependencyResolver.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="TaskException.cs" />
+    <Compile Include="TaskRunner.cs" />
     <Compile Include="TeamCity\MsBuildLogger.cs" />
     <Compile Include="TeamCity\TeamCityArtifactPublisher.cs" />
     <Compile Include="TeamCity\TeamCityFormatter.cs" />

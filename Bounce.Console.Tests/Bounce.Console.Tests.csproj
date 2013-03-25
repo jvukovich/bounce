@@ -45,6 +45,9 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FS">
+      <HintPath>..\packages\FS.0.0.3\lib\net40\FS.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -92,10 +95,9 @@
       <Project>{E7E05DAC-9A59-41F5-9FED-47FDF809A699}</Project>
       <Name>Bounce.TestHelpers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LegacyBounce.Framework\LegacyBounce.Framework.csproj">
-      <Project>{198788B4-CB73-4C5A-8E83-191ED52C4BD9}</Project>
-      <Name>LegacyBounce.Framework</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
