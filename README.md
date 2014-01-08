@@ -21,7 +21,7 @@ Imagine you have this in your project:
     using System;
     using Bounce.Framework;
 
-    namespace MyProject {
+    namespace MyProject.Bounce {
         public class Stuff {
             [Task]
             public void HelloWorld() {
@@ -40,7 +40,7 @@ Of course, you can pass arguments too:
     using System;
     using Bounce.Framework;
 
-    namespace MyProject {
+    namespace MyProject.Bounce {
         public class Stuff {
             [Task]
             public void Hello(string name) {
@@ -59,7 +59,7 @@ And those arguments can even have useful defaults:
     using System;
     using Bounce.Framework;
 
-    namespace MyProject {
+    namespace MyProject.Bounce {
         public class Stuff {
             [Task]
             public void Hello(string name = "all") {
@@ -80,9 +80,14 @@ And, if you've forgotten what you can do, just run bounce and it will tell you:
 
     tasks:
 
-        MyProject.Stuff.HelloWorld
+        MyProject.Bounce.Stuff.HelloWorld
 
-        MyProject.Stuff.Hello
+        MyProject.Bounce.Stuff.Hello
             /name:string = all
+
+
+## Naming your tasks project
+
+Ensure your assembly produces an assembly ending with ".Bounce.dll" or an executable ending with ".Bounce.exe" (both case-insensitive). Bounce only looks for tasks in these assemblies, so that it can start up really quickly.
 
 Bounce has a bunch of utilities that make it easy to build VisualStudio projects, as well as deploy to IIS sites. More documentation to come.
