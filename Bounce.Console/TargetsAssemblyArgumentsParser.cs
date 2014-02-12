@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Bounce.Console {
     public class TargetsAssemblyArgumentsParser {
@@ -25,6 +26,7 @@ namespace Bounce.Console {
                     Array.Copy(args, 1, remainingArgs, 0, remainingArgs.Length);
                     optionsAndArguments.BounceDirectory = firstArg.Substring(("/" + _bounceDir + ":").Length);
                     optionsAndArguments.RemainingArguments = remainingArgs;
+                    optionsAndArguments.WorkingDirectory = Directory.GetCurrentDirectory();
                 }
                 else if (firstArg == "/" + _bounceDir)
                 {
@@ -32,6 +34,7 @@ namespace Bounce.Console {
                     Array.Copy(args, 2, remainingArgs, 0, remainingArgs.Length);
                     optionsAndArguments.BounceDirectory = args[1];
                     optionsAndArguments.RemainingArguments = remainingArgs;
+                    optionsAndArguments.WorkingDirectory = Directory.GetCurrentDirectory();
                 }
             }
         }
@@ -67,6 +70,7 @@ namespace Bounce.Console {
             var targets = _bounceDirectoryFinder.FindBounceDirectory();
             if (targets != null) {
                 optionsAndArguments.BounceDirectory = targets;
+                optionsAndArguments.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(targets));
                 return optionsAndArguments;
             } else {
                 throw new TargetsAssemblyNotFoundException();
