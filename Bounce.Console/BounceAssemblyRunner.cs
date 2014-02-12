@@ -33,7 +33,7 @@ namespace Bounce.Console {
 
             BeforeBounceScriptRunner.RunBeforeBounceScript(optionsAndArguments);
 
-            bounceDirectory = optionsAndArguments.BounceDirectory;
+            bounceDirectory = Path.GetFullPath(optionsAndArguments.BounceDirectory);
             arguments = optionsAndArguments.RemainingArguments;
 
             var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = "true" };
