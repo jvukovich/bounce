@@ -56,10 +56,22 @@ namespace Bounce.Framework {
         }
 
         private IEnumerable<ITask> Tasks(string bounceDirectory, AttributedDependencyResolvers dependencyResolvers) {
-            IEnumerable<Type> allTypes = Directory.GetFiles(bounceDirectory).Where(IsBounceExecutable).SelectMany(file => {
-                var assembly = Assembly.LoadFrom(file);
-                return assembly.GetTypes();
-            });
+            IEnumerable<Type> allTypes = Directory.GetFiles(bounceDirectory)
+                .Where(IsBounceExecutable)
+                .SelectMany(file => {
+                    try {
+                        var assembly = Assembly.LoadFrom(file);
+                        return assembly.GetTypes();
+                    } 
+                    catch (TypeLoadException tl) {
+                        Console.Error.WriteLine("Could not load tasks from {0} {1}", file, tl);
+                    }
+                    catch (BadImageFormatException bi)
+                    {
+                        Console.Error.WriteLine("Could not load tasks from {0} {1}", file, bi);
+                    }
+                    return new Type[] {};
+                });
 
             IEnumerable<MethodInfo> resolverMethods = allTypes.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Static));
             IEnumerable<MethodInfo> resolvers = resolverMethods.Where(method => method.GetCustomAttributes(typeof(DependencyResolverAttribute), false).Length > 0);
