@@ -63,8 +63,9 @@ namespace Bounce.Framework {
                         var assembly = Assembly.LoadFrom(file);
                         return assembly.GetTypes();
                     } 
-                    catch (TypeLoadException tl) {
-                        Console.Error.WriteLine("Could not load tasks from {0} {1}", file, tl);
+                    catch (ReflectionTypeLoadException tl) {
+                        Console.Error.WriteLine("Could not load tasks from {0} - typeloader exeptions: {1}", file, 
+                            string.Join(Environment.NewLine,tl.LoaderExceptions.Select(e => e.ToString())));
                     }
                     catch (BadImageFormatException bi)
                     {
