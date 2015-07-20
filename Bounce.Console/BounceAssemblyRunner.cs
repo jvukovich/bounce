@@ -22,7 +22,6 @@ namespace Bounce.Console {
 				if (args != null && args.Length > 0) {
 					var tasks = new HashSet<string>();
 					var taskArgs = new HashSet<string>();
-					var returnCodes = new List<int>();
 
 					foreach (var arg in args) {
 						if (arg.StartsWith("/"))
@@ -39,15 +38,11 @@ namespace Bounce.Console {
 
 						var returnCode = FindTargetsAssemblyAndRunBounce(newArgs.ToArray());
 
-						returnCodes.Add(returnCode);
+						if (returnCode != 0)
+							return 1;
 					}
 
-					if (returnCodes.Count == 0)
-						return 1;
-
-					var badReturnCode = returnCodes.OrderByDescending(i => i).FirstOrDefault(i => i > 0);
-
-					return (badReturnCode > 0) ? badReturnCode : 0;
+					return 0;
 				}
 
 				return FindTargetsAssemblyAndRunBounce(args);
@@ -92,10 +87,16 @@ namespace Bounce.Console {
         private void RunBounce(Assembly bounceAssembly) {
             Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
-            var exitCode = (int) runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, arguments});
-            if (exitCode != 0) {
-                throw new BadExitException();
-            }
+			try {
+				var exitCode = (int) runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, arguments});
+				if (exitCode != 0) {
+	                throw new BadExitException();
+				}
+			}
+			catch (TargetInvocationException ex) {
+				if (ex.InnerException != null)
+					throw ex.InnerException;
+			}
         }
 
         private Assembly ReferencedBounceAssembly() {
