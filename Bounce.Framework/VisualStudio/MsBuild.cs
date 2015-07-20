@@ -1,25 +1,31 @@
 using System;
 using System.IO;
 using System.Linq;
+using Microsoft.Build.Utilities;
 
 namespace Bounce.Framework.VisualStudio {
     class MsBuild : IMsBuild {
+		private const string msbuildExe = "msbuild.exe";
         private readonly IShell Shell;
         public string MsBuildExe { get; set; }
 
         public MsBuild(IShell shell) {
             Shell = shell;
-            MsBuildExe = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe");
+            MsBuildExe = Path.Combine(GetNetPath(TargetDotNetFrameworkVersion.VersionLatest), msbuildExe);
         }
 
-        public void Build(string projSln, string config, string outputDir, string target)
+        public void Build(string projSln, string config, string outputDir, string target, string verbosity, bool nologo, bool parallel, TargetDotNetFrameworkVersion dotNetFrameworkVersion)
         {
             var arguments = NormaliseArguments(
                 "\"" + projSln + "\"",
                 ConfigIfSpecified(config),
                 OutputDirIfSpecified(outputDir),
-                TargetIfSpecified(target)
-                );
+                TargetIfSpecified(target),
+				VerbosityIfSpecified(verbosity),
+				NoLogoIfSpecified(nologo),
+				ParallelIfSpecified(parallel));
+
+			MsBuildExe = Path.Combine(GetNetPath(dotNetFrameworkVersion), msbuildExe);
 
             Shell.Exec(MsBuildExe, arguments);
         }
@@ -44,9 +50,25 @@ namespace Bounce.Framework.VisualStudio {
             return target != null ? "/t:" + target : null;
         }
 
+		protected string VerbosityIfSpecified(string verbosity) {
+			return verbosity != null ? "/verbosity:" + verbosity : null;
+		}
+
+		protected string NoLogoIfSpecified(bool nologo) {
+			return nologo ? "/nologo" : null;
+		}
+
+		protected string ParallelIfSpecified(bool parallel) {
+			return parallel ? "/m" : null;
+		}
+
         private string EnsureTrailingSlashIsSet(string outputDir)
         {
             return outputDir.Last() == Path.DirectorySeparatorChar ? outputDir : outputDir + Path.DirectorySeparatorChar;
         }
+
+		private static string GetNetPath(TargetDotNetFrameworkVersion dotNetFrameworkVersion) {
+			return ToolLocationHelper.GetPathToDotNetFramework(dotNetFrameworkVersion);
+		}
     }
 }

@@ -65,6 +65,7 @@
       <HintPath>..\References\ZipSharp\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\InetSrv\Microsoft.Web.Administration.dll</HintPath>
@@ -94,6 +95,7 @@
     <Compile Include="ConsoleShellLogger.cs" />
     <Compile Include="IShellLogger.cs" />
     <Compile Include="ITaskRunner.cs" />
+    <Compile Include="LogExtensions.cs" />
     <Compile Include="MultiShellLogger.cs" />
     <Compile Include="Props.cs" />
     <Compile Include="StringShellLogger.cs" />
