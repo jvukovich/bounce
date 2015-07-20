@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +19,38 @@ namespace Bounce.Console {
 
         public int Run(string[] args) {
             try {
-                return FindTargetsAssemblyAndRunBounce(args);
+				if (args != null && args.Length > 0) {
+					var tasks = new HashSet<string>();
+					var taskArgs = new HashSet<string>();
+					var returnCodes = new List<int>();
+
+					foreach (var arg in args) {
+						if (arg.StartsWith("/"))
+							taskArgs.Add(arg);
+						else
+							tasks.Add(arg);
+					}
+
+					foreach (var task in tasks) {
+						var newArgs = new HashSet<string> {task};
+
+						foreach (var taskArg in taskArgs)
+							newArgs.Add(taskArg);
+
+						var returnCode = FindTargetsAssemblyAndRunBounce(newArgs.ToArray());
+
+						returnCodes.Add(returnCode);
+					}
+
+					if (returnCodes.Count == 0)
+						return 1;
+
+					var badReturnCode = returnCodes.OrderByDescending(i => i).FirstOrDefault(i => i > 0);
+
+					return (badReturnCode > 0) ? badReturnCode : 0;
+				}
+
+				return FindTargetsAssemblyAndRunBounce(args);
             } catch (BounceConsoleException bce) {
                 bce.Explain(System.Console.Error);
                 return 1;
