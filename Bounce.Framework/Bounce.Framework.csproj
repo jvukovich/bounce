@@ -95,6 +95,7 @@
     <Compile Include="IShellLogger.cs" />
     <Compile Include="ITaskRunner.cs" />
     <Compile Include="MultiShellLogger.cs" />
+    <Compile Include="Props.cs" />
     <Compile Include="StringShellLogger.cs" />
     <Compile Include="DefaultLogFormatter.cs" />
     <Compile Include="DependencyResolverAttribute.cs" />
