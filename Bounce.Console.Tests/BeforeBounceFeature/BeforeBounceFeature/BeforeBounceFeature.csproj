@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BeforeBounceFeature</RootNamespace>
-    <AssemblyName>Targets</AssemblyName>
+    <AssemblyName>Before.Bounce.Feature</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -61,11 +61,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bounce.Framework, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Bounce.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bounce.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Bounce.Framework.Tests, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Bounce.Framework.Tests">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Bounce.Framework.Tests.dll</HintPath>
     </Reference>

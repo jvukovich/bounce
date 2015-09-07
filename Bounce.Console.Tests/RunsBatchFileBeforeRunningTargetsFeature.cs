@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Bounce.Framework;
 using Bounce.TestHelpers;
 using NUnit.Framework;
@@ -31,7 +30,7 @@ namespace Bounce.Console.Tests {
 
             ProcessOutput output = null;
 
-            Pushd(@"BeforeBounceFeature", () => shell.Exec(@"..\bounce.exe", "BeforeBounceFeature"));
+            FileSystemUtils.Pushd(@"BeforeBounceFeature", () => output = shell.Exec(@"..\bounce.exe", "BeforeBounceFeature"));
 
             Assert.That(output, Is.Not.Null);
             Assert.That(output.ExitCode, Is.EqualTo(0));
@@ -50,21 +49,14 @@ namespace Bounce.Console.Tests {
 
             ProcessOutput output = null;
 
-            Pushd(@"BeforeBounceFeature\BeforeBounceFeature", () => shell.Exec(@"..\..\bounce.exe", "BeforeBounceFeature"));
-
-            Assert.That(output, Is.Not.Null);
-            Assert.That(output.ExitCode, Is.EqualTo(1));
-            Assert.That(output.Error, Is.StringContaining("MSBUILD : error MSB1009: Project file does not exist."));
-        }
-
-        public void Pushd(string dir, Action doWhenInDirectory) {
-            string cwd = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(dir);
             try {
-                doWhenInDirectory();
-            } finally {
-                Directory.SetCurrentDirectory(cwd);
+                FileSystemUtils.Pushd(@"BeforeBounceFeature\BeforeBounceFeature",
+                    () => shell.Exec(@"..\..\bounce.exe", "BeforeBounceFeature"));
+            } catch (CommandExecutionException e) {
+                Assert.That(e.ExitCode, Is.EqualTo(1));
+                Assert.That(e.Output, Is.StringContaining("MSBUILD : error MSB1009: Project file does not exist."));
             }
         }
+
     }
 }
