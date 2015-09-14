@@ -27,6 +27,8 @@ namespace Bounce.Framework {
                 }
             }
 
+			Props.Load(result);
+
             return result;
         }
 

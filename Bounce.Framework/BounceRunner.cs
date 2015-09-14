@@ -20,7 +20,7 @@ namespace Bounce.Framework {
             try {
                 Directory.SetCurrentDirectory(Path.GetDirectoryName(bounceDirectory));
 
-				Props.Load(rawArguments);
+				//Props.Load(rawArguments);
 
                 var parameters = ParsedArguments(rawArguments);
                 Parameters.Main = new Parameters(parameters);

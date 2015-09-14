@@ -18,11 +18,15 @@ namespace Bounce.Framework.Tests
 
         [Test]
         public void ShouldParseParametersWithColons() {
+			var args = Params("/file:afile.txt /name:nobody").ToList();
             var parser = new ArgumentsParser();
-            var paramDict = parser.ParseParameters(Params("/file:afile.txt /name:nobody"));
+            var paramDict = parser.ParseParameters(args);
 
             Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
             Assert.That(paramDict["name"], Is.EqualTo("nobody"));
+
+			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
+			Assert.That(Props.Get("name"), Is.EqualTo("nobody"));
         }
 
         [Test]
@@ -32,6 +36,9 @@ namespace Bounce.Framework.Tests
 
             Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
             Assert.That(paramDict["name"], Is.EqualTo("nobody"));
+
+			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
+			Assert.That(Props.Get("name"), Is.EqualTo("nobody"));
         }
 
         [Test]
@@ -41,6 +48,9 @@ namespace Bounce.Framework.Tests
 
             Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
             Assert.That(paramDict["fast"], Is.EqualTo("true"));
+
+			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
+			Assert.That(Props.Get("fast"), Is.EqualTo("true"));
         }
 
         [Test]
@@ -50,6 +60,9 @@ namespace Bounce.Framework.Tests
 
             Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
             Assert.That(paramDict["fast"], Is.EqualTo("true"));
+
+			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
+			Assert.That(Props.Get("fast"), Is.EqualTo("true"));
         }
 
         [Test]

@@ -23,8 +23,13 @@ namespace Bounce.Console {
 					var tasks = new HashSet<string>();
 					var taskArgs = new HashSet<string>();
 
+					var foundTaskArgsSwitch = false;
+
 					foreach (var arg in args) {
 						if (arg.StartsWith("/"))
+							foundTaskArgsSwitch = true;
+
+						if (foundTaskArgsSwitch)
 							taskArgs.Add(arg);
 						else
 							tasks.Add(arg);
@@ -70,8 +75,6 @@ namespace Bounce.Console {
                 //call back to transfer control to other app domain
                 appDomain.DoCallBack(RunTask);
                 return 0;
-            } catch (Exception) {
-                return 1;
             } finally
             {
                 AppDomain.Unload(appDomain);
