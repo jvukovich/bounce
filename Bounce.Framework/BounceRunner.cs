@@ -76,7 +76,7 @@ namespace Bounce.Framework {
         private bool IsBounceExecutable(string path) {
             string fileName = Path.GetFileName(path);
             return !fileName.Equals("Bounce.Framework.dll", StringComparison.InvariantCultureIgnoreCase)
-                && new Regex(@"\bbounce\b.*\.(dll|exe)", RegexOptions.IgnoreCase).IsMatch(fileName);
+                && new Regex(@"\bbounce\b.*\.(dll|exe)$", RegexOptions.IgnoreCase).IsMatch(fileName);
         }
     }
 }
