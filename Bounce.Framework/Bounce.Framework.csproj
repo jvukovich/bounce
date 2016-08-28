@@ -115,6 +115,7 @@
     <Compile Include="VisualStudio\IMsBuildFile.cs" />
     <Compile Include="VisualStudio\IVisualStudioProject.cs" />
     <Compile Include="VisualStudio\MsBuild.cs" />
+    <Compile Include="VisualStudio\MsBuildPathDiscovery.cs" />
     <Compile Include="VisualStudio\MsBuildFile.cs" />
     <Compile Include="Web\IAppPool.cs" />
     <Compile Include="Web\Iis7WebApplication.cs" />

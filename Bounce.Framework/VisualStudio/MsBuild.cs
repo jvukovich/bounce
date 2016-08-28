@@ -9,7 +9,7 @@ namespace Bounce.Framework.VisualStudio {
 
         public MsBuild(IShell shell) {
             Shell = shell;
-            MsBuildExe = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe");
+            MsBuildExe = new MsBuildPathDiscovery().LocateMostRecentMsBuildPath();
         }
 
         public void Build(string projSln, string config, string outputDir, string target)

@@ -90,6 +90,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskRunnerTests.cs" />
     <Compile Include="TasksForTaskNames.cs" />
+    <Compile Include="VisualStudio\MsBuildPathDiscoveryTests.cs" />
     <Compile Include="VisualStudio\ProjectFilePropertyExpressionParserTest.cs" />
     <Compile Include="Web\WebSiteBindingParserTest.cs" />
   </ItemGroup>
