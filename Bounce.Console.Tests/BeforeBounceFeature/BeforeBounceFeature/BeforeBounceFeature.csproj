@@ -63,7 +63,7 @@
   <ItemGroup>
     <Reference Include="Bounce.Framework">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Bounce.Framework.dll</HintPath>
+      <HintPath>..\..\..\Bounce.Framework\bin\Debug\Bounce.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Bounce.Framework.Tests">
       <SpecificVersion>False</SpecificVersion>
