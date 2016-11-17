@@ -80,7 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSystemUtils.cs" />
-    <Compile Include="RunningTasksTests.cs" />
     <Compile Include="RunsBatchFileBeforeRunningTargetsFeature.cs" />
     <Compile Include="RunningTasksTests.cs" />
     <Compile Include="TargetsAssemblyArgumentsParser.cs" />

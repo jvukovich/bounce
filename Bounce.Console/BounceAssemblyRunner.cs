@@ -94,7 +94,7 @@ namespace Bounce.Console {
             Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
 			try {
-				var exitCode = (int) runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, arguments});
+				var exitCode = (int) runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, workingDirectory, arguments});
 				if (exitCode != 0) {
 	                throw new BadExitException();
 				}
