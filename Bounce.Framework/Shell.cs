@@ -22,7 +22,7 @@ namespace Bounce.Framework {
             var exitCode = Execute(commandName, commandArgs, logger);
 
             if (exitCode != 0) {
-                throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), exitCode), stringLogger.ErrorAndOutput);
+                throw new CommandExecutionException(String.Format("running: {0} {1}\nin: {2}\nexited with {3}", commandName, commandArgs, Directory.GetCurrentDirectory(), exitCode), stringLogger.ErrorAndOutput, exitCode);
             }
 
             return new ProcessOutput {

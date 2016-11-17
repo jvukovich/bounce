@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Bounce.Console {
     
@@ -10,6 +11,7 @@ namespace Bounce.Console {
     class BounceAssemblyRunner {
         private readonly BeforeBounceScriptRunner BeforeBounceScriptRunner;
         private string bounceDirectory;
+        private string workingDirectory;
         private string[] arguments;
         private int ExitCode = 1;
 
@@ -65,7 +67,8 @@ namespace Bounce.Console {
 
             BeforeBounceScriptRunner.RunBeforeBounceScript(optionsAndArguments);
 
-            bounceDirectory = optionsAndArguments.BounceDirectory;
+            bounceDirectory = Path.GetFullPath(optionsAndArguments.BounceDirectory);
+            workingDirectory = optionsAndArguments.WorkingDirectory;
             arguments = optionsAndArguments.RemainingArguments;
 
             var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = "true" };
