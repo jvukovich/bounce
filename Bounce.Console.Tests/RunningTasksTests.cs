@@ -11,7 +11,7 @@ namespace Bounce.Console.Tests {
 
             ProcessOutput output = null;
 
-            FileSystemUtils.Pushd(@"..\..\..\TestBounceAssembly", () => output = shell.Exec(@"..\Bounce.Console.Tests\bin\Debug\bounce.exe", "Task1"));
+            FileSystemUtils.Pushd(@"..\..\..\TestBounceAssembly", () => output = shell.Exec(@"..\Bounce.Console\bin\Debug\bounce.exe", "Task1"));
 
             Assert.That(output, Is.Not.Null);
             Assert.That(output.ExitCode, Is.EqualTo(0));
@@ -25,7 +25,7 @@ namespace Bounce.Console.Tests {
 
             ProcessOutput output = null;
 
-            FileSystemUtils.Pushd(@"..\..\..\TestBounceAssembly", () => output = shell.Exec(@"..\Bounce.Console.Tests\bin\Debug\bounce.exe", "Task2 /a b"));
+            FileSystemUtils.Pushd(@"..\..\..\TestBounceAssembly", () => output = shell.Exec(@"..\Bounce.Console\bin\Debug\bounce.exe", "Task2 /a b"));
 
             Assert.That(output, Is.Not.Null);
             Assert.That(output.ExitCode, Is.EqualTo(0));
@@ -39,14 +39,14 @@ namespace Bounce.Console.Tests {
 
 			ProcessOutput output = null;
 
-			FileSystemUtils.Pushd(@"..\..\..\TestBounceAssembly\bin\Debug", () => output = shell.Exec(@"..\..\..\Bounce.Console.Tests\bin\Debug\bounce.exe", "Task3 Task4 Task5 /a a /b:b /c c"));
+			FileSystemUtils.Pushd(@"..\..\..\TestBounceAssembly", () => output = shell.Exec(@"..\Bounce.Console\bin\Debug\bounce.exe", "Task3 Task4 Task5 /a a /b:b /c c"));
 
 			Assert.That(output, Is.Not.Null);
 			Assert.That(output.ExitCode, Is.EqualTo(0));
 			Assert.That(output.Error.Trim(), Is.EqualTo(""));
-			Assert.That(output.Output, Is.StringContaining("a=a"));
-			Assert.That(output.Output, Is.StringContaining("b=b"));
-			Assert.That(output.Output, Is.StringContaining("c=c"));
+			Assert.That(output.Output, Is.StringContaining("task3 a=a"));
+			Assert.That(output.Output, Is.StringContaining("task4 b=b"));
+			Assert.That(output.Output, Is.StringContaining("task5 a=a, b=b, c=c"));
 		}
 	}
 }
