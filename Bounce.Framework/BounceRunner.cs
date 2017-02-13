@@ -19,6 +19,9 @@ namespace Bounce.Framework {
         public int Run(string bounceDirectory, string workingDirectory, string [] rawArguments) {
             try {
                 Directory.SetCurrentDirectory(workingDirectory);
+
+				//Props.Load(rawArguments);
+
                 var parameters = ParsedArguments(rawArguments);
                 Parameters.Main = new Parameters(parameters);
 

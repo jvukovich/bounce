@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +21,38 @@ namespace Bounce.Console {
 
         public int Run(string[] args) {
             try {
-                return FindTargetsAssemblyAndRunBounce(args);
+				if (args != null && args.Length > 0) {
+					var tasks = new HashSet<string>();
+					var taskArgs = new HashSet<string>();
+
+					var foundTaskArgsSwitch = false;
+
+					foreach (var arg in args) {
+						if (arg.StartsWith("/"))
+							foundTaskArgsSwitch = true;
+
+						if (foundTaskArgsSwitch)
+							taskArgs.Add(arg);
+						else
+							tasks.Add(arg);
+					}
+
+					foreach (var task in tasks) {
+						var newArgs = new HashSet<string> {task};
+
+						foreach (var taskArg in taskArgs)
+							newArgs.Add(taskArg);
+
+						var returnCode = FindTargetsAssemblyAndRunBounce(newArgs.ToArray());
+
+						if (returnCode != 0)
+							return 1;
+					}
+
+					return 0;
+				}
+
+				return FindTargetsAssemblyAndRunBounce(args);
             } catch (BounceConsoleException bce) {
                 bce.Explain(System.Console.Error);
                 return 1;
@@ -46,7 +78,8 @@ namespace Bounce.Console {
                 //call back to transfer control to other app domain
                 appDomain.DoCallBack(RunTask);
                 return 0;
-            } finally {
+            } finally
+            {
                 AppDomain.Unload(appDomain);
             }
         }
@@ -60,10 +93,16 @@ namespace Bounce.Console {
         private void RunBounce(Assembly bounceAssembly) {
             Type runnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             object runner = runnerType.GetConstructor(new Type[0]).Invoke(new object[0]);
-            var exitCode = (int) runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, workingDirectory, arguments});
-            if (exitCode != 0) {
-                throw new BadExitException();
-            }
+			try {
+				var exitCode = (int) runnerType.GetMethod("Run").Invoke(runner, new object[] {bounceDirectory, workingDirectory, arguments});
+				if (exitCode != 0) {
+	                throw new BadExitException();
+				}
+			}
+			catch (TargetInvocationException ex) {
+				if (ex.InnerException != null)
+					throw ex.InnerException;
+			}
         }
 
         private Assembly ReferencedBounceAssembly() {
