@@ -102,6 +102,10 @@
       <Project>{E7E05DAC-9A59-41F5-9FED-47FDF809A699}</Project>
       <Name>Bounce.TestHelpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestBounceAssembly\TestBounceAssembly.csproj">
+      <Project>{ffdd5742-fb1d-425f-91ba-58b097ffb51b}</Project>
+      <Name>TestBounceAssembly</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
