@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -9,8 +10,7 @@ namespace Bounce.Framework.Tests
         [Fact]
         public void ShouldParseNoParameters()
         {
-            var parser = new ArgumentsParser();
-            var paramDict = parser.ParseParameters(new string[0]);
+            var paramDict = ArgumentsParser.ParseParameters(new string[0]);
 
             Assert.Empty(paramDict);
         }
@@ -19,8 +19,7 @@ namespace Bounce.Framework.Tests
         public void ShouldParseParametersWithColons()
         {
             var args = Params("/file:afile.txt /name:nobody").ToList();
-            var parser = new ArgumentsParser();
-            var paramDict = parser.ParseParameters(args);
+            var paramDict = ArgumentsParser.ParseParameters(args);
 
             Assert.Equal("afile.txt", paramDict["file"]);
             Assert.Equal("nobody", paramDict["name"]);
@@ -32,8 +31,7 @@ namespace Bounce.Framework.Tests
         [Fact]
         public void ShouldParseParametersWithSpaces()
         {
-            var parser = new ArgumentsParser();
-            var paramDict = parser.ParseParameters(Params("/file afile.txt /name nobody"));
+            var paramDict = ArgumentsParser.ParseParameters(Params("/file afile.txt /name nobody"));
 
             Assert.Equal("afile.txt", paramDict["file"]);
             Assert.Equal("nobody", paramDict["name"]);
@@ -45,8 +43,7 @@ namespace Bounce.Framework.Tests
         [Fact]
         public void ShouldParseBooleanParameterAtEnd()
         {
-            var parser = new ArgumentsParser();
-            var paramDict = parser.ParseParameters(Params("/file:afile.txt /fast"));
+            var paramDict = ArgumentsParser.ParseParameters(Params("/file:afile.txt /fast"));
 
             Assert.Equal("afile.txt", paramDict["file"]);
             Assert.Equal("true", paramDict["fast"]);
@@ -58,8 +55,7 @@ namespace Bounce.Framework.Tests
         [Fact]
         public void ShouldParseBooleanParameterInMiddle()
         {
-            var parser = new ArgumentsParser();
-            var paramDict = parser.ParseParameters(Params("/fast /file:afile.txt"));
+            var paramDict = ArgumentsParser.ParseParameters(Params("/fast /file:afile.txt"));
 
             Assert.Equal("afile.txt", paramDict["file"]);
             Assert.Equal("true", paramDict["fast"]);
@@ -71,10 +67,9 @@ namespace Bounce.Framework.Tests
         [Fact]
         public void ThrowsIfNonNamedArgumentFound()
         {
-            var parser = new ArgumentsParser();
-            var ex = Assert.Throws<NonNamedArgumentException>(() => parser.ParseParameters(Params("afile.txt")));
+            var ex = Assert.Throws<Exception>(() => ArgumentsParser.ParseParameters(Params("afile.txt")));
 
-            Assert.Equal("Exception of type 'Bounce.Framework.NonNamedArgumentException' was thrown.", ex.Message);
+            Assert.Contains("expected switch argument beginning with", ex.Message);
         }
 
         private static IEnumerable<string> Params(string parameters)

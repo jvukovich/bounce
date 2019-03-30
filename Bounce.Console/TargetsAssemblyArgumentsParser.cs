@@ -81,6 +81,8 @@ namespace Bounce.Console
 
             var targets = _bounceDirectoryFinder.FindBounceDirectory();
 
+            // todo: dotnetupgrade
+            // todo: remove unnecessary custom exceptions
             if (targets == null)
                 throw new TargetsAssemblyNotFoundException("unable to find valid Bounce assembly in this or any parent directory");
 

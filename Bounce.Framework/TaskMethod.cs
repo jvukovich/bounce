@@ -1,68 +1,60 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Bounce.Framework
 {
+    public interface ITask
+    {
+        string FullName { get; }
+        IEnumerable<ITaskParameter> Parameters { get; }
+        void Invoke(TaskParameters taskParameters);
+    }
+
     public class TaskMethod : ITask
     {
-        private readonly MethodInfo Method;
-        private readonly IDependencyResolver Resolver;
+        private readonly MethodInfo _method;
+        private readonly IDependencyResolver _resolver;
 
         public TaskMethod(MethodInfo method, IDependencyResolver resolver)
         {
-            Method = method;
-            Resolver = resolver;
+            _method = method;
+            _resolver = resolver;
         }
 
-        public string Name
-        {
-            get { return Method.Name; }
-        }
-
-        public string FullName
-        {
-            get { return Method.DeclaringType.FullName + "." + Method.Name; }
-        }
+        public string FullName => _method.DeclaringType.FullName + "." + _method.Name;
 
         public void Invoke(TaskParameters taskParameters)
         {
             try
             {
-                var taskObject = Resolver.Resolve(Method.DeclaringType);
+                var taskObject = _resolver.Resolve(_method.DeclaringType);
                 var methodArguments = MethodArgumentsFromCommandLineParameters(taskParameters);
-                Method.Invoke(taskObject, methodArguments);
-            } catch (TargetInvocationException e)
+
+                _method.Invoke(taskObject, methodArguments);
+            }
+            catch (TargetInvocationException e)
             {
-                throw new TaskException(this, e.InnerException);
+                // todo: dotnetupgrade
+                // todo: make exceptions generic
+                //throw new TaskException(this, e.InnerException);
+                throw e;
             }
         }
 
         private object[] MethodArgumentsFromCommandLineParameters(TaskParameters taskParameters)
         {
-            return Parameters.Select(p => (object) ParseParameter(taskParameters, p)).ToArray();
+            return Parameters.Select(x => ParseParameter(taskParameters, x)).ToArray();
         }
 
-        private object ParseParameter(TaskParameters taskParameters, ITaskParameter p)
+        private static object ParseParameter(TaskParameters taskParameters, ITaskParameter p)
         {
-            try
-            {
-                return taskParameters.Parameter(p);
-            } catch (RequiredParameterNotGivenException)
-            {
-                throw new TaskRequiredParameterException(p, this);
-            } catch (TypeParserNotFoundException)
-            {
-                throw new TaskParameterException(p, this);
-            }
+            return taskParameters.Parameter(p);
         }
 
         public IEnumerable<ITaskParameter> Parameters
         {
-            get { return Method.GetParameters().Select(p => (ITaskParameter) new TaskMethodParameter(p)); }
+            get { return _method.GetParameters().Select(x => (ITaskParameter) new TaskMethodParameter(x)); }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Bounce.Framework;
 
-namespace TestBounceAssembly
+namespace TestProject.Bounce
 {
     public class TestTasks
     {

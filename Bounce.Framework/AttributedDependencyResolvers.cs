@@ -5,26 +5,24 @@ using System.Reflection;
 
 namespace Bounce.Framework
 {
-    class AttributedDependencyResolvers : IDependencyResolver
+    public interface IDependencyResolver
     {
-        public List<MethodInfo> Resolvers = new List<MethodInfo>();
+        object Resolve(Type t);
+    }
+
+    internal class AttributedDependencyResolvers : IDependencyResolver
+    {
+        private readonly List<MethodInfo> _resolvers = new List<MethodInfo>();
 
         public void AddDependencyResolver(MethodInfo resolver)
         {
-            Resolvers.Add(resolver);
+            _resolvers.Add(resolver);
         }
 
         public object Resolve(Type t)
         {
-            object instance = Resolvers.Select(r => r.Invoke(null, new object[] {t})).FirstOrDefault(i => i != null);
-
-            if (instance != null)
-            {
-                return instance;
-            } else
-            {
-                return t.GetConstructor(new Type[0]).Invoke(new object[0]);
-            }
+            var instance = _resolvers.Select(x => x.Invoke(null, new object[] {t})).FirstOrDefault(i => i != null);
+            return instance ?? t.GetConstructor(new Type[0]).Invoke(new object[0]);
         }
     }
 }

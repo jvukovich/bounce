@@ -7,95 +7,88 @@ using System.Text.RegularExpressions;
 
 namespace Bounce.Framework
 {
+    // ReSharper disable once UnusedMember.Global
     public class BounceRunner
     {
-        private readonly ITaskRunner TaskRunner;
-
-        public BounceRunner() : this(new TaskRunner())
-        {
-        }
-
-        public BounceRunner(ITaskRunner taskRunner)
-        {
-            TaskRunner = taskRunner;
-        }
-
-        public int Run(string bounceDirectory, string workingDirectory, string[] rawArguments)
+        // ReSharper disable once UnusedMember.Global
+        public void Run(string bounceDir, string workingDir, string[] rawArgs)
         {
             try
             {
-                Directory.SetCurrentDirectory(workingDirectory);
+                Directory.SetCurrentDirectory(workingDir);
 
-                //Props.Load(rawArguments);
+                var parameters = ParsedArguments(rawArgs);
 
-                var parameters = ParsedArguments(rawArguments);
                 Parameters.Main = new Parameters(parameters);
 
                 var dependencyResolver = new AttributedDependencyResolvers();
-                var tasks = Tasks(bounceDirectory, dependencyResolver);
+                var tasks = Tasks(bounceDir, dependencyResolver);
 
-                if (rawArguments.Length > 0)
-                {
-                    TaskRunner.RunTask(TaskName(rawArguments), parameters, tasks);
-                } else
-                {
-                    UsageHelp.WriteUsage(Console.Out, tasks);
-                }
-
-                return 0;
-            } catch (BounceException e)
+                if (rawArgs.Length > 0)
+                    new TaskRunner().RunTask(TaskName(rawArgs), parameters, tasks);
+                else
+                    UsageHelp.WriteUsage(tasks);
+            }
+            catch (ReflectionTypeLoadException e)
             {
-                e.Explain(Console.Error);
-                return 1;
-            } catch (ReflectionTypeLoadException e)
-            {
+                // todo: dotnetupgrade
+                // todo: change logging strategy
                 foreach (var loaderException in e.LoaderExceptions)
-                {
                     Console.Error.WriteLine(loaderException);
-                }
-
-                return 1;
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
+                // todo: dotnetupgrade
+                // todo: change logging strategy
                 Console.Error.WriteLine(e);
-                return 1;
             }
         }
 
-        private static string TaskName(string[] arguments)
+        private static string TaskName(IReadOnlyList<string> arguments)
         {
             return arguments[0];
         }
 
-        private static TaskParameters ParsedArguments(string[] arguments)
+        private static TaskParameters ParsedArguments(IEnumerable<string> arguments)
         {
-            return new TaskParameters(new ArgumentsParser().ParseParameters(arguments.Skip(1)));
+            return new TaskParameters(ArgumentsParser.ParseParameters(arguments.Skip(1)));
         }
 
-        private IEnumerable<ITask> Tasks(string bounceDirectory, AttributedDependencyResolvers dependencyResolvers)
+        private static IEnumerable<ITask> Tasks(string bounceDirectory, AttributedDependencyResolvers dependencyResolvers)
         {
-            IEnumerable<Type> allTypes = Directory.GetFiles(bounceDirectory).Where(IsBounceExecutable).SelectMany(file =>
-                                                                                                                  {
-                                                                                                                      var assembly = Assembly.LoadFrom(file);
-                                                                                                                      return assembly.GetTypes();
-                                                                                                                  });
+            var allTypes =
+                Directory.GetFiles(bounceDirectory)
+                    .Where(IsBounceExecutable)
+                    .SelectMany(
+                        file =>
+                        {
+                            var assembly = Assembly.LoadFrom(file);
+                            return assembly.GetTypes();
+                        })
+                    .ToList();
 
-            IEnumerable<MethodInfo> resolverMethods = allTypes.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Static));
-            IEnumerable<MethodInfo> resolvers = resolverMethods.Where(method => method.GetCustomAttributes(typeof(DependencyResolverAttribute), false).Length > 0);
+            var resolverMethods = allTypes.SelectMany(x => x.GetMethods(BindingFlags.Public | BindingFlags.Static));
+            var resolvers = resolverMethods.Where(x => x.GetCustomAttributes(typeof(DependencyResolverAttribute), false).Length > 0);
 
             foreach (var resolver in resolvers)
-            {
                 dependencyResolvers.AddDependencyResolver(resolver);
-            }
 
-            IEnumerable<MethodInfo> taskMethods = allTypes.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance));
-            IEnumerable<ITask> tasks = taskMethods.Where(method => method.GetCustomAttributes(typeof(TaskAttribute), false).Length > 0).Select(method => (ITask) new TaskMethod(method, dependencyResolvers));
+            var taskMethods = allTypes.SelectMany(x => x.GetMethods(BindingFlags.Public | BindingFlags.Instance));
+
+            var tasks =
+                taskMethods
+                    .Where(x => x.GetCustomAttributes(typeof(TaskAttribute), false).Length > 0)
+                    .Select(x => (ITask) new TaskMethod(x, dependencyResolvers));
+
             return tasks;
         }
 
-        private bool IsBounceExecutable(string path)
+        private static bool IsBounceExecutable(string path)
         {
-            string fileName = Path.GetFileName(path);
+            var fileName = Path.GetFileName(path);
+
+            // todo: dotnetupgrade
+            // todo: cleanup
             return !fileName.Equals("Bounce.Framework.dll", StringComparison.InvariantCultureIgnoreCase)
                    && new Regex(@"\bbounce\b.*\.(dll|exe)", RegexOptions.IgnoreCase).IsMatch(fileName);
         }

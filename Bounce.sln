@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Framework.Tests", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Console.Tests", "Bounce.Console.Tests\Bounce.Console.Tests.csproj", "{2DD987A2-8501-4265-A731-A06F7E210F1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBounceAssembly", "TestBounceAssembly\TestBounceAssembly.csproj", "{FFDD5742-FB1D-425F-91BA-58B097FFB51B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject.Bounce", "TestProject.Bounce\TestProject.Bounce.csproj", "{FFDD5742-FB1D-425F-91BA-58B097FFB51B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{05E5A4A4-E497-4FDF-B843-8EE583F5D71E} = {05E5A4A4-E497-4FDF-B843-8EE583F5D71E}
 	EndProjectSection

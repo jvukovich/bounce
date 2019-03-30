@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Bounce.Framework.Tests
@@ -81,18 +82,18 @@ namespace Bounce.Framework.Tests
         public void ThrowsExceptionWhenTaskRequiredParameterNotProvided()
         {
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Test"), resolver);
-            var ex = Assert.Throws<TaskRequiredParameterException>(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())));
+            var ex = Assert.Throws<Exception>(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())));
 
-            Assert.Equal("Exception of type 'Bounce.Framework.TaskRequiredParameterException' was thrown.", ex.Message);
+            Assert.Contains("required parameter 'fast' not given", ex.Message);
         }
 
         [Fact]
         public void ThrowsExceptionWhenCustomTypeCannotBeParsed()
         {
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Bad"), resolver);
-            var ex = Assert.Throws<TaskParameterException>(() => task.Invoke(new TaskParameters(new Dictionary<string, string> {{"x", "something"}})));
+            var ex = Assert.Throws<Exception>(() => task.Invoke(new TaskParameters(new Dictionary<string, string> {{"x", "something"}})));
 
-            Assert.Equal("no parser for parameter `x' of type `CustomType' for task Bounce.Framework.Tests.TaskMethodTest+FakeTaskClass.Bad", ex.Message);
+            Assert.Contains("could not parse 'something' for type", ex.Message);
         }
 
         [Fact]
@@ -107,9 +108,9 @@ namespace Bounce.Framework.Tests
         public void TaskExceptionIsThrownWhenTaskThrows()
         {
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Throws"), resolver);
-            var ex = Assert.Throws<TaskException>(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())));
+            var ex = Assert.Throws<TargetInvocationException>(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())));
 
-            Assert.Equal("task Bounce.Framework.Tests.TaskMethodTest+FakeTaskClass.Throws threw an exception", ex.Message);
+            Assert.Contains("Exception has been thrown by the target", ex.Message);
         }
 
         public class FakeTaskClass

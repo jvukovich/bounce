@@ -77,7 +77,7 @@ namespace Bounce.Console.Tests
 
             var ex = Assert.Throws<TargetsAssemblyNotFoundException>(() => parser.GetTargetsAssembly(new[] {"SomeTask", "/other", "args"}));
             
-            Assert.Equal("Exception of type 'Bounce.Console.TargetsAssemblyNotFoundException' was thrown.", ex.Message);
+            Assert.Contains("unable to find valid Bounce assembly", ex.Message);
         }
 
         [Fact]

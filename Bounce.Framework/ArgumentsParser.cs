@@ -1,32 +1,27 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Bounce.Framework
 {
-    public class ArgumentsParser
+    public static class ArgumentsParser
     {
-        public IDictionary<string, string> ParseParameters(IEnumerable<string> parameters)
+        public static IDictionary<string, string> ParseParameters(IEnumerable<string> parameters)
         {
-            return ParseCommandLineParameters(parameters.ToArray());
-        }
-
-        public IDictionary<string, string> ParseCommandLineParameters(string[] args)
-        {
+            var args = parameters.ToList();
             var result = new Dictionary<string, string>();
 
-            for (int i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Count; i++)
             {
                 var arg = args[i];
 
                 if (arg.StartsWith("/"))
                 {
-                    var parameter = ParseParameter(args, ref i);
-
-                    result.Add(parameter.Key, parameter.Value);
-                } else
-                {
-                    throw new NonNamedArgumentException(arg);
+                    var (key, value) = ParseParameter(args, ref i);
+                    result.Add(key, value);
                 }
+                else
+                    throw new Exception($"expected switch argument beginning with '/', found '{arg}'");
             }
 
             Props.Load(result);
@@ -34,35 +29,33 @@ namespace Bounce.Framework
             return result;
         }
 
-        private static KeyValuePair<string, string> ParseParameter(string[] args, ref int i)
+        private static KeyValuePair<string, string> ParseParameter(IReadOnlyList<string> args, ref int i)
         {
             var arg = args[i];
 
-            var indexOfColon = arg.IndexOf(":");
-            if (indexOfColon >= 0)
+            var indexOfSeparator = arg.IndexOf(":");
+
+            if (indexOfSeparator >= 0)
             {
-                var name = arg.Substring(1, indexOfColon - 1);
-                var indexOfValue = indexOfColon + 1;
+                var name = arg.Substring(1, indexOfSeparator - 1);
+                var indexOfValue = indexOfSeparator + 1;
                 var value = arg.Substring(indexOfValue, arg.Length - indexOfValue);
 
                 return new KeyValuePair<string, string>(name, value);
-            } else
+            }
+            else
             {
                 var name = arg.Substring(1);
-                if (i + 1 < args.Length)
-                {
-                    if (args[i + 1].StartsWith("/"))
-                    {
-                        return new KeyValuePair<string, string>(name, "true");
-                    } else
-                    {
-                        i++;
-                        return new KeyValuePair<string, string>(name, args[i]);
-                    }
-                } else
-                {
+
+                if (i + 1 >= args.Count)
                     return new KeyValuePair<string, string>(name, "true");
-                }
+
+                if (args[i + 1].StartsWith("/"))
+                    return new KeyValuePair<string, string>(name, "true");
+
+                i++;
+
+                return new KeyValuePair<string, string>(name, args[i]);
             }
         }
     }

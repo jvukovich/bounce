@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -51,7 +52,7 @@ namespace Bounce.Framework.Tests
         public void ThrowsExceptionWhenStringParameterIsNotPresentWithType()
         {
             var p = new TaskParameters(new Dictionary<string, string>());
-            var ex = Assert.Throws<RequiredParameterNotGivenException>(() => p.Parameter(typeof(string), "file"));
+            var ex = Assert.Throws<Exception>(() => p.Parameter(typeof(string), "file"));
 
             Assert.Equal("required parameter 'file' not given", ex.Message);
         }
@@ -60,7 +61,7 @@ namespace Bounce.Framework.Tests
         public void ThrowsExceptionWhenStringParameterIsNotPresent()
         {
             var p = new TaskParameters(new Dictionary<string, string>());
-            var ex = Assert.Throws<RequiredParameterNotGivenException>(() => p.Parameter<string>("file"));
+            var ex = Assert.Throws<Exception>(() => p.Parameter<string>("file"));
 
             Assert.Equal("required parameter 'file' not given", ex.Message);
         }
@@ -72,7 +73,7 @@ namespace Bounce.Framework.Tests
             Assert.Equal(Lakes.Constance, p.Parameter<Lakes>("lake"));
         }
 
-        enum Lakes
+        private enum Lakes
         {
             Constance,
             Coniston,

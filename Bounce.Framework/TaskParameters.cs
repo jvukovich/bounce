@@ -30,18 +30,12 @@ namespace Bounce.Framework
         public object Parameter(ITaskParameter parameter)
         {
             if (Params.ContainsKey(parameter.Name))
-            {
                 return ParseParameter(parameter);
-            } else
-            {
-                if (parameter.IsRequired)
-                {
-                    throw new RequiredParameterNotGivenException(parameter.Name);
-                } else
-                {
-                    return parameter.DefaultValue;
-                }
-            }
+
+            if (parameter.IsRequired)
+                throw new Exception($"required parameter '{parameter.Name}' not given");
+
+            return parameter.DefaultValue;
         }
 
         private object ParseParameter(ITaskParameter parameter)

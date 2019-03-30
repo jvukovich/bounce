@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Bounce.Framework.Tests
@@ -62,8 +63,8 @@ namespace Bounce.Framework.Tests
 
         private static void AssertTaskIsNotInvokedWithName(string taskName, ITaskRunner runner, MockTask task)
         {
-            var ex = Assert.Throws<NoMatchingTaskException>(() => runner.RunTask(taskName, new TaskParameters(new Dictionary<string, string>()), new[] {task}));
-            Assert.Equal("Exception of type 'Bounce.Framework.NoMatchingTaskException' was thrown.", ex.Message);
+            var ex = Assert.Throws<Exception>(() => runner.RunTask(taskName, new TaskParameters(new Dictionary<string, string>()), new[] {task}));
+            Assert.Contains("not found, try one of the following", ex.Message);
         }
     }
 }

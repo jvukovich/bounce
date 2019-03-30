@@ -2,34 +2,40 @@ using System;
 
 namespace Bounce.Framework
 {
+    public interface ITaskParameter
+    {
+        string Name { get; }
+        string TypeDescription { get; }
+        bool IsRequired { get; }
+        object DefaultValue { get; }
+        Type Type { get; }
+    }
+
     public class TaskParameter : ITaskParameter
     {
+        private object _defaultValue;
+
         public TaskParameter()
         {
             IsRequired = true;
         }
 
-        private object _defaultValue;
-
         public string Name { get; set; }
 
-        public string TypeDescription
-        {
-            get { return TypeParsers.Default.TypeParser(Type).Description; }
-        }
+        public Type Type { get; set; }
+
+        public string TypeDescription => TypeParsers.Default.TypeParser(Type).Description;
 
         public bool IsRequired { get; private set; }
 
         public object DefaultValue
         {
-            get { return _defaultValue; }
+            get => _defaultValue;
             set
             {
                 _defaultValue = value;
                 IsRequired = false;
             }
         }
-
-        public Type Type { get; set; }
     }
 }

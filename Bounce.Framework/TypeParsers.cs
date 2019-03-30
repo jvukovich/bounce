@@ -4,37 +4,36 @@ using System.Linq;
 
 namespace Bounce.Framework
 {
-    class TypeParsers : Dictionary<Type, ITypeParser>, ITypeParsers
+    public interface ITypeParsers
+    {
+        T Parse<T>(string parameterValue);
+        object Parse(Type type, string parameterValue);
+        string Generate<T>(T parameterValue);
+        void RegisterTypeParser<T>(ITypeParser parser);
+        ITypeParser TypeParser(Type type);
+    }
+
+    internal class TypeParsers : Dictionary<Type, ITypeParser>, ITypeParsers
     {
         private static TypeParsers _default;
 
-        public static ITypeParsers Default
-        {
-            get
-            {
-                if (_default == null)
-                {
-                    _default = CreateWithStandardTypeParsers();
-                }
-
-                return _default;
-            }
-        }
+        public static ITypeParsers Default => _default ?? (_default = CreateWithStandardTypeParsers());
 
         private static TypeParsers CreateWithStandardTypeParsers()
         {
             var typeParsers = new TypeParsers();
+
             typeParsers.RegisterTypeParser<int>(new IntParser());
             typeParsers.RegisterTypeParser<string>(new StringParser());
             typeParsers.RegisterTypeParser<DateTime>(new DateTimeParser());
             typeParsers.RegisterTypeParser<bool>(new BooleanParser());
+
             return typeParsers;
         }
 
         public string Generate<T>(T parameterValue)
         {
-            ITypeParser parser = this[typeof(T)];
-            return parser.Generate(parameterValue);
+            return this[typeof(T)].Generate(parameterValue);
         }
 
         public void RegisterTypeParser<T>(ITypeParser parser)
@@ -45,15 +44,9 @@ namespace Bounce.Framework
         public ITypeParser TypeParser(Type type)
         {
             if (type.IsEnum)
-            {
                 return new EnumParser(type);
-            } else if (ContainsKey(type))
-            {
-                return this[type];
-            } else
-            {
-                return new NullTypeParser(type);
-            }
+
+            return ContainsKey(type) ? this[type] : new NullTypeParser(type);
         }
 
         public T Parse<T>(string parameterValue)
@@ -63,14 +56,19 @@ namespace Bounce.Framework
 
         public object Parse(Type type, string parameterValue)
         {
-            ITypeParser parser = TypeParser(type);
+            var parser = TypeParser(type);
+
             if (parser != null)
-            {
                 return parser.Parse(parameterValue);
-            } else
-            {
-                throw new TypeParserNotFoundException(parameterValue, type);
-            }
+
+            TypeParserNotFound(parameterValue, type);
+
+            return null;
+        }
+
+        public static void TypeParserNotFound(string parameterValue, Type type)
+        {
+            throw new Exception($"could not parse '{parameterValue}' for type '{type}'");
         }
     }
 
@@ -85,7 +83,8 @@ namespace Bounce.Framework
 
         public object Parse(string s)
         {
-            throw new TypeParserNotFoundException(s, _type);
+            TypeParsers.TypeParserNotFound(s, _type);
+            return null;
         }
 
         public string Generate(object o)
@@ -93,10 +92,7 @@ namespace Bounce.Framework
             throw new NotImplementedException();
         }
 
-        public string Description
-        {
-            get { return _type.Name; }
-        }
+        public string Description => _type.Name;
     }
 
     public class EnumParser : ITypeParser
@@ -123,15 +119,8 @@ namespace Bounce.Framework
             get
             {
                 var values = Enum.GetValues(_enumType).Cast<object>();
-                return "{" + String.Join(",", values.Select(v => v.ToString()).ToArray()) + "}";
+                return "{" + string.Join(",", values.Select(v => v.ToString()).ToArray()) + "}";
             }
-        }
-    }
-
-    public class TypeParserNotFoundException : Exception
-    {
-        public TypeParserNotFoundException(string value, Type type) : base(string.Format("could not parse `{0}' for type `{1}'", value, type))
-        {
         }
     }
 
@@ -142,7 +131,7 @@ namespace Bounce.Framework
         string Description { get; }
     }
 
-    class IntParser : ITypeParser
+    internal class IntParser : ITypeParser
     {
         public object Parse(string s)
         {
@@ -154,13 +143,10 @@ namespace Bounce.Framework
             return ((int) o).ToString();
         }
 
-        public string Description
-        {
-            get { return "int"; }
-        }
+        public string Description => "int";
     }
 
-    class BooleanParser : ITypeParser
+    internal class BooleanParser : ITypeParser
     {
         public object Parse(string s)
         {
@@ -172,13 +158,10 @@ namespace Bounce.Framework
             return ((bool) o).ToString().ToLower();
         }
 
-        public string Description
-        {
-            get { return "bool"; }
-        }
+        public string Description => "bool";
     }
 
-    class StringParser : ITypeParser
+    internal class StringParser : ITypeParser
     {
         public object Parse(string s)
         {
@@ -190,13 +173,10 @@ namespace Bounce.Framework
             return s.ToString();
         }
 
-        public string Description
-        {
-            get { return "string"; }
-        }
+        public string Description => "string";
     }
 
-    class DateTimeParser : ITypeParser
+    internal class DateTimeParser : ITypeParser
     {
         public object Parse(string s)
         {
@@ -208,9 +188,6 @@ namespace Bounce.Framework
             return ((DateTime) s).ToString("yyyy-MM-dd H:mm:ss");
         }
 
-        public string Description
-        {
-            get { return "datetime"; }
-        }
+        public string Description => "datetime";
     }
 }
