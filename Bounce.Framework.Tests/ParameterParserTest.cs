@@ -1,77 +1,84 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
+using Xunit;
 
 namespace Bounce.Framework.Tests
 {
-    [TestFixture]
-    public class ParameterParserTest {
-        [Test]
-        public void ShouldParseNoParameters() {
+    public class ParameterParserTest
+    {
+        [Fact]
+        public void ShouldParseNoParameters()
+        {
             var parser = new ArgumentsParser();
             var paramDict = parser.ParseParameters(new string[0]);
 
-            Assert.That(paramDict, Is.Empty);
+            Assert.Empty(paramDict);
         }
 
-        [Test]
-        public void ShouldParseParametersWithColons() {
-			var args = Params("/file:afile.txt /name:nobody").ToList();
+        [Fact]
+        public void ShouldParseParametersWithColons()
+        {
+            var args = Params("/file:afile.txt /name:nobody").ToList();
             var parser = new ArgumentsParser();
             var paramDict = parser.ParseParameters(args);
 
-            Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
-            Assert.That(paramDict["name"], Is.EqualTo("nobody"));
+            Assert.Equal("afile.txt", paramDict["file"]);
+            Assert.Equal("nobody", paramDict["name"]);
 
-			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
-			Assert.That(Props.Get("name"), Is.EqualTo("nobody"));
+            Assert.Equal("afile.txt", Props.Get("file"));
+            Assert.Equal("nobody", Props.Get("name"));
         }
 
-        [Test]
-        public void ShouldParseParametersWithSpaces() {
+        [Fact]
+        public void ShouldParseParametersWithSpaces()
+        {
             var parser = new ArgumentsParser();
             var paramDict = parser.ParseParameters(Params("/file afile.txt /name nobody"));
 
-            Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
-            Assert.That(paramDict["name"], Is.EqualTo("nobody"));
+            Assert.Equal("afile.txt", paramDict["file"]);
+            Assert.Equal("nobody", paramDict["name"]);
 
-			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
-			Assert.That(Props.Get("name"), Is.EqualTo("nobody"));
+            Assert.Equal("afile.txt", Props.Get("file"));
+            Assert.Equal("nobody", Props.Get("name"));
         }
 
-        [Test]
-        public void ShouldParseBooleanParameterAtEnd() {
+        [Fact]
+        public void ShouldParseBooleanParameterAtEnd()
+        {
             var parser = new ArgumentsParser();
             var paramDict = parser.ParseParameters(Params("/file:afile.txt /fast"));
 
-            Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
-            Assert.That(paramDict["fast"], Is.EqualTo("true"));
+            Assert.Equal("afile.txt", paramDict["file"]);
+            Assert.Equal("true", paramDict["fast"]);
 
-			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
-			Assert.That(Props.Get("fast"), Is.EqualTo("true"));
+            Assert.Equal("afile.txt", Props.Get("file"));
+            Assert.Equal("true", Props.Get("fast"));
         }
 
-        [Test]
-        public void ShouldParseBooleanParameterInMiddle() {
+        [Fact]
+        public void ShouldParseBooleanParameterInMiddle()
+        {
             var parser = new ArgumentsParser();
             var paramDict = parser.ParseParameters(Params("/fast /file:afile.txt"));
 
-            Assert.That(paramDict["file"], Is.EqualTo("afile.txt"));
-            Assert.That(paramDict["fast"], Is.EqualTo("true"));
+            Assert.Equal("afile.txt", paramDict["file"]);
+            Assert.Equal("true", paramDict["fast"]);
 
-			Assert.That(Props.Get("file"), Is.EqualTo("afile.txt"));
-			Assert.That(Props.Get("fast"), Is.EqualTo("true"));
+            Assert.Equal("afile.txt", Props.Get("file"));
+            Assert.Equal("true", Props.Get("fast"));
         }
 
-        [Test]
-        public void ThrowsIfNonNamedArgumentFound() {
+        [Fact]
+        public void ThrowsIfNonNamedArgumentFound()
+        {
             var parser = new ArgumentsParser();
-            Assert.That(() => parser.ParseParameters(Params("afile.txt")), Throws.InstanceOf<NonNamedArgumentException>());
+            var ex = Assert.Throws<NonNamedArgumentException>(() => parser.ParseParameters(Params("afile.txt")));
+
+            Assert.Equal("Exception of type 'Bounce.Framework.NonNamedArgumentException' was thrown.", ex.Message);
         }
 
-        private IEnumerable<string> Params(string parameters) {
+        private static IEnumerable<string> Params(string parameters)
+        {
             return parameters.Split(' ');
         }
     }

@@ -1,22 +1,26 @@
 ﻿using System.Collections.Generic;
-using NUnit.Framework;
+using Xunit;
 
-namespace Bounce.Framework.Tests {
-    [TestFixture]
-    public class TaskRunnerTests {
-        [Test]
-        public void InvokesTaskByWholeName() {
+namespace Bounce.Framework.Tests
+{
+    public class TaskRunnerTests
+    {
+        [Fact]
+        public void InvokesTaskByWholeName()
+        {
             var task = new MockTask {FullName = "asdf"};
             var runner = new TaskRunner();
             var taskParameters = new TaskParameters(new Dictionary<string, string>());
-            runner.RunTask("asdf", taskParameters, new [] {task});
 
-            Assert.That(task.WasInvoked, Is.True);
-            Assert.That(task.WasInvokedWithTaskParameters, Is.SameAs(taskParameters));
+            runner.RunTask("asdf", taskParameters, new[] {task});
+
+            Assert.True(task.WasInvoked);
+            Assert.Equal(taskParameters, task.WasInvokedWithTaskParameters);
         }
 
-        [Test]
-        public void CanInvokeTaskByPartialNames() {
+        [Fact]
+        public void CanInvokeTaskByPartialNames()
+        {
             var task = new MockTask {FullName = "The.Full.Path.To.Task"};
             var runner = new TaskRunner();
 
@@ -27,8 +31,9 @@ namespace Bounce.Framework.Tests {
             AssertTaskIsInvokedWithName("Task", runner, task);
         }
 
-        [Test]
-        public void TaskCanBeInvokedWithNameInsensitiveOfCase() {
+        [Fact]
+        public void TaskCanBeInvokedWithNameInsensitiveOfCase()
+        {
             var task = new MockTask {FullName = "The.Full.Path.To.Task"};
             var runner = new TaskRunner();
 
@@ -36,8 +41,9 @@ namespace Bounce.Framework.Tests {
             AssertTaskIsInvokedWithName("task", runner, task);
         }
 
-        [Test]
-        public void CannotBeInvokedTaskByPartialNameWithoutSpecificName() {
+        [Fact]
+        public void CannotBeInvokedTaskByPartialNameWithoutSpecificName()
+        {
             var task = new MockTask {FullName = "The.Full.Path.To.Task"};
             var runner = new TaskRunner();
 
@@ -47,15 +53,17 @@ namespace Bounce.Framework.Tests {
             AssertTaskIsNotInvokedWithName("To", runner, task);
         }
 
-        private static void AssertTaskIsInvokedWithName(string taskName, TaskRunner runner, MockTask task) {
+        private static void AssertTaskIsInvokedWithName(string taskName, ITaskRunner runner, MockTask task)
+        {
             runner.RunTask(taskName, new TaskParameters(new Dictionary<string, string>()), new[] {task});
-            Assert.That(task.WasInvoked, Is.True);
+
+            Assert.True(task.WasInvoked);
         }
 
-        private static void AssertTaskIsNotInvokedWithName(string taskName, TaskRunner runner, MockTask task) {
-            Assert.That(
-                () => runner.RunTask(taskName, new TaskParameters(new Dictionary<string, string>()), new[] {task}),
-                Throws.InstanceOf<NoMatchingTaskException>());
+        private static void AssertTaskIsNotInvokedWithName(string taskName, ITaskRunner runner, MockTask task)
+        {
+            var ex = Assert.Throws<NoMatchingTaskException>(() => runner.RunTask(taskName, new TaskParameters(new Dictionary<string, string>()), new[] {task}));
+            Assert.Equal("Exception of type 'Bounce.Framework.NoMatchingTaskException' was thrown.", ex.Message);
         }
     }
 }

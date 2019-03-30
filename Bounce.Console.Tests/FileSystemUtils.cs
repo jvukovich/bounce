@@ -1,12 +1,16 @@
 using System;
 using System.IO;
 
-namespace Bounce.Console.Tests {
-    public static class FileSystemUtils {
+namespace Bounce.Console.Tests
+{
+    public static class FileSystemUtils
+    {
         public static void Pushd(string dir, Action doWhenInDirectory)
         {
-            string cwd = Directory.GetCurrentDirectory();
+            var cwd = Directory.GetCurrentDirectory();
+
             Directory.SetCurrentDirectory(dir);
+
             try
             {
                 doWhenInDirectory();

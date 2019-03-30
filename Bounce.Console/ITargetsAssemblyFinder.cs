@@ -1,5 +1,7 @@
-﻿namespace Bounce.Console {
-    public interface ITargetsAssemblyFinder {
+﻿namespace Bounce.Console
+{
+    public interface ITargetsAssemblyFinder
+    {
         BounceDirectoryExecutable FindTargetsAssembly();
     }
 }

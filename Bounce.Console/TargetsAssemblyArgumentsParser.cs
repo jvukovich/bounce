@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Bounce.Console {
-    public class TargetsAssemblyArgumentsParser {
+namespace Bounce.Console
+{
+    public class TargetsAssemblyArgumentsParser
+    {
         private readonly IBounceDirectoryFinder _bounceDirectoryFinder;
         private string _bounceDir;
 
-        public TargetsAssemblyArgumentsParser() : this(new BounceDirectoryFinder()) {}
+        public TargetsAssemblyArgumentsParser() : this(new BounceDirectoryFinder())
+        {
+        }
 
-        public TargetsAssemblyArgumentsParser(IBounceDirectoryFinder bounceDirectoryFinder) {
+        public TargetsAssemblyArgumentsParser(IBounceDirectoryFinder bounceDirectoryFinder)
+        {
             _bounceDirectoryFinder = bounceDirectoryFinder;
         }
 
@@ -27,8 +32,7 @@ namespace Bounce.Console {
                     optionsAndArguments.BounceDirectory = firstArg.Substring(("/" + _bounceDir + ":").Length);
                     optionsAndArguments.RemainingArguments = remainingArgs;
                     optionsAndArguments.WorkingDirectory = Directory.GetCurrentDirectory();
-                }
-                else if (firstArg == "/" + _bounceDir)
+                } else if (firstArg == "/" + _bounceDir)
                 {
                     var remainingArgs = new string[args.Length - 2];
                     Array.Copy(args, 2, remainingArgs, 0, remainingArgs.Length);
@@ -55,7 +59,8 @@ namespace Bounce.Console {
             }
         }
 
-        public OptionsAndArguments GetTargetsAssembly(string[] args) {
+        public OptionsAndArguments GetTargetsAssembly(string[] args)
+        {
             var optionsAndArguments = new OptionsAndArguments {RemainingArguments = args};
 
             TryGetTargetsFromArguments(optionsAndArguments);
@@ -68,11 +73,13 @@ namespace Bounce.Console {
             }
 
             var targets = _bounceDirectoryFinder.FindBounceDirectory();
-            if (targets != null) {
+            if (targets != null)
+            {
                 optionsAndArguments.BounceDirectory = targets;
                 optionsAndArguments.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(targets));
                 return optionsAndArguments;
-            } else {
+            } else
+            {
                 throw new TargetsAssemblyNotFoundException();
             }
         }

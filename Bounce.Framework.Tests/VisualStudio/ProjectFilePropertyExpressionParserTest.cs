@@ -1,51 +1,54 @@
 ﻿using Bounce.Framework.VisualStudio;
-using NUnit.Framework;
+using Xunit;
 
-namespace Bounce.Framework.Tests.VisualStudio {
-    [TestFixture]
-    public class ProjectFilePropertyExpressionParserTest {
-        private ProjectFilePropertyExpressionParser Parser;
-        private PropertyValues Props;
+namespace Bounce.Framework.Tests.VisualStudio
+{
+    public class ProjectFilePropertyExpressionParserTest
+    {
+        private readonly ProjectFilePropertyExpressionParser parser;
+        private readonly PropertyValues props;
 
-        [SetUp]
-        public void SetUp() {
-            Props = new PropertyValues();
-            Parser = new ProjectFilePropertyExpressionParser(Props);
+        public ProjectFilePropertyExpressionParserTest()
+        {
+            props = new PropertyValues();
+            parser = new ProjectFilePropertyExpressionParser(props);
         }
 
-        [Test]
+        [Fact]
         public void ReturnsFalseWhenVariableDoesNotEqualString()
         {
-            Props["var"] = "value";
+            props["var"] = "value";
             AssertConditionResult(" '$(var)' == 'valu' ", false);
         }
 
-        [Test]
+        [Fact]
         public void ReturnsTrueWhenVariableEqualsString()
         {
-            Props["var"] = "value";
+            props["var"] = "value";
             AssertConditionResult(" '$(var)' == 'value' ", true);
         }
 
-        [Test]
+        [Fact]
         public void ReturnsTrueWhenEitherOperandToOrIsTrue()
         {
-            Props["var"] = "value";
+            props["var"] = "value";
             AssertConditionResult(" '$(var)' == 'value' Or '$(var)' == 'valu' ", true);
             AssertConditionResult(" '$(var)' == 'valu' Or '$(var)' == 'value' ", true);
             AssertConditionResult(" '$(var)' == 'value' Or '$(var)' == 'value' ", true);
         }
 
-        [Test]
+        [Fact]
         public void ReturnsFalseWhenNeitherOperandToOrIsTrue()
         {
-            Props["var"] = "value";
+            props["var"] = "value";
             AssertConditionResult(" '$(var)' == 'alue' Or '$(var)' == 'valu' ", false);
         }
 
-        private void AssertConditionResult(string source, bool expectedResult) {
-            var result = Parser.ParseCondition(source);
-            Assert.That(result, Is.EqualTo(expectedResult));
+        private void AssertConditionResult(string source, bool expectedResult)
+        {
+            var result = parser.ParseCondition(source);
+
+            Assert.Equal(expectedResult, result);
         }
     }
 }

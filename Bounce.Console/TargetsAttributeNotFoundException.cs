@@ -1,8 +1,11 @@
 ﻿using System.IO;
 
-namespace Bounce.Console {
-    internal class TargetsAttributeNotFoundException : BounceConsoleException {
-        public override void Explain(TextWriter writer) {
+namespace Bounce.Console
+{
+    internal class TargetsAttributeNotFoundException : BounceConsoleException
+    {
+        public override void Explain(TextWriter writer)
+        {
             writer.WriteLine("assembly contains no [Targets] method. Try adding something like this:");
             writer.WriteLine();
             writer.WriteLine(

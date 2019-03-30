@@ -1,5 +1,7 @@
-namespace Bounce.Framework.VisualStudio {
-    public interface IVisualStudioSolution : IMsBuildFile {
+namespace Bounce.Framework.VisualStudio
+{
+    public interface IVisualStudioSolution : IMsBuildFile
+    {
         string SolutionPath { get; }
         VisualStudioProjects Projects { get; }
     }

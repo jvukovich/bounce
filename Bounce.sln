@@ -6,12 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{99A9728C-CE6A-4657-8E52-DA2302A37EC3}"
 	ProjectSection(SolutionItems) = preProject
 		Bounce.Framework.nuspec = Bounce.Framework.nuspec
-		docs\notes_from_patterns_group_bbc.txt = docs\notes_from_patterns_group_bbc.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bounce", "Bounce", "{6B9741C2-D739-4C73-A613-9AA6F72A979A}"
-	ProjectSection(SolutionItems) = preProject
-		Bounce\beforebounce.bat = Bounce\beforebounce.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Framework", "Bounce.Framework\Bounce.Framework.csproj", "{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}"
@@ -30,17 +24,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.TestHelpers", "Bounce.TestHelpers\Bounce.TestHelpers.csproj", "{E7E05DAC-9A59-41F5-9FED-47FDF809A699}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryLongRunningConsole", "VeryLongRunningConsole\VeryLongRunningConsole.csproj", "{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "Build\Build.csproj", "{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Framework.IntegrationTests", "Bounce.Framework.IntegrationTests\Bounce.Framework.IntegrationTests.csproj", "{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{43F1BE6A-9803-4C8B-B507-679DBB64DA66}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,18 +74,6 @@ Global
 		{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug_3_5|Any CPU.ActiveCfg = Debug|Any CPU
-		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug_3_5|Any CPU.Build.0 = Debug|Any CPU
-		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}.Debug_3_5|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}.Debug_3_5|Any CPU.Build.0 = Debug|Any CPU
-		{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

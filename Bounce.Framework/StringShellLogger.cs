@@ -1,8 +1,10 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Bounce.Framework {
-    class StringShellLogger : IShellLogger {
+namespace Bounce.Framework
+{
+    class StringShellLogger : IShellLogger
+    {
         private readonly TextWriter SynchronizedOutputWriter;
         private readonly TextWriter SynchronizedErrorWriter;
         private readonly TextWriter SynchronizedCombinedWriter;
@@ -10,7 +12,8 @@ namespace Bounce.Framework {
         private readonly StringWriter ErrorWriter;
         private readonly StringWriter CombinedWriter;
 
-        public StringShellLogger() {
+        public StringShellLogger()
+        {
             OutputWriter = new StringWriter();
             SynchronizedOutputWriter = TextWriter.Synchronized(OutputWriter);
             ErrorWriter = new StringWriter();
@@ -19,32 +22,31 @@ namespace Bounce.Framework {
             SynchronizedCombinedWriter = TextWriter.Synchronized(CombinedWriter);
         }
 
-        public void OutputDataReceived(object sender, DataReceivedEventArgs e) {
+        public void OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
             SynchronizedOutputWriter.WriteLine(e.Data);
             SynchronizedCombinedWriter.WriteLine(e.Data);
         }
 
-        public void ErrorDataReceived(object sender, DataReceivedEventArgs e) {
+        public void ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
             SynchronizedErrorWriter.WriteLine(e.Data);
             SynchronizedCombinedWriter.WriteLine(e.Data);
         }
 
-        public string Output {
-            get {
-                return OutputWriter.ToString();
-            }
+        public string Output
+        {
+            get { return OutputWriter.ToString(); }
         }
 
-        public string Error {
-            get {
-                return ErrorWriter.ToString();
-            }
+        public string Error
+        {
+            get { return ErrorWriter.ToString(); }
         }
 
-        public string ErrorAndOutput {
-            get {
-                return CombinedWriter.ToString();
-            }
+        public string ErrorAndOutput
+        {
+            get { return CombinedWriter.ToString(); }
         }
     }
 }

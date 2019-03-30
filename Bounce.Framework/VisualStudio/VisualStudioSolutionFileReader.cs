@@ -2,18 +2,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Bounce.Framework.VisualStudio {
-    public class VisualStudioSolutionFileReader {
+namespace Bounce.Framework.VisualStudio
+{
+    public class VisualStudioSolutionFileReader
+    {
         private readonly IVisualStudioSolutionFileLoader SolutionLoader;
 
         public VisualStudioSolutionFileReader()
-            : this(new VisualStudioSolutionFileLoader()) {}
+            : this(new VisualStudioSolutionFileLoader())
+        {
+        }
 
-        public VisualStudioSolutionFileReader(IVisualStudioSolutionFileLoader solutionLoader) {
+        public VisualStudioSolutionFileReader(IVisualStudioSolutionFileLoader solutionLoader)
+        {
             SolutionLoader = solutionLoader;
         }
 
-        public VisualStudioSolution ReadSolution(string solutionPath, string configuration) {
+        public VisualStudioSolution ReadSolution(string solutionPath, string configuration)
+        {
             VisualStudioSolutionFileDetails solutionDetails = SolutionLoader.LoadVisualStudioSolution(solutionPath);
 
             var csProjectReferences = solutionDetails.VisualStudioProjects.Where(r => Path.GetExtension(r.Path) == ".csproj");

@@ -1,66 +1,79 @@
 using System.Collections.Generic;
-using NUnit.Framework;
+using Xunit;
 
-namespace Bounce.Framework.Tests {
-    [TestFixture]
-    public class ParametersTest {
-        [Test]
-        public void CanParseDefaultStringParameter() {
+namespace Bounce.Framework.Tests
+{
+    public class ParametersTest
+    {
+        [Fact]
+        public void CanParseDefaultStringParameter()
+        {
             var p = new TaskParameters(new Dictionary<string, string> {{"file", "thefile.txt"}});
-            Assert.That(p.Parameter("file", "afile.txt"), Is.EqualTo("thefile.txt"));
+            Assert.Equal("thefile.txt", p.Parameter("file", "afile.txt"));
         }
 
-        [Test]
-        public void CanParseDefaultStringParameterIfNotPresent() {
+        [Fact]
+        public void CanParseDefaultStringParameterIfNotPresent()
+        {
             var p = new TaskParameters(new Dictionary<string, string>());
-            Assert.That(p.Parameter("file", "afile.txt"), Is.EqualTo("afile.txt"));
+            Assert.Equal("afile.txt", p.Parameter("file", "afile.txt"));
         }
 
-        [Test]
-        public void CanParseStringParameter() {
-            var p = new TaskParameters(new Dictionary<string, string> { { "file", "thefile.txt" } });
-            Assert.That(p.Parameter("file", "afile.txt"), Is.EqualTo("thefile.txt"));
-        }
-
-        [Test]
-        public void CanParseDefaultStringParameterWithType() {
+        [Fact]
+        public void CanParseStringParameter()
+        {
             var p = new TaskParameters(new Dictionary<string, string> {{"file", "thefile.txt"}});
-            Assert.That(p.Parameter(typeof(string), "file", "afile.txt"), Is.EqualTo("thefile.txt"));
+            Assert.Equal("thefile.txt", p.Parameter("file", "afile.txt"));
         }
 
-        [Test]
-        public void CanParseDefaultStringParameterIfNotPresentWithType() {
+        [Fact]
+        public void CanParseDefaultStringParameterWithType()
+        {
+            var p = new TaskParameters(new Dictionary<string, string> {{"file", "thefile.txt"}});
+            Assert.Equal("thefile.txt", p.Parameter(typeof(string), "file", "afile.txt"));
+        }
+
+        [Fact]
+        public void CanParseDefaultStringParameterIfNotPresentWithType()
+        {
             var p = new TaskParameters(new Dictionary<string, string>());
-            Assert.That(p.Parameter(typeof(string), "file", "afile.txt"), Is.EqualTo("afile.txt"));
+            Assert.Equal("afile.txt", p.Parameter(typeof(string), "file", "afile.txt"));
         }
 
-        [Test]
-        public void CanParseStringParameterWithType() {
-            var p = new TaskParameters(new Dictionary<string, string> { { "file", "thefile.txt" } });
-            Assert.That(p.Parameter(typeof(string), "file", "afile.txt"), Is.EqualTo("thefile.txt"));
+        [Fact]
+        public void CanParseStringParameterWithType()
+        {
+            var p = new TaskParameters(new Dictionary<string, string> {{"file", "thefile.txt"}});
+            Assert.Equal("thefile.txt", p.Parameter(typeof(string), "file", "afile.txt"));
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenStringParameterIsNotPresentWithType()
         {
             var p = new TaskParameters(new Dictionary<string, string>());
-            Assert.That(() => p.Parameter(typeof(string), "file"), Throws.InstanceOf<RequiredParameterNotGivenException>());
+            var ex = Assert.Throws<RequiredParameterNotGivenException>(() => p.Parameter(typeof(string), "file"));
+
+            Assert.Equal("required parameter 'file' not given", ex.Message);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenStringParameterIsNotPresent()
         {
             var p = new TaskParameters(new Dictionary<string, string>());
-            Assert.That(() => p.Parameter<string>("file"), Throws.InstanceOf<RequiredParameterNotGivenException>());
+            var ex = Assert.Throws<RequiredParameterNotGivenException>(() => p.Parameter<string>("file"));
+
+            Assert.Equal("required parameter 'file' not given", ex.Message);
         }
 
-        [Test]
-        public void CanParseEnumeration() {
-            var p = new TaskParameters(new Dictionary<string, string> { { "lake", "constance" } });
-            Assert.That(p.Parameter<Lakes>("lake"), Is.EqualTo(Lakes.Constance));
+        [Fact]
+        public void CanParseEnumeration()
+        {
+            var p = new TaskParameters(new Dictionary<string, string> {{"lake", "constance"}});
+            Assert.Equal(Lakes.Constance, p.Parameter<Lakes>("lake"));
         }
 
-        enum Lakes {
+        enum Lakes
+        {
             Constance,
             Coniston,
             Consequence

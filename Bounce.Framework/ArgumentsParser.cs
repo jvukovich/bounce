@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bounce.Framework {
-    public class ArgumentsParser {
-        public IDictionary<string, string> ParseParameters(IEnumerable<string> parameters) {
+namespace Bounce.Framework
+{
+    public class ArgumentsParser
+    {
+        public IDictionary<string, string> ParseParameters(IEnumerable<string> parameters)
+        {
             return ParseCommandLineParameters(parameters.ToArray());
         }
 
@@ -20,14 +23,13 @@ namespace Bounce.Framework {
                     var parameter = ParseParameter(args, ref i);
 
                     result.Add(parameter.Key, parameter.Value);
-                }
-                else
+                } else
                 {
                     throw new NonNamedArgumentException(arg);
                 }
             }
 
-			Props.Load(result);
+            Props.Load(result);
 
             return result;
         }
@@ -44,20 +46,20 @@ namespace Bounce.Framework {
                 var value = arg.Substring(indexOfValue, arg.Length - indexOfValue);
 
                 return new KeyValuePair<string, string>(name, value);
-            }
-            else
+            } else
             {
                 var name = arg.Substring(1);
                 if (i + 1 < args.Length)
                 {
-                    if (args[i + 1].StartsWith("/")) {
+                    if (args[i + 1].StartsWith("/"))
+                    {
                         return new KeyValuePair<string, string>(name, "true");
-                    } else {
+                    } else
+                    {
                         i++;
                         return new KeyValuePair<string, string>(name, args[i]);
                     }
-                }
-                else
+                } else
                 {
                     return new KeyValuePair<string, string>(name, "true");
                 }

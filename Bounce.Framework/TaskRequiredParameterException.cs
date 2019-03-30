@@ -1,9 +1,12 @@
-namespace Bounce.Framework {
-    public class TaskRequiredParameterException : BounceException {
+namespace Bounce.Framework
+{
+    public class TaskRequiredParameterException : BounceException
+    {
         private readonly ITaskParameter _parameter;
         private readonly ITask _task;
 
-        public TaskRequiredParameterException(ITaskParameter parameter, ITask task) {
+        public TaskRequiredParameterException(ITaskParameter parameter, ITask task)
+        {
             _parameter = parameter;
             _task = task;
         }

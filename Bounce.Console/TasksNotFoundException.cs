@@ -2,13 +2,18 @@ using System;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace Bounce.Console {
+namespace Bounce.Console
+{
     [Serializable]
-    internal class TasksNotFoundException : BounceConsoleException {
+    internal class TasksNotFoundException : BounceConsoleException
+    {
         protected TasksNotFoundException(SerializationInfo info,
-                        StreamingContext context) {}
+            StreamingContext context)
+        {
+        }
 
-        public TasksNotFoundException() {
+        public TasksNotFoundException()
+        {
         }
 
         public override void Explain(TextWriter writer)

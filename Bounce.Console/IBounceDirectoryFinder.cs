@@ -1,5 +1,7 @@
-namespace Bounce.Console {
-    public interface IBounceDirectoryFinder {
+namespace Bounce.Console
+{
+    public interface IBounceDirectoryFinder
+    {
         string FindBounceDirectory();
     }
 }

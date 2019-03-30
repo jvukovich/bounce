@@ -1,13 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="TeamCity\**" />
-    <Compile Remove="Web\**" />
-    <EmbeddedResource Remove="TeamCity\**" />
-    <EmbeddedResource Remove="Web\**" />
-    <None Remove="TeamCity\**" />
-    <None Remove="Web\**" />
-  </ItemGroup>
 </Project>

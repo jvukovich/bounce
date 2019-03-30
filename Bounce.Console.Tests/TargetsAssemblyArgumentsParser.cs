@@ -1,90 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Moq;
-using NUnit.Framework;
+﻿using Moq;
+using Xunit;
 
 namespace Bounce.Console.Tests
 {
-    [TestFixture]
     public class TargetsAssemblyArgumentsParserTest
     {
-        [Test]
-        public void ShouldParseTargetsFromParameterWithColon() {
+        [Fact]
+        public void ShouldParseTargetsFromParameterWithColon()
+        {
             var finder = new Mock<IBounceDirectoryFinder>();
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/bounceDir:adir", "other", "args"});
 
-            Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"other", "args"}));
-            Assert.That(targetsAndArgs.BounceDirectory, Is.EqualTo("adir"));
+            Assert.Equal(new[] {"other", "args"}, targetsAndArgs.RemainingArguments);
+            Assert.Equal("adir", targetsAndArgs.BounceDirectory);
         }
 
-        [Test]
-        public void ShouldParseTargetsFromParameter() {
+        [Fact]
+        public void ShouldParseTargetsFromParameter()
+        {
             var finder = new Mock<IBounceDirectoryFinder>();
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/bounceDir", "adir", "other", "args"});
 
-            Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"other", "args"}));
-            Assert.That(targetsAndArgs.BounceDirectory, Is.EqualTo("adir"));
+            Assert.Equal(new[] {"other", "args"}, targetsAndArgs.RemainingArguments);
+            Assert.Equal("adir", targetsAndArgs.BounceDirectory);
         }
 
-        [Test]
-        public void ShouldParseTargetsAndRecurseFromArguments() {
+        [Fact]
+        public void ShouldParseTargetsAndRecurseFromArguments()
+        {
             var finder = new Mock<IBounceDirectoryFinder>();
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/bounceDir", "adir", "/recurse", "other", "args"});
 
-            Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"other", "args"}));
-            Assert.That(targetsAndArgs.BounceDirectory, Is.EqualTo("adir"));
-            Assert.That(targetsAndArgs.Recurse);
+            Assert.Equal(new[] {"other", "args"}, targetsAndArgs.RemainingArguments);
+            Assert.Equal("adir", targetsAndArgs.BounceDirectory);
+            Assert.True(targetsAndArgs.Recurse);
         }
 
-        [Test]
-        public void ShouldParseRecurseFromArguments() {
+        [Fact]
+        public void ShouldParseRecurseFromArguments()
+        {
             var finder = new Mock<IBounceDirectoryFinder>();
+
             finder.Setup(f => f.FindBounceDirectory()).Returns(@"path\to\bounce");
 
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"/recurse", "other", "args"});
 
-            Assert.That(targetsAndArgs.Recurse);
-            Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] { "other", "args" }));
-            Assert.That(targetsAndArgs.BounceDirectory, Is.SameAs(@"path\to\bounce"));
+            Assert.True(targetsAndArgs.Recurse);
+            Assert.Equal(new[] {"other", "args"}, targetsAndArgs.RemainingArguments);
+            Assert.Equal(@"path\to\bounce", targetsAndArgs.BounceDirectory);
         }
 
-        [Test]
-        public void ShouldFindTargetsIfNoTargetsParameterGiven() {
+        [Fact]
+        public void ShouldFindTargetsIfNoTargetsParameterGiven()
+        {
             var finder = new Mock<IBounceDirectoryFinder>();
+
             finder.Setup(f => f.FindBounceDirectory()).Returns(@"path\to\bounce");
 
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new[] {"build", "SomeTarget", "/other", "args"});
 
-            Assert.That(targetsAndArgs.RemainingArguments, Is.EqualTo(new[] {"build", "SomeTarget", "/other", "args"}));
-            Assert.That(targetsAndArgs.BounceDirectory, Is.SameAs(@"path\to\bounce"));
-            Assert.That(targetsAndArgs.Recurse, Is.False);
+            Assert.Equal(new[] {"build", "SomeTarget", "/other", "args"}, targetsAndArgs.RemainingArguments);
+            Assert.Equal(@"path\to\bounce", targetsAndArgs.BounceDirectory);
+            Assert.False(targetsAndArgs.Recurse);
         }
 
-        [Test]
-        public void ShouldThrowIfTargetsAssemblyNotFound() {
+        [Fact]
+        public void ShouldThrowIfTargetsAssemblyNotFound()
+        {
             var finder = new Mock<IBounceDirectoryFinder>();
-
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
-            Assert.That(() => parser.GetTargetsAssembly(new[] {"SomeTask", "/other", "args"}), Throws.InstanceOf(typeof(TargetsAssemblyNotFoundException)));
+
+            var ex = Assert.Throws<TargetsAssemblyNotFoundException>(() => parser.GetTargetsAssembly(new[] {"SomeTask", "/other", "args"}));
+            
+            Assert.Equal("Exception of type 'Bounce.Console.TargetsAssemblyNotFoundException' was thrown.", ex.Message);
         }
 
-        [Test]
-        public void ShouldAttemptToFindAssemblyIfNoArgsGiven() {
+        [Fact]
+        public void ShouldAttemptToFindAssemblyIfNoArgsGiven()
+        {
             var finder = new Mock<IBounceDirectoryFinder>();
+
             finder.Setup(f => f.FindBounceDirectory()).Returns(@"path\to\bounce");
 
             var parser = new TargetsAssemblyArgumentsParser(finder.Object);
             var targetsAndArgs = parser.GetTargetsAssembly(new string[0]);
 
-            Assert.That(targetsAndArgs.RemainingArguments, Is.Empty);
-            Assert.That(targetsAndArgs.BounceDirectory, Is.SameAs(@"path\to\bounce"));
+            Assert.Empty(targetsAndArgs.RemainingArguments);
+            Assert.Equal(@"path\to\bounce", targetsAndArgs.BounceDirectory);
         }
     }
 }

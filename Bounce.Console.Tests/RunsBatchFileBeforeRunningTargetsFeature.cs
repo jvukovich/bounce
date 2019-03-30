@@ -1,25 +1,30 @@
 ﻿using System.IO;
 using Bounce.Framework;
 using Bounce.TestHelpers;
-using NUnit.Framework;
+using Xunit;
 using ProcessOutput = Bounce.Framework.ProcessOutput;
 
-namespace Bounce.Console.Tests {
-    [TestFixture]
-    public class RunsBatchFileBeforeRunningTargetsFeature {
-        private void UnzipSolution() {
+namespace Bounce.Console.Tests
+{
+    public class RunsBatchFileBeforeRunningTargetsFeature
+    {
+        // todo: dotnetcore
+        private static void UnzipSolution()
+        {
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature");
-            new FS.FileSystem().Copy(@"..\..\BeforeBounceFeature", @"BeforeBounceFeature");
+            //new FS.FileSystem().Copy(@"..\..\BeforeBounceFeature", @"BeforeBounceFeature");
         }
 
-        [Test]
-        public void ShouldRunBatchFileBeforeRunningTargets() {
+        [Fact]
+        public void ShouldRunBatchFileBeforeRunningTargets()
+        {
             UnzipSolution();
 
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature\bounce");
 
-            //as there is a circular dependancy between BeforeBounceFeature.sln and the main bounce dll's
-            //this needs to be run and built under the same framework version
+            // todo: dotnetcore
+            // as there is a circular dependancy between BeforeBounceFeature.sln and the main bounce dll's
+            // this needs to be run and built under the same framework version
 #if (FRAMEWORKV35)
             File.WriteAllText(@"BeforeBounceFeature\bounce\beforebounce.bat", @"%SystemRoot%\Microsoft.NET\Framework\v3.5\msbuild.exe BeforeBounceFeature.sln /p:Configuration=Debug_3_5");
 #else
@@ -30,16 +35,17 @@ namespace Bounce.Console.Tests {
 
             ProcessOutput output = null;
 
-            FileSystemUtils.Pushd(@"BeforeBounceFeature", () => output = shell.Exec(@"..\bounce.exe", "BeforeBounceFeature"));
+            FileSystemUtils.Pushd("BeforeBounceFeature", () => output = shell.Exec(@"..\bounce.exe", "BeforeBounceFeature"));
 
-            Assert.That(output, Is.Not.Null);
-            Assert.That(output.ExitCode, Is.EqualTo(0));
-            Assert.That(output.Error.Trim(), Is.EqualTo(""));
-            Assert.That(output.Output, Is.StringContaining("building before bounce feature"));
+            Assert.NotNull(output);
+            Assert.Equal(0, output.ExitCode);
+            Assert.Equal(string.Empty, output.Error.Trim());
+            Assert.Contains("building before bounce feature", output.Output);
         }
 
-        [Test]
-        public void ShouldPrintOutputOfScriptIfItFailed() {
+        [Fact]
+        public void ShouldPrintOutputOfScriptIfItFailed()
+        {
             UnzipSolution();
 
             FileSystemTestHelper.RecreateDirectory(@"BeforeBounceFeature\BeforeBounceFeature\bounce");
@@ -47,16 +53,15 @@ namespace Bounce.Console.Tests {
 
             var shell = new Shell(new FakeLog());
 
-            ProcessOutput output = null;
-
-            try {
-                FileSystemUtils.Pushd(@"BeforeBounceFeature\BeforeBounceFeature",
-                    () => shell.Exec(@"..\..\bounce.exe", "BeforeBounceFeature"));
-            } catch (CommandExecutionException e) {
-                Assert.That(e.ExitCode, Is.EqualTo(1));
-                Assert.That(e.Output, Is.StringContaining("MSBUILD : error MSB1009: Project file does not exist."));
+            try
+            {
+                FileSystemUtils.Pushd(@"BeforeBounceFeature\BeforeBounceFeature", () => shell.Exec(@"..\..\bounce.exe", "BeforeBounceFeature"));
+            }
+            catch (CommandExecutionException e)
+            {
+                Assert.Equal(1, e.ExitCode);
+                Assert.Contains("MSBUILD : error MSB1009: Project file does not exist.", e.Output);
             }
         }
-
     }
 }

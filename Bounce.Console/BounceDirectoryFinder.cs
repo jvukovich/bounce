@@ -1,13 +1,18 @@
 using System.IO;
 
-namespace Bounce.Console {
-    class BounceDirectoryFinder : IBounceDirectoryFinder {
-        public string FindBounceDirectory() {
+namespace Bounce.Console
+{
+    class BounceDirectoryFinder : IBounceDirectoryFinder
+    {
+        public string FindBounceDirectory()
+        {
             return FindBounceDirectoryFrom(Directory.GetCurrentDirectory());
         }
 
-        private string FindBounceDirectoryFrom(string dir) {
-            if (string.IsNullOrEmpty(dir)) {
+        private string FindBounceDirectoryFrom(string dir)
+        {
+            if (string.IsNullOrEmpty(dir))
+            {
                 return null;
             }
 
@@ -16,7 +21,8 @@ namespace Bounce.Console {
             if (Directory.Exists(bounceDir))
             {
                 return bounceDir;
-            } else {
+            } else
+            {
                 return FindBounceDirectoryFrom(Path.GetDirectoryName(dir));
             }
         }

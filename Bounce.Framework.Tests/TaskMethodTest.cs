@@ -2,100 +2,114 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
 
-namespace Bounce.Framework.Tests {
-    [TestFixture]
-    public class TaskMethodTest {
-        public static StringWriter Output;
-        public IDependencyResolver Resolver;
+namespace Bounce.Framework.Tests
+{
+    public class TaskMethodTest
+    {
+        private static StringWriter output;
+        private readonly IDependencyResolver resolver;
 
-        [SetUp]
-        public void SetUp()
+        public TaskMethodTest()
         {
-            Output = new StringWriter();
-            Resolver = new SimpleDependencyResolver();
+            output = new StringWriter();
+            resolver = new SimpleDependencyResolver();
         }
 
-        [Test]
+        [Fact]
         public void InvokesTaskMethodWithNoParameters()
         {
-            var task = new TaskMethod(typeof (FakeTaskClass).GetMethod("Compile"), Resolver);
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Compile"), resolver);
+
             task.Invoke(new TaskParameters(new Dictionary<string, string>()));
 
-            Assert.That(Output.ToString().Trim(), Is.EqualTo("compiling"));
+            Assert.Equal("compiling", output.ToString().Trim());
         }
 
-        [Test]
+        [Fact]
         public void InvokesTaskMethodWithStringParameter()
         {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Deploy"), Resolver);
-            task.Invoke(new TaskParameters(new Dictionary<string, string> { { "dir", @"c:\sites" } }));
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Deploy"), resolver);
 
-            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"deploying c:\sites"));
+            task.Invoke(new TaskParameters(new Dictionary<string, string> {{"dir", @"c:\sites"}}));
+
+            Assert.Equal(@"deploying c:\sites", output.ToString().Trim());
         }
 
-        [Test]
+        [Fact]
         public void InvokesTaskMethodWithBooleanParameter()
         {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Test"), Resolver);
-            task.Invoke(new TaskParameters(new Dictionary<string, string> { { "fast", @"true" } }));
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Test"), resolver);
 
-            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"testing fast"));
+            task.Invoke(new TaskParameters(new Dictionary<string, string> {{"fast", "true"}}));
+
+            Assert.Equal("testing fast", output.ToString().Trim());
         }
 
-        [Test]
+        [Fact]
         public void InvokesTaskMethodWithOptionalStringParameterNotGiven()
         {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Optional"), Resolver);
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Optional"), resolver);
+
             task.Invoke(new TaskParameters(new Dictionary<string, string>()));
 
-            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"optional fileName: stuff.txt"));
+            Assert.Equal("optional fileName: stuff.txt", output.ToString().Trim());
         }
 
-        [Test]
+        [Fact]
         public void InvokesTaskMethodWithOptionalStringParameterGiven()
         {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Optional"), Resolver);
-            task.Invoke(new TaskParameters(new Dictionary<string, string>{{"fileName", "thefile.txt"}}));
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Optional"), resolver);
 
-            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"optional fileName: thefile.txt"));
+            task.Invoke(new TaskParameters(new Dictionary<string, string> {{"fileName", "thefile.txt"}}));
+
+            Assert.Equal("optional fileName: thefile.txt", output.ToString().Trim());
         }
 
-        [Test]
+        [Fact]
         public void InvokesTaskMethodWithNullableIntParameterGiven()
         {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Nullable"), Resolver);
-            task.Invoke(new TaskParameters(new Dictionary<string, string>{{"port", "80"}}));
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Nullable"), resolver);
 
-            Assert.That(Output.ToString().Trim(), Is.EqualTo(@"port: 80"));
+            task.Invoke(new TaskParameters(new Dictionary<string, string> {{"port", "80"}}));
+
+            Assert.Equal("port: 80", output.ToString().Trim());
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenTaskRequiredParameterNotProvided()
         {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Test"), Resolver);
-            Assert.That(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())), Throws.InstanceOf<TaskRequiredParameterException>());
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Test"), resolver);
+            var ex = Assert.Throws<TaskRequiredParameterException>(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())));
+
+            Assert.Equal("Exception of type 'Bounce.Framework.TaskRequiredParameterException' was thrown.", ex.Message);
         }
 
-
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenCustomTypeCannotBeParsed()
         {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Bad"), Resolver);
-            Assert.That(() => task.Invoke(new TaskParameters(new Dictionary<string, string> { { "x", @"something" } })), Throws.InstanceOf<TaskParameterException>());
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Bad"), resolver);
+            var ex = Assert.Throws<TaskParameterException>(() => task.Invoke(new TaskParameters(new Dictionary<string, string> {{"x", "something"}})));
+
+            Assert.Equal("no parser for parameter `x' of type `CustomType' for task Bounce.Framework.Tests.TaskMethodTest+FakeTaskClass.Bad", ex.Message);
         }
 
-        [Test]
-        public void NullableParameterIsNotRequired() {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Nullable"), Resolver);
-            Assert.That(task.Parameters.ElementAt(0).IsRequired, Is.False);
+        [Fact]
+        public void NullableParameterIsNotRequired()
+        {
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Nullable"), resolver);
+
+            Assert.False(task.Parameters.ElementAt(0).IsRequired);
         }
 
-        [Test]
-        public void TaskExceptionIsThrownWhenTaskThrows() {
-            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Throws"), Resolver);
-            Assert.That(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())), Throws.InstanceOf<TaskException>());
+        [Fact]
+        public void TaskExceptionIsThrownWhenTaskThrows()
+        {
+            var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Throws"), resolver);
+            var ex = Assert.Throws<TaskException>(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())));
+
+            Assert.Equal("task Bounce.Framework.Tests.TaskMethodTest+FakeTaskClass.Throws threw an exception", ex.Message);
         }
 
         public class FakeTaskClass
@@ -103,19 +117,19 @@ namespace Bounce.Framework.Tests {
             [Task]
             public void Compile()
             {
-                Output.WriteLine("compiling");
+                output.WriteLine("compiling");
             }
 
             [Task]
             public void Deploy(string dir)
             {
-                Output.WriteLine("deploying " + dir);
+                output.WriteLine("deploying " + dir);
             }
 
             [Task]
             public void Test(bool fast)
             {
-                Output.WriteLine("testing " + (fast ? "fast" : "slow"));
+                output.WriteLine("testing " + (fast ? "fast" : "slow"));
             }
 
             [Task]
@@ -124,24 +138,29 @@ namespace Bounce.Framework.Tests {
             }
 
             [Task]
-            public void Optional(string fileName = "stuff.txt") {
-                Output.WriteLine("optional fileName: " + fileName);
+            public void Optional(string fileName = "stuff.txt")
+            {
+                output.WriteLine("optional fileName: " + fileName);
             }
 
             [Task]
-            public void Nullable(int? port) {
-                Output.WriteLine("port: " + (port.HasValue? port.Value.ToString(): "<nothing>"));
+            public void Nullable(int? port)
+            {
+                output.WriteLine("port: " + (port.HasValue ? port.Value.ToString() : "<nothing>"));
             }
 
             [Task]
-            public void Throws() {
+            public void Throws()
+            {
                 throw new BadException();
             }
         }
 
-        public class BadException : Exception {}
+        private class BadException : Exception
+        {
+        }
 
-        public class CustomType
+        public abstract class CustomType
         {
         }
     }

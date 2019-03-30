@@ -1,7 +1,9 @@
 using System;
 
-namespace Bounce.Framework {
-    public interface ILog {
+namespace Bounce.Framework
+{
+    public interface ILog
+    {
         void Debug(string format, params object[] args);
         void Debug(object message);
 

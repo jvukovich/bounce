@@ -1,5 +1,7 @@
-namespace Bounce.Framework.VisualStudio {
-    public interface IVisualStudioProject : IMsBuildFile {
+namespace Bounce.Framework.VisualStudio
+{
+    public interface IVisualStudioProject : IMsBuildFile
+    {
         string OutputFile { get; }
         string Name { get; }
         string OutputDirectory { get; }

@@ -2,7 +2,7 @@
 
 A task runner for .Net.
 
-(theme track: [Bounce, Rock, Skate, Roll - Vaughan Mason & Crew](http://www.youtube.com/watch?v=dGMD0O7GGP8&feature=related))
+Coming soon: full library depreciation. Entire framework will be moving to .NET Core 2.x when version 1.0.0 is launched.
 
 ## Install
 

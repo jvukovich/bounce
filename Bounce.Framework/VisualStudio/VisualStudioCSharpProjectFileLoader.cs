@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 
-namespace Bounce.Framework.VisualStudio {
-    public class VisualStudioCSharpProjectFileLoader : IVisualStudioProjectFileLoader {
+namespace Bounce.Framework.VisualStudio
+{
+    public class VisualStudioCSharpProjectFileLoader : IVisualStudioProjectFileLoader
+    {
         private XNamespace msbuild = "http://schemas.microsoft.com/developer/msbuild/2003";
 
-        public VisualStudioProject LoadProject(string path, string projectName, string configuration) {
+        public VisualStudioProject LoadProject(string path, string projectName, string configuration)
+        {
             XDocument proj = XDocument.Load(path);
 
             var props = new PropertyValues();
@@ -20,17 +23,20 @@ namespace Bounce.Framework.VisualStudio {
             var outputDirectory = Path.Combine(projectDirectory, props["OutputPath"]);
             var outputFile = Path.Combine(outputDirectory, props["AssemblyName"] + "." + GetExtensionForOutputType(props["OutputType"]));
 
-            return new VisualStudioProject {
-                OutputFile = outputFile.TrimEnd('\\'),
-                OutputDirectory = outputDirectory.TrimEnd('\\'),
-                Name = projectName,
-                ProjectFile = path,
-                ProjectDirectory = projectDirectory,
-            };
+            return new VisualStudioProject
+                   {
+                       OutputFile = outputFile.TrimEnd('\\'),
+                       OutputDirectory = outputDirectory.TrimEnd('\\'),
+                       Name = projectName,
+                       ProjectFile = path,
+                       ProjectDirectory = projectDirectory,
+                   };
         }
 
-        private string GetExtensionForOutputType(string outputType) {
-            switch (outputType) {
+        private string GetExtensionForOutputType(string outputType)
+        {
+            switch (outputType)
+            {
                 case "WinExe":
                 case "Exe":
                     return "exe";
@@ -41,11 +47,16 @@ namespace Bounce.Framework.VisualStudio {
             }
         }
 
-        private void LoadProperties(IEnumerable<XElement> propertyGroups, PropertyValues props) {
-            foreach (var propertyGroup in propertyGroups) {
-                if (Condition(propertyGroup, props)) {
-                    foreach (var propElement in propertyGroup.Elements()) {
-                        if (Condition(propElement, props)) {
+        private void LoadProperties(IEnumerable<XElement> propertyGroups, PropertyValues props)
+        {
+            foreach (var propertyGroup in propertyGroups)
+            {
+                if (Condition(propertyGroup, props))
+                {
+                    foreach (var propElement in propertyGroup.Elements())
+                    {
+                        if (Condition(propElement, props))
+                        {
                             props[propElement.Name.LocalName] = propElement.Value;
                         }
                     }
@@ -53,16 +64,21 @@ namespace Bounce.Framework.VisualStudio {
             }
         }
 
-        private bool Condition(XElement element, PropertyValues props) {
+        private bool Condition(XElement element, PropertyValues props)
+        {
             XAttribute condition = element.Attribute("Condition");
-            if (condition != null) {
-                try {
+            if (condition != null)
+            {
+                try
+                {
                     var parser = new ProjectFilePropertyExpressionParser(props);
                     return parser.ParseCondition(condition.Value);
-                } catch (ConditionParseException) {
+                } catch (ConditionParseException)
+                {
                     return false;
                 }
-            } else {
+            } else
+            {
                 return true;
             }
         }

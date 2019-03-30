@@ -1,7 +1,9 @@
 using System;
 
-namespace Bounce.Framework {
-    public interface ITaskParameter {
+namespace Bounce.Framework
+{
+    public interface ITaskParameter
+    {
         string Name { get; }
         string TypeDescription { get; }
         bool IsRequired { get; }

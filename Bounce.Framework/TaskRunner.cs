@@ -1,16 +1,22 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bounce.Framework {
-    public class TaskRunner : ITaskRunner {
-        public void RunTask(string taskName, TaskParameters taskParameters, IEnumerable<ITask> tasks) {
+namespace Bounce.Framework
+{
+    public class TaskRunner : ITaskRunner
+    {
+        public void RunTask(string taskName, TaskParameters taskParameters, IEnumerable<ITask> tasks)
+        {
             var matchingTasks = tasks.Where(t => AllTaskNames(t).Contains(taskName.ToLower())).ToArray();
 
-            if (matchingTasks.Count() > 1) {
+            if (matchingTasks.Count() > 1)
+            {
                 throw new AmbiguousTaskNameException(taskName, matchingTasks);
-            } else if (!matchingTasks.Any()) {
+            } else if (!matchingTasks.Any())
+            {
                 throw new NoMatchingTaskException(taskName, tasks);
-            } else {
+            } else
+            {
                 matchingTasks.Single().Invoke(taskParameters);
             }
         }
