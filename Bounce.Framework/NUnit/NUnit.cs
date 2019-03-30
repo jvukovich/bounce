@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Bounce.Framework.TeamCity;
+//using Bounce.Framework.TeamCity;
 
 namespace Bounce.Framework.NUnit
 {
@@ -42,11 +42,11 @@ namespace Bounce.Framework.NUnit
             Log.Info("running unit tests for: " + joinedTestDlls);
 
 
-            if (TeamCityFormatter.IsActive) {
-                RunNUnitWithTeamCity(joinedTestDlls, excludeCategories, includeCategories);
-            } else {
+            //if (TeamCityFormatter.IsActive) {
+            //    RunNUnitWithTeamCity(joinedTestDlls, excludeCategories, includeCategories);
+            //} else {
                 RunNUnit(joinedTestDlls, excludeCategories, includeCategories);
-            }
+            //}
         }
 
         private void RunNUnitWithTeamCity(string joinedTestDlls, IEnumerable<string> excludeCategories, IEnumerable<string> includeCategories) {

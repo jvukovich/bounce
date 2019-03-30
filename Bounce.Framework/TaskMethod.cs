@@ -42,9 +42,9 @@ namespace Bounce.Framework {
         {
             try {
                 return taskParameters.Parameter(p);
-            } catch(RequiredParameterNotGivenException e) {
+            } catch(RequiredParameterNotGivenException) {
                 throw new TaskRequiredParameterException(p, this);
-            } catch (TypeParserNotFoundException e) {
+            } catch (TypeParserNotFoundException) {
                 throw new TaskParameterException(p, this);
             }
         }

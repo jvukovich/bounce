@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
+using System.Runtime.Loader;
 
 namespace Bounce.Console {
     
@@ -13,7 +13,6 @@ namespace Bounce.Console {
         private string bounceDirectory;
         private string workingDirectory;
         private string[] arguments;
-        private int ExitCode = 1;
 
         public BounceAssemblyRunner() {
             BeforeBounceScriptRunner = new BeforeBounceScriptRunner();
@@ -71,16 +70,22 @@ namespace Bounce.Console {
             workingDirectory = optionsAndArguments.WorkingDirectory;
             arguments = optionsAndArguments.RemainingArguments;
 
-            var appDomainSetup = new AppDomainSetup { ShadowCopyFiles = "true" };
-            var appDomain = AppDomain.CreateDomain("Bounce", null, appDomainSetup);
+            var bounceAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(bounceDirectory, "Bounce.Framework.dll"));
+            var bounceRunnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
+            var bounceRunnerInstance = Activator.CreateInstance(bounceRunnerType);
+
+            if (bounceRunnerInstance == null)
+                throw new NullReferenceException("bounceRunnerInstance is null");
+
+            // todo: netstandard
+            // RunTask() temporarily replaced to test the framework changes
 
             try {
-                //call back to transfer control to other app domain
-                appDomain.DoCallBack(RunTask);
+                bounceRunnerType.GetMethod("Run").Invoke(bounceRunnerInstance, new object[] {bounceDirectory, workingDirectory, arguments});
                 return 0;
             } finally
             {
-                AppDomain.Unload(appDomain);
+                // todo: netstandard
             }
         }
 

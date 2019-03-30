@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{99A9728C-CE6A-4657-8E52-DA2302A37EC3}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,23 +14,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bounce", "Bounce", "{6B9741
 		Bounce\beforebounce.bat = Bounce\beforebounce.bat
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework", "Bounce.Framework\Bounce.Framework.csproj", "{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Framework", "Bounce.Framework\Bounce.Framework.csproj", "{05E5A4A4-E497-4FDF-B843-8EE583F5D71E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console", "Bounce.Console\Bounce.Console.csproj", "{BD123B60-C18A-4446-808E-F4B81D0EE23D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Console", "Bounce.Console\Bounce.Console.csproj", "{BD123B60-C18A-4446-808E-F4B81D0EE23D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework.Tests", "Bounce.Framework.Tests\Bounce.Framework.Tests.csproj", "{0F0BBC36-D999-47EB-BA24-6A926C2B8641}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Framework.Tests", "Bounce.Framework.Tests\Bounce.Framework.Tests.csproj", "{0F0BBC36-D999-47EB-BA24-6A926C2B8641}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Console.Tests", "Bounce.Console.Tests\Bounce.Console.Tests.csproj", "{2DD987A2-8501-4265-A731-A06F7E210F1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Console.Tests", "Bounce.Console.Tests\Bounce.Console.Tests.csproj", "{2DD987A2-8501-4265-A731-A06F7E210F1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBounceAssembly", "TestBounceAssembly\TestBounceAssembly.csproj", "{FFDD5742-FB1D-425F-91BA-58B097FFB51B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBounceAssembly", "TestBounceAssembly\TestBounceAssembly.csproj", "{FFDD5742-FB1D-425F-91BA-58B097FFB51B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{05E5A4A4-E497-4FDF-B843-8EE583F5D71E} = {05E5A4A4-E497-4FDF-B843-8EE583F5D71E}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.TestHelpers", "Bounce.TestHelpers\Bounce.TestHelpers.csproj", "{E7E05DAC-9A59-41F5-9FED-47FDF809A699}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.TestHelpers", "Bounce.TestHelpers\Bounce.TestHelpers.csproj", "{E7E05DAC-9A59-41F5-9FED-47FDF809A699}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeryLongRunningConsole", "VeryLongRunningConsole\VeryLongRunningConsole.csproj", "{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VeryLongRunningConsole", "VeryLongRunningConsole\VeryLongRunningConsole.csproj", "{0AFE5169-89BE-49F4-B80C-8D3FF1FB540F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build", "Build\Build.csproj", "{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Build", "Build\Build.csproj", "{524D7FAE-17F1-4376-970F-F78BB4C9A4B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bounce.Framework.IntegrationTests", "Bounce.Framework.IntegrationTests\Bounce.Framework.IntegrationTests.csproj", "{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bounce.Framework.IntegrationTests", "Bounce.Framework.IntegrationTests\Bounce.Framework.IntegrationTests.csproj", "{ABBC7505-A9DA-46A5-A9D5-FD2E6077CA18}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{43F1BE6A-9803-4C8B-B507-679DBB64DA66}"
 	ProjectSection(SolutionItems) = preProject
@@ -103,5 +106,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FF63328-4191-4A1B-9A15-8C5B092643D4}
 	EndGlobalSection
 EndGlobal

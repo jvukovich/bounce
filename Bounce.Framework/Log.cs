@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Bounce.Framework.TeamCity;
+//using Bounce.Framework.TeamCity;
 
 namespace Bounce.Framework {
     public class Log : ILog {
@@ -93,11 +93,11 @@ namespace Bounce.Framework {
 
         public static ILog Default {
             get {
-                if (TeamCityFormatter.IsActive) {
-                    return new TeamCityLog(DefaultLogLevel);
-                } else {
+                //if (TeamCityFormatter.IsActive) {
+                //    return new TeamCityLog(DefaultLogLevel);
+                //} else {
                     return new Log(DefaultLogLevel);
-                }
+                //}
             }
         }
 

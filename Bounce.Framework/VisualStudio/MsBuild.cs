@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using Microsoft.Win32;
@@ -90,17 +91,19 @@ namespace Bounce.Framework.VisualStudio {
 			    msBuildToolsVersion != MsBuildToolsVersion.VersionLatest)
 				throw new IndexOutOfRangeException(string.Format("msBuildToolsVersion '{0}' was not found or is unsupported at this time. The latest version supported by Bounce is '{1}'.", msBuildToolsVersion, MsBuildToolsVersion.VersionLatest));
 
-			var keyPath = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\MSBuild\ToolsVersions\" + msBuildToolsVersion, false);
+            // todo: netstandard
+			//var keyPath = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\MSBuild\ToolsVersions\" + msBuildToolsVersion, false);
 
-			if (keyPath == null)
-				ThrowMsBuildToolsPathNotFoundExeception(msBuildToolsVersion);
+			//if (keyPath == null)
+			//	ThrowMsBuildToolsPathNotFoundExeception(msBuildToolsVersion);
 
-			var msBuildToolsPath = keyPath.GetValue("MSBuildToolsPath");
+			//var msBuildToolsPath = keyPath.GetValue("MSBuildToolsPath");
 
-			if (msBuildToolsPath == null)
-				ThrowMsBuildToolsPathNotFoundExeception(msBuildToolsVersion);
+			//if (msBuildToolsPath == null)
+			//	ThrowMsBuildToolsPathNotFoundExeception(msBuildToolsVersion);
 
-			return msBuildToolsPath.ToString();
+			//return msBuildToolsPath.ToString();
+		    return string.Empty; // todo: netstandard
 		}
 
 		private static void ThrowMsBuildToolsPathNotFoundExeception(string msBuildToolsVersion) {
