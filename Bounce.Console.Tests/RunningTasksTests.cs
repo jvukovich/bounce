@@ -1,5 +1,4 @@
 using Bounce.Framework;
-using Bounce.TestHelpers;
 using Xunit;
 
 namespace Bounce.Console.Tests

@@ -13,6 +13,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Bounce.Console\Bounce.Console.csproj" />
     <ProjectReference Include="..\Bounce.Framework\Bounce.Framework.csproj" />
-    <ProjectReference Include="..\Bounce.TestHelpers\Bounce.TestHelpers.csproj" />
   </ItemGroup>
 </Project>

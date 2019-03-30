@@ -1,13 +1,27 @@
 ﻿using System;
-using System.IO;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 namespace Bounce.Console
 {
-    public class TargetsAssemblyNotFoundException : BounceConsoleException
+    [Serializable]
+    public class TargetsAssemblyNotFoundException : Exception
     {
-        public override void Explain(TextWriter writer)
+        public TargetsAssemblyNotFoundException(string message) : base(message)
         {
-            writer.WriteLine(String.Format(@"unable to find {0} assembly in this or any parent directory", TargetsAssemblyFinder.TargetsDllPath));
+        }
+
+        protected TargetsAssemblyNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new ArgumentNullException(nameof(info));
+
+            base.GetObjectData(info, context);
         }
     }
 }

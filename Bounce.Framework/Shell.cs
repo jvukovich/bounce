@@ -93,7 +93,7 @@ namespace Bounce.Framework
             processInfo.RedirectStandardOutput = true;
             processInfo.UseShellExecute = false;
             processInfo.ErrorDialog = false;
-            if (string.IsNullOrEmpty(processInfo.EnvironmentVariables["HOME"]))
+            if (string.IsNullOrWhiteSpace(processInfo.EnvironmentVariables["HOME"]))
             {
                 processInfo.EnvironmentVariables["HOME"] = Environment.GetEnvironmentVariable("UserProfile");
             }

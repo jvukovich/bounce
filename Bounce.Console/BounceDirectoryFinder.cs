@@ -2,29 +2,28 @@ using System.IO;
 
 namespace Bounce.Console
 {
-    class BounceDirectoryFinder : IBounceDirectoryFinder
+    public interface IBounceDirectoryFinder
+    {
+        string FindBounceDirectory();
+    }
+
+    internal class BounceDirectoryFinder : IBounceDirectoryFinder
     {
         public string FindBounceDirectory()
         {
             return FindBounceDirectoryFrom(Directory.GetCurrentDirectory());
         }
 
-        private string FindBounceDirectoryFrom(string dir)
+        private static string FindBounceDirectoryFrom(string dir)
         {
-            if (string.IsNullOrEmpty(dir))
-            {
+            if (string.IsNullOrWhiteSpace(dir))
                 return null;
-            }
 
             var bounceDir = Path.Combine(dir, "Bounce");
 
-            if (Directory.Exists(bounceDir))
-            {
-                return bounceDir;
-            } else
-            {
-                return FindBounceDirectoryFrom(Path.GetDirectoryName(dir));
-            }
+            return Directory.Exists(bounceDir)
+                ? bounceDir
+                : FindBounceDirectoryFrom(Path.GetDirectoryName(dir));
         }
     }
 }

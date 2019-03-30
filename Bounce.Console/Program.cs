@@ -2,12 +2,21 @@
 
 namespace Bounce.Console
 {
-    internal class Program
+    internal static class Program
     {
         private static int Main(string[] args)
         {
-            var exitCode = new BounceAssemblyRunner().Run(args);
-            return exitCode;
+            try
+            {
+                BounceAssemblyRunner.Run(args);
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e);
+                return 70;
+            }
+
+            return 0;
         }
     }
 }

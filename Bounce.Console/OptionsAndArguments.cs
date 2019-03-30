@@ -2,9 +2,9 @@
 {
     public class OptionsAndArguments
     {
-        public string[] RemainingArguments;
-        public string BounceDirectory;
-        public string WorkingDirectory;
-        public bool Recurse;
+        public string[] RemainingArguments { get; set; }
+        public string BounceDirectory { get; set; }
+        public string WorkingDirectory { get; set; }
+        public bool Recurse { get; set; }
     }
 }
