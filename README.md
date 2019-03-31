@@ -1,3 +1,7 @@
+# What is Bounce?
+
+Bounce is a task runner for .NET. Our goal is to get developers to stop using PowerShell, MSBuild, NAnt and other scripting frameworks. Bounce allows you to more easily utilize the .NET stack in a consistent way, share code, leverage third party libraries, and build tests for your tasks.
+
 ## Coming Soon
 
 **Full library Deprecation**
@@ -6,7 +10,11 @@ The entire framework will be moving to .NET Core 2.x when version 1.0.0 is launc
 
 **Why .NET Core and not .NET Standard?**
 
-Because **AppDomain** and **AssemblyLoadContext** are not available in .NET Standard. One of these is necessary to load an assembly at runtime.
+Because **AppDomain.CreateDomain** throws a **PlatformNotSupportedException** in .NET Standard.
+
+Additionally, **AssemblyLoadContext** is only available in .NET Core.
+
+One of these is necessary to load an assembly at runtime.
 
 **Breaking Changes**
 
@@ -14,11 +22,7 @@ Support for Visual Studio tools and IIS management will be dropped (for better c
 
 In the future, common scripting APIs may be launched as separate NuGet packages.
 
-Developers are encouraged to migrate their projects to .NET Core or .NET Standard.
-
-# What is Bounce?
-
-Bounce is a task runner for .NET. Our goal is to get developers to stop using PowerShell, MSBuild, NAnt and other scripting frameworks. Bounce allows you to more easily utilize the .NET stack in a consistent way, share code, leverage third party libraries, and build tests for your tasks.
+Developers are encouraged to migrate their Bounce projects to .NET Core.
 
 ## Project Setup
 
@@ -28,7 +32,11 @@ To create a Bounce script project:
 
     PM> Install-Package Bounce
 
-Then, ensure your project produces an assembly ending with ".Bounce.dll" or an executable ending with ".Bounce.exe" (both case-insensitive). Bounce only looks for tasks in these assemblies. Example: **MyProject.Bounce.dll**
+**Required**: your assembly file name must end with **.Bounce.dll**, or an executable ending with **.Bounce.exe** (both case-insensitive).
+
+Example: **MyProject.Bounce.dll** or **MyProject.Bounce.exe**
+
+For optimal performance, Bounce only looks for tasks in these assemblies.
 
 Finally, your project must be in .NET Core (and the same version Bounce is built on).
 
