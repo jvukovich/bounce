@@ -57,7 +57,7 @@ namespace Bounce.Console
             var bounceAssemblyPath = Path.Combine(bounceDir, BounceRunner.BounceFrameworkAssemblyFileName);
 
             if (!File.Exists(bounceAssemblyPath))
-                bounceAssemblyPath = Path.Combine(Directory.GetCurrentDirectory(), BounceRunner.BounceFrameworkAssemblyFileName);
+                bounceAssemblyPath = Path.Combine(workingDir, BounceRunner.BounceFrameworkAssemblyFileName);
 
             if (!File.Exists(bounceAssemblyPath))
             {

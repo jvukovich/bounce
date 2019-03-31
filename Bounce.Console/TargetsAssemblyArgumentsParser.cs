@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Bounce.Console
 {
-    public class TargetsAssemblyArgumentsParser
+    public static class TargetsAssemblyArgumentsParser
     {
         private static void TryGetTargetsFromArguments(OptionsAndArguments optionsAndArguments)
         {
@@ -38,38 +38,17 @@ namespace Bounce.Console
             }
         }
 
-        private static void TryGetRecurseFromArguments(OptionsAndArguments optionsAndArguments)
-        {
-            var args = optionsAndArguments.RemainingArguments;
-
-            if (args.Length <= 0)
-                return;
-
-            var firstArg = args[0];
-
-            if (firstArg != "/recurse")
-                return;
-
-            var remainingArgs = new string[args.Length - 1];
-
-            Array.Copy(args, 1, remainingArgs, 0, remainingArgs.Length);
-
-            optionsAndArguments.Recurse = true;
-            optionsAndArguments.RemainingArguments = remainingArgs;
-        }
-
         public static OptionsAndArguments GetTargetsAssembly(string[] args)
         {
             var optionsAndArguments = new OptionsAndArguments {RemainingArguments = args};
 
             TryGetTargetsFromArguments(optionsAndArguments);
-            TryGetRecurseFromArguments(optionsAndArguments);
 
             if (optionsAndArguments.BounceDirectory != null)
                 return optionsAndArguments;
 
             optionsAndArguments.BounceDirectory = Directory.GetCurrentDirectory();
-            optionsAndArguments.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(optionsAndArguments.BounceDirectory));
+            optionsAndArguments.WorkingDirectory = Directory.GetCurrentDirectory();
 
             return optionsAndArguments;
         }
