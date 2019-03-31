@@ -33,7 +33,7 @@ namespace Bounce.Framework
                 return ParseParameter(parameter);
 
             if (parameter.IsRequired)
-                throw new Exception($"required parameter '{parameter.Name}' not given");
+                throw new Exception($"Required parameter '{parameter.Name}' must be provided.");
 
             return parameter.DefaultValue;
         }

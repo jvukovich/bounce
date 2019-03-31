@@ -21,7 +21,7 @@ namespace Bounce.Framework
                     result.Add(key, value);
                 }
                 else
-                    throw new Exception($"expected switch argument beginning with '/', found '{arg}'");
+                    throw new Exception($"Expected switch argument beginning with '/', found '{arg}'.");
             }
 
             Props.Load(result);

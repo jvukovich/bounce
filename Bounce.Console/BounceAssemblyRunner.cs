@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using Bounce.Framework;
 
 namespace Bounce.Console
 {
@@ -53,7 +54,17 @@ namespace Bounce.Console
             var workingDir = optionsAndArguments.WorkingDirectory;
             var remainingArgs = optionsAndArguments.RemainingArguments;
 
-            var bounceAssemblyPath = Path.Combine(bounceDir, "Bounce.Framework.dll");
+            var bounceAssemblyPath = Path.Combine(bounceDir, BounceRunner.BounceFrameworkAssemblyFileName);
+
+            if (!File.Exists(bounceAssemblyPath))
+                bounceAssemblyPath = Path.Combine(Directory.GetCurrentDirectory(), BounceRunner.BounceFrameworkAssemblyFileName);
+
+            if (!File.Exists(bounceAssemblyPath))
+            {
+                BounceRunner.GetLogger().Error($"Unable to find Bounce Framework assembly. Failed attempt to load: {bounceAssemblyPath}");
+                return;
+            }
+
             var bounceAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(bounceAssemblyPath);
             var bounceRunnerType = bounceAssembly.GetType("Bounce.Framework.BounceRunner");
             var bounceRunnerInstance = Activator.CreateInstance(bounceRunnerType);
@@ -75,7 +86,7 @@ namespace Bounce.Console
 
         private static OptionsAndArguments GetAssemblyFileName(string[] args)
         {
-            return new TargetsAssemblyArgumentsParser().GetTargetsAssembly(args);
+            return TargetsAssemblyArgumentsParser.GetTargetsAssembly(args);
         }
     }
 }

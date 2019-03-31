@@ -5,17 +5,6 @@ namespace Bounce.Console
 {
     public class TargetsAssemblyArgumentsParser
     {
-        private readonly IBounceDirectoryFinder _bounceDirectoryFinder;
-
-        public TargetsAssemblyArgumentsParser() : this(new BounceDirectoryFinder())
-        {
-        }
-
-        public TargetsAssemblyArgumentsParser(IBounceDirectoryFinder bounceDirectoryFinder)
-        {
-            _bounceDirectoryFinder = bounceDirectoryFinder;
-        }
-
         private static void TryGetTargetsFromArguments(OptionsAndArguments optionsAndArguments)
         {
             var args = optionsAndArguments.RemainingArguments;
@@ -69,7 +58,7 @@ namespace Bounce.Console
             optionsAndArguments.RemainingArguments = remainingArgs;
         }
 
-        public OptionsAndArguments GetTargetsAssembly(string[] args)
+        public static OptionsAndArguments GetTargetsAssembly(string[] args)
         {
             var optionsAndArguments = new OptionsAndArguments {RemainingArguments = args};
 
@@ -79,15 +68,8 @@ namespace Bounce.Console
             if (optionsAndArguments.BounceDirectory != null)
                 return optionsAndArguments;
 
-            var targets = _bounceDirectoryFinder.FindBounceDirectory();
-
-            // todo: dotnetupgrade
-            // todo: remove unnecessary custom exceptions
-            if (targets == null)
-                throw new TargetsAssemblyNotFoundException("unable to find valid Bounce assembly in this or any parent directory");
-
-            optionsAndArguments.BounceDirectory = targets;
-            optionsAndArguments.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(targets));
+            optionsAndArguments.BounceDirectory = Directory.GetCurrentDirectory();
+            optionsAndArguments.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(optionsAndArguments.BounceDirectory));
 
             return optionsAndArguments;
         }

@@ -18,12 +18,12 @@ namespace Bounce.Framework
             var matchingTasks = taskList.Where(x => AllTaskNames(x).Contains(taskName.ToLower())).ToList();
 
             if (matchingTasks.Count > 1)
-                throw new Exception($"multiple tasks with name '{taskName}' (qualify the task with its class name or namespace)");
+                throw new Exception($"Multiple tasks with the name '{taskName}'. Qualify the task with a class name or namespace.");
 
             if (!matchingTasks.Any())
             {
                 var availableTasks = UsageHelp.GetAvailableTasks(taskList);
-                throw new Exception($"task '{taskName}' not found, try one of the following: {availableTasks}");
+                throw new Exception($"Task '{taskName}' not found. Try one of the following: {availableTasks}");
             }
 
             matchingTasks.Single().Invoke(taskParameters);

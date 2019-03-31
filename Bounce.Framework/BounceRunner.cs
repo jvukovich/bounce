@@ -4,15 +4,21 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Serilog;
 
 namespace Bounce.Framework
 {
     // ReSharper disable once UnusedMember.Global
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class BounceRunner
     {
+        public const string BounceFrameworkAssemblyFileName = "Bounce.Framework.dll";
+
         // ReSharper disable once UnusedMember.Global
         public void Run(string bounceDir, string workingDir, string[] rawArgs)
         {
+            GetLogger();
+
             try
             {
                 Directory.SetCurrentDirectory(workingDir);
@@ -31,18 +37,32 @@ namespace Bounce.Framework
             }
             catch (ReflectionTypeLoadException e)
             {
-                // todo: dotnetupgrade
-                // todo: change logging strategy
                 foreach (var loaderException in e.LoaderExceptions)
-                    Console.Error.WriteLine(loaderException);
+                    Log.Error(loaderException.ToString());
             }
             catch (Exception e)
             {
-                // todo: dotnetupgrade
-                // todo: change logging strategy
-                Console.Error.WriteLine(e);
+                Log.Error(e.ToString());
             }
         }
+
+        public static ILogger GetLogger()
+        {
+            if (_loggerConfigured)
+                return Log.Logger;
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.Debug()
+                .CreateLogger();
+
+            _loggerConfigured = true;
+
+            return Log.Logger;
+        }
+
+        private static bool _loggerConfigured;
 
         private static string TaskName(IReadOnlyList<string> arguments)
         {
@@ -87,10 +107,9 @@ namespace Bounce.Framework
         {
             var fileName = Path.GetFileName(path);
 
-            // todo: dotnetupgrade
-            // todo: cleanup
-            return !fileName.Equals("Bounce.Framework.dll", StringComparison.InvariantCultureIgnoreCase)
-                   && new Regex(@"\bbounce\b.*\.(dll|exe)", RegexOptions.IgnoreCase).IsMatch(fileName);
+            return fileName.ToLowerInvariant() != BounceFrameworkAssemblyFileName
+                   && new Regex(@"\bbounce\b.*\.(dll|exe)", RegexOptions.IgnoreCase)
+                       .IsMatch(fileName);
         }
     }
 }

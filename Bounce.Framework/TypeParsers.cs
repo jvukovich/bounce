@@ -68,7 +68,7 @@ namespace Bounce.Framework
 
         public static void TypeParserNotFound(string parameterValue, Type type)
         {
-            throw new Exception($"could not parse '{parameterValue}' for type '{type}'");
+            throw new Exception($"Could not parse '{parameterValue}' for type '{type}'.");
         }
     }
 
@@ -89,7 +89,7 @@ namespace Bounce.Framework
 
         public string Generate(object o)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public string Description => _type.Name;
@@ -111,7 +111,7 @@ namespace Bounce.Framework
 
         public string Generate(object o)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public string Description

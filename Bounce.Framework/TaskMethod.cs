@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Serilog;
 
 namespace Bounce.Framework
 {
@@ -35,9 +36,11 @@ namespace Bounce.Framework
             }
             catch (TargetInvocationException e)
             {
-                // todo: dotnetupgrade
-                // todo: make exceptions generic
-                //throw new TaskException(this, e.InnerException);
+                Log.Error(e.ToString());
+
+                if (e.InnerException != null)
+                    Log.Error(e.InnerException.ToString());
+                
                 throw e;
             }
         }

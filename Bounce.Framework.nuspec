@@ -1,24 +1,20 @@
 <?xml version="1.0"?>
-<!-- todo: dotnetcore -->
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Bounce</id>
     <version>1.0.0</version>
-    <authors>Original author: Tim MacFarlane. Maintainer: Jonathan Vukovich</authors>
-	<language>en-US</language>
-    <owners>Original author: Tim MacFarlane. Maintainer: Jonathan Vukovich</owners>
+    <authors>Original author: Tim MacFarlane. Current author: Jonathan Vukovich</authors>
+    <language>en-US</language>
+    <owners>Original author: Tim MacFarlane. Current author: Jonathan Vukovich</owners>
     <licenseUrl>https://github.com/jvukovich/bounce/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/jvukovich/bounce</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A new build framework for C# projects.</description>
     <tags>Build CI deploy configuration</tags>
-    <dependencies>
-      <dependency id="SharpZipLib" version="0.86.0" />
-    </dependencies>
   </metadata>
   <files>
-	<file src="Bounce.Framework\bin\Debug\Bounce.Framework.dll" target="lib\net40" />
-	<file src="Bounce.Console\bin\Debug\Bounce.exe" target="tools\net40" />
-	<file src="Bounce.Console\bin\Debug\Bounce.exe.config" target="tools\net40" />
+	<file src="Bounce.Framework\bin\Debug\Bounce.Framework.dll" target="lib\netcoreapp2.2" />
+	<file src="Bounce.Console\bin\Debug\Bounce.exe" target="lib\netcoreapp2.2" />
+	<file src="Bounce.Console\bin\Debug\Bounce.exe.config" target="lib\netcoreapp2.2" />
   </files>
 </package>
