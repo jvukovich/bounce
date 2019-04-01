@@ -6,7 +6,6 @@ _ReSharper.*
 *.suo
 *.csproj.user
 *.resharper.user
-Bounce/
 docs/README.html
 .*.swp
 Bounce.tmp/
