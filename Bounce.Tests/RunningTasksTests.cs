@@ -1,7 +1,7 @@
 using Bounce.Framework;
 using Xunit;
 
-namespace Bounce.Console.Tests
+namespace Bounce.Tests
 {
     public class RunningTasksTests
     {

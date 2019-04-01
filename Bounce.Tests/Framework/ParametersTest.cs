@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Bounce.Framework;
 using Xunit;
 
-namespace Bounce.Framework.Tests
+namespace Bounce.Tests.Framework
 {
     public class ParametersTest
     {
@@ -54,7 +55,7 @@ namespace Bounce.Framework.Tests
             var p = new TaskParameters(new Dictionary<string, string>());
             var ex = Assert.Throws<Exception>(() => p.Parameter(typeof(string), "file"));
 
-            Assert.Equal("required parameter 'file' not given", ex.Message);
+            Assert.Equal("Required parameter 'file' must be provided.", ex.Message);
         }
 
         [Fact]
@@ -63,7 +64,7 @@ namespace Bounce.Framework.Tests
             var p = new TaskParameters(new Dictionary<string, string>());
             var ex = Assert.Throws<Exception>(() => p.Parameter<string>("file"));
 
-            Assert.Equal("required parameter 'file' not given", ex.Message);
+            Assert.Equal("Required parameter 'file' must be provided.", ex.Message);
         }
 
         [Fact]

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bounce.Framework;
 using Xunit;
 
-namespace Bounce.Framework.Tests
+namespace Bounce.Tests.Framework
 {
     public class ParameterParserTest
     {
@@ -69,7 +70,7 @@ namespace Bounce.Framework.Tests
         {
             var ex = Assert.Throws<Exception>(() => ArgumentsParser.ParseParameters(Params("afile.txt")));
 
-            Assert.Contains("expected switch argument beginning with", ex.Message);
+            Assert.Contains("Expected switch argument beginning with", ex.Message);
         }
 
         private static IEnumerable<string> Params(string parameters)

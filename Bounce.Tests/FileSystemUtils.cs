@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Bounce.Console.Tests
+namespace Bounce.Tests
 {
     public static class FileSystemUtils
     {

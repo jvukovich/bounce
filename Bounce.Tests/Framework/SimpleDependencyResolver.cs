@@ -1,6 +1,7 @@
 using System;
+using Bounce.Framework;
 
-namespace Bounce.Framework.Tests
+namespace Bounce.Tests.Framework
 {
     public class SimpleDependencyResolver : IDependencyResolver
     {

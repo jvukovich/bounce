@@ -6,7 +6,7 @@ Bounce is a task runner for .NET. Our goal is to get developers to stop using Po
 
 **Full library Deprecation**
 
-The entire framework will be moving to .NET Core 2.x when version 1.0.0 is launched.
+The entire framework will be moving to .NET Core when version 0.11.0 is launched.
 
 **Why .NET Core and not .NET Standard?**
 

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Bounce.Framework;
 
-namespace Bounce.Framework.Tests
+namespace Bounce.Tests.Framework
 {
     public class MockTask : ITask
     {

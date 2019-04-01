@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Bounce.Framework;
 using Xunit;
 
-namespace Bounce.Framework.Tests
+namespace Bounce.Tests.Framework
 {
     public class TaskMethodTest
     {
@@ -84,7 +85,7 @@ namespace Bounce.Framework.Tests
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Test"), resolver);
             var ex = Assert.Throws<Exception>(() => task.Invoke(new TaskParameters(new Dictionary<string, string>())));
 
-            Assert.Contains("required parameter 'fast' not given", ex.Message);
+            Assert.Contains("Required parameter 'fast' must be provided.", ex.Message);
         }
 
         [Fact]
@@ -93,7 +94,7 @@ namespace Bounce.Framework.Tests
             var task = new TaskMethod(typeof(FakeTaskClass).GetMethod("Bad"), resolver);
             var ex = Assert.Throws<Exception>(() => task.Invoke(new TaskParameters(new Dictionary<string, string> {{"x", "something"}})));
 
-            Assert.Contains("could not parse 'something' for type", ex.Message);
+            Assert.Contains("Could not parse 'something' for type", ex.Message);
         }
 
         [Fact]

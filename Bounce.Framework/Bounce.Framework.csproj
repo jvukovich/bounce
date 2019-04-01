@@ -1,13 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+     <PackageProjectUrl>https://github.com/jvukovich/bounce</PackageProjectUrl>
+     <PackageLicense>https://github.com/jvukovich/bounce/blob/master/LICENSE</PackageLicense>
+     <PackageTags>build CI deploy configuration</PackageTags>
+     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.8.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00792" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="1.0.2-dev-00020" />
+    <PackageReference Include="Serilog" AssemblyVersion="2.8.0" Version="2.8.0" />
+    <PackageReference Include="Serilog.Sinks.Console" AssemblyVersion="3.1.2-dev-00792" Version="3.1.2-dev-00792" />
+    <PackageReference Include="Serilog.Sinks.Debug" AssemblyVersion="1.0.2-dev-00020" Version="1.0.2-dev-00020" />
   </ItemGroup>
 </Project>

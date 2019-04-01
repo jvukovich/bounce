@@ -6,9 +6,14 @@ namespace Bounce.Framework
 {
     public static class UsageHelp
     {
-        public static void WriteUsage(IEnumerable<ITask> tasks)
+        public static void WriteUsage()
         {
             Console.WriteLine("usage: bounce task [options]");
+        }
+        
+        public static void WriteUsage(IEnumerable<ITask> tasks)
+        {
+            WriteUsage();
             Console.WriteLine();
             Console.WriteLine("tasks:");
             Console.Write(GetAvailableTasks(tasks));

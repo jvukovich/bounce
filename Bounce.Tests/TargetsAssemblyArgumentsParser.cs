@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Bounce.Console.Tests
+namespace Bounce.Tests
 {
     public class TargetsAssemblyArgumentsParserTest
     {
