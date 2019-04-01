@@ -40,6 +40,8 @@ For optimal performance, Bounce only looks for tasks in these assemblies.
 
 Finally, your project must be in .NET Core (and the same version Bounce is built on).
 
+Note: if you have third party library dependencies in your Bounce project, you may need to add **&lt;CopyLocalLockFileAssemblies&gt;true&lt;/CopyLocalLockFileAssemblies&gt;** to your .NET Core project. This will force all third party libraries to be copied to your assembly directory so that they resolve when Bounce executes your assembly. 
+
 ## Running
 
 To execute a Bounce project, first install the .NET Core tool:
