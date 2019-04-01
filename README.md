@@ -30,7 +30,7 @@ Bounce can be found on [NuGet](http://nuget.org/List/Packages/Bounce).
 
 To create a Bounce script project:
 
-    PM> Install-Package Bounce
+    PM> Install-Package Bounce.Framework
 
 **Required**: your assembly file name must end with **.Bounce.dll**, or an executable ending with **.Bounce.exe** (both case-insensitive).
 

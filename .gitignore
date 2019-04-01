@@ -17,3 +17,4 @@ _ReShaper.*/
 _TeamCity.*/
 packages/
 /.idea
+/Tools/nuget_api_key.txt
