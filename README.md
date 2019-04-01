@@ -44,7 +44,7 @@ Finally, your project must be in .NET Core (and the same version Bounce is built
 
 To execute a Bounce project, first install the .NET Core tool:
 
-    dotnet tool install --global Bounce.Console [--version x.x.x]
+    dotnet tool install --global Bounce [--version x.x.x]
 
 You may need to restart your console to refresh your environment variables.
 
