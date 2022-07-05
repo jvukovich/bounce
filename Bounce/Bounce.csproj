@@ -4,8 +4,7 @@
      <PackageLicense>https://github.com/jvukovich/bounce/blob/master/LICENSE</PackageLicense>
      <PackageTags>build CI deploy configuration</PackageTags>
      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-     <PackageVersion>0.11.0-beta2</PackageVersion>
-     <Description>.NET Core 3.1 beta version of Bounce</Description>
+     <PackageVersion>0.11.0-beta3</PackageVersion>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
