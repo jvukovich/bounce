@@ -107,9 +107,9 @@ namespace Bounce.Framework
         {
             var fileName = Path.GetFileName(path);
 
-            return fileName.ToLowerInvariant() != BounceFrameworkAssemblyFileName
-                   && new Regex(@"\bbounce\b.*\.(dll|exe)", RegexOptions.IgnoreCase)
-                       .IsMatch(fileName);
+            return fileName.ToLowerInvariant() != BounceFrameworkAssemblyFileName &&
+                !fileName.ToLowerInvariant().EndsWith(".config") &&
+                new Regex(@"\bbounce\b.*\.(dll|exe)", RegexOptions.IgnoreCase).IsMatch(fileName);
         }
     }
 }

@@ -1,16 +1,16 @@
 <Project>
   <PropertyGroup>
-    <Version>0.11.0-beta1</Version>
-    <InformationalVersion>0.11.0-beta1</InformationalVersion>
+    <Version>0.11.0-beta3</Version>
+    <InformationalVersion>0.11.0-beta3</InformationalVersion>
     <FileVersion>0.11.0</FileVersion>
     <Title>Bounce.Framework</Title>
     <Product>Bounce.Framework</Product>
-    <Company>NBucket, Inc.</Company>
-    <Copyright>Copyright 2018-2019 NBucket, Inc.</Copyright>
+    <Company>Cooperative Studios LLC</Company>
+    <Copyright>Copyright 2018-2022 Cooperative Studios LLC</Copyright>
     <RepositoryUrl>https://github.com/jvukovich/bounce.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <ReleaseNotes>.NET Core 2.2 beta version of Bounce.Framework</ReleaseNotes>
-    <Description>.NET Core 2.2 beta version of Bounce.Framework</Description>
+    <ReleaseNotes>.NET Core beta version of Bounce.Framework</ReleaseNotes>
+    <Description>.NET Core beta version of Bounce.Framework</Description>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 </Project>
