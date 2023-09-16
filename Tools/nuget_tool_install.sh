@@ -7,7 +7,7 @@ dotnet build --configuration Release
   cd ./Bounce
 
   dotnet pack --configuration Release
-  dotnet tool install --global --add-source ./bin/Release/NuGet Bounce --version 0.11.0-beta2
+  dotnet tool install --global --add-source ./bin/Release/NuGet Bounce --version 0.11.0-beta4
 
   IFS=''
   read -rn 1 -p 'Press enter to continue...' keyPress
@@ -19,7 +19,7 @@ dotnet build --configuration Release
 
 (
   # check for options to open test project
-  testDir="$(pwd)/TestProject.Bounce/bin/Release/netcoreapp3.1"
+  testDir="$(pwd)/TestProject.Bounce/bin/Release/net6.0"
 
   if command -v osascript &>/dev/null; then
     osascript <<END

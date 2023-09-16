@@ -6,8 +6,8 @@ read -p 'nuget_api_key.txt: ' apiKey
   cd ..
   dotnet build --configuration Release
 
-  cd ./Bounce.Bounce
+  cd ./Bounce
 
   dotnet pack --configuration Release
-  dotnet nuget push ./bin/Release/NuGet/Bounce.0.11.0-beta3.nupkg --source https://api.nuget.org/v3/index.json --api-key "${apiKey}"
+  dotnet nuget push ./bin/Release/NuGet/Bounce.0.11.0-beta4.nupkg --source https://api.nuget.org/v3/index.json --api-key "${apiKey}"
 )
