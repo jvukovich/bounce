@@ -4,10 +4,10 @@
      <PackageLicense>https://github.com/jvukovich/bounce/blob/master/LICENSE</PackageLicense>
      <PackageTags>build CI deploy configuration</PackageTags>
      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-     <PackageVersion>0.11.0-beta4</PackageVersion>
+     <PackageVersion>0.12.0</PackageVersion>
+     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <PackageOutputPath>./bin/Release/NuGet</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>

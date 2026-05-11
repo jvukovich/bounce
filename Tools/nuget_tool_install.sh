@@ -7,7 +7,7 @@ dotnet build --configuration Release
   cd ./Bounce
 
   dotnet pack --configuration Release
-  dotnet tool install --global --add-source ./bin/Release/NuGet Bounce --version 0.11.0-beta4
+  dotnet tool install --global --add-source ./bin/Release/NuGet Bounce --version 0.12.0
 
   IFS=''
   read -rn 1 -p 'Press enter to continue...' keyPress

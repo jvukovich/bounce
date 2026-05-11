@@ -1,16 +1,16 @@
 <Project>
   <PropertyGroup>
-    <Version>0.11.0-beta3</Version>
-    <InformationalVersion>0.11.0-beta3</InformationalVersion>
-    <FileVersion>0.11.0</FileVersion>
+    <Version>0.12.0</Version>
+    <InformationalVersion>0.12.0</InformationalVersion>
+    <FileVersion>0.12.0</FileVersion>
     <Title>Bounce</Title>
     <Product>Bounce</Product>
     <Company>Cooperative Studios LLC</Company>
-    <Copyright>Copyright 2018-2022 Cooperative Studios LLC</Copyright>
+    <Copyright>Copyright 2018-2026 Cooperative Studios LLC</Copyright>
     <RepositoryUrl>https://github.com/jvukovich/bounce.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <ReleaseNotes>.NET Core beta version of Bounce</ReleaseNotes>
-    <Description>.NET Core beta version of Bounce</Description>
+    <ReleaseNotes>.NET version of Bounce</ReleaseNotes>
+    <Description>.NET version of Bounce</Description>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 </Project>
